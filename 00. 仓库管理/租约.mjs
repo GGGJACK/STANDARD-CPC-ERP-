@@ -22,11 +22,14 @@ const DOMAINS = {
   DATA: ['04. 四期/系统代码/lib/store.mjs', '04. 四期/系统代码/lib/documents.mjs'],
   CONFIG: ['04. 四期/系统代码/lib/config.mjs'],
   TEST: ['04. 四期/測試設計_20261025/plan.mjs', '04. 四期/測試設計_20261025/run-tests.mjs', '00. 仓库管理/defects.csv'],
+  DOC: ['00. 仓库管理/'],
+  ARCH: ['04. 四期/架构审核_20261025/'],
 };
 
 const DOMAIN_CN = {
   API: '接口与权限', VIEW: '展示层', BIZ: '业务动作',
   DATA: '存储与单据', CONFIG: '配置（热点）', TEST: '测试资产',
+  DOC: '仓库治理文档', ARCH: '架构审核产出',
 };
 
 function parseArgs(argv) {
