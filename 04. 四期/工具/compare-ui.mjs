@@ -69,6 +69,16 @@ const PROBE = `(() => {
   const heads=[...document.querySelectorAll('h1,h2')].map(txt).filter(Boolean).slice(0,4);
   return JSON.stringify({heads,btns:[...new Set(btns)].slice(0,30),inputs:[...new Set(inputs)].slice(0,10),selects:[...new Set(selects)].slice(0,12),th:th.slice(0,18),rowCols,rowActions:[...new Set(rowActions)].slice(0,8),pager});
 })()`;
+// 已確認的產品決策：這些欄位／按鈕在本地是刻意移除或改名，不對照原系統。
+// 每一條都要能追到決策記錄（會議九問、施工順序表、四輪改造），不許隨手加。
+const intentional = {
+  '/vehicles': { th: ['車輛類型'] },            // 四期：移除車輛類型選單與表頭欄位
+  '/serviceplans': { btns: ['新增服務計劃'] },  // 三次修改：一約一計劃，只從合約列表新增
+  '/pestcontrolwork': { selects: ['所有種類'] }, // 文案精確化為「所有害蟲種類」
+  '/mysupply': { btns: ['新增記錄'] },           // 文案精確化為「新增補給記錄」
+  '/purchaseorders': { btns: ['工程滿意紙'] },   // 移至列表行操作與 PO 詳情頁，不放頂部工具欄
+};
+
 const norm = (value) => String(value || '').toLowerCase().replace(/[\s（）()「」]/g, '').replace('匯出', '導出').replace('匯入', '導入').replace('回收筒', '垃圾桶');
 const has = (actual, wanted) => actual.some((value) => norm(value).includes(norm(wanted)) || norm(wanted).includes(norm(value)) && norm(wanted).length > 2);
 const results = [];
@@ -87,9 +97,10 @@ for (const original of ORIGINAL) {
   await sleep(500);
   const raw = await ev(PROBE); if (raw) info = JSON.parse(raw);
   const req = required[original.route] || {};
-  const missingTh = (original.th || []).filter((th) => !has(info?.th || [], th));
-  const missingBtns = (req.btns || []).filter((btn) => !has(info?.btns || [], btn));
-  const missingSelects = (req.selects || []).filter((sel) => !has(info?.selects || [], sel));
+  const skip = intentional[original.route] || {};
+  const missingTh = (original.th || []).filter((th) => !has(info?.th || [], th) && !(skip.th || []).includes(th));
+  const missingBtns = (req.btns || []).filter((btn) => !has(info?.btns || [], btn) && !(skip.btns || []).includes(btn));
+  const missingSelects = (req.selects || []).filter((sel) => !has(info?.selects || [], sel) && !(skip.selects || []).includes(sel));
   const pass = !!info && !missingTh.length && !missingBtns.length && !missingSelects.length;
   results.push({ num: original.num, label: original.label, originalRoute: original.route, localRoute: route, pass, missingTh, missingBtns, missingSelects, local: info });
   console.log(pass ? 'OK' : `差異 表頭${missingTh.length} 按鈕${missingBtns.length} 篩選${missingSelects.length}`);
