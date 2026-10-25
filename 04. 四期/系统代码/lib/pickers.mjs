@@ -222,6 +222,40 @@ export const PICK_SOURCES = {
 
 export const PICK_SOURCE_NAMES = Object.keys(PICK_SOURCES);
 
+// SEC-01：每個資料源對應的實體。路由層用它做 assertEntity，讓選擇器與實體頁面
+// 共用同一套權限，而不是「只要登入了就放行」。pest_types 是靜態清單，不對應實體。
+export const PICK_SOURCE_ENTITY = {
+  customers: 'customers',
+  contracts: 'contracts',
+  purchase_orders: 'purchase_orders',
+  work_units: 'work_units',
+  employees: 'employees',
+  products: 'products',
+  pest_types: null,
+  pesticides: 'pesticides',
+  vehicles: 'vehicles',
+  work_instructions: 'work_instructions',
+  tools: 'supply_records',
+};
+
+// SEC-01：按角色裁剪回填欄位。
+// 金額只給會計／管理層；前線一律不帶聯絡資料（他們本來也進不了客戶頁）。
+const PICK_MONEY_FIELDS = ['cost_price', 'unit_cost', 'supplier_price', 'total_amount', 'subtotal'];
+const PICK_CONTACT_FIELDS = ['phone', 'fax', 'email', 'customer_tel', 'customer_fax', 'customer_email', 'contact_person', 'contact_phone'];
+export function pickFillForRole(fill, user) {
+  const out = { ...(fill || {}) };
+  if (!['accounting', 'management'].includes(user?.role)) for (const key of PICK_MONEY_FIELDS) delete out[key];
+  if (user?.role === 'front') for (const key of PICK_CONTACT_FIELDS) delete out[key];
+  return out;
+}
+
+// 選擇器權限的來源仍是實體的 viewRoles；只有「實體頁面不對前線開放，
+// 但前線的表單確實需要選這份資料」時，才在這裡列例外。
+// employees：補給／請假由前線自己填，必須能選人（Employee 實體頁面僅管理層可看）。
+export const PICK_SOURCE_EXTRA_ROLES = {
+  employees: ['front'],
+};
+
 export function pickRows(store, source) {
   const def = PICK_SOURCES[source];
   if (!def) return [];

@@ -999,6 +999,12 @@ function fieldInput(field, value, ctx) {
   const readonly = field.readOnly ? 'readonly' : '';
   const common = `id="${id}" name="${name}" ${required} ${readonly}`;
   const placeholder = field.placeholder ? ` placeholder="${esc(field.placeholder)}"` : '';
+  // SEC-02：金額欄位在無權限時只顯示佔位符，原值改用 hidden 提交。
+  // 必須在通用 input 之前攔截，否則編輯頁的 value 會把總額原樣吐進 HTML。
+  if (ctx.canSeeAmounts === false && (field.type === 'money' || AMOUNT_FIELDS.has(field.name))) {
+    const raw = value === null || value === undefined ? '' : value;
+    return `<input type="text" id="${id}" value="" placeholder="•••••" readonly autocomplete="off" aria-label="金額依權限隱藏"><input type="hidden" name="${name}" value="${esc(raw)}">`;
+  }
   if (field.type === 'textarea' || field.type === 'json') return `<textarea ${common} rows="${field.type === 'json' ? 6 : 3}"${placeholder}>${esc(field.type === 'json' && value && typeof value === 'object' ? JSON.stringify(value, null, 2) : value ?? '')}</textarea>`;
   if (field.type === 'richtext') return `<div data-rich="${id}"><div class="rich-toolbar noprint"><button type="button" data-cmd="bold"><b>B</b></button><button type="button" data-cmd="italic"><i>I</i></button><button type="button" data-cmd="underline"><u>U</u></button><button type="button" data-cmd="insertUnorderedList">• 列表</button><button type="button" data-cmd="insertOrderedList">1. 列表</button><button type="button" data-cmd="removeFormat">清除格式</button></div><div class="rich-editor" contenteditable="true"></div></div><textarea class="hidden" ${common}>${esc(value ?? '')}</textarea>`;
   if (field.type === 'pick' || field.type === 'picks') {

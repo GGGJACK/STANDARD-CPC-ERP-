@@ -12,7 +12,7 @@ import { accountingPage, checkInPage, customerDetailPage, excelSchedulePage, gen
 import { completionCertificate, printDocument, schedulePrint, workRecordPrint } from './lib/documents.mjs';
 import { imageEditorPage } from './lib/image-editor.mjs';
 import { collectAttachments, detailPage, errorPage, kpis, layout, loginPage, publicLayout, renderValue, simpleTable } from './lib/ui.mjs';
-import { PICK_SOURCES, searchPick } from './lib/pickers.mjs';
+import { PICK_SOURCES, PICK_SOURCE_ENTITY, PICK_SOURCE_EXTRA_ROLES, pickFillForRole, searchPick } from './lib/pickers.mjs';
 import { arr, bool, esc, hkNow, money, num, parseBody, safeEqual, safeFileName, str, token, uid, verifyPassword } from './lib/utils.mjs';
 
 const ROOT = path.dirname(fileURLToPath(import.meta.url));
@@ -367,10 +367,27 @@ async function handle(req, res) {
 
   if (p === '/api/pick' && req.method === 'GET') {
     const source = str(url.searchParams.get('source'));
-    if (!PICK_SOURCES[source]) throw new HttpError(404, '未知選擇器資料源');
+    const def = PICK_SOURCES[source];
+    if (!def) throw new HttpError(404, '未知選擇器資料源');
+    // SEC-01：選擇器是表單入口，權限必須與實體頁一致。否則前線可用它繞過
+    // /customers 的 403，把 1,608 個客戶連電話一起拉走；產品成本價同理。
+    // 判據仍取自實體 viewRoles，只有明確例外才放行（見 PICK_SOURCE_EXTRA_ROLES）。
+    const pickCfg = PICK_SOURCE_ENTITY[source] ? ENTITIES[PICK_SOURCE_ENTITY[source]] : null;
+    if (pickCfg) {
+      const allowed = [...(pickCfg.viewRoles || []), ...(PICK_SOURCE_EXTRA_ROLES[source] || [])];
+      if (!allowed.includes(user.role)) throw new HttpError(403, '無權使用此選擇器');
+    }
     const query = str(url.searchParams.get('q'));
     const limit = Math.min(50, Math.max(5, Number(url.searchParams.get('limit') || 20)));
-    return json(res, searchPick(store, source, query, limit));
+    const rows = searchPick(store, source, query, limit).map((row) => ({ ...row, fill: pickFillForRole(row.fill, user) }));
+    const amountsHidden = !['accounting', 'management'].includes(user.role);
+    store.audit({
+      user, action: 'pick', entity: pickCfg ? pickCfg.entity : source, label: def.label,
+      shown: `source=${source} rows=${rows.length}`,
+      masked: [amountsHidden ? 'amounts' : '', user.role === 'front' ? 'contact' : ''].filter(Boolean).join(','),
+      via: 'api', req,
+    });
+    return json(res, rows);
   }
   if (p.startsWith('/save/') && req.method === 'POST') {
     const cfg = ENTITIES[p.slice(6)];

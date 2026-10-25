@@ -68,7 +68,19 @@ function defaultNumber(store, cfg, data) {
 
 function normalizeRelations(store, cfg, data) {
   if (Object.hasOwn(data, 'customer_name') && data.customer_name) {
-    const customer = store.list('customers').find((r) => r.customer_name === data.customer_name || r.id === data.customer_id);
+    // DAT-03：先按 id 認，認不到才按名稱查。
+    // 原是 find(name === ... || id === ...)，同名客戶排在前面就會取到別人，
+    // 再由下面無條件覆蓋 customer_id —— 261 份單據會靜默改掛到另一個客戶名下。
+    let customer = data.customer_id ? store.get('customers', str(data.customer_id)) : null;
+    if (!customer) {
+      const hits = store.list('customers').filter((r) => r.customer_name === data.customer_name);
+      if (hits.length > 1) {
+        const error = new Error(`客戶「${data.customer_name}」有 ${hits.length} 筆同名記錄，請從下拉選擇要關聯的那一筆`);
+        error.statusCode = 409;
+        throw error;
+      }
+      customer = hits[0] || null;
+    }
     if (customer) {
       const mapping = {
         customer_id: customer.id, customer_code: customer.customer_code, customer_tel: customer.phone,
@@ -222,10 +234,20 @@ function prepareRecord({ store, cfg, fields, existing = null, user }) {
 
 function productForAdjustment(store, row) {
   const products = store.list('products', { includeDeleted: true });
-  return products.find((p) => row.product_id && p.id === row.product_id)
-    || products.find((p) => row.product_code && p.product_code === row.product_code)
-    || products.find((p) => row.code_no && p.product_code === row.code_no)
-    || products.find((p) => row.product_name && p.product_name === row.product_name);
+  const byId = row.product_id && products.find((p) => p.id === row.product_id);
+  if (byId) return byId;
+  const byCode = products.find((p) => (row.product_code && p.product_code === row.product_code) || (row.code_no && p.product_code === row.code_no));
+  if (byCode) return byCode;
+  if (!row.product_name) return null;
+  // DAT-03：名稱不是唯一鍵。命中多筆時取第一筆會把庫存記到另一個同名產品上，
+  // 寧可讓操作停下來，也不要寫錯帳。
+  const byName = products.filter((p) => p.product_name === row.product_name);
+  if (byName.length > 1) {
+    const error = new Error(`產品「${row.product_name}」有 ${byName.length} 筆同名記錄，請改用產品編號或從下拉選擇`);
+    error.statusCode = 409;
+    throw error;
+  }
+  return byName[0] || null;
 }
 
 function saveStockAdjustment({ store, cfg, data, existing, user }) {
@@ -309,7 +331,16 @@ export function reverseStockCount({ store, id, user, redo = false }) {
     for (const item of arr(count.items)) {
       const product = productForAdjustment(store, item);
       if (!product) continue;
-      const diff = num(item.difference, num(item.actual_quantity) - num(item.system_quantity));
+      // 差額優先讀盤點單快照；快照缺失才退回明細推算。兩者都缺時拒絕沖銷 ——
+      // 回退成 actual − 0 會把庫存清零，寧可讓操作失敗也不要寫壞帳。
+      const hasSnapshot = item.difference !== undefined && item.difference !== null && item.difference !== '';
+      const hasSystem = item.system_quantity !== undefined && item.system_quantity !== null && item.system_quantity !== '';
+      if (!hasSnapshot && !hasSystem) {
+        const error = new Error(`盤點 ${count.count_number} 的明細缺少差額快照（${item.product_name || item.product_id || '未知產品'}），為避免寫錯庫存已中止，請改用庫存調整單處理`);
+        error.statusCode = 409;
+        throw error;
+      }
+      const diff = hasSnapshot ? num(item.difference) : num(item.actual_quantity) - num(item.system_quantity);
       if (!diff) continue;
       operations.push({ product, diff });
     }
@@ -362,10 +393,16 @@ function saveStockCount({ store, cfg, data, existing, user }) {  return store.tr
     }
     data.completed_by ||= user.name;
     if (shouldPost) { data.completed_date ||= hkNow().date; data.stock_posted = true; }
-    const saved = store.save(cfg.key, data, { id: data.id, user, expectedUpdated: existing?.updated_date || null });
+    // STK-06：盤點結果必須在落庫「之前」回填進 data.items。
+    // store.save() 回傳的是重新讀出的新物件，若在 save 之後才改 op.item，
+    // 只會改到記憶體裡的 data.items，saved.items 仍是沒有 difference 的版本；
+    // 刪除沖銷時 item.difference 缺失會退回 actual − 0，把庫存直接清零。
     for (const op of operations) {
       op.item.product_id = op.product.id; op.item.product_name = op.product.product_name; op.item.product_code = op.product.product_code;
       op.item.system_quantity = op.before; op.item.difference = op.difference;
+    }
+    const saved = store.save(cfg.key, data, { id: data.id, user, expectedUpdated: existing?.updated_date || null });
+    for (const op of operations) {
       op.product.stock_quantity = op.actual;
       store.save('products', op.product, { id: op.product.id, user });
       if (op.difference !== 0) {
