@@ -29,3 +29,6 @@ _原始报价单样例.pdf
 Thumbs.db
 desktop.ini
 .DS_Store
+
+# ===== WorkBuddy 專案元數據（不與協作者共享）=====
+.workbuddy/
