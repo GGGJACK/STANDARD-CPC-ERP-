@@ -82,10 +82,15 @@ function matchUniqueByName(rows, nameField, name, label) {
   return null;
 }
 
+// 關聯回填的兩條規則（不是遺漏，改動前先讀）：
+// 1) 只有真的能存下 xxx_id 的實體才做解析。customers／leads／follow_ups 沒有 customer_id，
+//    名字就是自由文字，一律不做匹配、也不拋 409（否則新建同名客戶會被擋下，還會抄到別人的
+//    customer_code）。work_records 有 work_unit_name 但沒有 work_unit_id，同理跳過。
+// 2) 不變量：伺服端永不覆蓋使用者這次提交的值；派生欄位只在「本次為空」且「母檔有值」時補齊。
 function normalizeRelations(store, cfg, data) {
   const hasField = (name) => cfg.fields.some((f) => f.name === name);
-  // 派生欄位只在單據上本來是空的時候回填：使用者手填的值（聯絡人、電話、客戶類型）一律保留，
-  // 母檔沒有值時也不清空，避免每次儲存都把人改過的資料蓋回去。
+  // 使用者手填的值（聯絡人、電話、客戶類型）一律保留；母檔沒有值時也不清空，
+  // 避免每次儲存都把人改過的資料蓋回去。
   const fill = (field, value) => {
     if (!hasField(field)) return;
     if (value === undefined || value === null || value === '') return;
@@ -93,7 +98,6 @@ function normalizeRelations(store, cfg, data) {
     data[field] = value;
   };
   // 客戶：id 優先。有 id 就只認 id，不再依名字覆寫，避免單據漂移到同名客戶身上。
-  // 只有真的能存下 customer_id 的實體才做關聯解析（客戶本身、線索等沒有 customer_id，名字就是自由文字）。
   if (hasField('customer_id')) {
     const id = str(data.customer_id).trim();
     let customer = id ? store.get('customers', id) : null;
