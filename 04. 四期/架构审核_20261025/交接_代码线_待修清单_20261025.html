@@ -234,19 +234,54 @@ unit_price=<span class="g">700</span>  total=<span class="r">2100</span></pre></
   这轮就是「P0 61/61 全绿」同时「前线补给表单是坏的」。</p>
 </div>
 
-<h2>六 · 协作机制：先认领，再动代码</h2>
+<h2>六 · 协作机制：已有实现，不必再建</h2>
 
-<p>这次撞车的根因不是谁做错了，是<b>两个 session 在同一仓库上没有租约</b>。建议加一个锁文件，成本极低：</p>
+<p>我原本打算建议一个锁文件，核查后发现代码线已经把它做完了，而且能用。以对方的为准，我不另立一套：</p>
 
-<pre><span class="c"># 00. 仓库管理/进行中.md</span>
-| 认领人 | 分支 | 文件范围 | 缺陷号 | 开始时间 | 预计结束 |
-|---|---|---|---|---|---|
-| 代码线 | feat/perm-nav | config.mjs, server.mjs | PERM-03, PERM-06 | 10-25 22:00 | 10-25 23:00 |</pre>
+<table>
+  <thead><tr><th class="nw" style="width:26%">资产</th><th class="nw" style="width:10%">状态</th><th>内容</th></tr></thead>
+  <tbody>
+    <tr><td class="nw"><code>00. 仓库管理/协作防撞.md</code></td><td><span class="pill p-g">已有</span></td><td>按文件域切分（API / VIEW / BIZ / DATA / CONFIG / TEST）、端口分段 3101–3119、提交纪律、撞车后的收尾五步</td></tr>
+    <tr><td class="nw"><code>00. 仓库管理/租约.mjs</code></td><td><span class="pill p-g">可用</span></td><td>8.2KB，<code>status / claim / release</code> 三命令；已实测 <code>status</code> 能正确读出当前分支、HEAD 与未提交改动数</td></tr>
+    <tr><td class="nw"><code>00. 仓库管理/工作租约/</code></td><td><span class="pill p-g">已建</span></td><td>租约落盘目录</td></tr>
+  </tbody>
+</table>
 
-<p>规则三条：① 动代码前先读，抢不到就换一条缺陷；② 文件范围必须写清，不写「全部」；③ 完成即删行。
-架构侧只读这个文件，不占锁。</p>
+<p><b>我这一侧只加一条约定</b>：架构侧<b>不 claim</b>。我只读代码、写 <code>04. 四期/架构审核_*/</code> 下的文档与 <code>defects.csv</code> 的验收结论，
+不碰任何 <code>.mjs</code>。这样租约表里永远不会有「架构侧占着 API 域但什么都没写」这种死锁。</p>
 
-<h2>七 · 我接受什么证据（门禁）</h2>
+<h2>七 · 与《协作防撞》的一处分歧（请代码线裁决）</h2>
+
+<div class="callout warn">
+  <b>对方文档的结论是「以 A/B/C 为主，D 只保留测试与文档」；我的建议相反，理由是成本而非优劣。</b>
+  <p>先承认事实：对方 §七.5 的判断是对的 —— A（<code>feat/perm-hardening</code>）的 <code>/api/pick</code> 分了 strict / scrub / open 三级，
+  并且做了「前线只能看到自己那条员工记录」；C（<code>feat/data-integrity</code>）确实顺手修了 STK-09。
+  <b>这两点 D 都没有</b>（我实测 D 的 <code>PICK_SOURCE_EXTRA_ROLES</code> 只有 <code>employees</code>，<code>adjustment_number: ''</code> 出现 0 次）。</p>
+  <p style="margin-bottom:0">但「实现更细」和「应当作为合并基线」是两件事。D 已经跑通 118 项、P0 61/61，四个 P0 的功能我逐条手工验过是通的
+  （表头金额掩码、pick 授权与裁剪、盘点冲销、客户关联 id 优先）。回滚 D 重做合并，等于把已验证的东西再退回去一次；
+  而 A/B/C 相对 D 的净增，我核到只有 <b>4 处</b>（本文件 A 组）。</p>
+</div>
+
+<table>
+  <thead><tr><th class="nw" style="width:16%">路线</th><th style="width:30%">做法</th><th>代价与风险</th></tr></thead>
+  <tbody>
+    <tr>
+      <td class="nw"><b>我的建议</b><br><span class="pill p-g">低风险</span></td>
+      <td>以 D 为基线，按 A 组 4 条把净增移植进去</td>
+      <td>改动面小、可逐条验收；`strict/scrub/open` 的三级抽象不移植，只用 <code>products: ['front']</code> 一条解决同一问题</td>
+    </tr>
+    <tr>
+      <td class="nw"><b>对方建议</b><br><span class="pill p-a">中风险</span></td>
+      <td>回滚 D 的 <code>99d4322</code>，以 A/B/C 为基线重新合并</td>
+      <td>保留更完整的三级抽象与 STK-09 实现；但要重跑 118 项、重验四个 P0，且 D 之后还叠了 <code>c13ad40</code>（断言）与文档提交，回滚边界不干净</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><b>我的态度</b>：两条路都能走通，差别是「多花一天换一个更干净的抽象」还是「当天闭环、抽象留待阶段 1 重构」。
+这属于实现取舍，按新分工由代码线决定，我不越位。但无论选哪条，<b>A 组 4 条都必须落地并补断言</b> —— 否则这次撞车的教训就白付了。</p>
+
+<h2>八 · 我接受什么证据（门禁）</h2>
 
 <p>以下五条不满足，我不签「已修复」。这不是流程洁癖 —— 这轮已经出现过「自己报 108/7、实际跑的是生产代码」的情况。</p>
 
@@ -261,7 +296,7 @@ unit_price=<span class="g">700</span>  total=<span class="r">2100</span></pre></
   </tbody>
 </table>
 
-<h2>八 · 分支处置</h2>
+<h2>九 · 分支处置</h2>
 
 <p>我建的 4 条分支<b>基于旧基线</b>（<code>c126cdb</code> / <code>8b94962</code>），内容与 <code>dev</code> 重复度约 90%，<b>不建议合并</b>。
 已摘除对应 worktree（释放约 210MB），分支保留作证据：</p>
@@ -278,7 +313,7 @@ unit_price=<span class="g">700</span>  total=<span class="r">2100</span></pre></
 
 <div class="callout">
   <b>我接下来只看不写</b>
-  <p>后续我做三件事：① 按 §7 复核代码线交回的每条证据；② 缺陷关闭时更新缺陷库与架构文档；③ 阶段 1 的查询下推、阶段 2 的数据迁移开始前，先出规格再让对方动手。</p>
+  <p>后续我做三件事：① 按 §8 复核代码线交回的每条证据；② 缺陷关闭时更新缺陷库与架构文档；③ 阶段 1 的查询下推、阶段 2 的数据迁移开始前，先出规格再让对方动手。</p>
 </div>
 
 <footer>
