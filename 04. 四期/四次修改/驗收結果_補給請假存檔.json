@@ -1,0 +1,134 @@
+{
+  "at": "2026-10-25T07:57:11.321Z",
+  "base": "http://127.0.0.1:3101",
+  "total": 25,
+  "pass": 25,
+  "fail": 0,
+  "results": [
+    {
+      "name": "補給記錄 · front 可開啟新增彈窗",
+      "pass": true,
+      "detail": "HTTP 200"
+    },
+    {
+      "name": "補給記錄 · front 彈窗 __id 為空",
+      "pass": true,
+      "detail": "__id=\"\""
+    },
+    {
+      "name": "補給記錄 · office 可開啟新增彈窗",
+      "pass": true,
+      "detail": "HTTP 200"
+    },
+    {
+      "name": "補給記錄 · office 彈窗 __id 為空",
+      "pass": true,
+      "detail": "__id=\"\""
+    },
+    {
+      "name": "請假紀錄 · front 可開啟新增彈窗",
+      "pass": true,
+      "detail": "HTTP 200"
+    },
+    {
+      "name": "請假紀錄 · front 彈窗 __id 為空",
+      "pass": true,
+      "detail": "__id=\"\""
+    },
+    {
+      "name": "請假紀錄 · office 可開啟新增彈窗",
+      "pass": true,
+      "detail": "HTTP 200"
+    },
+    {
+      "name": "請假紀錄 · office 彈窗 __id 為空",
+      "pass": true,
+      "detail": "__id=\"\""
+    },
+    {
+      "name": "前線建立補給記錄成功",
+      "pass": true,
+      "detail": "HTTP 302 "
+    },
+    {
+      "name": "補給記錄真的寫入",
+      "pass": true,
+      "detail": "id=sup_mvnjbdoc_707079922cee"
+    },
+    {
+      "name": "前線建立請假記錄成功",
+      "pass": true,
+      "detail": "HTTP 302 "
+    },
+    {
+      "name": "請假記錄真的寫入",
+      "pass": true,
+      "detail": "id=lea_mvnjbesz_151879b9ee2d"
+    },
+    {
+      "name": "壞 __id + 無 updated_date 視為新增",
+      "pass": true,
+      "detail": "HTTP 302 "
+    },
+    {
+      "name": "壞 __id 仍寫入且沿用該 ID",
+      "pass": true,
+      "detail": "sup_UITEST-mvnjbd7a_ghost"
+    },
+    {
+      "name": "編輯已不存在的記錄被擋下",
+      "pass": true,
+      "detail": "HTTP 404"
+    },
+    {
+      "name": "編輯已不存在的記錄不寫入",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "錯誤訊息有顯示（不是空白頁）",
+      "pass": true,
+      "detail": "找不到要編輯的記錄"
+    },
+    {
+      "name": "明細數量欄位已標記為整數",
+      "pass": true,
+      "detail": "[{\"name\":\"product_name\",\"label\":\"產品\",\"type\":\"pick\",\"source\":\"products\",\"valueMode\":\"label\"…"
+    },
+    {
+      "name": "小數數量被後端擋下",
+      "pass": true,
+      "detail": "HTTP 400"
+    },
+    {
+      "name": "錯誤訊息說明必須為整數",
+      "pass": true,
+      "detail": "第 1 行的「數量」必須為整數，不可有小數"
+    },
+    {
+      "name": "小數數量未寫入",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "整數數量可正常存檔",
+      "pass": true,
+      "detail": "HTTP 302 "
+    },
+    {
+      "name": "商品庫存小數被擋下",
+      "pass": true,
+      "detail": "HTTP 400 「庫存數量」必須為整數，不可有小數"
+    },
+    {
+      "name": "商品未寫入",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "測試資料已清理",
+      "pass": true,
+      "detail": "4 筆 · 殘留 0"
+    }
+  ]
+}

@@ -1,0 +1,31 @@
+# ===== 数据库与运行时 =====
+*.db
+*.db-wal
+*.db-shm
+node_modules/
+
+# ===== 开发期备份与历史快照（按需从本地目录取）=====
+backup-*/
+_歷史版本/
+
+# ===== 交付产物：830MB 压缩包，已存项目资产库 =====
+_delivery/pkg/
+_delivery/pkg2/
+_delivery/_stage/
+
+# ===== 含上传凭证/签名 URL 的临时脚本，禁止入库 =====
+_delivery/upload_*.py
+_delivery/upload_trial.sh
+_delivery/dl_url.txt
+_delivery/upload_results.json
+
+# ===== 大体量参考资料：已存资产库 ERP-09_文档与蓝图 =====
+原系統參考/
+_原始报价单样例.pdf
+05. 源码分析/frontend/
+*.zip
+
+# ===== 系统文件 =====
+Thumbs.db
+desktop.ini
+.DS_Store

@@ -1,0 +1,62 @@
+[
+  {
+    "path": "/api/apps/69814e2192f68b7de4fb2564",
+    "status": 401,
+    "bytes": 150,
+    "head": "{\"error_type\":\"HTTPException\",\"message\":\"Unauthorized. 401: Unauthorized\",\"detail\":\"Unauthorized. 401: Unauthorized\",\"traceback\":\"\",\"request_id\":null}"
+  },
+  {
+    "path": "/api/apps/69814e2192f68b7de4fb2564/entities",
+    "status": 404,
+    "bytes": 114,
+    "head": "{\"error_type\":\"HTTPException\",\"message\":\"App not found\",\"detail\":\"App not found\",\"traceback\":\"\",\"request_id\":null}"
+  },
+  {
+    "path": "/api/apps/69814e2192f68b7de4fb2564/schema",
+    "status": 404,
+    "bytes": 114,
+    "head": "{\"error_type\":\"HTTPException\",\"message\":\"App not found\",\"detail\":\"App not found\",\"traceback\":\"\",\"request_id\":null}"
+  },
+  {
+    "path": "/api/apps/69814e2192f68b7de4fb2564/entity-schemas",
+    "status": 401,
+    "bytes": 148,
+    "head": "{\"error_type\":\"HTTPException\",\"message\":\"Could not validate credentials\",\"detail\":\"Could not validate credentials\",\"traceback\":\"\",\"request_id\":null}"
+  },
+  {
+    "path": "/api/apps/69814e2192f68b7de4fb2564/config",
+    "status": 404,
+    "bytes": 114,
+    "head": "{\"error_type\":\"HTTPException\",\"message\":\"App not found\",\"detail\":\"App not found\",\"traceback\":\"\",\"request_id\":null}"
+  },
+  {
+    "path": "/api/apps/69814e2192f68b7de4fb2564/metadata",
+    "status": 404,
+    "bytes": 114,
+    "head": "{\"error_type\":\"HTTPException\",\"message\":\"App not found\",\"detail\":\"App not found\",\"traceback\":\"\",\"request_id\":null}"
+  },
+  {
+    "path": "/api/apps/69814e2192f68b7de4fb2564/settings",
+    "status": 404,
+    "bytes": 114,
+    "head": "{\"error_type\":\"HTTPException\",\"message\":\"App not found\",\"detail\":\"App not found\",\"traceback\":\"\",\"request_id\":null}"
+  },
+  {
+    "path": "/api/apps/69814e2192f68b7de4fb2564/auth/config",
+    "status": 404,
+    "bytes": 114,
+    "head": "{\"error_type\":\"HTTPException\",\"message\":\"App not found\",\"detail\":\"App not found\",\"traceback\":\"\",\"request_id\":null}"
+  },
+  {
+    "path": "/api/apps/69814e2192f68b7de4fb2564/functions",
+    "status": 404,
+    "bytes": 114,
+    "head": "{\"error_type\":\"HTTPException\",\"message\":\"App not found\",\"detail\":\"App not found\",\"traceback\":\"\",\"request_id\":null}"
+  },
+  {
+    "path": "/api/apps/69814e2192f68b7de4fb2564/users",
+    "status": 404,
+    "bytes": 114,
+    "head": "{\"error_type\":\"HTTPException\",\"message\":\"App not found\",\"detail\":\"App not found\",\"traceback\":\"\",\"request_id\":null}"
+  }
+]

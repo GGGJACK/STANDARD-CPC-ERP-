@@ -1,0 +1,1955 @@
+{
+  "passed": 34,
+  "failed": 0,
+  "total": 34,
+  "results": [
+    {
+      "num": "01",
+      "label": "公告板",
+      "originalRoute": "/dashboard",
+      "localRoute": "/mywork",
+      "pass": true,
+      "missingTh": [],
+      "missingBtns": [],
+      "missingSelects": [],
+      "local": {
+        "heads": [
+          "我的工作",
+          "公司公告",
+          "今日工作",
+          "本月工作"
+        ],
+        "btns": [
+          "上班打卡",
+          "申請請假",
+          "我的出勤"
+        ],
+        "inputs": [],
+        "selects": [],
+        "th": [
+          "日期",
+          "工作名稱",
+          "工作地點",
+          "服務種類",
+          "員工",
+          "狀態",
+          "日期",
+          "工作名稱",
+          "工作地點",
+          "服務種類",
+          "員工",
+          "狀態"
+        ],
+        "rowCols": [
+          "2026-10-24",
+          "滅蟲滅鼠",
+          "新田倉",
+          "定期",
+          "—",
+          "待執行"
+        ],
+        "rowActions": [
+          "滅蟲滅鼠"
+        ],
+        "pager": []
+      }
+    },
+    {
+      "num": "02",
+      "label": "我的工作",
+      "originalRoute": "/mywork",
+      "localRoute": "/mywork",
+      "pass": true,
+      "missingTh": [],
+      "missingBtns": [],
+      "missingSelects": [],
+      "local": {
+        "heads": [
+          "我的工作",
+          "公司公告",
+          "今日工作",
+          "本月工作"
+        ],
+        "btns": [
+          "上班打卡",
+          "申請請假",
+          "我的出勤"
+        ],
+        "inputs": [],
+        "selects": [],
+        "th": [
+          "日期",
+          "工作名稱",
+          "工作地點",
+          "服務種類",
+          "員工",
+          "狀態",
+          "日期",
+          "工作名稱",
+          "工作地點",
+          "服務種類",
+          "員工",
+          "狀態"
+        ],
+        "rowCols": [
+          "2026-10-24",
+          "滅蟲滅鼠",
+          "新田倉",
+          "定期",
+          "—",
+          "待執行"
+        ],
+        "rowActions": [
+          "滅蟲滅鼠"
+        ],
+        "pager": []
+      }
+    },
+    {
+      "num": "03",
+      "label": "滅蟲工作",
+      "originalRoute": "/pestcontrolwork",
+      "localRoute": "/pestcontrolwork",
+      "pass": true,
+      "missingTh": [],
+      "missingBtns": [],
+      "missingSelects": [],
+      "local": {
+        "heads": [
+          "滅蟲工作"
+        ],
+        "btns": [
+          "今日工作",
+          "所有工作",
+          "按年",
+          "按月",
+          "按日",
+          "篩選"
+        ],
+        "inputs": [
+          "搜尋工作名稱、地址..."
+        ],
+        "selects": [
+          "所有狀態",
+          "所有種類"
+        ],
+        "th": [
+          "日期",
+          "工作名稱",
+          "工作地點",
+          "服務種類",
+          "害蟲種類",
+          "員工",
+          "狀態"
+        ],
+        "rowCols": [
+          "2026-02-07",
+          "百卉九江書院",
+          "聖道百卉書院",
+          "定期",
+          "—",
+          "梁振林、邱偉煌、蔡暢然、馮泓叡",
+          "已完成"
+        ],
+        "rowActions": [
+          "百卉九江書院"
+        ],
+        "pager": []
+      }
+    },
+    {
+      "num": "04",
+      "label": "服務計劃",
+      "originalRoute": "/serviceplans",
+      "localRoute": "/serviceplans",
+      "pass": true,
+      "missingTh": [],
+      "missingBtns": [],
+      "missingSelects": [],
+      "local": {
+        "heads": [
+          "服務計劃"
+        ],
+        "btns": [
+          "新增服務計劃",
+          "全港 10",
+          "香港 1",
+          "九龍 1",
+          "新界 2",
+          "離島 0",
+          "未分類 6",
+          "已結束 3",
+          "搜尋",
+          "查看",
+          "編輯"
+        ],
+        "inputs": [
+          "搜尋客戶、合約編號、地址、工作內容或頻率..."
+        ],
+        "selects": [
+          "按開始日期排序"
+        ],
+        "th": [
+          "開始日期",
+          "客戶",
+          "詳細地址",
+          "地區",
+          "狀態",
+          "服務頻率",
+          "操作"
+        ],
+        "rowCols": [
+          "— 至 —",
+          "城市清潔有限公司 C-2026-0001",
+          "—",
+          "未分類",
+          "生效中",
+          "—",
+          "查看 編輯"
+        ],
+        "rowActions": [
+          "城市清潔有限公司",
+          "查看",
+          "編輯"
+        ],
+        "pager": []
+      }
+    },
+    {
+      "num": "05",
+      "label": "服務報告",
+      "originalRoute": "/servicereports",
+      "localRoute": "/servicereports",
+      "pass": true,
+      "missingTh": [],
+      "missingBtns": [],
+      "missingSelects": [],
+      "local": {
+        "heads": [
+          "服務報告"
+        ],
+        "btns": [
+          "新增服務報告",
+          "搜尋",
+          "查看"
+        ],
+        "inputs": [
+          "搜尋已完成工作、報告、地點或員工..."
+        ],
+        "selects": [],
+        "th": [
+          "完成日期",
+          "報告標題",
+          "工作名稱",
+          "工作地點",
+          "員工",
+          "狀態",
+          "操作"
+        ],
+        "rowCols": [
+          "2026-06-25",
+          "滅白蟻服務工作報告",
+          "富通大廈",
+          "灣仔海傍告士打道77-79號",
+          "馮泓叡",
+          "進行中",
+          "查看"
+        ],
+        "rowActions": [
+          "滅白蟻服務工作報告",
+          "查看"
+        ],
+        "pager": [
+          "共 2 筆"
+        ]
+      }
+    },
+    {
+      "num": "06",
+      "label": "工作排班",
+      "originalRoute": "/workschedule",
+      "localRoute": "/workschedule",
+      "pass": true,
+      "missingTh": [],
+      "missingBtns": [],
+      "missingSelects": [],
+      "local": {
+        "heads": [
+          "工作排班",
+          "2026-10-24 日詳情"
+        ],
+        "btns": [
+          "←",
+          "→",
+          "本月"
+        ],
+        "inputs": [
+          "month"
+        ],
+        "selects": [],
+        "th": [
+          "一",
+          "二",
+          "三",
+          "四",
+          "五",
+          "六",
+          "日",
+          "地點／工作",
+          "聯絡",
+          "時間",
+          "備註",
+          "地點／工作",
+          "聯絡",
+          "時間",
+          "備註",
+          "地點／工作",
+          "聯絡",
+          "時間"
+        ],
+        "rowCols": [
+          "新田倉 滅蟲滅鼠",
+          "—",
+          "—",
+          "—"
+        ],
+        "rowActions": [],
+        "pager": []
+      }
+    },
+    {
+      "num": "07",
+      "label": "上班打卡",
+      "originalRoute": "/checkin",
+      "localRoute": "/checkin",
+      "pass": true,
+      "missingTh": [],
+      "missingBtns": [],
+      "missingSelects": [],
+      "local": {
+        "heads": [
+          "上班打卡",
+          "近 30 筆打卡記錄",
+          "出勤記錄"
+        ],
+        "btns": [
+          "上班打卡",
+          "我的出勤"
+        ],
+        "inputs": [],
+        "selects": [],
+        "th": [
+          "日期",
+          "時間",
+          "員工",
+          "狀態",
+          "備註",
+          "日期",
+          "類型",
+          "工時",
+          "備註"
+        ],
+        "rowCols": [
+          "暫無資料"
+        ],
+        "rowActions": [],
+        "pager": []
+      }
+    },
+    {
+      "num": "08",
+      "label": "補給記錄",
+      "originalRoute": "/mysupply",
+      "localRoute": "/mysupply",
+      "pass": true,
+      "missingTh": [],
+      "missingBtns": [],
+      "missingSelects": [],
+      "local": {
+        "heads": [
+          "補給記錄"
+        ],
+        "btns": [
+          "匯出 CSV",
+          "新增記錄",
+          "全部",
+          "個人",
+          "TG4278",
+          "WR7935",
+          "WS6355",
+          "ZK2944",
+          "篩選",
+          "查看",
+          "編輯",
+          "上一頁"
+        ],
+        "inputs": [
+          "搜尋補給記錄…"
+        ],
+        "selects": [
+          "補給位置"
+        ],
+        "th": [
+          "日期",
+          "員工",
+          "補給位置",
+          "產品",
+          "工具",
+          "備註",
+          "操作"
+        ],
+        "rowCols": [
+          "2026-10-24",
+          "驗收員工",
+          "個人",
+          "—",
+          "—",
+          "—",
+          "查看 編輯"
+        ],
+        "rowActions": [
+          "查看",
+          "編輯"
+        ],
+        "pager": [
+          "共 1 筆",
+          "上一頁",
+          "1 / 1",
+          "共 1 筆"
+        ]
+      }
+    },
+    {
+      "num": "09",
+      "label": "客戶管理",
+      "originalRoute": "/customers",
+      "localRoute": "/customers",
+      "pass": true,
+      "missingTh": [],
+      "missingBtns": [],
+      "missingSelects": [],
+      "local": {
+        "heads": [
+          "客戶管理"
+        ],
+        "btns": [
+          "匯出 CSV",
+          "匯入 CSV",
+          "客戶合併",
+          "新增客戶",
+          "篩選",
+          "查看",
+          "編輯",
+          "上一頁",
+          "下一頁"
+        ],
+        "inputs": [
+          "搜尋客戶管理…"
+        ],
+        "selects": [
+          "全部類型",
+          "主客戶"
+        ],
+        "th": [
+          "客戶編號",
+          "主客戶",
+          "客戶名稱",
+          "英文名稱",
+          "類型",
+          "聯繫人",
+          "電話",
+          "傳真",
+          "電郵",
+          "服務地址",
+          "操作"
+        ],
+        "rowCols": [
+          "—",
+          "—",
+          "Kat",
+          "Kat",
+          "普通客戶",
+          "—",
+          "9759 7721",
+          "—",
+          "—",
+          "—",
+          "查看 編輯"
+        ],
+        "rowActions": [
+          "查看",
+          "編輯"
+        ],
+        "pager": [
+          "共 1,610 筆",
+          "0510 / 2672",
+          "上一頁",
+          "下一頁",
+          "1 / 33"
+        ]
+      }
+    },
+    {
+      "num": "10",
+      "label": "報價管理",
+      "originalRoute": "/quotations",
+      "localRoute": "/quotations",
+      "pass": true,
+      "missingTh": [],
+      "missingBtns": [],
+      "missingSelects": [],
+      "local": {
+        "heads": [
+          "報價管理"
+        ],
+        "btns": [
+          "回收筒 (30)",
+          "匯出 CSV",
+          "匯入 CSV",
+          "批量導入",
+          "新增報價單",
+          "篩選",
+          "查看",
+          "編輯",
+          "上一頁",
+          "下一頁"
+        ],
+        "inputs": [
+          "搜尋報價管理…"
+        ],
+        "selects": [
+          "全部年份",
+          "全部類型",
+          "全部階段",
+          "全部員工",
+          "全部工作單位",
+          "全部投標方式"
+        ],
+        "th": [
+          "創建日期",
+          "報價單編號",
+          "報價單名稱",
+          "類型",
+          "工作單位",
+          "客戶名稱",
+          "工作地點",
+          "工作內容",
+          "總金額",
+          "負責員工",
+          "投標方式",
+          "階段",
+          "操作"
+        ],
+        "rowCols": [
+          "2026-10-24",
+          "SQP-2026-1086",
+          "SQP-2026-1086_滅鼠",
+          "服務",
+          "—",
+          "驗收客戶mvmepkt5<script>alert(1)</script>",
+          "香港",
+          "滅鼠",
+          "HK$ 220",
+          "—",
+          "—",
+          "跟進中",
+          "查看 編輯"
+        ],
+        "rowActions": [
+          "查看",
+          "編輯"
+        ],
+        "pager": [
+          "共 1,797 筆",
+          "上一頁",
+          "下一頁",
+          "1 / 36",
+          "共 1,797 筆"
+        ]
+      }
+    },
+    {
+      "num": "11",
+      "label": "採購單管理",
+      "originalRoute": "/purchaseorders",
+      "localRoute": "/purchaseorders",
+      "pass": true,
+      "missingTh": [],
+      "missingBtns": [],
+      "missingSelects": [],
+      "local": {
+        "heads": [
+          "採購單管理"
+        ],
+        "btns": [
+          "匯出 CSV",
+          "新增採購單",
+          "全部 (903)",
+          "服務 (668)",
+          "產品 (34)",
+          "篩選",
+          "查看",
+          "工程滿意紙",
+          "編輯",
+          "上一頁",
+          "下一頁"
+        ],
+        "inputs": [
+          "搜尋採購單管理…"
+        ],
+        "selects": [
+          "服務／產品",
+          "全部年份",
+          "全部月份",
+          "全部狀態",
+          "全部工作狀態"
+        ],
+        "th": [
+          "PO日期",
+          "採購單名稱",
+          "工作單位",
+          "客戶",
+          "工作地點",
+          "金額",
+          "PO文件",
+          "工作狀態",
+          "工作日期",
+          "備註",
+          "操作"
+        ],
+        "rowCols": [
+          "2026-10-24",
+          "—",
+          "—",
+          "驗收客戶mvmepkt5<script>alert(1)</script>",
+          "香港",
+          "HK$ 200",
+          "—",
+          "待安排",
+          "2026-11-15、2026-11-16",
+          "—",
+          "查看 工程滿意紙 編輯"
+        ],
+        "rowActions": [
+          "查看",
+          "工程滿意紙",
+          "編輯"
+        ],
+        "pager": [
+          "共 903 筆",
+          "上一頁",
+          "下一頁",
+          "1 / 19",
+          "共 903 筆"
+        ]
+      }
+    },
+    {
+      "num": "12",
+      "label": "送貨單管理",
+      "originalRoute": "/deliverynotes",
+      "localRoute": "/deliverynotes",
+      "pass": true,
+      "missingTh": [],
+      "missingBtns": [],
+      "missingSelects": [],
+      "local": {
+        "heads": [
+          "送貨單管理"
+        ],
+        "btns": [
+          "回收筒 (15)",
+          "匯出 CSV",
+          "新增送貨單",
+          "篩選",
+          "查看",
+          "編輯",
+          "上一頁",
+          "下一頁"
+        ],
+        "inputs": [
+          "搜尋送貨單管理…"
+        ],
+        "selects": [
+          "全部狀態",
+          "全部年份",
+          "全部月份"
+        ],
+        "th": [
+          "送貨單編號",
+          "日期",
+          "客戶名稱",
+          "地盤",
+          "送貨方式",
+          "PO No.",
+          "收貨人",
+          "關聯單據",
+          "狀態",
+          "操作"
+        ],
+        "rowCols": [
+          "DNP2610057",
+          "2026-10-24",
+          "庫存驗收客戶",
+          "香港",
+          "跟車運送",
+          "—",
+          "tester",
+          "—",
+          "已送達",
+          "查看 編輯"
+        ],
+        "rowActions": [
+          "查看",
+          "編輯"
+        ],
+        "pager": [
+          "共 1,012 筆",
+          "00 / 14",
+          "372/26",
+          "372/26",
+          "373/26"
+        ]
+      }
+    },
+    {
+      "num": "13",
+      "label": "產品管理",
+      "originalRoute": "/products",
+      "localRoute": "/products",
+      "pass": true,
+      "missingTh": [],
+      "missingBtns": [],
+      "missingSelects": [],
+      "local": {
+        "heads": [
+          "產品管理",
+          "LIST FOR PEST CONTROL CHEMICALS 2026"
+        ],
+        "btns": [
+          "匯出 CSV",
+          "匯入 CSV",
+          "貨單",
+          "新增產品",
+          "篩選",
+          "編輯",
+          "查看",
+          "上一頁",
+          "下一頁"
+        ],
+        "inputs": [
+          "搜尋產品管理…"
+        ],
+        "selects": [
+          "全部分類"
+        ],
+        "th": [
+          "Item No. 項目編號",
+          "Trade Name 貿易名稱",
+          "HK Registered # 香港註冊編號",
+          "Active Ingredients 有效成份",
+          "Packing 包裝",
+          "產品編號",
+          "產品圖片",
+          "產品名稱",
+          "AFCD Reg. No.",
+          "MSDS",
+          "供應商",
+          "來貨價",
+          "標準零售價",
+          "行家價",
+          "鼠隊價",
+          "社福及管理公司價",
+          "庫存",
+          "操作"
+        ],
+        "rowCols": [
+          "P-S077",
+          "Exterminex In-Ground Interceptor/Wood 木條",
+          "—",
+          "—",
+          "—"
+        ],
+        "rowActions": [],
+        "pager": [
+          "共 132 筆",
+          "上一頁",
+          "下一頁",
+          "1 / 3",
+          "共 132 筆"
+        ]
+      }
+    },
+    {
+      "num": "14",
+      "label": "庫存管理",
+      "originalRoute": "/inventory",
+      "localRoute": "/inventory",
+      "pass": true,
+      "missingTh": [],
+      "missingBtns": [],
+      "missingSelects": [],
+      "local": {
+        "heads": [
+          "庫存管理"
+        ],
+        "btns": [
+          "庫存列表",
+          "調整記錄",
+          "盤點記錄",
+          "庫存調整",
+          "新增盤點",
+          "補錄歷史送貨單庫存",
+          "調整"
+        ],
+        "inputs": [],
+        "selects": [],
+        "th": [
+          "產品編號",
+          "產品名稱",
+          "庫存數量",
+          "來貨價",
+          "庫存值",
+          "狀態",
+          "操作"
+        ],
+        "rowCols": [
+          "驅殺至尊",
+          "—",
+          "—",
+          "HK$ 0",
+          "低庫存",
+          "調整"
+        ],
+        "rowActions": [
+          "調整"
+        ],
+        "pager": []
+      }
+    },
+    {
+      "num": "15",
+      "label": "服務管理",
+      "originalRoute": "/services",
+      "localRoute": "/services",
+      "pass": true,
+      "missingTh": [],
+      "missingBtns": [],
+      "missingSelects": [],
+      "local": {
+        "heads": [
+          "服務管理"
+        ],
+        "btns": [
+          "匯出 CSV",
+          "匯入 CSV",
+          "新增服務",
+          "篩選",
+          "查看",
+          "編輯",
+          "上一頁"
+        ],
+        "inputs": [
+          "搜尋服務管理…"
+        ],
+        "selects": [],
+        "th": [
+          "服務名稱",
+          "服務編號",
+          "類別",
+          "計價單位",
+          "基本價格",
+          "描述",
+          "操作"
+        ],
+        "rowCols": [
+          "太陽能蚊機保養",
+          "—",
+          "滅蟲服務",
+          "—",
+          "HK$ 100",
+          "太陽能蚊機保養服務 Mosquito Trap Maintenance Service (Solar Type)",
+          "查看 編輯"
+        ],
+        "rowActions": [
+          "查看",
+          "編輯"
+        ],
+        "pager": [
+          "共 21 筆",
+          "上一頁",
+          "1 / 1",
+          "共 21 筆"
+        ]
+      }
+    },
+    {
+      "num": "16",
+      "label": "供應商管理",
+      "originalRoute": "/suppliers",
+      "localRoute": "/suppliers",
+      "pass": true,
+      "missingTh": [],
+      "missingBtns": [],
+      "missingSelects": [],
+      "local": {
+        "heads": [
+          "供應商管理"
+        ],
+        "btns": [
+          "匯出 CSV",
+          "匯入 CSV",
+          "新增供應商",
+          "篩選",
+          "查看",
+          "編輯",
+          "上一頁",
+          "下一頁"
+        ],
+        "inputs": [
+          "搜尋供應商管理…"
+        ],
+        "selects": [
+          "全部產品"
+        ],
+        "th": [
+          "供應商編號",
+          "供應商名稱",
+          "聯繫人",
+          "電話",
+          "傳真",
+          "地址",
+          "操作"
+        ],
+        "rowCols": [
+          "P0062",
+          "01 Link",
+          "—",
+          "3106 5260",
+          "3568 1833",
+          "—",
+          "查看 編輯"
+        ],
+        "rowActions": [
+          "查看",
+          "編輯"
+        ],
+        "pager": [
+          "共 151 筆",
+          "上一頁",
+          "下一頁",
+          "1 / 4",
+          "共 151 筆"
+        ]
+      }
+    },
+    {
+      "num": "17",
+      "label": "排班管理",
+      "originalRoute": "/schedules",
+      "localRoute": "/schedules",
+      "pass": true,
+      "missingTh": [],
+      "missingBtns": [],
+      "missingSelects": [],
+      "local": {
+        "heads": [
+          "排班管理",
+          "2026-10-24 日詳情"
+        ],
+        "btns": [
+          "打印",
+          "新增排班",
+          "←",
+          "→",
+          "本月",
+          "編輯"
+        ],
+        "inputs": [
+          "month"
+        ],
+        "selects": [],
+        "th": [
+          "一",
+          "二",
+          "三",
+          "四",
+          "五",
+          "六",
+          "日",
+          "地點／工作",
+          "聯絡",
+          "時間",
+          "備註",
+          "地點／工作",
+          "聯絡",
+          "時間",
+          "備註",
+          "地點／工作",
+          "聯絡",
+          "時間"
+        ],
+        "rowCols": [
+          "新田倉 滅蟲滅鼠",
+          "—",
+          "—",
+          "—"
+        ],
+        "rowActions": [],
+        "pager": []
+      }
+    },
+    {
+      "num": "18",
+      "label": "排班Excel",
+      "originalRoute": "/ExcelSchedule",
+      "localRoute": "/excelschedule",
+      "pass": true,
+      "missingTh": [],
+      "missingBtns": [],
+      "missingSelects": [],
+      "local": {
+        "heads": [
+          "排班Excel"
+        ],
+        "btns": [
+          "篩選",
+          "重新載入",
+          "導出CSV",
+          "打印",
+          "1月",
+          "2月",
+          "3月",
+          "4月",
+          "5月",
+          "6月",
+          "7月",
+          "8月",
+          "9月",
+          "10月",
+          "11月",
+          "12月",
+          "儲存全部"
+        ],
+        "inputs": [
+          "date",
+          "month",
+          "年份",
+          "69f81b4ccf253c1a26472856|schedule_date",
+          "69f81b4ccf253c1a26472856|work_unit_name",
+          "69f81b4ccf253c1a26472856|employees",
+          "69f81b4ccf253c1a26472856|vehicle_plate",
+          "69f81b6246ac338841ffc048|schedule_date",
+          "69f81b6246ac338841ffc048|work_unit_name",
+          "69f81b6246ac338841ffc048|employees"
+        ],
+        "selects": [
+          "待執行"
+        ],
+        "th": [
+          "日期",
+          "工作單位",
+          "工作內容",
+          "地點",
+          "狀態",
+          "員工（以頓號分隔）",
+          "車輛"
+        ],
+        "rowCols": [
+          "滅蟲滅鼠",
+          "新田倉",
+          "已完成 已取消 待安排 待執行 進行中"
+        ],
+        "rowActions": [],
+        "pager": []
+      }
+    },
+    {
+      "num": "19",
+      "label": "合約列表",
+      "originalRoute": "/contracts",
+      "localRoute": "/contracts",
+      "pass": true,
+      "missingTh": [],
+      "missingBtns": [],
+      "missingSelects": [],
+      "local": {
+        "heads": [
+          "合約列表"
+        ],
+        "btns": [
+          "匯出 CSV",
+          "匯入 CSV",
+          "新增合約",
+          "篩選",
+          "查看",
+          "編輯",
+          "上一頁"
+        ],
+        "inputs": [
+          "搜尋合約列表…"
+        ],
+        "selects": [
+          "全部年份",
+          "全部月份"
+        ],
+        "th": [
+          "合約編號",
+          "合約名稱",
+          "工作單位",
+          "客戶名稱",
+          "關聯報價單",
+          "合約期",
+          "服務頻率",
+          "合約總額",
+          "合約狀態",
+          "操作"
+        ],
+        "rowCols": [
+          "SQP-2026-1086",
+          "SQP-2026-1086_驗收客戶mvmepkt5<script>alert(1)</script>_滅鼠",
+          "—",
+          "驗收客戶mvmepkt5<script>alert(1)</script>",
+          "SQP-2026-1086",
+          "2026-10-24",
+          "—",
+          "HK$ 220",
+          "草稿",
+          "查看 編輯"
+        ],
+        "rowActions": [
+          "查看",
+          "編輯"
+        ],
+        "pager": [
+          "共 13 筆",
+          "上一頁",
+          "1 / 1",
+          "共 13 筆"
+        ]
+      }
+    },
+    {
+      "num": "20",
+      "label": "車輛管理",
+      "originalRoute": "/vehicles",
+      "localRoute": "/vehicles",
+      "pass": true,
+      "missingTh": [],
+      "missingBtns": [],
+      "missingSelects": [],
+      "local": {
+        "heads": [
+          "車輛管理"
+        ],
+        "btns": [
+          "匯出 CSV",
+          "易通行費用匯入",
+          "添加費用記錄",
+          "新增車輛",
+          "全部",
+          "TG4278",
+          "WR7935",
+          "WS6355",
+          "ZK2944",
+          "篩選",
+          "查看",
+          "編輯",
+          "上一頁"
+        ],
+        "inputs": [
+          "搜尋車輛管理…"
+        ],
+        "selects": [
+          "全部車牌",
+          "全部狀態"
+        ],
+        "th": [
+          "車牌號碼",
+          "車輛類型",
+          "牌照到期日",
+          "保險到期日",
+          "狀態",
+          "備註",
+          "操作"
+        ],
+        "rowCols": [
+          "TG4278",
+          "—",
+          "2027-03-26",
+          "2026-11-22",
+          "可用",
+          "—",
+          "查看 編輯"
+        ],
+        "rowActions": [
+          "查看",
+          "編輯"
+        ],
+        "pager": [
+          "共 4 筆",
+          "上一頁",
+          "1 / 1",
+          "共 4 筆"
+        ]
+      }
+    },
+    {
+      "num": "21",
+      "label": "請假紀錄",
+      "originalRoute": "/leaverecords",
+      "localRoute": "/leaves",
+      "pass": true,
+      "missingTh": [],
+      "missingBtns": [],
+      "missingSelects": [],
+      "local": {
+        "heads": [
+          "請假紀錄"
+        ],
+        "btns": [
+          "匯出 CSV",
+          "新增請假記錄",
+          "篩選",
+          "查看",
+          "編輯",
+          "上一頁"
+        ],
+        "inputs": [
+          "搜尋請假紀錄…"
+        ],
+        "selects": [
+          "2026年",
+          "選擇月份",
+          "全部狀態"
+        ],
+        "th": [
+          "員工",
+          "類型",
+          "日期",
+          "天數",
+          "狀態",
+          "原因",
+          "操作"
+        ],
+        "rowCols": [
+          "Melody",
+          "年假",
+          "2026-07-20",
+          "3",
+          "已批准",
+          "—",
+          "查看 編輯"
+        ],
+        "rowActions": [
+          "查看",
+          "編輯"
+        ],
+        "pager": [
+          "共 3 筆",
+          "上一頁",
+          "1 / 1",
+          "共 3 筆"
+        ]
+      }
+    },
+    {
+      "num": "22",
+      "label": "月度出勤表",
+      "originalRoute": "/monthlyattendance",
+      "localRoute": "/monthlyattendance",
+      "pass": true,
+      "missingTh": [],
+      "missingBtns": [],
+      "missingSelects": [],
+      "local": {
+        "heads": [
+          "月度出勤表"
+        ],
+        "btns": [
+          "查看",
+          "保存",
+          "導出CSV",
+          "導出PDF"
+        ],
+        "inputs": [
+          "u-front|2026-10-01",
+          "u-front|2026-10-02",
+          "u-front|2026-10-03",
+          "u-front|2026-10-04",
+          "u-front|2026-10-05",
+          "u-front|2026-10-06",
+          "u-front|2026-10-07",
+          "u-front|2026-10-08",
+          "u-front|2026-10-09",
+          "u-front|2026-10-10"
+        ],
+        "selects": [
+          "2026年",
+          "10月"
+        ],
+        "th": [
+          "序號",
+          "員工姓名",
+          "1 週四",
+          "2 週五",
+          "3 週六",
+          "4 週日",
+          "5 週一",
+          "6 週二",
+          "7 週三",
+          "8 週四",
+          "9 週五",
+          "10 週六",
+          "11 週日",
+          "12 週一",
+          "13 週二",
+          "14 週三",
+          "15 週四",
+          "16 週五"
+        ],
+        "rowCols": [
+          "1",
+          "盧力峰",
+          "0.0"
+        ],
+        "rowActions": [],
+        "pager": []
+      }
+    },
+    {
+      "num": "23",
+      "label": "發票管理",
+      "originalRoute": "/invoices",
+      "localRoute": "/invoices",
+      "pass": true,
+      "missingTh": [],
+      "missingBtns": [],
+      "missingSelects": [],
+      "local": {
+        "heads": [
+          "發票管理"
+        ],
+        "btns": [
+          "匯出 CSV",
+          "新增發票",
+          "篩選",
+          "查看",
+          "編輯",
+          "上一頁",
+          "下一頁"
+        ],
+        "inputs": [
+          "搜尋發票管理…"
+        ],
+        "selects": [
+          "全部類型",
+          "全部狀態"
+        ],
+        "th": [
+          "創建日期",
+          "發票編號",
+          "類型",
+          "客戶名稱",
+          "總金額",
+          "已付金額",
+          "到期日",
+          "狀態",
+          "來源",
+          "操作"
+        ],
+        "rowCols": [
+          "2026-10-24",
+          "—",
+          "服務",
+          "驗收客戶mvmepkt5<script>alert(1)</script>",
+          "HK$ 220",
+          "HK$ 50",
+          "2026-11-23",
+          "部分收款",
+          "SQP-2026-1086",
+          "查看 編輯"
+        ],
+        "rowActions": [
+          "查看",
+          "編輯"
+        ],
+        "pager": [
+          "共 206 筆",
+          "上一頁",
+          "下一頁",
+          "1 / 5",
+          "共 206 筆"
+        ]
+      }
+    },
+    {
+      "num": "24",
+      "label": "收據管理",
+      "originalRoute": "/receipts",
+      "localRoute": "/receipts",
+      "pass": true,
+      "missingTh": [],
+      "missingBtns": [],
+      "missingSelects": [],
+      "local": {
+        "heads": [
+          "收據管理"
+        ],
+        "btns": [
+          "匯出 CSV",
+          "新增收據",
+          "篩選",
+          "查看",
+          "編輯",
+          "上一頁",
+          "下一頁"
+        ],
+        "inputs": [
+          "搜尋收據管理…"
+        ],
+        "selects": [],
+        "th": [
+          "收據編號",
+          "日期",
+          "客戶名稱",
+          "關聯發票",
+          "付款方式",
+          "總金額",
+          "操作"
+        ],
+        "rowCols": [
+          "—",
+          "2026-10-24",
+          "驗收客戶mvmepkt5<script>alert(1)</script>",
+          "—",
+          "現金",
+          "HK$ 50",
+          "查看 編輯"
+        ],
+        "rowActions": [
+          "查看",
+          "編輯"
+        ],
+        "pager": [
+          "共 58 筆",
+          "上一頁",
+          "下一頁",
+          "1 / 2",
+          "共 58 筆"
+        ]
+      }
+    },
+    {
+      "num": "25",
+      "label": "會計系統",
+      "originalRoute": "/accounting",
+      "localRoute": "/accounting",
+      "pass": true,
+      "missingTh": [],
+      "missingBtns": [],
+      "missingSelects": [],
+      "local": {
+        "heads": [
+          "會計系統",
+          "2026-10 月度匯總"
+        ],
+        "btns": [
+          "會計科目",
+          "總分類賬",
+          "交易記錄",
+          "應收台賬",
+          "查看月份"
+        ],
+        "inputs": [
+          "m"
+        ],
+        "selects": [],
+        "th": [
+          "類別",
+          "筆數",
+          "金額"
+        ],
+        "rowCols": [
+          "發票",
+          "20",
+          "HK$ 33,415"
+        ],
+        "rowActions": [],
+        "pager": []
+      }
+    },
+    {
+      "num": "26",
+      "label": "系統設置",
+      "originalRoute": "/settings",
+      "localRoute": "/settings",
+      "pass": true,
+      "missingTh": [],
+      "missingBtns": [],
+      "missingSelects": [],
+      "local": {
+        "heads": [
+          "系統設置"
+        ],
+        "btns": [
+          "編輯公司設置",
+          "上傳Logo",
+          "上傳簽名",
+          "上傳印章",
+          "配額 / 假期 / 審計",
+          "保存設置"
+        ],
+        "inputs": [
+          "quota_limit",
+          "work_weekdays",
+          "work_start",
+          "work_end"
+        ],
+        "selects": [
+          "停用（演示）",
+          "啟用（本地演示）"
+        ],
+        "th": [],
+        "rowCols": [],
+        "rowActions": [],
+        "pager": []
+      }
+    },
+    {
+      "num": "27",
+      "label": "個人設置",
+      "originalRoute": "/PersonalSettings",
+      "localRoute": "/me",
+      "pass": true,
+      "missingTh": [],
+      "missingBtns": [],
+      "missingSelects": [],
+      "local": {
+        "heads": [
+          "個人設置"
+        ],
+        "btns": [
+          "儲存姓名",
+          "上傳 / 更換頭像",
+          "修改密碼",
+          "停用我的帳號"
+        ],
+        "inputs": [
+          "name",
+          "text",
+          "file",
+          "current",
+          "password",
+          "confirm"
+        ],
+        "selects": [],
+        "th": [],
+        "rowCols": [],
+        "rowActions": [],
+        "pager": []
+      }
+    },
+    {
+      "num": "28",
+      "label": "用戶管理",
+      "originalRoute": "/usermanagement",
+      "localRoute": "/users",
+      "pass": true,
+      "missingTh": [],
+      "missingBtns": [],
+      "missingSelects": [],
+      "local": {
+        "heads": [
+          "用戶管理"
+        ],
+        "btns": [
+          "新增用戶 / 發送邀請",
+          "建立帳號",
+          "保存"
+        ],
+        "inputs": [
+          "name",
+          "email",
+          "password",
+          "Dashboard,Customers,Quotations",
+          "Employee ID",
+          "accessible_pages",
+          "重設密碼（留空不變）",
+          "active",
+          "must_change"
+        ],
+        "selects": [
+          "front",
+          "accounting",
+          "management",
+          "office"
+        ],
+        "th": [
+          "姓名 / 電郵",
+          "角色",
+          "綁定員工",
+          "可訪問頁面",
+          "狀態",
+          "操作"
+        ],
+        "rowCols": [
+          "front office accounting management",
+          "啟用 首次改密",
+          "保存"
+        ],
+        "rowActions": [
+          "保存"
+        ],
+        "pager": [
+          "共 6 個"
+        ]
+      }
+    },
+    {
+      "num": "29",
+      "label": "員工管理",
+      "originalRoute": "/employees",
+      "localRoute": "/employees",
+      "pass": true,
+      "missingTh": [],
+      "missingBtns": [],
+      "missingSelects": [],
+      "local": {
+        "heads": [
+          "員工管理"
+        ],
+        "btns": [
+          "匯出 CSV",
+          "匯入 CSV",
+          "新增員工",
+          "所有員工 (1)",
+          "在職 (1)",
+          "離職 (0)",
+          "篩選",
+          "由排班還原的員工名單（10）",
+          "查看",
+          "編輯",
+          "上一頁"
+        ],
+        "inputs": [
+          "搜尋員工管理…"
+        ],
+        "selects": [
+          "所有員工"
+        ],
+        "th": [
+          "員工姓名",
+          "排班次數",
+          "狀態",
+          "員工姓名",
+          "員工昵稱",
+          "員工編號",
+          "員工類型",
+          "電話",
+          "電郵",
+          "時薪/月薪",
+          "狀態",
+          "操作"
+        ],
+        "rowCols": [
+          "盧力峰",
+          "481",
+          "待建檔"
+        ],
+        "rowActions": [],
+        "pager": [
+          "共 1 筆",
+          "上一頁",
+          "1 / 1",
+          "共 1 筆"
+        ]
+      }
+    },
+    {
+      "num": "30",
+      "label": "工作單位管理",
+      "originalRoute": "/workunits",
+      "localRoute": "/workunits",
+      "pass": true,
+      "missingTh": [],
+      "missingBtns": [],
+      "missingSelects": [],
+      "local": {
+        "heads": [
+          "工作單位管理"
+        ],
+        "btns": [
+          "匯出 CSV",
+          "新增工作單位",
+          "篩選",
+          "查看",
+          "編輯",
+          "上一頁"
+        ],
+        "inputs": [
+          "搜尋工作單位管理…"
+        ],
+        "selects": [],
+        "th": [
+          "中文名稱",
+          "英文名稱",
+          "簡稱",
+          "公司電話",
+          "公司電郵",
+          "顏色",
+          "操作"
+        ],
+        "rowCols": [
+          "天讚蟲控服務有限公司",
+          "T.J. Pest Control Services Limited",
+          "TJ",
+          "2470 3020",
+          "—",
+          "#3b82f6",
+          "查看 編輯"
+        ],
+        "rowActions": [
+          "查看",
+          "編輯"
+        ],
+        "pager": [
+          "共 16 筆",
+          "1997 / 6539",
+          "上一頁",
+          "1 / 1",
+          "共 16 筆"
+        ]
+      }
+    },
+    {
+      "num": "31",
+      "label": "電郵範本",
+      "originalRoute": "/EmailTemplates",
+      "localRoute": "/emailtemplates",
+      "pass": true,
+      "missingTh": [],
+      "missingBtns": [],
+      "missingSelects": [],
+      "local": {
+        "heads": [
+          "電郵範本"
+        ],
+        "btns": [
+          "匯出 CSV",
+          "新增範本",
+          "通用",
+          "收據",
+          "送貨單",
+          "報價單",
+          "發票",
+          "篩選",
+          "查看",
+          "編輯",
+          "保存範本",
+          "上一頁"
+        ],
+        "inputs": [
+          "搜尋電郵範本…",
+          "template_name",
+          "document_type",
+          "subject",
+          "is_active"
+        ],
+        "selects": [
+          "文件類型"
+        ],
+        "th": [
+          "範本名稱",
+          "文件類型",
+          "主旨",
+          "啟用",
+          "操作"
+        ],
+        "rowCols": [
+          "收據預設範本",
+          "收據",
+          "收據 {{文件編號}}",
+          "true",
+          "查看 編輯"
+        ],
+        "rowActions": [
+          "查看",
+          "編輯"
+        ],
+        "pager": [
+          "共 5 筆",
+          "上一頁",
+          "1 / 1",
+          "共 5 筆"
+        ]
+      }
+    },
+    {
+      "num": "32",
+      "label": "地址庫",
+      "originalRoute": "/addresslibrary",
+      "localRoute": "/addresses",
+      "pass": true,
+      "missingTh": [],
+      "missingBtns": [],
+      "missingSelects": [],
+      "local": {
+        "heads": [
+          "地址庫"
+        ],
+        "btns": [
+          "匯出 CSV",
+          "新增地址",
+          "篩選",
+          "查看",
+          "編輯",
+          "上一頁"
+        ],
+        "inputs": [
+          "搜尋地址庫…"
+        ],
+        "selects": [
+          "全部類型",
+          "全部區域",
+          "全部狀態"
+        ],
+        "th": [
+          "地址名稱",
+          "完整地址",
+          "類型",
+          "區域",
+          "聯繫人",
+          "聯繫電話",
+          "操作"
+        ],
+        "rowCols": [
+          "驗收地址",
+          "香港驗收道 1 號",
+          "—",
+          "—",
+          "—",
+          "—",
+          "查看 編輯"
+        ],
+        "rowActions": [
+          "查看",
+          "編輯"
+        ],
+        "pager": [
+          "共 1 筆",
+          "上一頁",
+          "1 / 1",
+          "共 1 筆"
+        ]
+      }
+    },
+    {
+      "num": "33",
+      "label": "工作細則庫",
+      "originalRoute": "/workinstructions",
+      "localRoute": "/workinstructions",
+      "pass": true,
+      "missingTh": [],
+      "missingBtns": [],
+      "missingSelects": [],
+      "local": {
+        "heads": [
+          "工作細則庫"
+        ],
+        "btns": [
+          "匯出 CSV",
+          "新增工作細則",
+          "篩選",
+          "查看",
+          "編輯",
+          "刪除",
+          "上一頁"
+        ],
+        "inputs": [
+          "搜尋工作細則庫…"
+        ],
+        "selects": [
+          "全部類別",
+          "全部狀態"
+        ],
+        "th": [
+          "標題",
+          "類別",
+          "內容",
+          "啟用",
+          "操作"
+        ],
+        "rowCols": [
+          "戶外噴霧",
+          "室外服務",
+          "我們的滅蟲人員，會在戶外指定工作範圍，如綠化帶，多積水位置及陰暗位置等進行超低量噴霧處理，殺滅成蚊及蠓，以減少蚊蠓數量。另外，我們會在渠位施放蚊沙或蚊油，以殺滅蚊子幼蟲，防止繁殖及擴散，達致殺滅及預防功效。",
+          "true",
+          "查看 編輯 刪除"
+        ],
+        "rowActions": [
+          "查看",
+          "編輯",
+          "刪除"
+        ],
+        "pager": [
+          "共 23 筆",
+          "上一頁",
+          "1 / 1",
+          "共 23 筆"
+        ]
+      }
+    },
+    {
+      "num": "34",
+      "label": "藥物庫",
+      "originalRoute": "/pesticides",
+      "localRoute": "/pesticides",
+      "pass": true,
+      "missingTh": [],
+      "missingBtns": [],
+      "missingSelects": [],
+      "local": {
+        "heads": [
+          "藥物庫"
+        ],
+        "btns": [
+          "匯出 CSV",
+          "新增藥物",
+          "篩選",
+          "查看",
+          "編輯",
+          "上一頁"
+        ],
+        "inputs": [
+          "搜尋藥物庫…"
+        ],
+        "selects": [
+          "全部類別"
+        ],
+        "th": [
+          "藥物名稱",
+          "AFCD Reg. No.",
+          "藥物類別",
+          "操作"
+        ],
+        "rowCols": [
+          "Actellic 50EC 保安定",
+          "#2P158EC",
+          "飛蟲、蒼蠅、蛾",
+          "查看 編輯"
+        ],
+        "rowActions": [
+          "查看",
+          "編輯"
+        ],
+        "pager": [
+          "共 38 筆",
+          "上一頁",
+          "1 / 1",
+          "共 38 筆"
+        ]
+      }
+    }
+  ]
+}

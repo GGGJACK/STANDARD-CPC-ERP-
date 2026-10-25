@@ -1,0 +1,6 @@
+﻿輪次,通過,失敗,總數,測試批次,結果文件
+第一輪,342,7,349,mvmdhqel,cpc-test-results-r1.json
+第二輪,394,0,394,mvmdookl,cpc-test-results-r2.json
+第三輪,404,0,404,mvmegaku,cpc-test-results-r3.json
+最終輪,411,0,411,mvmepkt5,cpc-test-results-r4.json
+四期包復測,411,0,411,mvmg89rx,四期包復測結果.json

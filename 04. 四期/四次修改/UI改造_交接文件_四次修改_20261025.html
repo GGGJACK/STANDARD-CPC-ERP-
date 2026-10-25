@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>四期 · 第四次修改 · UI 改造交接文件</title>
+<style>
+  :root{
+    --brand:#0f766e;--brand-2:#0b5f58;--grad:linear-gradient(135deg,#2563eb,#0d9488);
+    --ink:#0f172a;--ink2:#334155;--muted:#64748b;--line:#e4e9f0;--bg:#f6f8fb;
+    --red:#b42318;--amber:#b54708;--green:#047857;--blue:#1d4ed8;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font:15px/1.75 "Microsoft JhengHei","PingFang HK","PingFang SC",system-ui,-apple-system,"Segoe UI",sans-serif;
+    -webkit-font-smoothing:antialiased}
+  .wrap{display:grid;grid-template-columns:272px minmax(0,1fr);max-width:1560px;margin:0 auto;gap:0}
+  /* 側欄 */
+  nav.toc{position:sticky;top:0;align-self:start;height:100vh;overflow:auto;padding:26px 16px 40px;background:#fff;border-right:1px solid var(--line)}
+  .toc-brand{display:flex;align-items:center;gap:11px;padding-bottom:16px;margin-bottom:14px;border-bottom:1px solid var(--line)}
+  .toc-logo{width:38px;height:38px;border-radius:11px;background:var(--grad);display:flex;align-items:center;justify-content:center;box-shadow:0 4px 10px rgba(37,99,235,.28);flex:none}
+  .toc-logo svg{width:20px;height:20px;stroke:#fff;fill:none;stroke-width:1.8}
+  .toc-brand b{display:block;font-size:14px;line-height:1.35}
+  .toc-brand span{display:block;font-size:11px;color:var(--muted)}
+  .toc-title{font-size:10.5px;font-weight:700;letter-spacing:.1em;color:#94a3b8;padding:8px 8px 6px}
+  nav.toc a{display:block;padding:6px 9px;border-radius:7px;color:#475569;font-size:13px;text-decoration:none;line-height:1.5}
+  nav.toc a:hover{background:#f1f5f9;color:var(--brand)}
+  nav.toc a.sub{padding-left:22px;font-size:12.5px;color:#64748b}
+  nav.toc a.sub::before{content:"·";margin-right:6px;color:#cbd5e1}
+  /* 主體 */
+  main{padding:34px 40px 90px;min-width:0}
+  header.hero{background:#fff;border:1px solid var(--line);border-radius:16px;padding:28px 30px;margin-bottom:26px;box-shadow:0 1px 3px rgba(16,24,40,.06)}
+  .hero .kicker{font-size:11.5px;font-weight:700;letter-spacing:.12em;color:var(--brand);text-transform:uppercase}
+  header.hero h1{font-size:31px;line-height:1.25;letter-spacing:-.02em;margin:8px 0 10px;font-weight:700}
+  header.hero p{margin:0;color:var(--muted);font-size:14px;max-width:900px}
+  .meta{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+  .meta span{background:#f1f5f9;border:1px solid var(--line);border-radius:999px;padding:3px 11px;font-size:12px;color:#475569}
+  h2{font-size:21px;letter-spacing:-.01em;margin:40px 0 14px;padding-top:10px;font-weight:700;scroll-margin-top:16px}
+  h2 .num{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:8px;background:var(--grad);color:#fff;font-size:13px;margin-right:9px;vertical-align:2px}
+  h3{font-size:15.5px;margin:26px 0 10px;font-weight:700;color:var(--ink)}
+  h4{font-size:14px;margin:18px 0 8px;font-weight:700;color:var(--ink2)}
+  p{margin:0 0 12px}
+  ul,ol{margin:0 0 14px;padding-left:22px}
+  li{margin:4px 0}
+  code{font:12.5px/1.6 ui-monospace,Consolas,"Courier New",monospace;background:#f1f5f9;border:1px solid #e2e8f0;border-radius:4px;padding:1px 5px;color:#0f172a}
+  pre{background:#0f172a;color:#e2e8f0;border-radius:10px;padding:14px 16px;overflow:auto;font:12.5px/1.65 ui-monospace,Consolas,monospace;margin:0 0 16px}
+  pre .c{color:#7dd3fc}
+  .card{background:#fff;border:1px solid var(--line);border-radius:13px;padding:18px 22px;margin:0 0 16px;box-shadow:0 1px 2px rgba(16,24,40,.05)}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+  table{width:100%;border-collapse:separate;border-spacing:0;font-size:13.5px;background:#fff;border:1px solid var(--line);border-radius:11px;overflow:hidden;margin:0 0 18px}
+  th{background:#f8fafc;text-align:left;font-size:12px;font-weight:700;color:#64748b;letter-spacing:.03em;padding:10px 13px;border-bottom:1px solid var(--line);white-space:nowrap}
+  td{padding:10px 13px;border-bottom:1px solid #eef2f7;vertical-align:top}
+  tr:last-child td{border-bottom:0}
+  tbody tr:hover{background:#f9fbfd}
+  td.nw,th.nw{white-space:nowrap}
+  .pill{display:inline-flex;align-items:center;border-radius:999px;padding:1px 9px;font-size:11.5px;font-weight:600;white-space:nowrap;border:1px solid transparent}
+  .pill.g{background:#ecfdf5;color:var(--green);border-color:#b8e8d6}
+  .pill.r{background:#fef3f2;color:var(--red);border-color:#f6d2ce}
+  .pill.y{background:#fffaeb;color:var(--amber);border-color:#f5e2b8}
+  .pill.b{background:#eff6ff;color:var(--blue);border-color:#c9ddfb}
+  .pill.n{background:#f1f5f9;color:#475569;border-color:#e2e8f0}
+  .callout{border:1px solid #cfe9df;border-left:3px solid var(--brand);background:#f2fbf7;border-radius:9px;padding:12px 16px;margin:0 0 16px;font-size:14px}
+  .callout.warn{border-color:#f4e0b6;border-left-color:#d97706;background:#fffaeb}
+  .callout.risk{border-color:#f6d2ce;border-left-color:var(--red);background:#fef3f2}
+  .callout b{display:block;margin-bottom:3px}
+  .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(168px,1fr));gap:13px;margin:0 0 20px}
+  .kpi{background:#fff;border:1px solid var(--line);border-radius:12px;padding:14px 16px;box-shadow:0 1px 2px rgba(16,24,40,.05)}
+  .kpi b{display:block;font-size:24px;font-weight:700;letter-spacing:-.02em;line-height:1.2}
+  .kpi span{display:block;font-size:12px;color:var(--muted);margin-top:2px}
+  figure{margin:0 0 22px}
+  figure a.zoom{display:block;cursor:zoom-in}
+  figure img{display:block;width:100%;height:auto;border:1px solid var(--line);border-radius:10px;box-shadow:0 1px 3px rgba(16,24,40,.07)}
+  figcaption{font-size:12.5px;color:var(--muted);margin-top:7px;display:flex;gap:8px;align-items:center}
+  .tag{display:inline-block;font-size:11px;font-weight:700;letter-spacing:.05em;padding:1px 8px;border-radius:5px}
+  .tag.before{background:#f1f5f9;color:#64748b}
+  .tag.after{background:#ecfdf5;color:var(--green)}
+  .pair{margin:0 0 30px}
+  .pair .lbl{display:flex;align-items:center;gap:9px;margin:0 0 8px;font-size:13.5px;font-weight:700}
+  .footer{margin-top:50px;padding-top:18px;border-top:1px solid var(--line);font-size:12.5px;color:var(--muted)}
+  @media(max-width:1080px){
+    .wrap{grid-template-columns:1fr}
+    nav.toc{position:static;height:auto;border-right:0;border-bottom:1px solid var(--line)}
+    main{padding:22px 16px 60px}
+    .grid2,.grid3{grid-template-columns:1fr}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="toc">
+  <div class="toc-brand">
+    <div class="toc-logo"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3 8 4.5v9L12 21l-8-4.5v-9z"/><path d="m4 7.5 8 4.5 8-4.5M12 12v9"/></svg></div>
+    <div><b>標準清潔滅蟲</b><span>UI 改造交接文件</span></div>
+  </div>
+  <div class="toc-title">目錄</div>
+  <a href="#s0">0 · 摘要</a>
+  <a href="#s1">1 · 審查方法與依據</a>
+  <a href="#s2">2 · 原系統設計語言</a>
+  <a href="#s3">3 · 現狀問題清單</a>
+  <a href="#s3-1" class="sub">設計令牌層</a>
+  <a href="#s3-2" class="sub">骨架與導航層</a>
+  <a href="#s3-3" class="sub">組件層</a>
+  <a href="#s3-4" class="sub">真實缺陷</a>
+  <a href="#s4">4 · 改造內容</a>
+  <a href="#s5">5 · 前後對照</a>
+  <a href="#s6">6 · 驗收結果</a>
+  <a href="#s7">7 · 檔案與回滾</a>
+  <a href="#s8">8 · 已知限制與建議</a>
+  <a href="#s9">9 · 補丁：存檔修復與數量整數</a>
+</nav>
+
+<main>
+<header class="hero">
+  <div class="kicker">Phase 4 · Revision 4</div>
+  <h1>UI 系統性改造交接文件</h1>
+  <p>以原系統（standardcpc.base44.app）的視覺語言與原始碼為基線，對復刻系統做一次完整的介面重構：重建設計令牌、側欄與頁首骨架、表格與表單組件，並修掉審查中發現的三個真實渲染缺陷。業務規則與權限一律未動（僅修正新增表單的提交欄位與錯誤處理）。</p>
+  <div class="meta">
+    <span>2026-10-25</span>
+    <span>改動 7 檔 · +571 / −100 行</span>
+    <span>驗收 73/73 · 55/55 · 176/176</span>
+    <span>無資料庫遷移</span>
+  </div>
+</header>
+
+<h2 id="s0"><span class="num">0</span>摘要</h2>
+<div class="kpis">
+  <div class="kpi"><b>7</b><span>改動檔案</span></div>
+  <div class="kpi"><b>+571 / −100</b><span>新增 / 刪除行</span></div>
+  <div class="kpi"><b>73/73</b><span>前線驗收</span></div>
+  <div class="kpi"><b>55/55</b><span>營運回歸</span></div>
+  <div class="kpi"><b>176</b><span>四角色頁面冒煙</span></div>
+</div>
+
+<div class="card">
+  <p><b>一句話總結：</b>把「能用的復刻系統」升級成「看起來像一套產品」——側欄有品牌與圖示、頁首操作靠右、KPI 有語義圖示、密集表格不再把編號與日期擠成兩行、操作列在橫向捲動時始終可見、表單控件字體與高度統一。</p>
+  <table>
+    <thead><tr><th>層面</th><th>改造前</th><th>改造後</th></tr></thead>
+    <tbody>
+      <tr><td class="nw">品牌識別</td><td>純文字「標準清潔滅蟲」</td><td>藍→綠漸層 Logo 方塊 + 名稱/副標雙行</td></tr>
+      <tr><td class="nw">側欄導航</td><td>▸/▾ 文字箭頭、無圖示、選中為淺色左邊框</td><td>6 個分組圖示 + 旋轉 SVG 箭頭 + 漸層膠囊選中態 + 底部頭像卡</td></tr>
+      <tr><td class="nw">頁首</td><td>標題 22px，操作按鈕在標題下方左對齊</td><td>標題 25px，操作自動提升到標題同列右對齊</td></tr>
+      <tr><td class="nw">KPI</td><td>數字與標籤同欄、無圖示、全部墨綠</td><td>38px 粉彩圖示磁貼 + 23px 數字 + 藍/琥珀/玫瑰/翡翠語義色</td></tr>
+      <tr><td class="nw">密集表格</td><td>編號與日期折成 2 行，行高 70–95px</td><td>關鍵欄 nowrap + 列寬下限，行高降到 40–66px</td></tr>
+      <tr><td class="nw">操作列</td><td>橫向溢出時被推出畫面</td><td><code>position:sticky</code> 吸附右緣，任何捲動位置都可點</td></tr>
+      <tr><td class="nw">行內按鈕</td><td>3 個描邊小按鈕，每列重複</td><td>去邊框文字型，僅 hover 上色，視覺重量降一級</td></tr>
+      <tr><td class="nw">表單控件</td><td>字體回落 Arial、高 31px</td><td>繼承 CJK 字體、高 36px、聚焦 3px 光環</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<h2 id="s1"><span class="num">1</span>審查方法與依據</h2>
+<p>不使用「憑印象改版面」的做法。整個審查是四路並行取證，任何一條改動都能回指到具體證據。</p>
+
+<table>
+  <thead><tr><th>來源</th><th>取得方式</th><th>用途</th></tr></thead>
+  <tbody>
+    <tr><td class="nw">原系統線上站</td><td><code>https://standardcpc.base44.app</code> 首頁與 <code>/assets/index-*.css</code>（100,567 bytes）</td><td>確認主題令牌（shadcn 變數）、字體堆疊</td></tr>
+    <tr><td class="nw">原系統前端原始碼</td><td><code>05. 源碼分析/frontend/beautified/app.js</code>（1.17 MB）+ <code>chunks/*.js</code>，以 Prettier 美化後逐段閱讀</td><td>側欄、卡片、表格、按鈕的實際 Tailwind 類名與結構</td></tr>
+    <tr><td class="nw">原系統 34 張截圖</td><td><code>03 Standard CPC DataBase/01. 截圖/</code>（1241px 寬）</td><td>視覺基準：間距、密度、圖示風格、色彩語義</td></tr>
+    <tr><td class="nw">復刻系統實機</td><td>本機 3000 埠，Headless Chrome 1600×1000，逐頁 <code>Page.captureScreenshot</code> + <code>getComputedStyle</code> 取值</td><td>44 頁 × 前後兩輪，形成可量化對照</td></tr>
+  </tbody>
+</table>
+
+<h3>1.1 從原系統原始碼抽出的關鍵事實</h3>
+<pre><span class="c">// app.js @32056 — 側欄品牌區</span>
+className: "w-10 h-10 bg-gradient-to-br from-blue-600 to-teal-600
+            rounded-xl shadow-lg shadow-blue-500/20"
+
+<span class="c">// app.js @32101 — 選中選單（漸層膠囊）</span>
+n.pathname === B.url
+  ? "bg-gradient-to-r from-blue-600 to-teal-600 text-white shadow-lg shadow-blue-500/20"
+  : "hover:bg-blue-50 hover:text-blue-700 rounded-xl"
+
+<span class="c">// index-Stf6taEd.css — 主題令牌</span>
+--background: 0 0% 100%;  --foreground: 0 0% 3.9%;
+--muted-foreground: 0 0% 45.1%;  --border: 0 0% 89.8%;
+--radius: .5rem;  --sidebar-background: 0 0% 98%;
+
+<span class="c">// chunks/Contracts-*.js @470 — 表格欄頭</span>
+className: "text-3xl font-bold text-slate-900"   <span class="c">// 頁標題 30px/700</span>
+className: "bg-slate-50"                          <span class="c">// 表頭底色</span></pre>
+
+<h3>1.2 這些事實推導出的設計語言</h3>
+<div class="grid3">
+  <div class="card" style="margin:0">
+    <h4 style="margin-top:0">色彩</h4>
+    <p style="font-size:13.5px;color:#475569;margin:0">中性近黑文字 + 白底，品牌只用一組「藍→青綠」漸層（Logo、選中態），功能色（綠/藍/琥珀/玫瑰）留給狀態與 KPI 圖示。</p>
+  </div>
+  <div class="card" style="margin:0">
+    <h4 style="margin-top:0">形狀</h4>
+    <p style="font-size:13.5px;color:#475569;margin:0">卡片 12px 圓角 + 1px 淡邊 + 極輕陰影；導航項與按鈕 8px；標籤為全圓角膠囊。不用粗邊框與重陰影。</p>
+  </div>
+  <div class="card" style="margin:0">
+    <h4 style="margin-top:0">圖示</h4>
+    <p style="font-size:13.5px;color:#475569;margin:0">Lucide 線性圖示，16px、1.8px 描邊、圓端點；只在「分組標題 / KPI / 工具列按鈕 / 卡片標題」出現，行內不濫用。</p>
+  </div>
+</div>
+
+<h2 id="s2"><span class="num">2</span>原系統設計語言 vs 復刻系統（改造前）</h2>
+<p>下表是實測數值，不是估算。<code>getComputedStyle</code> 取自 <code>/contracts</code> 頁面同一組選擇器。</p>
+<table>
+  <thead><tr><th>令牌</th><th>原系統</th><th>復刻（改造前）</th><th>判定</th></tr></thead>
+  <tbody>
+    <tr><td class="nw">頁標題 h1</td><td>30px / 700 / #0f172a</td><td>22px / 700 / #182027</td><td><span class="pill r">偏小</span></td></tr>
+    <tr><td class="nw">表頭 th</td><td>14px / 500 / muted / bg-slate-50</td><td>11.7px / 600 / #66717b / #fafbfc</td><td><span class="pill y">偏小</span></td></tr>
+    <tr><td class="nw">表格 td</td><td>14px / padding 16px</td><td>12.7px / padding 9×10px</td><td><span class="pill y">偏擠</span></td></tr>
+    <tr><td class="nw">卡片</td><td>12px 圓角 + shadow</td><td>10px 圓角 + 0 1px 1px 3%</td><td><span class="pill y">偏平</span></td></tr>
+    <tr><td class="nw">按鈕</td><td>h-9 (36px) / text-sm / rounded-md</td><td>h≈38px / 14px / 7px</td><td><span class="pill y">不統一</span></td></tr>
+    <tr><td class="nw">輸入框</td><td>inherit 字體、h-9</td><td><b>Arial</b>、h=31px</td><td><span class="pill r">字體脫節</span></td></tr>
+    <tr><td class="nw">品牌色</td><td>藍→青綠漸層</td><td>單一墨綠 #0f6e56</td><td><span class="pill n">風格差異</span></td></tr>
+    <tr><td class="nw">側欄</td><td>#fafafa + 圖示 + 漸層選中</td><td>#fff + 純文字 + 左邊框選中</td><td><span class="pill r">無識別</span></td></tr>
+  </tbody>
+</table>
+
+<div class="callout">
+  <b>設計決策：保留墨綠，借用漸層</b>
+  直接把主色換成原系統的黑/藍會讓既有使用者（辦公室、前線）失去辨識感，也會讓「已驗收三輪」的介面產生不必要的漂移。因此最終方案是：<b>品牌色仍以墨綠 #0f766e 為主</b>，只在「Logo 方塊」與「側欄選中態」使用藍→青綠漸層——這正好對應原系統把漸層當裝飾、把中性色當主體的用法。
+</div>
+
+<h2 id="s3"><span class="num">3</span>現狀問題清單</h2>
+<p>共 16 項，按「令牌 → 骨架 → 組件 → 缺陷」四層排列。每項都標了處理狀態。</p>
+
+<h3 id="s3-1">3.1 設計令牌層</h3>
+<table>
+  <thead><tr><th>#</th><th>問題</th><th>證據</th><th>處理</th></tr></thead>
+  <tbody>
+    <tr><td>1</td><td>全站只有 5 個 CSS 變數，狀態色散落在各處硬編碼</td><td><code>:root</code> 僅 <code>--brand/--line/--ink/--muted</code></td><td><span class="pill g">已改</span> 重建 24 個令牌</td></tr>
+    <tr><td>2</td><td>字號階梯斷層：正文 14、表格 12.7、表頭 11.7、標籤 11</td><td>computed styles</td><td><span class="pill g">已改</span> 13 / 13 / 11.5 / 11.5</td></tr>
+    <tr><td>3</td><td><b>輸入框字體回落 Arial</b>，與正文微軟正黑不一致</td><td><code>input</code> computed <code>font-family: Arial</code></td><td><span class="pill g">已修</span> 見 §3.4-①</td></tr>
+    <tr><td>4</td><td>圓角三套（10 / 7 / 6）且無規律</td><td>card 10px、btn 7px、pill 10px</td><td><span class="pill g">已改</span> 12 / 8 / 999</td></tr>
+  </tbody>
+</table>
+
+<h3 id="s3-2">3.2 骨架與導航層</h3>
+<table>
+  <thead><tr><th>#</th><th>問題</th><th>證據</th><th>處理</th></tr></thead>
+  <tbody>
+    <tr><td>5</td><td>側欄只有文字，沒有品牌區、沒有分組圖示、沒有頭像</td><td>改造前截圖 <code>01_我的工作_前.png</code></td><td><span class="pill g">已改</span> Logo 方塊 + 6 圖示 + 頭像卡</td></tr>
+    <tr><td>6</td><td>分組箭頭用 <code>::after content:'▸'</code> 字元，字型不同會位移</td><td><code>.navgrp:not([open])&gt;summary::after</code></td><td><span class="pill g">已改</span> SVG mask 箭頭 + rotate</td></tr>
+    <tr><td>7</td><td>選中態為「淺綠底 + 3px 左邊框」，與 hover 差異小</td><td><code>a.on{background:#eaf5f0}</code></td><td><span class="pill g">已改</span> 漸層膠囊 + 陰影</td></tr>
+    <tr><td>8</td><td><b>頁首操作按鈕在標題下方左對齊</b>，與原系統右上角相反</td><td>改造前所有列表頁</td><td><span class="pill g">已改</span> 自動提升到標題同列</td></tr>
+    <tr><td>9</td><td>登入頁卡片內容溢出、示範帳號按鈕換行、無品牌區</td><td><code>00_登入_前.png</code>（備註文字被卡片下緣切掉）</td><td><span class="pill g">已改</span> 重新設計</td></tr>
+  </tbody>
+</table>
+
+<h3 id="s3-3">3.3 組件層</h3>
+<table>
+  <thead><tr><th>#</th><th>問題</th><th>證據</th><th>處理</th></tr></thead>
+  <tbody>
+    <tr><td>10</td><td>KPI 卡：數字與標籤上下擠、無圖示、四張全墨綠</td><td>改造前 <code>02_mywork</code></td><td><span class="pill g">已改</span> 圖示磁貼 + 語義色</td></tr>
+    <tr><td>11</td><td><b>表格編號/日期欄被擠成 2 行</b>（例：<code>SQP-2026-</code> / <code>1085</code>）</td><td><code>03_報價管理_前.png</code> 第 2、6 欄</td><td><span class="pill g">已改</span> nowrap + 列寬下限</td></tr>
+    <tr><td>12</td><td>橫向溢出時操作列被推出畫面，必須先捲動才能點</td><td>12 欄以上的報價/採購頁</td><td><span class="pill g">已改</span> sticky 吸附右緣</td></tr>
+    <tr><td>13</td><td>每列 3 個描邊小按鈕（查看/編輯/刪除），密集頁達 270 個</td><td><code>/purchaseorders</code> 有 273 個 <code>.btn</code></td><td><span class="pill g">已改</span> 去邊框文字型</td></tr>
+    <tr><td>14</td><td>金額欄未右對齊，<code>HK$ 0</code> 與 <code>HK$ 47,200</code> 起點不一</td><td><code>02_合約列表_前.png</code></td><td><span class="pill g">已改</span> 依型別自動 <code>.num</code></td></tr>
+    <tr><td>15</td><td>空狀態只有一行灰字，無圖形，與「載入失敗」難分</td><td>全部空表</td><td><span class="pill g">已改</span> 托盤圖示 + 虛框</td></tr>
+    <tr><td>16</td><td>表單底部「儲存/取消」浮在卡片外，與表單脫節</td><td><code>05_新增客戶_前</code></td><td><span class="pill g">已改</span> 卡片內吸底操作條</td></tr>
+  </tbody>
+</table>
+
+<h3 id="s3-4">3.4 審查中發現的三個真實缺陷</h3>
+<p>這三個不是「風格問題」，是會讓使用者困惑或誤判的實際錯誤，已一併修掉。</p>
+
+<div class="callout risk">
+  <b>① 輸入框字體回落 Arial</b>
+  <code>input</code> 沒有繼承 <code>font-family</code>，Chrome 預設用 Arial。結果是同一張表單裡「客戶名稱」（微軟正黑）與輸入框裡打出來的字（Arial）長得不一樣，中英文混排時字重與字寬都會跳。<br>
+  <b>修法：</b><code>input,select,textarea{font-family:inherit}</code>。實測 <code>/new/customers</code> 輸入框字體由 <code>Arial</code> → <code>"Microsoft JhengHei"</code>。
+</div>
+
+<div class="callout risk">
+  <b>② 庫存頁「來貨價」顯示 <code>HK$ HK$ 0</code></b>
+  <code>server.mjs</code> 寫成 <code>`HK$ ${money(...)}`</code>，而 <code>money()</code> 本身已回傳含幣種符號的字串。<br>
+  <b>修法：</b>移除多餘前綴，統一走 <code>money()</code>。
+</div>
+
+<div class="callout risk">
+  <b>③ 空狀態圖示「泄漏」到日曆空格</b>
+  新增空狀態樣式時用了 <code>.empty::before</code> 產生圖示，但日曆空白格是 <code>&lt;div class="calendar-cell empty"&gt;</code>，於是 7×5 的日曆裡每個空白格都長出一個托盤圖示，且被 <code>padding:46px!important</code> 撐高。<br>
+  <b>修法：</b>日曆格改為 <code>calendar-cell is-empty</code>，圖示選擇器收窄到 <code>td.empty</code> 與 <code>.card.empty</code>。
+</div>
+
+<h2 id="s4"><span class="num">4</span>改造內容</h2>
+
+<h3>4.1 設計令牌（<code>lib/ui.mjs</code> · <code>:root</code>）</h3>
+<pre>:root{
+  --brand:#0f766e;  --brand-2:#0b5f58;  --brand-50:#ecfdf5;
+  --grad:linear-gradient(135deg,#2563eb 0%,#0d9488 100%);
+  --ink:#0f172a;    --ink-2:#334155;    --muted:#64748b;
+  --line:#e4e9f0;   --line-2:#eef2f7;   --bg:#f6f8fb;
+  --danger:#b42318; --warn:#b54708;     --info:#1d4ed8;
+  --r:12px; --r-sm:8px; --r-xs:6px;
+  --sh-sm:0 1px 2px rgba(16,24,40,.05);
+  --sh:0 1px 3px rgba(16,24,40,.06), 0 1px 2px rgba(16,24,40,.04);
+  --side:250px;
+}</pre>
+<p>對照改造前的 5 個變數，現在狀態色、陰影、圓角、側欄寬度都收進令牌，後續要換主題只需改這一塊。</p>
+
+<h3>4.2 側欄（品牌 + 分組圖示 + 漸層選中 + 頭像卡）</h3>
+<pre>&lt;aside&gt;
+  &lt;div class="brand"&gt;
+    &lt;div class="brand-logo"&gt; <span class="c">&lt;!-- icon('box') --&gt;</span> &lt;/div&gt;
+    &lt;div&gt;&lt;b&gt;標準清潔滅蟲&lt;/b&gt;&lt;span&gt;公司一站式管理系統&lt;/span&gt;&lt;/div&gt;
+  &lt;/div&gt;
+  &lt;div class="navscroll"&gt;
+    &lt;details class="navgrp"&gt;
+      &lt;summary&gt; <span class="c">&lt;!-- 分組圖示 --&gt;</span> &lt;b&gt;市場管理&lt;/b&gt; &lt;/summary&gt;
+      &lt;nav&gt;&lt;a class="on"&gt;客戶管理&lt;/a&gt;…&lt;/nav&gt;
+    &lt;/details&gt;
+  &lt;/div&gt;
+  &lt;div class="who"&gt;&lt;div class="who-avatar"&gt;高&lt;/div&gt;…&lt;a href="/logout"&gt;&lt;/a&gt;&lt;/div&gt;
+&lt;/aside&gt;</pre>
+<ul>
+  <li>分組圖示對照表 <code>NAV_ICONS</code>：主要功能→dashboard、前線員工→users、市場管理→trend、營運管理→building、公司財務→wallet、設置→settings。</li>
+  <li>選中態 <code>aside nav a.on{background:var(--grad);box-shadow:0 4px 12px rgba(37,99,235,.24)}</code>，未選中為灰點 + hover 淺底。</li>
+  <li>底部 <code>.who</code> 用 <code>flex</code> 固定在視窗底，<code>.navscroll</code> 獨立捲動——長選單不會把使用者資訊推走。</li>
+</ul>
+
+<h3>4.3 頁首：把「操作」提升到標題同列</h3>
+<p>系統有 20+ 個列表頁，格式都是 <code>&lt;h1&gt;</code> + <code>&lt;div class="sub"&gt;</code> + <code>&lt;div class="bar"&gt;</code>。逐一改寫風險太高，因此加了一個受控的字串轉換：</p>
+<pre>function splitHead(body) {
+  <span class="c">// 1. 取出 breadcrumbs / h1 / .sub</span>
+  <span class="c">// 2. 若緊接著的 .bar 內不含 input/select/textarea/form/table/dialog/details</span>
+  <span class="c">//    → 視為「純按鈕列」，提升為頁首右側操作區</span>
+  <span class="c">// 3. 否則原樣保留（篩選列留在標題下方）</span>
+  return { head: `&lt;div class="pagehead"&gt;…&lt;/div&gt;`, rest };
+}</pre>
+<p>安全邊界：只處理「頁面開頭」的那一組，且一旦偵測到表單控件就放棄提升——所以 <code>/quotations</code>、<code>/trash</code> 這種帶搜尋框的頁面，篩選列仍留在原位，只有匯出/新增等按鈕上移。</p>
+
+<h3>4.4 按鈕與圖示自動注入</h3>
+<pre>const ACTION_ICON_RULES = [
+  [/^(新增|建立|創建|開立)/, 'plus'],
+  [/^匯出/, 'download'],   [/^(匯入|導入|批量導入)/, 'upload'],
+  [/^篩選/, 'filter'],     [/^合併/, 'merge'],  [/^回收/, 'trash'],
+];</pre>
+<p>20 多個頁面的按鈕文字不用改，<code>decorateActions()</code> 會依關鍵字補上 16px 線性圖示。實測效果：<code>回收筒 (30)</code> 前綴垃圾桶、<code>匯出 CSV</code> 前綴下載箭頭、<code>新增合約</code> 前綴加號。</p>
+
+<h3>4.5 表格：三件事同時解決密度、可讀性與可操作性</h3>
+<table>
+  <thead><tr><th>機制</th><th>做法</th><th>效果</th></tr></thead>
+  <tbody>
+    <tr><td class="nw">關鍵欄 nowrap</td><td><code>NOWRAP_RE</code> 比對欄位 key（number/no/id/code/date/amount/total/price/plate/type…），命中則加 <code>td.nw</code></td><td><code>SQP-2026-1085</code>、<code>2026-10-23</code> 不再折行</td></tr>
+    <tr><td class="nw">列寬下限</td><td><code>colMin()</code>：編號類 104px、名稱/地址類 210px、單位/地點類 148px、其餘 100px，寫進 <code>th style="min-width"</code></td><td>密集表不再把 12 欄硬塞進 1300px，改為容器橫向捲動</td></tr>
+    <tr><td class="nw">操作列吸附</td><td><code>th.act-col, td.actions.act-col{position:sticky;right:0}</code> + 左側漸層陰影</td><td>報價頁 12 欄時，捲到任何位置都能直接點「查看/編輯/刪除」</td></tr>
+    <tr><td class="nw">金額右對齊</td><td><code>isNum()</code>：<code>type==='money'</code> 或欄位在 <code>AMOUNT_FIELDS</code> 內即套 <code>.num</code></td><td>數字小數點對齊，掃視總額變快</td></tr>
+    <tr><td class="nw">行內按鈕降噪</td><td><code>td.actions .btn.small{background:transparent;border-color:transparent}</code>，僅 hover 上色</td><td>採購頁 273 個按鈕的視覺重量大幅下降</td></tr>
+  </tbody>
+</table>
+
+<h3>4.6 KPI 卡</h3>
+<pre>export function kpis(items) {
+  const name = item.icon || KPI_DEFAULT_ICONS[i % 6];   <span class="c">// calendar/clock/alert/check…</span>
+  const tone = item.tone ?? KPI_DEFAULT_TONES[i % 6];   <span class="c">// ''/amber/rose/emerald/violet</span>
+  return `&lt;div class="kpi"&gt;
+    &lt;div class="kpi-ico ${tone}"&gt;${icon(name)}&lt;/div&gt;
+    &lt;div class="kpi-main"&gt;&lt;b&gt;${value}&lt;/b&gt;&lt;span&gt;${label}&lt;/span&gt;&lt;/div&gt;
+  &lt;/div&gt;`;
+}</pre>
+<p>呼叫端完全不用改（<code>kpis([{label,value}])</code> 仍可用），圖示與色調按索引自動輪替；需要指定時傳 <code>icon</code>/<code>tone</code> 即可。<code>/receivables</code> 原本手寫的 5 張 KPI 也改走這個函式，順帶修掉「數字與標籤擠在同一行」的舊樣式。</p>
+<p>網格改用 <code>repeat(auto-fit,minmax(205px,1fr))</code>：3 張 KPI 的客戶詳情頁不再留一格空白。</p>
+
+<h3>4.7 表單與彈窗</h3>
+<ul>
+  <li>控件高度統一 36px、圓角 8px、聚焦 <code>box-shadow:0 0 0 3px rgba(15,118,110,.14)</code>。</li>
+  <li><code>form.card &gt; .bar</code> 變成卡片內吸底操作條（負邊距 + 上邊框 + 淺底），「儲存/取消」不再飄在卡片外。</li>
+  <li><code>.frow input[type=checkbox|radio|color]</code> 個別覆寫寬度——修掉「顏色選擇器被拉成整條黑條」與「勾選框被拉滿整欄」。</li>
+  <li>彈窗 header/footer <code>sticky</code>，改為 14px 圓角與 <code>rgba(15,23,42,.55)</code> 遮罩。</li>
+</ul>
+
+<h3>4.8 登入頁重構</h3>
+<p>從「一張白卡 + 兩行字」改成：整頁垂直置中、頂部品牌方塊、404px 卡片、電郵/密碼 placeholder、全寬主按鈕、2×2 示範角色格、底部密碼提示。原本被裁切的「示範帳號密碼：demo1234」現在落在卡片內。</p>
+
+<h2 id="s5"><span class="num">5</span>前後對照</h2>
+<p>同一台機器、同一個 1600×1000 視窗、同一份資料庫。左右為「改造前 / 改造後」上下排列，可直接比對行高、欄寬與層級。</p>
+
+<div class="pair">
+  <div class="lbl">00 · 登入頁</div>
+  <figure><a class="zoom" href="截圖對照/00_登入_前.png" target="_blank" rel="noopener" title="點擊檢視原尺寸"><img src="截圖對照/00_登入_前.png" alt="登入頁改造前"></a><figcaption><span class="tag before">BEFORE</span> 卡片內容溢出、示範按鈕換行、無品牌區</figcaption></figure>
+  <figure style="margin-bottom:0"><a class="zoom" href="截圖對照/00_登入_後.png" target="_blank" rel="noopener" title="點擊檢視原尺寸"><img src="截圖對照/00_登入_後.png" alt="登入頁改造後"></a><figcaption><span class="tag after">AFTER</span> 整頁置中、品牌方塊、2×2 角色格</figcaption></figure>
+</div>
+
+<div class="pair">
+  <div class="lbl">01 · 我的工作</div>
+  <figure><a class="zoom" href="截圖對照/01_我的工作_前.png" target="_blank" rel="noopener" title="點擊檢視原尺寸"><img src="截圖對照/01_我的工作_前.png" alt="我的工作改造前"></a><figcaption><span class="tag before">BEFORE</span> KPI 無圖示、按鈕在標題下方左對齊、空狀態只有灰字</figcaption></figure>
+  <figure style="margin-bottom:0"><a class="zoom" href="截圖對照/01_我的工作_後.png" target="_blank" rel="noopener" title="點擊檢視原尺寸"><img src="截圖對照/01_我的工作_後.png" alt="我的工作改造後"></a><figcaption><span class="tag after">AFTER</span> 漸層側欄、圖示 KPI、操作靠右、托盤空狀態</figcaption></figure>
+</div>
+
+<div class="pair">
+  <div class="lbl">02 · 合約列表</div>
+  <figure><a class="zoom" href="截圖對照/02_合約列表_前.png" target="_blank" rel="noopener" title="點擊檢視原尺寸"><img src="截圖對照/02_合約列表_前.png" alt="合約列表改造前"></a><figcaption><span class="tag before">BEFORE</span> 合約編號與合約期折成兩行，3 個描邊按鈕重複 12 次</figcaption></figure>
+  <figure style="margin-bottom:0"><a class="zoom" href="截圖對照/02_合約列表_後.png" target="_blank" rel="noopener" title="點擊檢視原尺寸"><img src="截圖對照/02_合約列表_後.png" alt="合約列表改造後"></a><figcaption><span class="tag after">AFTER</span> 編號/日期單行、操作列去邊框、按鈕帶圖示靠右</figcaption></figure>
+</div>
+
+<div class="pair">
+  <div class="lbl">03 · 報價管理（最密集的一頁：12 欄 / 1,796 筆）</div>
+  <figure><a class="zoom" href="截圖對照/03_報價管理_前.png" target="_blank" rel="noopener" title="點擊檢視原尺寸"><img src="截圖對照/03_報價管理_前.png" alt="報價管理改造前"></a><figcaption><span class="tag before">BEFORE</span> 每格折 3–6 行，行高約 85px，操作列在最右被推出畫面</figcaption></figure>
+  <figure style="margin-bottom:0"><a class="zoom" href="截圖對照/03_報價管理_後.png" target="_blank" rel="noopener" title="點擊檢視原尺寸"><img src="截圖對照/03_報價管理_後.png" alt="報價管理改造後"></a><figcaption><span class="tag after">AFTER</span> 列寬下限 + 橫向捲動，行高降到約 66px，操作列吸附右緣常駐</figcaption></figure>
+</div>
+
+<div class="pair">
+  <div class="lbl">04 · 客戶管理</div>
+  <figure><a class="zoom" href="截圖對照/04_客戶管理_前.png" target="_blank" rel="noopener" title="點擊檢視原尺寸"><img src="截圖對照/04_客戶管理_前.png" alt="客戶管理改造前"></a><figcaption><span class="tag before">BEFORE</span> 客戶編號被截成 <code>C01..</code>，地址欄位互相擠壓</figcaption></figure>
+  <figure style="margin-bottom:0"><a class="zoom" href="截圖對照/04_客戶管理_後.png" target="_blank" rel="noopener" title="點擊檢視原尺寸"><img src="截圖對照/04_客戶管理_後.png" alt="客戶管理改造後"></a><figcaption><span class="tag after">AFTER</span> 編號完整、地址可讀、篩選列獨立成卡</figcaption></figure>
+</div>
+
+<div class="pair">
+  <div class="lbl">05 · 庫存管理（同時修掉 <code>HK$ HK$ 0</code>）</div>
+  <figure><a class="zoom" href="截圖對照/05_庫存管理_前.png" target="_blank" rel="noopener" title="點擊檢視原尺寸"><img src="截圖對照/05_庫存管理_前.png" alt="庫存管理改造前"></a><figcaption><span class="tag before">BEFORE</span> 來貨價欄顯示「HK$ HK$ 0」</figcaption></figure>
+  <figure style="margin-bottom:0"><a class="zoom" href="截圖對照/05_庫存管理_後.png" target="_blank" rel="noopener" title="點擊檢視原尺寸"><img src="截圖對照/05_庫存管理_後.png" alt="庫存管理改造後"></a><figcaption><span class="tag after">AFTER</span> 幣種只出現一次，KPI 改為圖示磁貼</figcaption></figure>
+</div>
+
+<div class="pair">
+  <div class="lbl">06 · 排班管理（同時修掉日曆空格圖示泄漏）</div>
+  <figure><a class="zoom" href="截圖對照/06_排班管理_前.png" target="_blank" rel="noopener" title="點擊檢視原尺寸"><img src="截圖對照/06_排班管理_前.png" alt="排班管理改造前"></a><figcaption><span class="tag before">BEFORE</span> 日曆格線淡、事件條與日期層級不明</figcaption></figure>
+  <figure style="margin-bottom:0"><a class="zoom" href="截圖對照/06_排班管理_後.png" target="_blank" rel="noopener" title="點擊檢視原尺寸"><img src="截圖對照/06_排班管理_後.png" alt="排班管理改造後"></a><figcaption><span class="tag after">AFTER</span> 空格改虛線底、事件條加左側色條、當日高亮</figcaption></figure>
+</div>
+
+<div class="pair">
+  <div class="lbl">07 · 回收桶</div>
+  <figure><a class="zoom" href="截圖對照/07_回收桶_前.png" target="_blank" rel="noopener" title="點擊檢視原尺寸"><img src="截圖對照/07_回收桶_前.png" alt="回收桶改造前"></a><figcaption><span class="tag before">BEFORE</span> 時間欄折行、模組標籤與正文同重</figcaption></figure>
+  <figure style="margin-bottom:0"><a class="zoom" href="截圖對照/07_回收桶_後.png" target="_blank" rel="noopener" title="點擊檢視原尺寸"><img src="截圖對照/07_回收桶_後.png" alt="回收桶改造後"></a><figcaption><span class="tag after">AFTER</span> 時間單行、模組膠囊化、警示條更清楚</figcaption></figure>
+</div>
+
+<h2 id="s6"><span class="num">6</span>驗收結果</h2>
+<p>全部在隔離副本（<code>:3101</code> + 獨立 <code>_verify.db</code>）執行，跑完自動清理測試資料，不動正式庫。</p>
+
+<table>
+  <thead><tr><th>套件</th><th>範圍</th><th>結果</th><th>產出</th></tr></thead>
+  <tbody>
+    <tr><td class="nw">verify-frontline.mjs</td><td>第三次修改的 73 項前線員工功能</td><td><span class="pill g">73 / 73 通過</span></td><td><code>驗收結果_三次修改.json</code></td></tr>
+    <tr><td class="nw">verify-operation-2.mjs</td><td>第二次修改的 55 項營運管理功能</td><td><span class="pill g">55 / 55 通過</span></td><td><code>驗收結果_營運回歸_55.json</code></td></tr>
+    <tr><td class="nw">四角色頁面冒煙</td><td>44 頁 × 4 角色 = 176 次載入</td><td><span class="pill g">176 / 176 無異常</span></td><td><code>驗收結果_UI.json</code></td></tr>
+  </tbody>
+</table>
+
+<h3>6.1 冒煙測試檢查項</h3>
+<p>不只是「HTTP 200」，每一頁另外檢查：</p>
+<ul>
+  <li>HTTP 狀態 &lt; 500（含 302 權限跳轉視為正常）</li>
+  <li>渲染內容不含 <code>&gt;undefined&lt;</code>、<code>undefined&lt;/</code>、<code>NaN&lt;</code></li>
+  <li><code>class="pagehead"</code> 在單頁內最多出現一次（避免頁首被重複包裹）</li>
+  <li><code>&lt;div&gt;</code> / <code>&lt;/div&gt;</code> 數量配平（避免模板拼接漏標籤）</li>
+</ul>
+<p>四個角色分別登入：management / office / front / accounting — 涵蓋權限差異造成的不同側欄與不同按鈕組合。</p>
+
+<div class="callout">
+  <b>一個刻意的取捨</b>
+  上一輪的驗收腳本裡有一條硬編碼斷言：<code>/\.navgrp&gt;summary\{[^}]*font-size:13px;font-weight:700/</code>。第一次重跑時我把分組標題設成 600 字重，這條就紅了。由於「主欄目 13px 加粗」本身是第二輪的使用者決策，我選擇把字重回復成 700 讓它繼續成立，而不是改測試——測試是契約，樣式應該服從契約。
+</div>
+
+<h2 id="s7"><span class="num">7</span>檔案與回滾</h2>
+
+<h3>7.1 改動檔案</h3>
+<table>
+  <thead><tr><th>檔案</th><th>行數</th><th>增 / 刪</th><th>改動內容</th></tr></thead>
+  <tbody>
+    <tr><td class="nw"><code>lib/ui.mjs</code></td><td>649 → 1092</td><td>+507 / −88</td><td>設計令牌、側欄骨架、頁首拆分、圖示庫、按鈕與表格渲染、KPI、登入頁、明細選擇器回填</td></tr>
+    <tr><td class="nw"><code>lib/pages.mjs</code></td><td>727 → 727</td><td>+5 / −5</td><td>日曆空格類名 <code>empty</code> → <code>is-empty</code>（4 處）；應收台賬 KPI 改走 <code>kpis()</code></td></tr>
+    <tr><td class="nw"><code>lib/core.mjs</code></td><td>552 → 554</td><td>+3 / −1</td><td>新增補給／請假彈窗的 <code>__id</code> 改為空值（存檔 404 的根因）</td></tr>
+    <tr><td class="nw"><code>lib/actions.mjs</code></td><td>772 → 814</td><td>+44 / −3</td><td><code>saveEntity</code> 對「不存在的 __id」加防禦式回退</td></tr>
+    <tr><td class="nw"><code>lib/utils.mjs</code></td><td>274 → 280</td><td>+6 / −0</td><td>新增 <code>isIntegerField()</code>：數量類欄位的整數判定</td></tr>
+    <tr><td class="nw"><code>lib/config.mjs</code></td><td>817 → 817</td><td>+1 / −1</td><td>補給記錄的「產品／工具」欄改以明細表渲染</td></tr>
+    <tr><td class="nw"><code>server.mjs</code></td><td>838 → 841</td><td>+5 / −2</td><td>庫存頁重複幣種；錯誤重繪時清除失效的 <code>__id</code></td></tr>
+  </tbody>
+</table>
+<p>沒有資料庫遷移、沒有新增依賴、沒有改動任何 route 或權限判斷。</p>
+
+<h3>7.2 回滾</h3>
+<p>改造前的完整快照留在：</p>
+<pre>F:\04 STANDARD CPC SYSTEM\04. 四期\系统代码\backup-ui-20261025-112240\
+  ├─ lib\  (10 個 .mjs)
+  └─ server.mjs</pre>
+<p>回滾 = 把該目錄的 <code>lib</code> 與 <code>server.mjs</code> 覆蓋回 <code>系统代码\</code>，再重啟 <code>启动系统.bat</code>。因為沒有 schema 變更，<code>data.db</code> 不需要動。</p>
+
+<h3>7.3 上線步驟</h3>
+<ol>
+  <li>關掉正在跑的 <code>启动系统.bat</code> 視窗（或對 3000 埠的 node 程序按 Ctrl+C）。</li>
+  <li>雙擊 <code>F:\04 STANDARD CPC SYSTEM\04. 四期\系统代码\启动系统.bat</code>。</li>
+  <li>瀏覽器 <code>http://127.0.0.1:3000</code>，強制重新整理（Ctrl+F5）清掉舊 CSS。</li>
+  <li>用示範帳號任一角色登入，確認側欄、KPI、表格樣式已更新。</li>
+</ol>
+
+<h2 id="s8"><span class="num">8</span>已知限制與建議</h2>
+
+<h3>8.1 這次刻意沒做的</h3>
+<table>
+  <thead><tr><th>項目</th><th>原因</th><th>建議</th></tr></thead>
+  <tbody>
+    <tr><td class="nw">列表頁 KPI 橫條</td><td>原系統在報價/客戶頁頂部有 6 張統計卡，需要對全量資料做聚合；屬於功能新增而非樣式</td><td>若要補，建議先在 <code>/quotations</code> 試點，用 <code>kpis()</code> 直接接</td></tr>
+    <tr><td class="nw">表格點擊排序</td><td>後端目前沒有 <code>sort</code> 參數，只加前端箭頭會是假的可點</td><td>下一輪在 <code>dataTable</code> 加 <code>?sort=field&amp;dir=</code> 並在 store 層支援</td></tr>
+    <tr><td class="nw">全站勾選批次操作</td><td>各實體的批次動作語義不同（刪除/匯出/改狀態），需逐一定義</td><td>先做「批次匯出選取」這種無副作用的</td></tr>
+    <tr><td class="nw">應收台賬 / 總帳分頁</td><td>目前一次渲染 378 / 522 行，頁面高達 1.8–2.5 萬像素；改分頁會動到資料流</td><td><b>優先度最高</b>的後續項，建議沿用現有 <code>pager()</code></td></tr>
+    <tr><td class="nw">深色模式</td><td>原系統有 dark 變數，但復刻系統沒有切換入口</td><td>令牌已集中，補一組 <code>[data-theme=dark]</code> 覆寫即可</td></tr>
+    <tr><td class="nw">通知鈴鐺 / 浮動客服</td><td>原系統右上角有鈴鐺與右下角客服球，但沒有對應資料來源</td><td>有真實通知資料後再加</td></tr>
+  </tbody>
+</table>
+
+<h3>8.2 已知樣式邊界</h3>
+<ul>
+  <li><b>超寬表格必然橫向捲動。</b>報價頁 12 欄在 1600px 視窗（扣掉 250px 側欄）下無法全部塞入。現在的做法是「寧可捲動，也不要把資料折成 5 行」，並用吸附操作列保證可操作性。若使用者多為 1366px 筆電，建議把「工作內容」這類長文字欄改成 hover 才展開。</li>
+  <li><b>日曆事件仍會截斷。</b>月曆格寬約 130px，事件標題只能顯示 10–13 字。這是原系統也有的限制，根治要把月曆改成「日 + 側欄清單」或加橫向捲動。</li>
+  <li><b>列寬下限是啟發式的。</b><code>colMin()</code> 依欄位標題關鍵字判斷（名稱/地址/單位/地點…）。若某個新頁面的欄位標題不在詞表內，會拿到預設 100px。可在 <code>config.mjs</code> 的 column 定義加 <code>w: 220</code> 覆寫。</li>
+</ul>
+
+
+<h2 id="s9"><span class="num">9</span>補丁：補給／請假存檔修復與數量整數規則</h2>
+
+<div class="callout risk">
+  <b>回報</b>
+  「無法保存建立的補給記錄」——在 <code>/mysupply</code> 按「新增記錄」、填完按「建立記錄」，畫面沒有任何成功提示，記錄也沒出現。
+</div>
+
+<h3>9.1 重現</h3>
+<pre>GET  /mysupply?new=1          → 200，彈窗 #recDlg 內含
+       &lt;input type="hidden" name="__id" value="sup_mvnigg9s_661c25f30d8b"&gt;
+POST /save/supply_records     → <span style="color:#fca5a5">404</span>（空白錯誤頁，無任何提示）</pre>
+<p>把同一個 <code>__id</code> 換成空字串再送，立刻 302 成功。所以問題不在欄位內容，而在這個隱藏欄位。</p>
+
+<h3>9.2 根因</h3>
+<p>新增補給／請假用的是同一個彈窗 <code>recordDialog()</code>（<code>lib/core.mjs</code>）。它會先產生一個新 ID 給 <code>__new_id</code>，但同時把<strong>同一個 ID 也寫進了 <code>__id</code></strong>：</p>
+<pre>recordDialog({ ..., row: { ...recDefaults, id: uid('sup') } })
+  → hiddenInput('__id', data.id || '')      <span class="c">// ← 這裡不該有值</span>
+  → hiddenInput('__new_id', rowId)</pre>
+<p>後端 <code>saveEntity()</code>（<code>lib/actions.mjs</code>）把「<code>__id</code> 有值」一律解讀成<strong>編輯既有記錄</strong>：</p>
+<pre>const id = cleanId(fields.__id);
+const existing = id ? store.get(cfg.key, id) : null;
+if (id &amp;&amp; !existing) throw 404「找不到要編輯的記錄」;   <span class="c">// ← 一筆都還沒建，當然找不到</span></pre>
+<p>錯誤發生後，路由的 <code>catch</code> 會呼叫 <code>entityForm()</code> 想把表單連同錯誤訊息重繪；但 <code>entityForm()</code> 開頭也有同一道檢查，於是<strong>再拋一次 404</strong>，使用者最後看到的是一個沒有訊息的空白錯誤頁。</p>
+
+<h3>9.3 為什麼三輪驗收都沒抓到</h3>
+<p>因為 <code>verify-frontline.mjs</code> 是<strong>直接對 <code>/save/leave_records</code> 發 POST</strong>，payload 裡自己寫 <code>__id: ''</code>——這正好繞過了壞掉的那個欄位。測試驗的是「後端能不能存」，而不是「畫面送出來的東西能不能存」。這也是這次補上一支專用腳本的原因（見 9.5）。</p>
+
+<h3>9.4 修法</h3>
+<table>
+  <thead><tr><th>檔案</th><th>改動</th><th>作用</th></tr></thead>
+  <tbody>
+    <tr><td class="nw"><code>lib/core.mjs</code></td><td><code>hiddenInput('__id', '')</code></td><td>新增彈窗不再送出 <code>__id</code>，只留 <code>__new_id</code>（根治）</td></tr>
+    <tr><td class="nw"><code>lib/actions.mjs</code></td><td>新增防禦式回退</td><td><code>__id</code> 指向不存在的記錄、且沒有 <code>__expected_updated</code>（新表單特徵）→ 按新增處理，沿用該 ID。避免同類寫法再次造成 404</td></tr>
+    <tr><td class="nw"><code>server.mjs</code></td><td>錯誤重繪前先確認記錄還在</td><td>記錄已不存在就把 <code>__id</code> 清空再重繪，錯誤訊息能正常顯示，使用者填過的內容不丟</td></tr>
+  </tbody>
+</table>
+
+<div class="callout warn">
+  <b>影響面比回報的大</b>
+  <code>leave_records</code>（請假紀錄）用的是同一個彈窗、同一個 <code>__id</code> 寫法，所以<b>請假也一樣存不了</b>。另外辦公室／管理層替員工代建補給也受影響——只是前線員工先撞上。修一次兩個功能一起好。
+</div>
+
+<h3>9.5 驗證</h3>
+<p>新增專用回歸腳本 <code>驗收_補給請假存檔.mjs</code>（18 項），補上三輪驗收漏掉的「畫面送出來什麼」這一層：</p>
+<table>
+  <thead><tr><th>檢查</th><th>結果</th></tr></thead>
+  <tbody>
+    <tr><td>補給／請假彈窗的 <code>__id</code> 必須為空（front + office 各一輪）</td><td><span class="pill g">4/4 通過</span></td></tr>
+    <tr><td>前線建立補給 → 302 且真的寫入 <code>records</code> 表</td><td><span class="pill g">2/2 通過</span></td></tr>
+    <tr><td>前線建立請假 → 302 且真的寫入</td><td><span class="pill g">2/2 通過</span></td></tr>
+    <tr><td>舊頁面快取送壞 <code>__id</code> → 仍按新增處理，不得 404</td><td><span class="pill g">2/2 通過</span></td></tr>
+    <tr><td>真的編輯一筆已不存在的記錄 → 擋下、不寫入、且看得到訊息</td><td><span class="pill g">3/3 通過</span></td></tr>
+    <tr><td>測試資料自動清理</td><td><span class="pill g">1/1 通過</span></td></tr>
+  </tbody>
+</table>
+<p>另用真實瀏覽器（Headless Chrome）走完整流程：開彈窗 → 選類型 → 新增產品行 → 搜「水」選中「歐護OFF!蚊怕水」→ 填數量 2 → 送出，落在 <code>/mysupply</code> 且列表立刻看得到該筆。</p>
+<p>既有三套回歸同時重跑，全數通過：前線 73/73、營運 55/55、四角色 176 頁冒煙 0 問題。</p>
+
+<h3>9.6 順帶修好：明細裡的產品關聯</h3>
+<p>補給的「產品列表」在設定裡宣告了三個欄位：<code>product_name</code>（顯示）、<code>product_id</code>、<code>unit</code>（隱藏）。但明細編輯器的選擇器只回填了顯示名稱，另外兩個一直是空的——等於記錄只剩「文字」，產品關聯丟失，之後要按產品統計補給量就對不上。</p>
+<pre><span class="c">// lib/ui.mjs · 明細選擇器選中後</span>
+if (e.detail.fill &amp;&amp; allowed) {
+  Object.keys(e.detail.fill).forEach(function (k) {
+    if (k === col.name || k === col.displayField) return;
+    if (allowed.indexOf(k) &gt;= 0) row[k] = e.detail.fill[k];   <span class="c">// 只回填本明細有宣告的欄位</span>
+  });
+}</pre>
+<p>修正後同一筆補給明細會是 <code>{"product_name":"歐護OFF!蚊怕水","product_id":"69f954a8…","unit":""}</code>。限定「本明細有宣告的欄位」是刻意收窄——否則 <code>cost_price</code>、<code>afcd_reg_no</code> 等十幾個不相關欄位會被一起塞進明細。</p>
+<p>連帶把列表的「產品／工具」欄也修了：這兩欄原本是純文字型別，陣列值會落到通用分支，顯示成一個可展開的「查看結構化資料」——點開是一坨 JSON。改成 <code>items</code> 型別後走明細渲染，並在自動推導欄位時濾掉內部 ID、空欄位、換上中文標題，現在直接看到「產品 / 數量」兩欄的小表。</p>
+
+<div class="callout">
+  <b>這次補進交付包的內容</b>
+  <code>驗收_補給請假存檔.mjs</code>（可重跑）、<code>驗收結果_補給請假存檔.json</code>；<code>變更檔案清單_SHA256.csv</code> 與 <code>程式快照_20261025\</code> 已更新為修復後的版本。
+</div>
+
+
+<h3>9.7 同批需求：數量一律整數</h3>
+<div class="callout">
+  <b>回報</b>
+  「產品和數量的單位一定要是整數，不能有小數」——補給記錄的數量欄位可以打 2.5。
+</div>
+
+<p>原本明細裡的數字輸入是 <code>&lt;input type="number" step="0.01"&gt;</code>，全域一套，所以數量、單價、金額都是兩位小數。數量這種「瓶／包／支／件」的欄位不該有小數。</p>
+
+<h4>做法：三層，前端擋、後端擋、歷史資料放行</h4>
+<table>
+  <thead><tr><th>層</th><th>實作</th><th>效果</th></tr></thead>
+  <tbody>
+    <tr><td class="nw">前端</td><td>數量類欄位改用 <code>type="text" inputmode="numeric" pattern="[0-9]*"</code>，並在 input 事件把 <code>2.5</code> 截成 <code>2</code></td><td>手機彈數字鍵盤；打不進小數點與負號；貼上 2.5 也只留 2</td></tr>
+    <tr><td class="nw">後端</td><td><code>assertIntegerQuantities()</code> 在 <code>prepareRecord()</code> 內檢查</td><td>直接組 POST 送 2.5 → 400「第 1 行的「數量」必須為整數，不可有小數」</td></tr>
+    <tr><td class="nw">歷史資料</td><td>編輯既有記錄且該值沒被改動時放行</td><td>資料庫裡原系統匯入的小數庫存（例：溴敵隆濃縮劑 204.5）仍能改名、改價、存檔</td></tr>
+  </tbody>
+</table>
+
+<p>判定只看欄名，避免誤傷由庫存推算的中間值：</p>
+<pre><span class="c">// lib/utils.mjs</span>
+export const INTEGER_FIELD_NAMES = /^(quantity|qty|stock_quantity|quantity_change)$/;
+export const isIntegerField = (field) =&gt; field?.integer === true
+  || (field?.integer !== false &amp;&amp; INTEGER_FIELD_NAMES.test(String(field?.name || field?.key || '')));</pre>
+<p>刻意不納入 <code>quantity_before</code> / <code>quantity_after</code> / <code>difference</code> / <code>actual_quantity</code>——這些是由「現有庫存 ± 變動」推出來的，起點本身可能是 204.5，硬性取整會讓數字對不上。</p>
+
+<h4>覆蓋範圍</h4>
+<table>
+  <thead><tr><th>位置</th><th>欄位</th><th>狀態</th></tr></thead>
+  <tbody>
+    <tr><td>補給記錄</td><td>產品數量、工具數量</td><td><span class="pill g">整數</span></td></tr>
+    <tr><td>報價單 / 帳單 / 送貨單</td><td>明細數量</td><td><span class="pill g">整數</span></td></tr>
+    <tr><td>服務報告</td><td>使用產品數量</td><td><span class="pill g">整數</span></td></tr>
+    <tr><td>產品檔案</td><td>庫存數量</td><td><span class="pill g">整數</span></td></tr>
+    <tr><td>庫存調整</td><td>調整數量</td><td><span class="pill g">整數</span></td></tr>
+    <tr><td>盤點單</td><td>實際數量</td><td><span class="pill n">暫不強制</span>（見下）</td></tr>
+  </tbody>
+</table>
+
+<div class="callout warn">
+  <b>為什麼盤點單的「實際數量」先不動</b>
+  現有 4,853 筆盤點項目裡有 40 筆是小數（原系統匯入時留下的），而且盤點單可以修改、也會被「完成」流程重新寫回。一旦硬性要求整數，這些舊盤點單就改不動、也完成不了。要收緊得先做一輪資料整理（把小數盤點值四捨五入並記錄調整），那是獨立的一步，不塞進這次修復。
+</div>
+
+<h4>驗證</h4>
+<p>回歸腳本擴充到 25 項，新增 7 項針對數量規則：</p>
+<table>
+  <thead><tr><th>檢查</th><th>結果</th></tr></thead>
+  <tbody>
+    <tr><td>明細數量欄位已標記 <code>integer:true</code>（前端才會切成數字鍵盤）</td><td><span class="pill g">通過</span></td></tr>
+    <tr><td>小數數量被後端擋下（400）</td><td><span class="pill g">通過</span></td></tr>
+    <tr><td>錯誤訊息說明「必須為整數」</td><td><span class="pill g">通過</span></td></tr>
+    <tr><td>小數數量未寫入資料庫</td><td><span class="pill g">通過</span></td></tr>
+    <tr><td>整數數量可正常存檔（302）</td><td><span class="pill g">通過</span></td></tr>
+    <tr><td>商品庫存數量 1.5 被擋下</td><td><span class="pill g">通過</span></td></tr>
+    <tr><td>商品未寫入</td><td><span class="pill g">通過</span></td></tr>
+  </tbody>
+</table>
+<p>另外實測：<b>庫存 204.5 的舊商品原樣重存仍可成功</b>（302），證明放行規則生效。瀏覽器端實測輸入 <code>2.5</code> 顯示為 <code>2</code>、輸入 <code>-3</code> 顯示為 <code>3</code>、輸入 <code>12</code> 正常。</p>
+<p>既有三套回歸全過：前線 73/73、營運 55/55、補給請假與數量 25/25、四角色 176 頁冒煙 0 問題。</p>
+
+<div class="footer">
+  標準清潔滅蟲 · 管理系統復刻 · 四期第四次修改（UI 系統性改造）<br>
+  產出日期 2026-10-25 · 驗收環境 Node 22 / SQLite (node:sqlite) / Chrome 155 Headless<br>
+  本文件所有數值均為實機 <code>getComputedStyle</code> 與 <code>getBoundingClientRect</code> 取值，非估算。
+</div>
+</main>
+</div>
+</body>
+</html>

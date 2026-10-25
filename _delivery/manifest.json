@@ -1,0 +1,65 @@
+[
+  {
+    "name": "ERP-01_业务数据快照_导出.zip",
+    "bytes": 3844982,
+    "files": 104,
+    "path": "F:\\04 STANDARD CPC SYSTEM\\_delivery\\pkg\\ERP-01_业务数据快照_导出.zip",
+    "sha256": "ec55a792550ad5fe1a46aec9a4e549e5a41492f57f788e636b7200d3358898f6"
+  },
+  {
+    "name": "ERP-02_数据库快照.zip",
+    "bytes": 7258778,
+    "files": 4,
+    "path": "F:\\04 STANDARD CPC SYSTEM\\_delivery\\pkg\\ERP-02_数据库快照.zip",
+    "sha256": "104dbc883c5f01da4ef3012e4fe250037bb4673038bf63a7687718468ec68a66"
+  },
+  {
+    "name": "ERP-03_附件_产品与工单.zip",
+    "bytes": 104927733,
+    "files": 194,
+    "path": "F:\\04 STANDARD CPC SYSTEM\\_delivery\\pkg\\ERP-03_附件_产品与工单.zip",
+    "sha256": "fc91f2c23da427df08bdf107756a085338f231011a590a2c4d7f9c462aa23035"
+  },
+  {
+    "name": "ERP-04_附件_报价单.zip",
+    "bytes": 193865871,
+    "files": 187,
+    "path": "F:\\04 STANDARD CPC SYSTEM\\_delivery\\pkg\\ERP-04_附件_报价单.zip",
+    "sha256": "46fff10715420f57e9809e8eed4271062f07c4f5fe68940efb37f1512332ff33"
+  },
+  {
+    "name": "ERP-05_附件_采购单_A.zip",
+    "bytes": 178915449,
+    "files": 550,
+    "path": "F:\\04 STANDARD CPC SYSTEM\\_delivery\\pkg\\ERP-05_附件_采购单_A.zip",
+    "sha256": "d490497fb100df62ac568b693a4190521e535998950bf3febe78196352c0fdaf"
+  },
+  {
+    "name": "ERP-05_附件_采购单_B.zip",
+    "bytes": 178904062,
+    "files": 550,
+    "path": "F:\\04 STANDARD CPC SYSTEM\\_delivery\\pkg\\ERP-05_附件_采购单_B.zip",
+    "sha256": "f9903374cc9df12a90e54e1dc033fd26afd947a579e136afc3cbc39626958c21"
+  },
+  {
+    "name": "ERP-05_附件_采购单_C.zip",
+    "bytes": 178903258,
+    "files": 543,
+    "path": "F:\\04 STANDARD CPC SYSTEM\\_delivery\\pkg\\ERP-05_附件_采购单_C.zip",
+    "sha256": "a979ab472e012c5761cfc7fb4664780bca65c81d72a90a3c2b55e392f583872b"
+  },
+  {
+    "name": "ERP-08_系统代码_去重.zip",
+    "bytes": 18733422,
+    "files": 413,
+    "path": "F:\\04 STANDARD CPC SYSTEM\\_delivery\\pkg\\ERP-08_系统代码_去重.zip",
+    "sha256": "42b44c76cc85fd5a7c1b04b8ae371b12467f867ce1bad691a4ddc01240d01d82"
+  },
+  {
+    "name": "ERP-09_文档与蓝图.zip",
+    "bytes": 10105244,
+    "files": 87,
+    "path": "F:\\04 STANDARD CPC SYSTEM\\_delivery\\pkg\\ERP-09_文档与蓝图.zip",
+    "sha256": "42bf684ff811fb3d994bd3514212d2c74c2160e68e0001767dbdbdc6bd126921"
+  }
+]

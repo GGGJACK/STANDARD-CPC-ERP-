@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>標準清潔滅蟲 · 二期交接文檔</title>
+<style>
+  :root{--ink:#15181c;--ink2:#4a5158;--ink3:#828a93;--line:#e4e7eb;--soft:#f6f7f9;
+    --brand:#0f6e56;--brand-soft:#e9f5f0;--warn:#9a5b00;--warn-soft:#fdf4e6;
+    --risk:#a32d2d;--risk-soft:#fceceb;--blue:#1f5f9e;--blue-soft:#eaf2fa;}
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;background:#eef0f3;color:var(--ink);font-size:15px;line-height:1.78;
+    font-family:"PingFang SC","Microsoft YaHei","Hiragino Sans GB",system-ui,sans-serif}
+  .wrap{display:flex;max-width:1240px;margin:0 auto;background:#fff;min-height:100vh}
+  nav{width:230px;flex:none;padding:34px 0 60px;border-right:1px solid var(--line);position:sticky;top:0;height:100vh;overflow:auto;background:#fbfcfd}
+  nav .t{font-size:11px;letter-spacing:.16em;color:var(--ink3);padding:0 22px 10px;text-transform:uppercase}
+  nav a{display:block;padding:7px 22px;font-size:13px;color:var(--ink2);text-decoration:none;border-left:3px solid transparent}
+  nav a:hover{background:#f2f4f6;color:var(--ink)}
+  main{flex:1;padding:52px 62px 90px;min-width:0}
+  @media(max-width:900px){nav{display:none}main{padding:26px 18px 60px}}
+  header{border-bottom:2px solid var(--ink);padding-bottom:22px;margin-bottom:32px}
+  .kicker{font-size:11.5px;letter-spacing:.2em;color:var(--ink3);text-transform:uppercase;margin-bottom:10px}
+  h1{font-size:28px;line-height:1.34;margin:0 0 12px;font-weight:600;letter-spacing:-.01em}
+  .sub{color:var(--ink2);font-size:14px}
+  h2{font-size:20px;margin:50px 0 14px;font-weight:600;padding-left:13px;border-left:4px solid var(--brand)}
+  h3{font-size:15.5px;margin:26px 0 8px;font-weight:600}
+  p{margin:10px 0}small{color:var(--ink3)}
+  code{background:var(--soft);padding:1.5px 6px;border-radius:4px;font-size:12.5px;font-family:ui-monospace,Consolas,monospace;color:#2a3a4a}
+  table{width:100%;border-collapse:collapse;margin:16px 0;font-size:13.2px}
+  th,td{border:1px solid var(--line);padding:9px 11px;text-align:left;vertical-align:top}
+  th{background:var(--soft);font-weight:600;font-size:12.5px;color:var(--ink2)}
+  td.num{text-align:right;font-variant-numeric:tabular-nums}
+  .tag{display:inline-block;padding:1px 9px;border-radius:10px;font-size:11.5px;line-height:1.75;white-space:nowrap;font-weight:500}
+  .t-ok{background:var(--brand-soft);color:var(--brand)}.t-part{background:var(--warn-soft);color:var(--warn)}
+  .t-no{background:var(--risk-soft);color:var(--risk)}.t-info{background:var(--blue-soft);color:var(--blue)}
+  .callout{background:var(--brand-soft);border-left:3px solid var(--brand);padding:14px 18px;margin:18px 0;border-radius:0 7px 7px 0}
+  .callout.warn{background:var(--warn-soft);border-color:var(--warn)}
+  .callout.risk{background:var(--risk-soft);border-color:var(--risk)}
+  .callout.info{background:var(--blue-soft);border-color:var(--blue)}
+  .callout strong{display:block;margin-bottom:4px}
+  ul,ol{margin:10px 0;padding-left:22px}li{margin:6px 0}
+  .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:18px 0}
+  @media(max-width:760px){.grid{grid-template-columns:repeat(2,1fr)}}
+  .card{border:1px solid var(--line);border-radius:9px;padding:15px 16px;background:#fff}
+  .card .n{font-size:22px;font-weight:600;color:var(--brand);line-height:1.3;font-variant-numeric:tabular-nums}
+  .card .l{font-size:12px;color:var(--ink3);margin-top:2px}
+  .flow{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:16px 0;font-size:12.8px}
+  .flow span{border:1px solid var(--line);border-radius:6px;padding:7px 12px;background:var(--soft)}
+  .flow i{color:var(--ink3);font-style:normal}
+  .check{list-style:none;padding-left:0}
+  .check li{position:relative;padding-left:30px;margin:12px 0}
+  .check li:before{content:"";position:absolute;left:0;top:5px;width:16px;height:16px;border:1.5px solid #b9c0c8;border-radius:4px}
+  footer{margin-top:60px;padding-top:18px;border-top:1px solid var(--line);font-size:12.5px;color:var(--ink3)}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav>
+  <div class="t">目录</div>
+  <a href="#s0">0 · 本期摘要</a>
+  <a href="#s1">1 · 新增的四个模块</a>
+  <a href="#s2">2 · 单据转换链</a>
+  <a href="#s3">3 · 打印与 PDF</a>
+  <a href="#s4">4 · 权限如何贯穿</a>
+  <a href="#s5">5 · 验收清单</a>
+  <a href="#s6">6 · 已知限制</a>
+  <a href="#s7">7 · 待你拍板</a>
+  <a href="#s8">8 · 三期预告</a>
+</nav>
+<main>
+
+<header>
+  <div class="kicker">Phase 2 Handover · 2026-10-24</div>
+  <h1>標準清潔滅蟲 · 管理系統復刻<br>二期交接文檔</h1>
+  <div class="sub">合約 · 發票 · 收據 · 應收台賬 · 單據轉換 · A4 打印版面<br>
+  所有金额与客户均来自真实导出数据，非模拟</div>
+</header>
+
+<h2 id="s0">0 · 本期摘要</h2>
+
+<p class="lead">
+一期解决的是「谁能看什么」，二期解决的是「钱怎么走」——把报价单接上合约、发票、收款、应收，
+让一张单从报价一路走到收清款，中间每一步都留痕、每一步都按角色收口。
+</p>
+
+<div class="grid">
+  <div class="card"><div class="n">12</div><div class="l">合约（真实导入）</div></div>
+  <div class="card"><div class="n">206</div><div class="l">发票（205 导入 + 1 转换生成）</div></div>
+  <div class="card"><div class="n">59</div><div class="l">收据（57 导入 + 2 测试）</div></div>
+  <div class="card"><div class="n">4</div><div class="l">新增页面</div></div>
+</div>
+
+<table>
+  <tr><th style="width:24%">本期做了什么</th><th>说明</th><th style="width:12%">状态</th></tr>
+  <tr><td>合約列表 + 详情</td><td>12 份真实合约，关联报价单、合约期、PO 号、付款条款</td><td><span class="tag t-ok">完成</span></td></tr>
+  <tr><td>發票管理</td><td>206 张，含明细、已收、余额、逾期筛选、四张统计卡</td><td><span class="tag t-ok">完成</span></td></tr>
+  <tr><td>收據管理</td><td>59 张，按发票核销，记录现金/支票/转账/转数快</td><td><span class="tag t-ok">完成</span></td></tr>
+  <tr><td>應收台賬</td><td>按账龄分桶（未到期/1–30/31–60/61–90/90+）+ 欠款 Top10</td><td><span class="tag t-ok">完成</span></td></tr>
+  <tr><td>單據轉換</td><td>报价 → 发票（一键）；发票 → 收款（自动算余额与状态）</td><td><span class="tag t-ok">完成</span></td></tr>
+  <tr><td>A4 打印版面</td><td>报价单、发票两种版式，内嵌公司真 LOGO / 签名 / 印章</td><td><span class="tag t-ok">完成</span></td></tr>
+  <tr><td>發票编号规则</td><td>服务 S + 年份后两位 + 5 位流水；产品 P + …（沿用原系统形制）</td><td><span class="tag t-ok">完成</span></td></tr>
+  <tr><td>合约新建 / 编辑</td><td>只能看不能改</td><td><span class="tag t-no">未做</span></td></tr>
+  <tr><td>税额 / 多币种</td><td>香港一般不开增值税发票，暂不做；多币种未支持</td><td><span class="tag t-no">未做</span></td></tr>
+</table>
+
+<h2 id="s1">1 · 新增的四个模块</h2>
+
+<h3>1.1 合約列表 <code>/contracts</code></h3>
+<p>字段照搬原系统：合约编号、客户、工作内容、合约期（起–止）、金额、状态（生效中/已到期）。
+点进去能看到这份合约挂的是哪张报价单，以及该客户最近的发票。</p>
+
+<h3>1.2 發票管理 <code>/invoices</code></h3>
+<p>四张统计卡：开票总额、已收款、应收余额、逾期张数。支持按「未收款 / 已逾期 / 已收清」筛选。
+每行显示：编号、日期、客户、到期日、总额、已收、余额、状态。</p>
+
+<h3>1.3 收據管理 <code>/receipts</code></h3>
+<p>收款记录与发票一一对应。一张发票可以收多次（部分收款），每次生成一张收据，
+自动累加已收金额并重算余额与状态。</p>
+
+<h3>1.4 應收台賬 <code>/receivables</code> <span class="tag t-info">会计 / 管理层专属</span></h3>
+<p>按到期日算账龄，五个桶分别统计金额与张数；下方列出欠款最多的 10 个客户及占比，
+再往下是全部未收清发票（按到期日排序，超过 90 天标红）。</p>
+
+<h2 id="s2">2 · 单据转换链</h2>
+
+<div class="flow">
+  <span>報價單<br><small>1,826 张</small></span><i>→</i>
+  <span>合約<br><small>12 份</small></span><i>→</i>
+  <span>發票<br><small>一键生成</small></span><i>→</i>
+  <span>收據<br><small>登记收款</small></span><i>→</i>
+  <span>應收餘額<br><small>自动重算</small></span>
+</div>
+
+<h3>2.1 报价 → 发票</h3>
+<p>报价单详情页右上角有「生成發票」按钮。点击后系统会：</p>
+<ol>
+  <li>读取报价单的客户、明细、金额</li>
+  <li>按类型生成编号（服务 <code>S2600001</code>、产品 <code>P26xxxxx</code>）</li>
+  <li>到期日默认 = 开票日 + 30 天，状态「草稿」，已收 0，余额 = 总额</li>
+  <li>把明细逐行复制到发票，然后跳转到新发票</li>
+</ol>
+<p><b>实测</b>：报价单 7,500 元 → 生成 <code>S2600001</code>，总额 7,500，余额 7,500。</p>
+
+<h3>2.2 发票 → 收款</h3>
+<p>发票详情页有「登記收款」表单，金额默认填余额，可选现金/支票/转账/转数快。
+提交后自动：生成收据号（<code>R260058</code>）→ 累加已收 → 重算余额 → 更新状态。</p>
+<p><b>实测</b>：7,500 的发票先收 1,000 → 状态「部分收款」、余额 6,500、收据 <code>R260058</code>；
+再收 6,500 → 状态「已付款」、余额 0。</p>
+
+<div class="callout warn">
+  <strong>转换是单向的</strong>
+  报价转成发票后，两者只保留引用关系，不会双向同步。报价单后续被改动，已生成的发票不会自动跟着变——
+  这是刻意的：已经发给客户的发票不应该因为内部改单而变动。要改，作废重开。
+</div>
+
+<h2 id="s3">3 · 打印与 PDF</h2>
+
+<p>两个版面：报价单 <code>/quotations/:id/print</code>、发票 <code>/invoices/:id/print</code>。
+都是 A4 纵向、独立页面（不带侧边栏），打开后点「列印 / 另存為 PDF」即可。</p>
+
+<table>
+  <tr><th style="width:22%">要素</th><th>来源</th></tr>
+  <tr><td>公司 LOGO</td><td>从原系统 <code>CompanySettings.company_logo</code> 下载的真图，内嵌为 base64</td></tr>
+  <tr><td>签名 / 印章</td><td>同上，取自 <code>company_signature</code> 与 <code>company_stamp</code></td></tr>
+  <tr><td>公司抬头</td><td>Room 302, 3/F, Sunwise Industrial Building, 16-26 Wang Wo Tsai St, Tsuen Wan<br>Tel (852) 2371 3793 · Fax (852) 2370 8369 · info@standardcpc.com</td></tr>
+  <tr><td>发票页脚</td><td>付款条款（Net 30）、收款方式说明、客户签收栏</td></tr>
+</table>
+
+<div class="callout risk">
+  <strong>「一模一样」还差最后一步</strong>
+  版面是按原系统字段和我见到的页面结构重建的，<b>但我没有原系统导出的那份 PDF 原件可比对</b>
+  （原系统的 <code>pdf_url</code> 字段几乎全是空的）。要做到逐像素一致，需要你发我任意一份旧报价单 PDF，
+  我按它调字号、行高、边距、栏宽。现在这版可以正常发给客户，但不敢说「一模一样」。
+</div>
+
+<h2 id="s4">4 · 权限如何贯穿</h2>
+
+<table>
+  <tr><th style="width:18%">模块</th><th>前線</th><th>辦公室</th><th>會計</th><th>管理層</th></tr>
+  <tr><td>合約</td><td><span class="tag t-no">不可见</span></td><td>可看，金额遮蔽</td><td>全部</td><td>全部</td></tr>
+  <tr><td>發票</td><td><span class="tag t-no">不可见</span></td><td>可看，<b>金额全部 •••••</b></td><td>全部</td><td>全部</td></tr>
+  <tr><td>收據</td><td><span class="tag t-no">不可见</span></td><td>可看，金额遮蔽</td><td>全部</td><td>全部</td></tr>
+  <tr><td>應收台賬</td><td><span class="tag t-no">不可见</span></td><td><span class="tag t-no">不可见</span></td><td>全部</td><td>全部</td></tr>
+  <tr><td>打印發票</td><td><span class="tag t-no">403</span></td><td><span class="tag t-no">403</span></td><td>可打印</td><td>可打印</td></tr>
+  <tr><td>生成發票</td><td><span class="tag t-no">403</span></td><td>可生成</td><td>可生成</td><td>可生成</td></tr>
+  <tr><td>登記收款</td><td><span class="tag t-no">403</span></td><td><span class="tag t-no">403</span></td><td>可操作</td><td>可操作</td></tr>
+</table>
+
+<p>所有查看、打印、生成、收款动作都会写进 <code>audit_log</code>，action 分别是
+<code>view / print / create</code>，via 标记为 <code>convert</code> 或 <code>collect</code>——
+将来查「这张发票是谁开的、谁收的钱」，一查就有。</p>
+
+<h2 id="s5">5 · 验收清单</h2>
+<ul class="check">
+  <li><b>合約可見</b> —— 管理層 → 合約列表<br><small>预期：12 份，能看到合约期与状态；点进去看得到关联报价单</small></li>
+  <li><b>发票统计对得上</b> —— 發票管理<br><small>预期：开票总额 / 已收款 / 应收余额 三个数字与台账一致；逾期张数 > 0</small></li>
+  <li><b>逾期筛选</b> —— 状态下拉选「已逾期」<br><small>预期：只剩余额 > 0 且已过到期日的发票</small></li>
+  <li><b>办公室看不到金额</b> —— 换「辦公室」看發票管理<br><small>预期：总额/已收/余额全是 <code>•••••</code>，统计卡也是</small></li>
+  <li><b>应收台账只有会计能看</b> —— 「辦公室」直接访问 <code>/receivables</code><br><small>预期：403 提示页</small></li>
+  <li><b>报价转发票</b> —— 打开任一有金额的报价单 → 生成發票<br><small>预期：跳转到新发票，编号 S26xxxxx，明细已复制，余额=总额</small></li>
+  <li><b>收款核销</b> —— 在新发票上填金额 1,000 → 確認收款<br><small>预期：生成收据号，状态变「部分收款」，余额减少 1,000</small></li>
+  <li><b>收清自动改状态</b> —— 再收剩余金额<br><small>预期：状态变「已付款」，余额 0，应收台账里消失</small></li>
+  <li><b>打印带 LOGO 与印章</b> —— 打开任一报价单 → 列印<br><small>预期：左上公司 LOGO，右下签名与红色印章，A4 一页</small></li>
+  <li><b>成交留痕</b> —— 管理後台 → 最近審計<br><small>预期：能看到 view / print / create 三类，via 标注 convert 或 collect</small></li>
+</ul>
+
+<h2 id="s6">6 · 已知限制</h2>
+<table>
+  <tr><th style="width:6%">#</th><th style="width:28%">限制</th><th>说明</th></tr>
+  <tr><td>1</td><td>PDF 未逐像素对齐</td><td>需要一份旧 PDF 原件比对；当前版式可用但不保证一致</td></tr>
+  <tr><td>2</td><td>收据没有打印版</td><td>收据目前只能看列表，没做 A4 版面</td></tr>
+  <tr><td>3</td><td>合约不能新建/编辑</td><td>只能查看与关联；新建合约流程待三期</td></tr>
+  <tr><td>4</td><td>转换单向、不可撤销</td><td>误点「生成發票」会多出一张草稿单，需手工处理（暂无作废功能）</td></tr>
+  <tr><td>5</td><td>发票编号可能撞号</td><td>当前用「前缀+年份+流水」，并发极高时理论上有风险；上 PostgreSQL 后改用序列</td></tr>
+  <tr><td>6</td><td>无税额、无多币种</td><td>全部按 HK$ 单价直加；如需人民币结算要另做</td></tr>
+  <tr><td>7</td><td>应收台账只显示前 80 行</td><td>完整清单需接导出功能</td></tr>
+  <tr><td>8</td><td>未做账期提醒</td><td>到期前/逾期未发通知给会计或客户</td></tr>
+</table>
+
+<h2 id="s7">7 · 待你拍板</h2>
+
+<div class="callout risk">
+  <strong>① 办公室员工打印报价单，要不要显示总额？</strong>
+  这是本期的真实矛盾：按权限矩阵「办公室看不到总额」，但报价单是要发给客户的，没有总额的报价单没法用。<br>
+  现在的做法是<b>放行打印、保留总额</b>（视为对外文件）。如果你们的本意是「连对外文件的总额也不能经他手」，
+  那就得改成「只有会计/管理层能打印」，但这样办公室开完单就得找人代打——请确认哪种符合实际。
+</div>
+
+<div class="callout warn">
+  <strong>② 发票编号规则对不对？</strong>
+  我按原系统形制推的：服务 <code>S + 26 + 5 位</code>、产品 <code>P + 26 + 5 位</code>、收据 <code>R + 26 + 4 位</code>。
+  原数据里看到 <code>P2610053</code>、<code>R260057</code> 这种，但不确定 10053 那段是流水还是另有含义。
+  如果你们有固定规则（比如按客户号、按月份），告诉我，改一个函数就行。
+</div>
+
+<div class="callout">
+  <strong>③ 合约期到了要不要自动提醒？</strong>
+  12 份合约里有到期的（原系统字段里已有「已到期」状态）。三期可以做成「到期前 60 天推给管理层」。
+</div>
+
+<h2 id="s8">8 · 三期预告</h2>
+<p>按蓝图，三期是「现场与人事」：</p>
+<ul>
+  <li>手机端：排班、打卡、工作单、拍照上传</li>
+  <li>服务报告（含客户可查看的公开链接，带有效期、可撤销）</li>
+  <li>请假、月度出勤、车辆</li>
+  <li>以及本期欠下的：合约新建、收据打印、应收导出、账期提醒</li>
+</ul>
+
+<div class="callout info">
+  <strong>建议顺序</strong>
+  先做「手机端工作单」——它是前線 15–30 人唯一会用到的功能，也是旧系统里数据量最大的部分（排班 13,113 条）。
+  做完这一块，前線才真正愿意用新系统，否则新系统对他们等于不存在。
+</div>
+
+<footer>
+  標準清潔滅蟲 · 管理系統復刻 — 二期交接文檔 · 生成于 2026-10-24<br>
+  代码位置：<code>F:\04 STANDARD CPC SYSTEM\02. 二期\系统代码\</code>（取代一期目录中的同名文件）<br>
+  一期文档：<code>F:\04 STANDARD CPC SYSTEM\01. 一期\一期交接文檔.html</code>
+</footer>
+
+</main>
+</div>
+</body>
+</html>

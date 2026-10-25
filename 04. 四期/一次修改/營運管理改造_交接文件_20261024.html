@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>營運管理改造 · 交接文件（一次修改）</title>
+<style>
+:root{--brand:#0f6e56;--brand2:#0a5946;--line:#e3e7eb;--ink:#182027;--muted:#6c7883;--warn:#9a5b00;--danger:#a32d2d;--bg:#f4f6f8}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.7 "Microsoft JhengHei","PingFang HK","PingFang SC",system-ui,sans-serif}
+a{color:var(--brand);text-decoration:none}
+a:hover{text-decoration:underline}
+.layout{display:flex;align-items:flex-start;gap:0}
+.toc{position:sticky;top:0;flex:0 0 268px;height:100vh;overflow:auto;background:#fff;border-right:1px solid var(--line);padding:22px 16px 40px}
+.toc h2{font-size:12px;letter-spacing:.14em;color:#929ca5;margin:0 0 10px;font-weight:600}
+.toc ol{margin:0;padding:0;list-style:none;font-size:13px}
+.toc li{margin:2px 0}
+.toc li a{display:block;padding:5px 9px;border-radius:6px;color:#3c4650;line-height:1.45}
+.toc li a:hover{background:#f1f6f3;text-decoration:none}
+.toc li a.sub{padding-left:22px;font-size:12.3px;color:#6c7883}
+.doc{flex:1 1 auto;min-width:0;padding:34px 40px 90px;max-width:1080px}
+h1{font-size:27px;line-height:1.3;margin:0 0 6px}
+.lead{color:var(--muted);font-size:13.5px;margin:0 0 4px}
+.meta{display:flex;gap:10px;flex-wrap:wrap;margin:14px 0 30px}
+.tag{display:inline-block;border-radius:999px;padding:2px 11px;font-size:11.5px;background:#eaf5f0;color:var(--brand);white-space:nowrap}
+.tag.g{background:#eef1f4;color:#53606b}
+.tag.w{background:#fff3dd;color:var(--warn)}
+.tag.r{background:#fdecec;color:var(--danger)}
+h2{font-size:19px;margin:44px 0 14px;padding-bottom:9px;border-bottom:2px solid #e8ecef}
+h2 .n{color:#b6c0c7;font-weight:700;margin-right:8px}
+h3{font-size:15px;margin:26px 0 10px;color:var(--brand2)}
+h4{font-size:13.5px;margin:18px 0 7px;color:#3c4650}
+p{margin:9px 0}
+ul,ol{margin:8px 0 8px 22px;padding:0}
+li{margin:4px 0}
+.card{background:#fff;border:1px solid var(--line);border-radius:11px;padding:18px 20px;margin:14px 0 18px}
+.card>h3:first-child,.card>h4:first-child{margin-top:0}
+table{width:100%;border-collapse:collapse;font-size:12.8px;margin:10px 0}
+th,td{border-bottom:1px solid #eef1f3;padding:8px 10px;text-align:left;vertical-align:top}
+th{background:#fafbfc;color:#5c6873;font-size:11.8px;font-weight:600;white-space:nowrap}
+tr:last-child td{border-bottom:0}
+tbody tr:hover{background:#fcfdfe}
+code{background:#f2f5f6;border-radius:4px;padding:1px 5px;font:12px/1.55 Consolas,ui-monospace,monospace;word-break:break-word}
+pre{background:#0f1b23;color:#dbe7ee;border-radius:9px;padding:14px 16px;overflow:auto;font:12px/1.62 Consolas,ui-monospace,monospace;margin:10px 0}
+pre code{background:none;padding:0;color:inherit}
+.note{border-left:3px solid var(--brand);background:#edf7f2;padding:11px 15px;border-radius:0 8px 8px 0;margin:12px 0}
+.note.warn{border-color:var(--warn);background:#fff6e8}
+.note.risk{border-color:var(--danger);background:#fff0f0}
+.note b{display:block;margin-bottom:2px}
+.kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin:16px 0}
+.kpi{background:#fff;border:1px solid var(--line);border-radius:10px;padding:12px 14px}
+.kpi b{display:block;color:var(--brand);font-size:21px;line-height:1.4;font-variant-numeric:tabular-nums}
+.kpi span{font-size:11.5px;color:var(--muted)}
+.checks{list-style:none;margin:10px 0;padding:0}
+.checks li{display:flex;gap:9px;align-items:flex-start;padding:7px 0;border-bottom:1px dashed #eef1f3;font-size:13px}
+.checks li:last-child{border-bottom:0}
+.checks .box{flex:0 0 16px;height:16px;margin-top:3px;border:1.5px solid #c3ccd2;border-radius:4px}
+.flow{background:#fff;border:1px solid var(--line);border-radius:10px;padding:16px 18px;overflow:auto}
+.flow pre{background:none;color:#2b3a44;padding:0;margin:0;font-size:12px;line-height:1.75}
+.small{font-size:12px;color:var(--muted)}
+hr{border:0;border-top:1px solid var(--line);margin:34px 0}
+@media(max-width:900px){.layout{display:block}.toc{position:static;height:auto;width:auto;border-right:0;border-bottom:1px solid var(--line)}.doc{padding:22px 16px 60px}.kpis{grid-template-columns:1fr 1fr}}
+@media print{.toc{display:none}.doc{max-width:none;padding:0}body{background:#fff}}
+</style>
+</head>
+<body>
+<div class="layout">
+<nav class="toc">
+<h2>目錄</h2>
+<ol>
+<li><a href="#s1">1 · 一頁看懂</a></li>
+<li><a href="#s2">2 · 九個決策</a></li>
+<li><a href="#s3">3 · 原系統對照依據</a></li>
+<li><a href="#s4">4 · 架構與資料流</a></li>
+<li><a href="#s5">5 · 逐檔改動明細</a></li>
+<li><a href="#s6">6 · 核心機制詳解</a></li>
+<li><a class="sub" href="#s61">6.1 可搜尋選擇器 picker</a></li>
+<li><a class="sub" href="#s62">6.2 明細編輯器 items</a></li>
+<li><a class="sub" href="#s63">6.3 排班彈窗</a></li>
+<li><a class="sub" href="#s64">6.4 導航折疊與高亮</a></li>
+<li><a class="sub" href="#s65">6.5 請假審批守門</a></li>
+<li><a href="#s7">7 · 資料兼容與遷移</a></li>
+<li><a href="#s8">8 · 驗收與自動腳本</a></li>
+<li><a href="#s9">9 · 回滾方案</a></li>
+<li><a href="#s10">10 · 已知限制與待辦</a></li>
+<li><a href="#s11">11 · 二次開發指引</a></li>
+<li><a href="#s12">12 · 附錄</a></li>
+</ol>
+</nav>
+
+<main class="doc">
+<h1>營運管理改造 · 交接文件</h1>
+<p class="lead">標準清潔滅蟲 · 四期系統 · 第一次業務改造（代號：一次修改）</p>
+<div class="meta">
+<span class="tag">2026-10-24</span>
+<span class="tag g">範圍：營運管理 7 頁 + 請假／補給</span>
+<span class="tag g">8 個檔案 · 新增 1 個模組</span>
+<span class="tag">自動驗收 40 / 40 通過</span>
+</div>
+
+<!-- ══════════════════ 1 ══════════════════ -->
+<h2 id="s1"><span class="n">1</span>一頁看懂</h2>
+
+<p>本輪把業務審核會議上提出的四個區塊（排班、車輛、請假、補給）＋ 合約表單的具體問題，全部落成程式改動。做法上沒有重寫任何頁面框架，而是在既有的 <strong>server-rendered + 單一實體配置（ENTITIES）</strong> 架構上，補了一套「可搜尋選擇器」與「彈窗」能力，讓原本靠手打 ID 的表單變成下拉聯動。</p>
+
+<div class="kpis">
+<div class="kpi"><b>10</b><span>可搜尋資料源</span></div>
+<div class="kpi"><b>9</b><span>排班工作列表可見欄位（原 21 列）</span></div>
+<div class="kpi"><b>5</b><span>修掉的導航多重高亮</span></div>
+<div class="kpi"><b>0</b><span>資料庫結構變更</span></div>
+</div>
+
+<div class="card">
+<h3>做了什麼</h3>
+<table>
+<thead><tr><th style="width:20%">區塊</th><th>結果</th><th style="width:12%">狀態</th></tr></thead>
+<tbody>
+<tr><td>左側導航</td><td>6 個分組可收起／展開，預設只開當前分組並記憶；修掉「開排班頁 5 條同時變綠」</td><td><span class="tag">完成</span></td></tr>
+<tr><td>排班管理</td><td>新增排班改頁內彈窗；工作列表 21 列裸輸入 → 9 欄卡片 + PO／合約選擇器，選中自動帶出 5 個欄位</td><td><span class="tag">完成</span></td></tr>
+<tr><td>排班 Excel</td><td>補上「新增工作欄」，複用同一彈窗並預填日期；工作單位用 id 反查名稱</td><td><span class="tag">完成</span></td></tr>
+<tr><td>合約列表</td><td>客戶可搜尋回填、工作內容／工作細則聯動細則庫、害蟲種類與服務頻率下拉、用藥聯動藥物庫；移除兩個無用欄位</td><td><span class="tag">完成</span></td></tr>
+<tr><td>車輛管理</td><td>詳情頁新增費用區塊（明細＋合計＋添加）；費用表單車牌下拉、刪郵件訊息 ID、保留日期時間</td><td><span class="tag">完成</span></td></tr>
+<tr><td>請假紀錄</td><td>員工姓名下拉（可打英文）、管理層專屬批准／拒絕、非管理層提交強制回待審批</td><td><span class="tag">完成</span></td></tr>
+<tr><td>補給記錄</td><td>補給位置下拉、產品聯動產品庫、工具智能提示、前線員工可新增</td><td><span class="tag">完成</span></td></tr>
+<tr><td>月度出勤表</td><td>未改（會議結論「以後再加」），仍為手動填寫＋保存</td><td><span class="tag w">刻意保留</span></td></tr>
+<tr><td>易通行匯入</td><td>未接 Outlook，維持手動貼上</td><td><span class="tag w">刻意保留</span></td></tr>
+</tbody>
+</table>
+</div>
+
+<div class="note">
+<b>交付結論</b>
+程式已就緒、服務已用新代碼重啟，資料庫結構與歷史資料完全未動。照第 8 章跑一次自動驗收（40 項）即可確認環境無誤；照第 9 章可在 5 分鐘內回滾。
+</div>
+
+<!-- ══════════════════ 2 ══════════════════ -->
+<h2 id="s2"><span class="n">2</span>九個決策（三輪提問的原始答案）</h2>
+
+<p>改造前先問了 9 個會影響架構的問題，每輪 3 個。下表是<strong>當時的選項與實際選擇</strong>，後續任何改動都應以此為準，不要憑感覺推翻。</p>
+
+<div class="card">
+<table>
+<thead><tr><th style="width:6%">輪</th><th style="width:20%">問題</th><th style="width:34%">選項</th><th style="width:16%">選擇</th><th>落地位置</th></tr></thead>
+<tbody>
+<tr><td>1</td><td>營運管理菜單結構</td><td>A 收斂回原系統 6 項／B 保留 9 項只改功能／C 6 項主菜單＋二級</td><td><b>B 保留 9 項</b></td><td>NAV 未刪併，只改 key</td></tr>
+<tr><td>1</td><td>新增排班形態</td><td>A 獨立頁增強／B 日曆頁內彈窗／C 兩者都要</td><td><b>B 頁內彈窗</b></td><td><code>scheduleDialog()</code></td></tr>
+<tr><td>1</td><td>導航折疊預設</td><td>A 全展開＋記憶／B 僅展開當前分組／C 全收起</td><td><b>B 僅展開當前分組</b></td><td><code>layout()</code> + localStorage</td></tr>
+<tr><td>2</td><td>合約表單改哪些</td><td>多選：客戶可搜／工作內容聯動細則庫／害蟲下拉／用藥聯動藥物庫</td><td><b>四項全選</b>，另加「所有下拉都要能輸入搜索」</td><td><code>config.contracts.fields</code></td></tr>
+<tr><td>2</td><td>選 PO／合約帶出什麼</td><td>多選：名稱地點單位／聯絡人電話／服務類型／週期排程提示</td><td><b>四項全選</b></td><td><code>lib/pickers.mjs</code> 的 fill 表</td></tr>
+<tr><td>2</td><td>工作列表欄位呈現</td><td>A 精簡 9 欄＋ID 隱藏／B 保留 21 列改選擇器／C 精簡＋進階展開</td><td><b>A 精簡 9 欄</b></td><td><code>workItemColumns</code></td></tr>
+<tr><td>3</td><td>排班 Excel 新增</td><td>A 複用排班彈窗／B 行內插一列／C 保持現狀</td><td><b>A 複用彈窗</b></td><td><code>excelSchedulePage</code></td></tr>
+<tr><td>3</td><td>補給記錄取值</td><td>A 產品下拉＋工具智能提示／B 新建工具庫／C 只修補給位置</td><td><b>A</b>（產品聯動現有產品庫、可搜；工具推薦；前線可新增）</td><td><code>supply_records.fields</code></td></tr>
+<tr><td>3</td><td>請假員工與審批</td><td>A 姓名下拉＋僅管理層／B 姓名下拉＋辦公室也可批／C 姓名手打</td><td><b>A</b></td><td>config + <code>saveEntity</code> 守門</td></tr>
+</tbody>
+</table>
+</div>
+
+<div class="note warn">
+<b>一處會議紀要的自相矛盾，已按紀要執行</b>
+口述時說過「時間要刪」，但書面紀要寫「費用記錄的日期和時間字段應保留，其他無用字段（如郵件信息ID）應刪除」。本輪<strong>保留日期＋時間、刪除郵件訊息 ID</strong>，與紀要一致。
+</div>
+
+<!-- ══════════════════ 3 ══════════════════ -->
+<h2 id="s3"><span class="n">3</span>原系統對照依據</h2>
+
+<p>所有「原系統長什麼樣」的判斷，都不是憑印象，而是來自反編譯出來的前端 chunk 與 34 頁 DOM 導出。下次要對照時直接看這幾個檔。</p>
+
+<div class="card">
+<table>
+<thead><tr><th style="width:34%">檔案</th><th>用途</th></tr></thead>
+<tbody>
+<tr><td><code>05. 源码分析/frontend/app.js</code></td><td>原系統左側菜單權威來源（<code>key:"operations"</code> 那段）</td></tr>
+<tr><td><code>05. 源码分析/frontend/beautified/chunks/Schedules-*.js</code></td><td>原「新增排班」彈窗：欄位順序、PO／合約搜尋器、週期排程提示</td></tr>
+<tr><td><code>…/chunks/EditContract-*.js</code></td><td>原合約表單標籤：<code>PO編號 / 客戶名稱（To）/ 工作單位（From）/ 工作地點（Location）/ Attn</code></td></tr>
+<tr><td><code>…/chunks/Vehicles-*.js</code>、<code>ViewVehicle-*.js</code></td><td>原車輛列表按鈕（易通行匯入／新增車輛／添加費用記錄）與詳情頁費用記錄</td></tr>
+<tr><td><code>…/chunks/LeaveRecords-*.js</code>、<code>MySupply-*.js</code></td><td>請假與補給的原始互動</td></tr>
+<tr><td><code>03 Standard CPC DataBase/02. 数据导出/1x_*.txt</code></td><td>34 頁實際畫面文字（排班 17、排班Excel 18、合約 19、車輛 20、請假 21、月度出勤 22）</td></tr>
+<tr><td><code>03 Standard CPC DataBase/01. 截图/*.png</code></td><td>同上的截圖</td></tr>
+</tbody>
+</table>
+</div>
+
+<h3>3.1 原系統營運管理菜單（權威）</h3>
+<pre><code>operations:
+  排班管理        /Schedules
+  排班Excel       /ExcelSchedule
+  合約列表        /Contracts
+  車輛管理        /Vehicles
+  請假紀錄        /LeaveRecords
+  月度出勤表      /MonthlyAttendance</code></pre>
+<p class="small">新系統在此基礎上多了 定期服務排程、車輛費用、庫存管理、盤點記錄，並把請假紀錄放到「前線員工」。依決策 B，本輪不動結構。</p>
+
+<h3>3.2 改造前的關鍵資料事實（決定實作方式）</h3>
+<div class="card">
+<table>
+<thead><tr><th>實體</th><th style="width:14%">筆數</th><th>對改造的影響</th></tr></thead>
+<tbody>
+<tr><td>Employee 員工</td><td><b>0</b></td><td>不能直接從員工表做下拉。改為合併「排班 assigned_employees（9 人）＋出勤（13 人）＋請假＋使用者」歸納名單</td></tr>
+<tr><td>Contract 合約</td><td>12</td><td>資料本身沒有 <code>contact_person / work_unit_name / pest_type</code> 值，選中時這幾格會是空的，屬資料現況而非 bug</td></tr>
+<tr><td>Schedule 排班</td><td>13,115</td><td>欄位必須「只增不減」：所有 ID 欄轉隱藏仍原樣回寫，否則歷史排班會被洗掉</td></tr>
+<tr><td>Customer 客戶</td><td>1,608</td><td>必須做伺服器端搜尋（<code>/api/pick</code>），不能一次塞進 HTML</td></tr>
+<tr><td>PurchaseOrder 採購單</td><td>902</td><td>同上；排班選 PO 需支援 po_name／po_number／customer_name 模糊比對</td></tr>
+<tr><td>Product 產品 / Pesticide 藥物</td><td>132 / 38</td><td>補給與合約用藥的資料源</td></tr>
+<tr><td>WorkInstruction 工作細則</td><td>22</td><td>類別實際是「室內服務／滅蟲服務／室外服務／其他服務」，與舊 config 的選項不一致，已改為可自由搜尋</td></tr>
+<tr><td>WorkUnit 工作單位</td><td>16</td><td>排班「工作單位」用它反查名稱</td></tr>
+<tr><td>Vehicle 車輛</td><td>4</td><td>TG4278 / WR7935 / WS6355 / ZK2944</td></tr>
+<tr><td>LeaveRecord / SupplyRecord / VehicleExpense</td><td>3 / 0 / 0</td><td>補給與車輛費用原本是空表，所以「前線看不到新增」不是資料問題而是權限問題</td></tr>
+</tbody>
+</table>
+</div>
+
+<!-- ══════════════════ 4 ══════════════════ -->
+<h2 id="s4"><span class="n">4</span>架構與資料流</h2>
+
+<p>四期是「單進程 Node + SQLite + 伺服器端渲染」，沒有前端 build。所有頁面由 <code>lib/*.mjs</code> 產生 HTML，瀏覽器只跑一段共用的 <code>COMMON_JS</code>。本輪新增的能力全部掛在這條鏈上，沒有引入任何框架或依賴。</p>
+
+<div class="flow">
+<pre>  瀏覽器（表單 / 彈窗）
+     │  ① 輸入關鍵字
+     ▼
+  COMMON_JS  pkFetch()  ──GET /api/pick?source=contracts&amp;q=CON──►  server.mjs 路由
+                                                                        │
+                                                                        ▼
+                                                              lib/pickers.mjs
+                                                              searchPick(store, source, q)
+                                                                        │
+                                                     ┌──────────────────┴──────────────────┐
+                                                     │ PICK_SOURCES[source].build(store)   │
+                                                     │ 30 秒記憶體快取（memo）              │
+                                                     └──────────────────┬──────────────────┘
+                                                                        ▼
+                                                    records 表（JSON）→ 正規化為
+                                                    { id, label, sub, fill{...} }
+     ◄──────────────────────────────────────────────────────────────────┘
+     │  ② 選中一筆
+     ▼
+  pkApplyFill()  把 fill 表逐鍵寫回同一個 form / 工作卡片內的
+                 [data-f="欄名"] 或 [name="欄名"]，並派發 input 事件
+     │
+     ▼
+  ③ 送出表單 → POST /save/:entity → prepareRecord()（picks 轉 JSON）→ store.save()</pre>
+</div>
+
+<div class="card">
+<h3>檔案職責</h3>
+<table>
+<thead><tr><th style="width:22%">檔案</th><th>職責</th><th style="width:12%">本輪</th></tr></thead>
+<tbody>
+<tr><td><code>server.mjs</code></td><td>路由、session、CSRF、表單接收</td><td><span class="tag">改</span></td></tr>
+<tr><td><code>lib/config.mjs</code></td><td>NAV 菜單 + ENTITIES（欄位／欄位型別／權限／篩選）</td><td><span class="tag">改</span></td></tr>
+<tr><td><code>lib/ui.mjs</code></td><td>版面、CSS、COMMON_JS、欄位渲染、清單／明細</td><td><span class="tag">改</span></td></tr>
+<tr><td><code>lib/core.mjs</code></td><td>entityForm / entityDetail / listEntity 等通用頁</td><td><span class="tag">改</span></td></tr>
+<tr><td><code>lib/pages.mjs</code></td><td>客製頁：日曆、排班 Excel、出勤、會計</td><td><span class="tag">改</span></td></tr>
+<tr><td><code>lib/actions.mjs</code></td><td>saveEntity、prepareRecord、各實體副作用</td><td><span class="tag">改</span></td></tr>
+<tr><td><code>lib/documents.mjs</code></td><td>列印／PDF 版式</td><td><span class="tag">改</span></td></tr>
+<tr><td><code>lib/pickers.mjs</code></td><td><b>新增</b>：可搜尋資料源與查詢</td><td><span class="tag">新增</span></td></tr>
+<tr><td><code>lib/store.mjs</code>、<code>utils.mjs</code>、<code>schema.json</code></td><td>資料存取、工具函式、schema 文件</td><td><span class="tag g">未動</span></td></tr>
+</tbody>
+</table>
+</div>
+
+<!-- ══════════════════ 5 ══════════════════ -->
+<h2 id="s5"><span class="n">5</span>逐檔改動明細</h2>
+
+<h3>5.1 新增 <code>lib/pickers.mjs</code>（231 行）</h3>
+<div class="card">
+<table>
+<thead><tr><th style="width:26%">匯出</th><th>說明</th></tr></thead>
+<tbody>
+<tr><td><code>PICK_SOURCES</code></td><td>10 個資料源定義：<code>customers / contracts / purchase_orders / work_units / employees / products / pesticides / vehicles / work_instructions / tools</code></td></tr>
+<tr><td><code>searchPick(store, source, q, limit)</code></td><td>關鍵字加權比對：完全相同 100、前綴 80、包含 60、其餘 20；再按標籤排序</td></tr>
+<tr><td><code>pickLabel(store, source, id)</code></td><td>編輯舊資料時把 ID 換回顯示文字（避免輸入框只顯示一串亂碼 ID）</td></tr>
+<tr><td><code>pickRows / pickRecord</code></td><td>取整份清單 / 單筆</td></tr>
+<tr><td><code>clearPickCache()</code></td><td>清快取（改資料後如需即時反映可調用）</td></tr>
+</tbody>
+</table>
+<p class="small">每個資料源輸出統一結構：</p>
+<pre><code>{
+  id:    "69a93eab…",                       // 存進資料庫的值（或顯示文字，見 valueMode）
+  label: "C-2026-0001 · 城市清潔有限公司",  // 下拉/輸入框顯示
+  sub:   "滅鼠 · 2026-03-01 起",             // 第二行小字
+  text:  "C-2026-0001 城市清潔 …",           // 參與模糊比對的欄位拼接
+  fill:  { contract_number, customer_name, work_location, work_content, … }
+}</code></pre>
+</div>
+
+<h3>5.2 <code>server.mjs</code>（+2 條路由）</h3>
+<div class="card">
+<pre><code>// GET /api/pick?source=contracts&amp;q=CON&amp;limit=20
+if (p === '/api/pick' &amp;&amp; req.method === 'GET') {
+  const source = str(url.searchParams.get('source'));
+  if (!PICK_SOURCES[source]) throw new HttpError(404, '未知選擇器資料源');
+  const query = str(url.searchParams.get('q'));
+  const limit = Math.min(50, Math.max(5, Number(url.searchParams.get('limit') || 20)));
+  return json(res, searchPick(store, source, query, limit));
+}
+
+// POST /leaves/:id/decide  —— 僅 management
+// body: __csrf, status=已批准|已拒絕|待審批, __back
+// 寫入 row.decided_by / row.decided_at，審計 action='approve'</code></pre>
+</div>
+
+<h3>5.3 <code>lib/config.mjs</code>（802 行）</h3>
+<div class="card">
+<table>
+<thead><tr><th style="width:22%">位置</th><th>改動</th></tr></thead>
+<tbody>
+<tr><td>NAV</td><td><code>pestcontrolwork / workschedule / myschedule / serviceplans / myattendance / monthlyattendance / receivables</code> 七個 key 改為唯一值（原本 5 條共用 <code>schedules</code>、2 條共用 <code>attendances</code>…）</td></tr>
+<tr><td><code>workItemColumns</code></td><td>重寫：11 個可見欄（2 個選擇器 + 9 個業務欄）＋ 11 個 <code>hidden:true</code> 欄位</td></tr>
+<tr><td>contracts.fields</td><td>客戶名稱 <code>pick</code>、工作單位 <code>pick</code>、工作內容 <code>pick</code>（valueMode text）、<code>work_instructions</code> <code>picks</code>、害蟲種類／服務種類／服務頻率改 <code>select</code>、用藥明細改帶 <code>pick</code> 欄；刪 <code>record_mode / record_points</code>；三個 ID 欄改 <code>readOnly</code></td></tr>
+<tr><td>schedules.fields</td><td>車牌 <code>pick</code>（可自由輸入）、顏色 <code>color</code>、分配員工 <code>picks</code>、工作列表 <code>items + layout:'cards'</code></td></tr>
+<tr><td>leave_records.fields</td><td>員工姓名 <code>pick</code>（valueMode text，可打全英文）、<code>employee_id</code> 改唯讀</td></tr>
+<tr><td>supply_records</td><td><code>editRoles</code> 由 OFFICE_ADMIN 放寬為 WORK_READ（前線可新增）；員工 <code>pick</code>、補給位置 <code>select</code>（動態選項）、產品／工具明細改 <code>pick</code></td></tr>
+<tr><td>vehicle_expenses.fields</td><td>車牌 <code>pick</code>、刪 <code>vehicle_id</code> 與 <code>email_message_id</code></td></tr>
+</tbody>
+</table>
+<p class="small">隱藏欄位清單（原樣保留、不再顯示）：<code>po_name / quotation_id / quotation_number / contract_number / recurring_schedule_id / recurring_schedule_name / work_unit_id / estimated_hours / work_hours / status</code>。</p>
+</div>
+
+<h3>5.4 <code>lib/ui.mjs</code>（553 行）</h3>
+<div class="card">
+<table>
+<thead><tr><th style="width:26%">區塊</th><th>改動</th></tr></thead>
+<tbody>
+<tr><td>CSS</td><td>新增 <code>.navgrp</code>、<code>.pk / .pk-menu / .pk-chip</code>、<code>dialog.modal</code>、<code>.wf-card / .wf-grid / .wf-link</code>、<code>.item-cards</code>；<code>input[list]</code> 加下拉箭頭</td></tr>
+<tr><td><code>layout()</code></td><td><code>&lt;div class="navg"&gt;</code> → <code>&lt;details class="navgrp"&gt;</code>，<code>open</code> 由「當前分組」決定</td></tr>
+<tr><td><code>COMMON_JS</code></td><td>新增導航記憶、<code>pkFetch / pkApplyFill / pkMount / wfMount</code>、重寫 items 編輯器、彈窗開關</td></tr>
+<tr><td><code>pickerControl()</code></td><td>新元件，輸出 <code>.pk</code> 結構（單選／多選）</td></tr>
+<tr><td><code>fieldInput()</code></td><td>支援 <code>pick / picks / color</code>；<code>select</code> 改為 <code>&lt;input list=datalist&gt;</code>（可輸入搜索）；items 帶出 <code>data-layout / data-add-label / data-row-label</code></td></tr>
+<tr><td><code>formGrid()</code> 新匯出</td><td>把欄位清單渲染成 <code>.fgrid</code>，供彈窗重用同一份 config</td></tr>
+<tr><td><code>renderValue()</code></td><td><code>pick</code> 用 <code>pickLabel()</code> 換回文字；<code>picks</code> 用「、」串接</td></tr>
+<tr><td><code>renderItems()</code></td><td>過濾 <code>hidden</code> 欄；新增 <code>layout='cards'</code> 卡片式閱讀</td></tr>
+<tr><td><code>detailPage()</code></td><td>新增 <code>tools</code> 參數，把「移至回收筒／還原」併進同一條操作列</td></tr>
+</tbody>
+</table>
+</div>
+
+<h3>5.5 <code>lib/core.mjs</code>（463 行）</h3>
+<div class="card">
+<table>
+<thead><tr><th style="width:26%">位置</th><th>改動</th></tr></thead>
+<tbody>
+<tr><td><code>leaveDecideForm()</code></td><td>新函式，產生批准／拒絕小表單</td></tr>
+<tr><td><code>listEntity()</code></td><td><code>extraActions</code> 支援請假：待審批時顯示批准／拒絕（僅 management）</td></tr>
+<tr><td><code>entityDetail()</code> · vehicles</td><td>新增「車輛費用（N 筆 · HK$合計）」明細表 ＋ 添加費用記錄／易通行匯入</td></tr>
+<tr><td><code>entityDetail()</code> · leave_records</td><td>待審批且有權限時，頂部顯示審批卡</td></tr>
+<tr><td><code>entityDetail()</code> · 操作列</td><td>刪除／還原改由 <code>tools</code> 傳入，不再單獨佔一行</td></tr>
+<tr><td><code>prefillEntity()</code></td><td>支援 <code>?vehicleId=</code> 預填車牌（從車輛詳情點「添加費用記錄」）</td></tr>
+<tr><td><code>defaultsFor()</code></td><td>補給日期、請假起訖日期預設今日（原本只有前線帳號才有）</td></tr>
+</tbody>
+</table>
+</div>
+
+<h3>5.6 <code>lib/pages.mjs</code>（526 行）</h3>
+<div class="card">
+<table>
+<thead><tr><th style="width:26%">位置</th><th>改動</th></tr></thead>
+<tbody>
+<tr><td><code>scheduleDialog()</code></td><td>新函式：輸出 <code>&lt;dialog id="schedDlg"&gt;</code>，內含 <code>ENTITIES.schedules.fields</code> 全欄位，POST 到 <code>/save/schedules</code>，帶 <code>__back</code></td></tr>
+<tr><td><code>workSchedulePage()</code></td><td>「新增排班」改按鈕開彈窗；<code>?edit=id</code> 自動開彈窗並預填；日曆項目與「編輯」都指向 <code>?edit=</code>；補「⚠ N 張 PO 待安排」；active key 依身分區分</td></tr>
+<tr><td><code>excelSchedulePage()</code></td><td>加「新增工作欄」按鈕＋彈窗（預填 <code>newDate</code>）；工作單位用 <code>unitIndex</code> 反查</td></tr>
+<tr><td>其他頁 active key</td><td><code>pestcontrolwork / serviceplans / myattendance / monthlyattendance / receivables</code> 對齊新 NAV key</td></tr>
+</tbody>
+</table>
+</div>
+
+<h3>5.7 <code>lib/actions.mjs</code>（709 行）</h3>
+<div class="card">
+<pre><code>// prepareRecord：新增 picks 型別（存 JSON 陣列）
+if (['items', 'files', 'picks'].includes(field.type)) data[field.name] = parseJSONField(value, []);
+
+// saveEntity：非管理層遞交請假，一律回待審批（防繞過前端）
+if (cfg.key === 'leave_records' &amp;&amp; user.role !== 'management') data.status = '待審批';
+
+// dynamicOptions：補給位置選項 = 個人 + 所有車牌
+type: unique(['個人', ...vehicles]),</code></pre>
+</div>
+
+<h3>5.8 <code>lib/documents.mjs</code>（416 行）</h3>
+<div class="card">
+<ul>
+<li><code>genericItems()</code>：列印時過濾 <code>hidden</code> 欄，避免出現空白表頭與一串 ID。</li>
+<li><code>genericDocument()</code>：<code>picks</code> 型別輸出「、」串接的可讀文字，不再直接吐 JSON。</li>
+</ul>
+</div>
+
+<!-- ══════════════════ 6 ══════════════════ -->
+<h2 id="s6"><span class="n">6</span>核心機制詳解</h2>
+
+<h3 id="s61">6.1 可搜尋選擇器 picker</h3>
+
+<p>一個 <code>.pk</code> 容器同時包含：隱藏輸入（真正提交的值）、文字輸入（顯示／輸入關鍵字）、下拉面板、（多選時）標籤區。</p>
+
+<pre><code>&lt;div class="pk" data-source="contracts" data-multi="0" data-valuemode="id"&gt;
+  &lt;input type="hidden" class="pk-val" name="contract_id" value="69a93eab…"&gt;
+  &lt;input type="text"   class="pk-input" value="C-2026-0001 · 城市清潔有限公司"&gt;
+  &lt;div class="pk-menu" hidden&gt;&lt;/div&gt;
+&lt;/div&gt;</code></pre>
+
+<h4>三種 <code>valueMode</code>（最容易踩坑的地方）</h4>
+<table>
+<thead><tr><th style="width:14%">模式</th><th style="width:34%">隱藏欄存什麼</th><th>用在哪些欄位</th></tr></thead>
+<tbody>
+<tr><td><code>id</code>（預設）</td><td>記錄 ID</td><td>排班工作列表的 <code>po_id / contract_id</code>、車輛費用（若保留 id）</td></tr>
+<tr><td><code>label</code></td><td>顯示文字</td><td>工作單位、產品名稱、藥物名稱、分配員工的單筆值</td></tr>
+<tr><td><code>text</code></td><td>輸入框即時鏡像</td><td>客戶名稱、工作內容、車牌、員工姓名、工具名稱——<b>允許自由輸入，選中則覆蓋</b></td></tr>
+</tbody>
+</table>
+
+<div class="note risk">
+<b>為什麼需要 text 模式</b>
+像「客戶名稱」這種欄位，歷史資料可能不在客戶庫裡。若用 id 模式，用戶打了字但沒選中任何一筆，隱藏值仍是空的，存檔就會丟資料。<code>text</code> 模式讓輸入框內容實時同步到隱藏欄，既能選、也能手打。
+</div>
+
+<h4>填充鏈（選一個合約 → 自動帶出 8 個欄位）</h4>
+<p><code>pkApplyFill()</code> 會在同一個 <code>.wf-card</code>（或整個 <code>form</code>）範圍內，把所有 <code>[data-f="欄名"]</code> 與 <code>[name="欄名"]</code> 找出來逐一賦值，並派發 <code>input</code> 事件，讓 items 編輯器的 row 物件同步更新。</p>
+<div class="note warn">
+<b>兩個已修掉的坑（改動時別改回去）</b>
+① 不能填充「自己這個 picker」的隱藏欄與文字框——否則選合約後，<code>contract_number</code> 的 fill 會把「C-2026-0001 · 城市清潔有限公司」這串 label 寫進只該放編號的欄位（本輪實測踩過）。
+② 被填充的對象若是另一個 picker 的隱藏欄，必須同時更新它旁邊的文字框，否則畫面上看得到舊值、存進去的卻是新值。
+</div>
+
+<h3 id="s62">6.2 明細編輯器 items</h3>
+<p>原本只有一種表格佈局、且所有欄位都會畫出來。現在支援三件事：</p>
+<table>
+<thead><tr><th style="width:22%">能力</th><th>寫法</th></tr></thead>
+<tbody>
+<tr><td>隱藏欄</td><td>欄位定義加 <code>hidden: true</code>；不渲染但 row 物件仍保留，存檔原樣回寫</td></tr>
+<tr><td>卡片佈局</td><td>欄位定義加 <code>layout: 'cards'</code>；<code>link: true</code> 的欄位放在卡片頂部（PO／合約），其餘進兩欄 grid</td></tr>
+<tr><td>單元格用選擇器</td><td>欄位定義 <code>type: 'pick'</code> + <code>source</code> + <code>displayField</code> + <code>valueMode</code></td></tr>
+</tbody>
+</table>
+<p class="small">排班工作列表目前的長相：<code>link</code> 區（關聯採購單、關聯合約）→ 9 個業務欄（工作名稱／地點／單位／聯絡人／電話／服務類型／開始／結束／備註）。</p>
+
+<h3 id="s63">6.3 排班彈窗</h3>
+<pre><code>scheduleDialog({ store, user, csrf, row, isEdit, back, open })
+
+&lt;dialog class="modal" id="schedDlg"&gt;
+  &lt;form method="post" action="/save/schedules"&gt;
+    __csrf  __id  __new_id  __expected_updated  __back
+    …formGrid(ENTITIES.schedules.fields, row, ctx)…
+  &lt;/form&gt;
+&lt;/dialog&gt;</code></pre>
+<ul>
+<li><b>新增</b>：按鈕 <code>data-dlg-open="schedDlg" data-date="2026-10-28"</code>，JS 會把日期填進 <code>schedule_date</code> 再 <code>showModal()</code>。</li>
+<li><b>編輯</b>：<code>/schedules?edit=&lt;id&gt;</code>，伺服器端渲染已填好的彈窗並自動開啟。</li>
+<li><b>排班 Excel</b>：同一個函式、同一個 <code>id</code>，只換預填日期與 <code>__back</code>，所以只有一份表單邏輯要維護。</li>
+<li>提交是傳統 POST，成功後伺服器 302 回 <code>__back</code>，彈窗隨頁面重載關閉——不需要前端狀態管理。</li>
+</ul>
+
+<h3 id="s64">6.4 導航折疊與高亮</h3>
+<pre><code>&lt;details class="navgrp" data-g="營運管理" open&gt;
+  &lt;summary&gt;&lt;b&gt;營運管理&lt;/b&gt;&lt;/summary&gt;
+  &lt;nav&gt;&lt;a class="on" href="/schedules"&gt;排班管理&lt;/a&gt;…&lt;/nav&gt;
+&lt;/details&gt;
+
+// 記憶：localStorage["cpc.navgroups"] = {"市場管理":true}
+// 還原：載入時若有紀錄則覆蓋 server 的 open 狀態</code></pre>
+<p>高亮判斷改為「每條菜單一個唯一 key」，頁面傳 <code>active</code> 對應自己的 key。原本 <code>schedules</code> 被 5 條菜單共用，導致同時亮 5 條。</p>
+
+<h3 id="s65">6.5 請假審批守門</h3>
+<ul>
+<li>UI 層：只有 <code>management</code> 看得到「批准／拒絕」，列表與詳情都有。</li>
+<li>路由層：<code>POST /leaves/:id/decide</code> 先 <code>requireRole(user, ['management'], 'leave_records')</code>，非管理層直接 403。</li>
+<li>儲存層：<code>saveEntity</code> 對非管理層強制 <code>status='待審批'</code>，就算繞過前端直接 POST 也改不了狀態。</li>
+</ul>
+
+<!-- ══════════════════ 7 ══════════════════ -->
+<h2 id="s7"><span class="n">7</span>資料兼容與遷移</h2>
+<div class="card">
+<ul>
+<li><b>沒有任何資料庫結構變更</b>。四期的業務資料存在 <code>records</code> 表（<code>entity / id / data(JSON) / deleted / created_date / updated_date</code>），新增欄位只是 JSON 多一個 key，不需要 ALTER TABLE、不需要跑 migration。</li>
+<li><b>欄位只增不刪</b>。合約的 <code>record_mode / record_points</code>、車輛費用的 <code>vehicle_id / email_message_id</code> 只是<em>不再顯示</em>，舊值仍留在 JSON 裡；重新保存也不會被清掉（<code>prepareRecord</code> 以 <code>{...existing}</code> 為底）。</li>
+<li><b>排班工作列表</b>的所有 ID 欄改為 <code>hidden</code>，提交時仍在 JSON 中，13,115 筆歷史排班不會掉欄位。</li>
+<li><b>新增欄位</b>：<code>contracts.work_instructions</code>（picks，JSON 陣列）。舊合約沒有這個 key，讀取時視為空陣列。</li>
+<li><b>新增欄位</b>：<code>leave_records.decided_by / decided_at</code>（審批人與時間）。</li>
+</ul>
+</div>
+
+<div class="note warn">
+<b>建議（尚未執行）</b>
+改造前後建議各留一份資料庫快照。目前 <code>系统代码/backup-20261024-193250/</code> 是更早的備份，<b>不含本輪之後的業務資料</b>，不要拿它當「今天的還原點」。
+</div>
+
+<!-- ══════════════════ 8 ══════════════════ -->
+<h2 id="s8"><span class="n">8</span>驗收與自動腳本</h2>
+
+<h3>8.1 手工驗收（給業務同事）</h3>
+<div class="card">
+<ul class="checks">
+<li><span class="box"></span><span>左側任一灰色分組標題可點擊收起，再點展開；切換頁面後狀態保留</span></li>
+<li><span class="box"></span><span>打開 <code>/schedules</code>，左側只有「排班管理」一條綠色（以前會亮 5 條）</span></li>
+<li><span class="box"></span><span>「新增排班」彈窗不跳頁；「關聯合約」輸入關鍵字可選；選中後工作名稱／地點／單位／聯絡人／電話自動填</span></li>
+<li><span class="box"></span><span>「工作名稱」輸入「鼠」，下拉出現工作細則庫條目（滅鼠／室內滅鼠／智能捕鼠…）</span></li>
+<li><span class="box"></span><span>「分配員工」可搜尋並多選，選完顯示綠色標籤</span></li>
+<li><span class="box"></span><span>建立後回到同一天日曆，下方「日詳情」出現新排班</span></li>
+<li><span class="box"></span><span><code>/excelschedule?date=2026-10-28</code> → 新增工作欄 → 日期已預填</span></li>
+<li><span class="box"></span><span><code>/new/contracts</code> 客戶名稱輸入「城市清潔」→ 選中 → 客戶 ID／編號／聯絡人自動填；害蟲種類、服務頻率可下拉也可打字</span></li>
+<li><span class="box"></span><span><code>/vehicles</code> → 點車牌 → 底部有車輛費用明細與「添加費用記錄」（車牌已帶入）</span></li>
+<li><span class="box"></span><span>用前線帳號開 <code>/leaves</code> 看不到批准／拒絕；用管理層帳號看得到且可批</span></li>
+<li><span class="box"></span><span>用前線帳號開 <code>/mysupply</code> 有「新增記錄」，補給位置可選「個人／4 個車牌」，產品可搜</span></li>
+<li><span class="box"></span><span>列印排班（<code>/print-schedule</code>）與排班詳情頁沒有出現空白表頭或一串 ID</span></li>
+</ul>
+</div>
+
+<h3>8.2 自動驗收（給工程師）</h3>
+<p>腳本在 <code>verify-operation.mjs</code>，零依賴、40 項檢查。<b>必須對副本庫跑</b>，因為它會寫測試記錄。</p>
+<pre><code># 1) 在 系统代码 目錄產生副本
+node -e "const{DatabaseSync}=require('node:sqlite');const db=new DatabaseSync('data.db');db.exec(`VACUUM INTO 'verify-copy.db'`)"
+
+# 2) 用副本起第二個實例（不要動 3000）
+set DB_PATH=%cd%\verify-copy.db
+set PORT=3101
+set CPC_AUTO_IMPORT=0
+node server.mjs
+
+# 3) 另開終端
+node verify-operation.mjs http://127.0.0.1:3101</code></pre>
+<p class="small">腳本偵測到 <code>:3000</code> 會直接拒絕執行；真的要在正式環境跑需加 <code>--force</code>（不建議）。</p>
+
+<div class="card">
+<h3>本輪實測結果</h3>
+<table>
+<thead><tr><th style="width:34%">層次</th><th style="width:14%">項目</th><th>結果</th></tr></thead>
+<tbody>
+<tr><td>HTTP 端到端（真實提交／審批流轉）</td><td>18 項</td><td><span class="tag">全數通過</span></td></tr>
+<tr><td>Chromium 實操（彈窗、選擇器、多選、導航）</td><td>21 項</td><td><span class="tag">全數通過</span>，0 個 JS 錯誤</td></tr>
+<tr><td>交接用自動腳本（本資料夾）</td><td>40 項</td><td><span class="tag">40 / 40 通過</span></td></tr>
+</tbody>
+</table>
+<p class="small">測試跑在以 <code>VACUUM INTO</code> 產生的副本上，正式 <code>data.db</code> 無測試寫入；副本已刪除。</p>
+</div>
+
+<!-- ══════════════════ 9 ══════════════════ -->
+<h2 id="s9"><span class="n">9</span>回滾方案</h2>
+
+<div class="card">
+<h3>情況 A：只想退回本輪程式（資料保留）</h3>
+<p>本輪只動了 8 個檔案，其中 7 個是既有檔案。把這 7 個檔案換回改造前版本即可，資料庫不用動。</p>
+<table>
+<thead><tr><th style="width:34%">檔案</th><th>改造前來源</th></tr></thead>
+<tbody>
+<tr><td><code>server.mjs</code></td><td><code>系统代码/backup-20261024-193250/server.mjs</code>（19:32 版，<b>不是本輪直前版</b>，直接覆蓋會連帶回退其他內容，僅供參考對照）</td></tr>
+<tr><td><code>lib/config.mjs</code>、<code>lib/ui.mjs</code>、<code>lib/core.mjs</code>、<code>lib/pages.mjs</code>、<code>lib/actions.mjs</code>、<code>lib/documents.mjs</code></td><td><b>沒有備份</b>。此目錄的 <code>backup-20261024-193250/</code> 只有根目錄 4 個檔，<b>不含 lib/</b></td></tr>
+<tr><td><code>lib/pickers.mjs</code></td><td>刪除即可（前提是 server.mjs 也一起回退，否則 import 會失敗）</td></tr>
+</tbody>
+</table>
+<div class="note risk">
+<b>回滾的真實狀況（不要被「有備份」誤導）</b>
+<code>backup-20261024-193250/</code> 只備份了 <code>server.mjs / seed.mjs / data.db / 启动系统.bat</code>，<b>lib/ 底下 7 個檔案完全沒有改造前副本</b>。也就是說：本輪<b>沒有可用的程式級還原點。</b><br>
+可行的做法只有兩條：① 依第 5 章的改動點人工逆向還原；② 接受交付版本，用本資料夾的 <code>程式快照_20261024/</code> 當基準繼續往前修。<br>
+<b>下一次改造前，請先把整個 <code>系统代码/</code> 複製成 <code>系统代码_快照_YYYYMMDD/</code> 再動手。</b>
+</div>
+</div>
+
+<div class="card">
+<h3>情況 A-2：想回到「本次交付」的狀態</h3>
+<p>本資料夾的 <code>程式快照_20261024/</code> 就是交付當下的 8 個檔案原文（結構與 <code>系统代码/</code> 相同）。若後續改壞了，把它覆蓋回去即可回到交付狀態。</p>
+<pre><code>copy /Y "一次修改\程式快照_20261024\server.mjs"        "系统代码\server.mjs"
+copy /Y "一次修改\程式快照_20261024\lib\*.mjs"          "系统代码\lib\"</code></pre>
+<p class="small">覆蓋後重啟 <code>启动系统.bat</code>，瀏覽器 Ctrl+F5。</p>
+</div>
+
+<div class="card">
+<h3>情況 B：資料被改壞，連資料一起退回</h3>
+<ol>
+<li>停止服務（關掉 <code>启动系统.bat</code> 視窗，或 <code>taskkill /PID &lt;pid&gt; /F</code>）。</li>
+<li>備份現況：把 <code>data.db</code>、<code>data.db-wal</code>、<code>data.db-shm</code> 三個檔一起複製走（<b>WAL 模式，只拿 .db 會少最近交易</b>）。</li>
+<li>把備份的 <code>data.db</code>（連同刪除現有 <code>-wal / -shm</code>）放回原位。</li>
+<li>重啟服務。</li>
+</ol>
+</div>
+
+<!-- ══════════════════ 10 ══════════════════ -->
+<h2 id="s10"><span class="n">10</span>已知限制與待辦</h2>
+
+<div class="card">
+<table>
+<thead><tr><th style="width:24%">項目</th><th>現況</th><th style="width:14%">性質</th></tr></thead>
+<tbody>
+<tr><td>月度出勤表</td><td>仍是手動填寫＋保存，未與打卡記錄自動聯動</td><td><span class="tag w">會議決定延後</span></td></tr>
+<tr><td>易通行費用匯入</td><td>維持手動貼文字，未接 Outlook／Email 自動抓取</td><td><span class="tag w">會議決定延後</span></td></tr>
+<tr><td>合約歷史資料</td><td>12 筆舊合約沒有 <code>contact_person / work_unit_name / pest_type</code> 值，選中時這幾格空白；新建合約正常</td><td><span class="tag g">資料現況</span></td></tr>
+<tr><td>員工主檔</td><td>Employee 表 0 筆；下拉名單來自排班／出勤／請假歸納。無員工檔就無法綁定帳號與薪資</td><td><span class="tag g">既有缺口</span></td></tr>
+<tr><td>工具推薦清單</td><td>無工具庫，先用「歷史用過的工具＋10 個常用項」墊底，可自由輸入</td><td><span class="tag g">設計取捨</span></td></tr>
+<tr><td>日曆顯示</td><td>每天只顯示前 3 條排班，其餘收在「+N 更多」</td><td><span class="tag g">效能取捨</span></td></tr>
+<tr><td>排班 Excel 員工欄</td><td>以「、」分隔純文字回寫，若手動改名字可能產生重名/新員工</td><td><span class="tag g">既有行為</span></td></tr>
+<tr><td>請假狀態欄</td><td>非管理層的表單仍可看到「狀態」下拉，但送出後會被強制改回待審批</td><td><span class="tag g">可由 UI 再優化</span></td></tr>
+<tr><td>行動版</td><td>彈窗與卡片在 <code>&lt;760px</code> 會單欄排列，未做專門手機版</td><td><span class="tag g">未驗證</span></td></tr>
+</tbody>
+</table>
+</div>
+
+<h3>建議的下一輪範圍（未開工）</h3>
+<ul>
+<li><b>市場管理</b>：報價單信件式版式、採購單詳情、批量導入的實際可用性。</li>
+<li><b>公司財務</b>：總帳／科目表目前偏空，需與會計確認口徑。</li>
+<li><b>月度出勤 × 打卡</b>：把 <code>CheckInRecord</code> 匯總進出勤表，取代手填。</li>
+<li><b>員工主檔</b>：把 9～13 個歷史姓名正式建檔，才能支撐薪資與帳號綁定。</li>
+</ul>
+
+<!-- ══════════════════ 11 ══════════════════ -->
+<h2 id="s11"><span class="n">11</span>二次開發指引</h2>
+
+<h3>11.1 新增一個 picker 資料源</h3>
+<ol>
+<li>在 <code>lib/pickers.mjs</code> 的 <code>PICK_SOURCES</code> 加一項：<code>{ label, build(store) }</code>，回傳 <code>{id,label,sub,text,fill}</code>。</li>
+<li>在 <code>lib/config.mjs</code> 把欄位改成 <code>field('xxx','標籤','pick',{source:'新源',valueMode:'id'|'label'|'text',displayField:'…'})</code>。</li>
+<li>明細欄位同理，在 <code>itemColumns</code> 加 <code>type:'pick'</code>。</li>
+<li>不需要改 <code>server.mjs</code>——<code>/api/pick</code> 會自動支援新 source（僅做白名單檢查）。</li>
+</ol>
+
+<h3>11.2 讓某個實體也支援彈窗</h3>
+<ol>
+<li>複製 <code>scheduleDialog()</code>，把 <code>ENTITIES.schedules</code> 換成目標實體、<code>action</code> 換成 <code>/save/&lt;key&gt;</code>。</li>
+<li>頁面上放 <code>&lt;button data-dlg-open="你的id"&gt;</code>，並把 dialog 的 <code>id</code> 設成同一個。</li>
+<li>如果需要「編輯」也走彈窗，照 <code>?edit=</code> 的做法：伺服器端判斷參數 → 預填 row → <code>open:true</code> + 自動 <code>showModal()</code>。</li>
+</ol>
+
+<h3>11.3 常見陷阱</h3>
+<ul>
+<li>新增 <code>select</code> 欄位會自動變成「可輸入的 datalist」，<b>不再強制只能選項</b>；若要嚴格限制，請在 <code>prepareRecord</code> 加白名單校驗。</li>
+<li>items 的隱藏欄一旦從 <code>itemColumns</code> 刪掉，存檔時該 key 就不會被寫入——正確做法是標 <code>hidden:true</code>，不是刪掉。</li>
+<li><code>.pk</code> 的下拉面板用絕對定位，若放進 <code>overflow:hidden</code> 的容器會被裁掉；items 卡片已改為 <code>overflow:visible</code>。</li>
+<li>改完 CSS/JS 只需重啟 Node 並在瀏覽器 <b>Ctrl+F5</b>；沒有 build 步驟。</li>
+</ul>
+
+<!-- ══════════════════ 12 ══════════════════ -->
+<h2 id="s12"><span class="n">12</span>附錄</h2>
+
+<h3>12.1 變更檔案清單（SHA256）</h3>
+<p>完整版見同目錄 <code>變更檔案清單_SHA256.csv</code>。用 <code>certutil -hashfile &lt;檔名&gt; SHA256</code> 或 <code>sha256sum</code> 比對，即可確認手上這份是不是交接版本。交付當下的 8 個檔案原文另外放在 <code>程式快照_20261024/</code>（結構同 <code>系统代码/</code>），可直接覆蓋回滾或做 diff。</p>
+<div class="card">
+<table>
+<thead><tr><th style="width:22%">檔案</th><th style="width:8%">類型</th><th style="width:8%">行數</th><th>SHA256（前 16 碼）</th></tr></thead>
+<tbody>
+<tr><td>lib/pickers.mjs</td><td>新增</td><td>231</td><td><code>2039a56921c94685</code></td></tr>
+<tr><td>server.mjs</td><td>修改</td><td>733</td><td><code>b6541c5b3a866cdc</code></td></tr>
+<tr><td>lib/config.mjs</td><td>修改</td><td>802</td><td><code>1d8d38cadb99f8e3</code></td></tr>
+<tr><td>lib/ui.mjs</td><td>修改</td><td>553</td><td><code>4d7d4232f2346ba3</code></td></tr>
+<tr><td>lib/core.mjs</td><td>修改</td><td>463</td><td><code>0023baa943c6147f</code></td></tr>
+<tr><td>lib/pages.mjs</td><td>修改</td><td>526</td><td><code>be20e26a5d3cf6bb</code></td></tr>
+<tr><td>lib/actions.mjs</td><td>修改</td><td>709</td><td><code>e650408c6d9ddb63</code></td></tr>
+<tr><td>lib/documents.mjs</td><td>修改</td><td>416</td><td><code>b12999a198545bb1</code></td></tr>
+</tbody>
+</table>
+</div>
+
+<h3>12.2 環境與帳號</h3>
+<div class="card">
+<table>
+<tbody>
+<tr><th style="width:26%">服務位址</th><td><code>http://127.0.0.1:3000</code>（同網段：<code>http://192.168.1.155:3000</code>）</td></tr>
+<tr><th>啟動方式</th><td>雙擊 <code>系统代码/启动系统.bat</code>，或 <code>node server.mjs</code>；保持視窗開著</td></tr>
+<tr><th>資料庫</th><td><code>系统代码/data.db</code>（WAL；另有 <code>-wal / -shm</code> 兩個伴生檔）</td></tr>
+<tr><th>程式目錄</th><td><code>F:\04 STANDARD CPC SYSTEM\04. 四期\系统代码</code></td></tr>
+<tr><th>示範帳號</th><td>登入頁下方四個按鈕（辦公室／前線／會計／管理層），密碼 <code>demo1234</code></td></tr>
+<tr><th>Node 版本</th><td>v22.22.2（使用內建 <code>node:sqlite</code>，實驗性 API，啟動時的 ExperimentalWarning 屬正常）</td></tr>
+<tr><th>正式庫現況</th><td>客戶 1,608 · 合約 12 · 採購單 902 · 排班 13,115 · 工作細則 22 · 產品 132 · 藥物 38 · 車輛 4 · 員工 0</td></tr>
+</tbody>
+</table>
+</div>
+
+<h3>12.3 本次未觸碰</h3>
+<p class="small"><code>lib/store.mjs</code>、<code>lib/utils.mjs</code>、<code>lib/image-editor.mjs</code>、<code>schema.json</code>、<code>seed.mjs</code>、<code>test.mjs</code>、<code>data.db</code> 結構、<code>启动系统.bat</code>、四期根目錄的既有報告與 CSV。</p>
+
+<hr>
+<p class="small">文件版本：v1.0 · 2026-10-24 · 對應程式碼 SHA256 見 12.1。若程式碼再有變動，請更新本文件與 <code>變更檔案清單_SHA256.csv</code>，否則下一手會對不上。</p>
+</main>
+</div>
+</body>
+</html>

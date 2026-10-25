@@ -1,0 +1,374 @@
+{
+  "at": "2026-10-25T07:55:02.017Z",
+  "base": "http://127.0.0.1:3101",
+  "total": 73,
+  "pass": 73,
+  "fail": 0,
+  "results": [
+    {
+      "name": "登入頁可開",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "前線登入",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "前線員工組只剩滅蟲工作／我的出勤／補給記錄",
+      "pass": true,
+      "detail": " 標準清潔滅蟲 公司一站式管理系統 主要功能 公告板 我的工作 前線員工 滅蟲工作 我的出勤 補給記錄 營運管理 服務計劃 服務報告 車輛管理 請假紀錄 設置 個人設置 工作單位管理 工作細則庫 藥物庫 盧 盧力峰（前線） front@de"
+    },
+    {
+      "name": "營運管理給前線四項：服務計劃／服務報告／車輛／請假",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "前線看不到排班管理／定期排程／合約列表／月度出勤／排班Excel",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "前線設置沒有回收桶",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "前線 /schedules 被拒 403",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "前線 /recurringschedules 被拒 403",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "前線 /excelschedule 被拒 403",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "前線 /trash 被拒 403",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "前線 /contracts 被拒 403",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "/checkin 導向我的出勤",
+      "pass": true,
+      "detail": "/myattendance"
+    },
+    {
+      "name": "/workschedule 導向我的工作排班",
+      "pass": true,
+      "detail": "/mywork?tab=schedule"
+    },
+    {
+      "name": "我的工作有三個頁簽",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "我的工作可看到排班日曆",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "打卡已併入我的出勤",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "服務計劃頁沒有新增入口",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "前線服務計劃沒有編輯入口",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "服務計劃詳情不再 404",
+      "pass": true,
+      "detail": "200"
+    },
+    {
+      "name": "詳情電話由客戶檔回填",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "前線詳情不顯示合約金額",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "辦公室服務計劃仍有鉛筆編輯",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "鉛筆打開服務子集彈窗",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "子集彈窗含害蟲／用藥／地區／服務種類",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "子集彈窗不顯示合約總額欄位",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "合約彈窗是全集：含害蟲／用藥／地區與合約總額",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "辦公室導航回收桶在設置",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "前線看到全部服務報告",
+      "pass": true,
+      "detail": "共 2 筆 · 唯讀（可查看，不可修改）"
+    },
+    {
+      "name": "前線服務報告唯讀且無新增",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "前線可開服務報告詳情且不可改",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "滅蟲工作預設今日",
+      "pass": true,
+      "detail": "0"
+    },
+    {
+      "name": "滅蟲工作全員可見（>13000 項）",
+      "pass": true,
+      "detail": "13119"
+    },
+    {
+      "name": "滅蟲工作分頁每頁 100",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "服務類型四選篩選",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "補給新增是彈窗",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "補給位置可選車牌",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "補給有員工篩選",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "前線補給有匯出 CSV",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "請假新增是彈窗且有匯出 CSV",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "建立含害蟲種類的臨時排班",
+      "pass": true,
+      "detail": "302"
+    },
+    {
+      "name": "今日工作顯示新排班與害蟲種類",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "按服務類型「臨時」篩選",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "按害蟲種類篩選",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "請假新增成功",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "前線請假強制本人",
+      "pass": true,
+      "detail": "盧力峰/u-front"
+    },
+    {
+      "name": "請假天數自動計算 3 天",
+      "pass": true,
+      "detail": "3"
+    },
+    {
+      "name": "前線請假狀態強制待審批",
+      "pass": true,
+      "detail": "待審批"
+    },
+    {
+      "name": "前線只看到自己的請假",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "補給新增成功且強制本人",
+      "pass": true,
+      "detail": "盧力峰"
+    },
+    {
+      "name": "補給位置可存車牌",
+      "pass": true,
+      "detail": "ZK2944"
+    },
+    {
+      "name": "前線補給看全部員工",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "前線可開新增車輛費用",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "前線新增車輛費用成功",
+      "pass": true,
+      "detail": "302"
+    },
+    {
+      "name": "車輛費用金額對前線可見",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "前線不可修改車輛費用",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "前線不可刪除車輛費用",
+      "pass": true,
+      "detail": "403"
+    },
+    {
+      "name": "前線可匯出請假 CSV",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "前線可匯出補給 CSV",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "前線不可匯出客戶 CSV",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "辦公室仍不可匯出請假 CSV",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "會計不可進回收桶",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "會計導航沒有回收桶",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "管理層匯出不受影響",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "回歸 / 200",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "回歸 /schedules 200",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "回歸 /contracts 200",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "回歸 /purchaseorders 200",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "回歸 /deliverynotes 200",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "回歸 /inventory 200",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "回歸 /trash 200",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "回歸 /recurringschedules 200",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "回歸 /settings 200",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "測試資料已清理",
+      "pass": true,
+      "detail": "5 筆"
+    }
+  ]
+}

@@ -1,0 +1,819 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>前線員工改造 · 詳細交接文件（三次修改）</title>
+<style>
+  :root{--brand:#0f6e56;--brand2:#12866a;--ink:#1d262d;--muted:#6b7780;--line:#e2e7ea;--bg:#f5f7f8;--card:#fff;--warn:#a35b00;--danger:#a12b2b}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.75 -apple-system,"Segoe UI","Microsoft JhengHei","PingFang TC","Noto Sans TC",sans-serif}
+  a{color:var(--brand);text-decoration:none}a:hover{text-decoration:underline}
+  .hero{background:linear-gradient(135deg,#0d5c48,#12866a);color:#fff;padding:38px 28px 30px}
+  .hero .inner{max-width:1180px;margin:0 auto}
+  .hero .eyebrow{font-size:12px;letter-spacing:.18em;opacity:.8}
+  .hero h1{margin:8px 0 6px;font-size:30px;line-height:1.25}
+  .hero p{margin:0;opacity:.9;max-width:820px}
+  .stats{display:flex;gap:14px;flex-wrap:wrap;margin-top:22px}
+  .stat{background:#ffffff1a;border:1px solid #ffffff33;border-radius:10px;padding:10px 16px;min-width:120px}
+  .stat b{display:block;font-size:22px;line-height:1.2}
+  .stat span{font-size:11.5px;opacity:.85}
+  .wrap{max-width:1180px;margin:0 auto;padding:26px 22px 80px;display:grid;grid-template-columns:228px 1fr;gap:30px}
+  .toc{position:sticky;top:18px;align-self:start;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 14px 10px;font-size:12.5px}
+  .toc b{display:block;font-size:11px;letter-spacing:.14em;color:var(--muted);margin:0 0 8px}
+  .toc a{display:block;padding:4px 7px;border-radius:6px;color:#33424c}
+  .toc a:hover{background:#eef6f2;text-decoration:none}
+  main{min-width:0}
+  section{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:24px 26px;margin-bottom:20px}
+  h2{font-size:21px;margin:0 0 4px;color:#123c31}
+  h2 .no{color:var(--brand);font-size:13px;letter-spacing:.1em;display:block;margin-bottom:2px}
+  h3{font-size:15.5px;margin:22px 0 8px;color:#173f34}
+  h4{font-size:13.5px;margin:16px 0 6px;color:#2c4a41}
+  p{margin:7px 0}
+  .lead{color:#3c4c55;font-size:14.5px}
+  .muted{color:var(--muted)}
+  .small{font-size:12.5px}
+  table{width:100%;border-collapse:collapse;margin:10px 0 4px;font-size:12.8px}
+  th,td{border-bottom:1px solid var(--line);padding:8px 9px;text-align:left;vertical-align:top}
+  th{background:#f3f7f5;color:#2b4a40;font-weight:600;font-size:12px;white-space:nowrap}
+  tr:last-child td{border-bottom:0}
+  code{background:#f1f5f3;border:1px solid #e2e9e5;border-radius:4px;padding:1px 5px;font:12px/1.5 ui-monospace,Consolas,monospace;color:#0d5c48}
+  pre{background:#0f1b18;color:#d8ece4;border-radius:10px;padding:14px 16px;overflow:auto;font:12px/1.65 ui-monospace,Consolas,monospace}
+  pre code{background:none;border:0;color:inherit;padding:0}
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:12px;margin:12px 0}
+  .card{border:1px solid var(--line);border-radius:10px;padding:14px 16px;background:#fbfcfd}
+  .card h4{margin:0 0 6px;font-size:13.5px}
+  .card p{margin:0;font-size:12.8px;color:#45555e}
+  .badge{display:inline-block;border-radius:999px;padding:1px 9px;font-size:11.5px;line-height:1.7;white-space:nowrap}
+  .b-done{background:#e7f5ee;color:#0b6b4f;border:1px solid #bfe3d3}
+  .b-part{background:#fff4e2;color:#8a5200;border:1px solid #f0d6a8}
+  .b-todo{background:#fdecec;color:#8f2626;border:1px solid #efc7c7}
+  .b-info{background:#eef2f7;color:#40566b;border:1px solid #d6e0ea}
+  .note{border-left:4px solid var(--brand);background:#f2f8f5;padding:11px 14px;border-radius:0 8px 8px 0;margin:12px 0;font-size:13px}
+  .warn{border-left-color:#c47b12;background:#fff8ec}
+  .danger{border-left-color:#b33b3b;background:#fdf2f2}
+  .quote{border-left:3px solid #b9cdc5;padding:2px 0 2px 12px;color:#4b5c64;font-size:13px;margin:8px 0}
+  ul,ol{margin:7px 0;padding-left:22px}li{margin:3px 0}
+  .kbd{font:11.5px ui-monospace,Consolas,monospace;background:#eef2f0;border:1px solid #d5dfda;border-bottom-width:2px;border-radius:4px;padding:1px 5px}
+  .file{font-family:ui-monospace,Consolas,monospace;font-size:12px;color:#0d5c48}
+  .pill{display:inline-block;background:#eef3f0;border:1px solid #d9e4de;border-radius:999px;padding:0 8px;font-size:11px;color:#33544a;white-space:nowrap}
+  .num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+  footer{margin-top:8px;color:var(--muted);font-size:12px;text-align:center}
+  @media(max-width:900px){.wrap{grid-template-columns:1fr;padding:16px}.grid{grid-template-columns:1fr!important}.toc{position:static}.hero h1{font-size:24px}}
+  @media print{.toc{display:none}.wrap{display:block;max-width:none}.hero{background:#0d5c48}section{break-inside:avoid;border:0;padding:10px 0}body{background:#fff}}
+</style>
+</head>
+<body>
+<header class="hero">
+  <div class="inner">
+    <div class="eyebrow">標準清潔滅蟲 · 四期系統 · 第三輪業務改造</div>
+    <h1>前線員工改造 · 詳細交接文件</h1>
+    <p>依 2026-10-24 業務會議逐字稿與九題拍板結果落地：導航與權限、滅蟲工作、服務計劃／報告、我的工作／出勤、請假／補給、車輛費用、CSV 例外。本文件共 12 章＋2 附錄，給下一位工程師：先看第 0、1 章知道改了什麼，第 6 章知道代碼在哪，第 7、10 章知道怎麼驗，第 11、12 章知道怎麼改與怎麼排障。</p>
+    <div class="stats">
+      <div class="stat"><b>73 / 73</b><span>本輪自動驗收</span></div>
+      <div class="stat"><b>55 / 55</b><span>上一輪回歸</span></div>
+      <div class="stat"><b>7</b><span>改動檔案</span></div>
+      <div class="stat"><b>+283 / −113</b><span>新增／刪除行</span></div>
+      <div class="stat"><b>0</b><span>資料庫遷移</span></div>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+  <nav class="toc">
+    <b>目錄</b>
+    <a href="#s0">0. 一頁摘要</a>
+    <a href="#s1">1. 九題決策與落地</a>
+    <a href="#s2">2. 會議訴求對照</a>
+    <a href="#s3">3. 改造明細</a>
+    <a href="#s4">4. 權限矩陣</a>
+    <a href="#s5">5. 資料模型與相容</a>
+    <a href="#s6">6. 代碼地圖</a>
+    <a href="#s7">7. 驗收證據</a>
+    <a href="#s8">8. 部署與回滾</a>
+    <a href="#s9">9. 已知限制與下一輪</a>
+    <a href="#s10">10. 驗收逐項清單（73）</a>
+    <a href="#s11">11. 關鍵代碼前後對照</a>
+    <a href="#s12">12. 運維排障 FAQ</a>
+    <a href="#a1">附錄 A 交付物清單</a>
+    <a href="#a2">附錄 B 資料快照</a>
+  </nav>
+  <main>
+
+    <section id="s0">
+      <h2><span class="no">CHAPTER 0</span>一頁摘要</h2>
+      <p class="lead">一句話：把「前線員工」從管理層菜單的縮小版，改成真正的前線工作台——只看自己要用的四個營運模組、滅蟲工作全員可見但不可改、服務計劃唯讀可查電話、服務報告只讀、打卡併入出勤、請假／補給可自己新增與匯出。</p>
+      <table>
+        <thead><tr><th>面向</th><th>本輪結果</th><th>證據</th></tr></thead>
+        <tbody>
+          <tr><td>導航</td><td>前線員工組只剩滅蟲工作／我的出勤／補給記錄；營運管理給前線四項（服務計劃、服務報告、車輛、請假）；回收桶移入設置且只給辦公室／管理層</td><td>§3.1、§4、§7 第 2–8 項</td></tr>
+          <tr><td>滅蟲工作</td><td>全員可見（13,121 項）、預設今日、每頁 100 條、服務類型四選、害蟲種類由排班工作項讀取、不可增改刪</td><td>§3.2、§7 第 30–37 項</td></tr>
+          <tr><td>服務計劃</td><td>移除新增入口（只從合約列表新增）、修復詳情 404、電話由客戶檔回填、鉛筆打開「服務安排」子集彈窗</td><td>§3.3、§7 第 15–25 項</td></tr>
+          <tr><td>服務報告</td><td>前線可看全部、只讀；無新增／修改／分享入口。PDF 與公司模板本輪不動</td><td>§3.4、§7 第 26–29 項</td></tr>
+          <tr><td>個人頁</td><td>我的排班併入我的工作（三個頁簽）；上班打卡併入我的出勤</td><td>§3.5、§7 第 9–14 項</td></tr>
+          <tr><td>請假／補給</td><td>新增改頁內彈窗；補給看全部＋員工篩選＋車牌選項；前線只能為自己建；兩者可匯出 CSV</td><td>§3.6、§7 第 38–52 項</td></tr>
+          <tr><td>車輛</td><td>前線可看車牌／牌照／保險，可新增費用，金額可見；不可改刪既有費用</td><td>§3.7、§7 第 53–57 項</td></tr>
+          <tr><td>下拉</td><td>選擇器改 fixed 定位、最多 50 筆、最高 420px，修掉 item-editor 內被裁切</td><td>§3.8、§7 第 58–60 項</td></tr>
+        </tbody>
+      </table>
+      <div class="note"><b>沒有做的事（刻意）</b>：沒有改資料庫表結構、沒有把服務計劃拆成新實體、沒有做服務報告 PDF、沒有改排班演算法、沒有動財務與市場模組的業務規則。詳見 §9。</div>
+    </section>
+
+    <section id="s1">
+      <h2><span class="no">CHAPTER 1</span>九題決策與落地</h2>
+      <p class="lead">你逐題拍板的答案，以及它最後落在哪一行代碼。這章是「為什麼這樣做」的唯一依據。</p>
+      <table>
+        <thead><tr><th style="width:52px">題號</th><th style="width:220px">你的決定</th><th>落地方式</th><th style="width:150px">代碼位置</th></tr></thead>
+        <tbody>
+          <tr><td>Q1</td><td>服務計劃與合約是同一份資料；一約一計劃；只能從合約列表新增</td><td>服務計劃頁移除新增；保留鉛筆。合約列表仍可新增合約（同一個 Contract 實體，1:1）</td><td class="file">pages.mjs servicePlansPage</td></tr>
+          <tr><td>Q2</td><td>服務報告前線「能看，不能改」</td><td>移除前線本人過濾，列表與詳情可看全部；新增／編輯／分享／刪除全部隱藏並在路由層攔截</td><td class="file">pages.mjs serviceReportsPage<br>core.mjs entityDetail</td></tr>
+          <tr><td>Q3</td><td>上班打卡併入我的出勤（選 A）</td><td>我的出勤加入今日狀態＋打卡卡；<code>/checkin</code> GET 302 到 <code>/myattendance</code>，POST 保留</td><td class="file">pages.mjs myAttendancePage<br>server.mjs</td></tr>
+          <tr><td>Q4</td><td>合約彈窗是全集；服務計劃鉛筆是子集</td><td>合約表單含金額＋害蟲／用藥／地區；服務子集只含客戶、地址、地區、服務類型、害蟲、用藥、頻率、起訖、狀態、備註</td><td class="file">core.mjs planDialog<br>config.mjs contracts</td></tr>
+          <tr><td>Q5</td><td>補給看全部；報告看全部；車輛可記費用且金額可見；我的排班併入我的工作；回收桶只給辦公室／管理層</td><td>逐項開放；回收桶路由收緊為 office／management</td><td class="file">core.mjs filteredRows<br>config.mjs NAV<br>server.mjs</td></tr>
+          <tr><td>Q6</td><td>保留「單次」，新增「臨時」，共四選</td><td>服務類型＝定期／單次／臨時／緊急；歷史 138 筆單次不遷移</td><td class="file">config.mjs workItemColumns</td></tr>
+          <tr><td>Q7</td><td>四類定義照提案；新增排班預設「臨時」</td><td>item editor 新增工作時自動帶 <code>service_type=臨時</code>；由定期排程產生的仍是「定期」</td><td class="file">ui.mjs item editor<br>config.mjs default</td></tr>
+          <tr><td>Q8</td><td>服務報告暫時不變動，公司模板候補</td><td>沒有加 PDF 按鈕、沒有改版式；只做權限收斂</td><td class="file">—</td></tr>
+          <tr><td>Q9</td><td>CSV 只開請假／補給；補給全部、請假本人</td><td><code>exportEntity</code> 對前線只放行兩個 key；其他仍僅管理層</td><td class="file">core.mjs exportEntity</td></tr>
+        </tbody>
+      </table>
+      <h3>四類服務的判定口徑</h3>
+      <table>
+        <thead><tr><th>類型</th><th>判定標準</th><th>典型場景</th><th>系統行為</th></tr></thead>
+        <tbody>
+          <tr><td><b>定期</b></td><td>來自合約／服務計劃，有固定頻率</td><td>寫字樓每月兩次滅蟲</td><td>由定期排程自動生成</td></tr>
+          <tr><td><b>單次</b></td><td>客戶提前預約、日期已確認的一次性服務</td><td>客戶來電預約下週三洗地</td><td>手動建排班，可掛報價單／PO</td></tr>
+          <tr><td><b>臨時</b></td><td>當天或次日臨時插入，事前沒有計劃</td><td>主管早上說「下午去某村補做」</td><td>手動建排班，預設值</td></tr>
+          <tr><td><b>緊急</b></td><td>突發事故，要求 24 小時內到場</td><td>爆蟲投訴、衛生署巡查</td><td>手動建排班，標紅優先</td></tr>
+        </tbody>
+      </table>
+      <p class="small muted">一句話區分：單次＝提前約好的；臨時＝當天塞進去的；緊急＝突發要馬上到的。</p>
+    </section>
+
+    <section id="s2">
+      <h2><span class="no">CHAPTER 2</span>會議訴求對照</h2>
+      <p class="lead">逐字稿 17 條訴求的狀態。標「調整」的是會議現場說法與後續拍板不同，以拍板為準。</p>
+      <table>
+        <thead><tr><th style="width:46px">#</th><th>會議原話／訴求</th><th style="width:78px">狀態</th><th>落地方式</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>服務計劃、服務報告從前線員工移入營運管理</td><td><span class="badge b-done">完成</span></td><td>NAV 重排</td></tr>
+          <tr><td>2</td><td>前線在營運管理只看服務計劃、車輛、請假</td><td><span class="badge b-part">調整</span></td><td>依 Q2 變成四項，多一個「服務報告」唯讀</td></tr>
+          <tr><td>3</td><td>工作排班直接刪除</td><td><span class="badge b-done">完成</span></td><td>NAV 移除；<code>/workschedule</code> 導向我的工作排班頁簽</td></tr>
+          <tr><td>4</td><td>滅蟲工作要看到員工、害蟲、狀態、服務類型、地點、名稱、日期</td><td><span class="badge b-done">完成</span></td><td>七欄齊；害蟲由排班工作項讀取</td></tr>
+          <tr><td>5</td><td>滅蟲工作全部人都可以看</td><td><span class="badge b-done">完成</span></td><td>移除前線本人過濾</td></tr>
+          <tr><td>6</td><td>滅蟲工作不可刪減改</td><td><span class="badge b-done">完成</span></td><td>頁面無操作欄；路由只讀</td></tr>
+          <tr><td>7</td><td>服務計劃詳情點不進去、要看到聯絡電話</td><td><span class="badge b-done">完成</span></td><td>修復路由 404；電話由客戶檔回填</td></tr>
+          <tr><td>8</td><td>新增服務計劃要彈窗、合約編號下拉聯動</td><td><span class="badge b-part">調整</span></td><td>依 Q1 不再從服務計劃新增；編輯改子集彈窗</td></tr>
+          <tr><td>9</td><td>害蟲種類、用藥改成 tag 多選</td><td><span class="badge b-done">完成</span></td><td>picks 選擇器（23 種害蟲、38 種藥物）</td></tr>
+          <tr><td>10</td><td>刪合約總額、手動指定地區</td><td><span class="badge b-done">完成</span></td><td>服務子集無金額；手動地區欄位不存在</td></tr>
+          <tr><td>11</td><td>服務報告要列印 PDF、寄 email</td><td><span class="badge b-todo">未做</span></td><td>Q8：等公司模板，本輪不動</td></tr>
+          <tr><td>12</td><td>回收桶放到設置子欄目</td><td><span class="badge b-done">完成</span></td><td>設置 → 回收桶；只給辦公室／管理層</td></tr>
+          <tr><td>13</td><td>上班打卡和我的出勤集成一頁</td><td><span class="badge b-done">完成</span></td><td>今日狀態＋打卡＋工時＋記錄同頁</td></tr>
+          <tr><td>14</td><td>請假、補給可以出 CSV</td><td><span class="badge b-done">完成</span></td><td>只開這兩個模組；補給全部、請假本人</td></tr>
+          <tr><td>15</td><td>新增記錄要彈窗，不要跳新頁</td><td><span class="badge b-done">完成</span></td><td>請假／補給頁內 <code>&lt;dialog&gt;</code></td></tr>
+          <tr><td>16</td><td>補給位置只有個人，沒有車牌</td><td><span class="badge b-done">驗證</span></td><td>四期原本已支援「個人＋4 個車牌」，本輪加測試鎖住</td></tr>
+          <tr><td>17</td><td>產品／工具下拉太矮，看不到</td><td><span class="badge b-done">完成</span></td><td>fixed 定位＋50 筆＋最高 420px</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section id="s3">
+      <h2><span class="no">CHAPTER 3</span>改造明細</h2>
+
+      <h3>3.1 導航與權限</h3>
+      <table>
+        <thead><tr><th>分組</th><th>前線看到</th><th>辦公室／會計／管理層看到</th></tr></thead>
+        <tbody>
+          <tr><td>主要功能</td><td>公告板、我的工作</td><td>同左</td></tr>
+          <tr><td>前線員工</td><td>滅蟲工作、我的出勤、補給記錄</td><td>同左（保留查閱）</td></tr>
+          <tr><td>市場管理</td><td>—</td><td>客戶、線索、跟進、報價、採購、送貨、產品、服務、供應商</td></tr>
+          <tr><td>營運管理</td><td>服務計劃、服務報告、車輛管理、請假紀錄</td><td>再加排班管理、定期排程、合約列表、月度出勤、排班Excel、庫存、盤點</td></tr>
+          <tr><td>設置</td><td>個人設置、工作單位、工作細則、藥物庫</td><td>再加用戶、員工、地址庫、公告、回收桶、系統設置</td></tr>
+        </tbody>
+      </table>
+      <p class="small">路由層同步加閘門，不只是藏菜單：前線直接輸入 <code>/schedules</code>、<code>/recurringschedules</code>、<code>/excelschedule</code>、<code>/trash</code>、<code>/contracts</code> 一律 403。</p>
+      <div class="note warn"><b>與二次修改的差異</b>：回收桶從「營運管理」移到「設置」，且會計不再能進（原本 accounting 在白名單）。</div>
+
+      <h3>3.2 滅蟲工作</h3>
+      <div class="grid">
+        <div class="card"><h4>可見範圍</h4><p>前線不再只看本人。全庫 13,121 項工作，所有角色同一份清單。</p></div>
+        <div class="card"><h4>預設視圖</h4><p>預設「今日工作」；「所有工作」再按年／月／日縮小。每頁 100 條，底部有頁碼。</p></div>
+        <div class="card"><h4>篩選</h4><p>服務類型（定期／單次／臨時／緊急）、害蟲種類、狀態、關鍵字，四個條件可疊加。</p></div>
+        <div class="card"><h4>害蟲來源</h4><p>讀 <code>work_items[].pest_types</code>；沒有才退回服務報告的 pest_types。詳情頁同步顯示。</p></div>
+      </div>
+      <p class="small muted">歷史資料現實：13,115 個排班全部沒有 contract_id、沒有 pest_types；12,969 個工作項是「定期」。所以改完後頁面不會突然出現害蟲標籤，只有新建排班才會有。</p>
+
+      <h3>3.3 服務計劃</h3>
+      <table>
+        <thead><tr><th>項目</th><th>Before</th><th>After</th></tr></thead>
+        <tbody>
+          <tr><td>新增入口</td><td>頁面頂部「新增服務計劃」，開整張合約表單</td><td>移除；新增一律到「合約列表 → 新增合約」</td></tr>
+          <tr><td>編輯入口</td><td>「編輯」跳 <code>/edit/contracts/:id</code>（全集）</td><td>鉛筆開 <code>planDlg</code>，只含服務欄位（子集）</td></tr>
+          <tr><td>詳情</td><td><code>/serviceplans/:id</code> 被 service_plan_dates 路由吃掉 → 404</td><td>顯式路由到 <code>servicePlanDetail</code>，200</td></tr>
+          <tr><td>聯絡電話</td><td>只讀 contract.contact_phone（12 份全空）</td><td>空時退回客戶檔（customer_id → 名稱），C-2026-0001 實測 2425 6333</td></tr>
+          <tr><td>金額</td><td>詳情顯示合約金額</td><td>前線不顯示；關聯 PO 金額也遮罩</td></tr>
+          <tr><td>地區</td><td>只按地址關鍵字猜</td><td>優先使用 <code>region</code> 欄位，沒有才猜</td></tr>
+        </tbody>
+      </table>
+      <h4>子集彈窗欄位（11 個）</h4>
+      <p>客戶名稱、工作地點、地區、服務種類、害蟲種類、用藥、服務頻率、開始日期、結束日期、合約狀態、備註。其餘 20 多個欄位以 hidden 原值回寫，存檔不會斷鏈（實測合約編號、100 元總額、報價單號都保留）。</p>
+
+      <h3>3.4 服務報告</h3>
+      <ul>
+        <li>前線列表由「只看本人」改為看全部；目前 2 筆（馮泓叡）都看得到。</li>
+        <li>新增、編輯、移至回收筒、產生公開連結全部對前線隱藏；路由層也擋（share 仍要求 editRoles）。</li>
+        <li>PDF 與公司模板未動（Q8）。</li>
+      </ul>
+
+      <h3>3.5 我的工作與我的出勤</h3>
+      <table>
+        <thead><tr><th>頁面</th><th>改動</th></tr></thead>
+        <tbody>
+          <tr><td>我的工作</td><td>三個頁簽：今日工作／本月工作／排班日曆。日曆可直接點日期看當日詳情，亦可切月。</td></tr>
+          <tr><td>我的出勤</td><td>今日狀態（已／未打卡）、打卡按鈕、本月工時、出勤記錄、打卡記錄同頁。<code>/checkin</code> 不再獨立。</td></tr>
+          <tr><td>我的排班</td><td>獨立菜單移除；<code>/myschedule</code> 302 到 <code>/mywork?tab=schedule</code>。</td></tr>
+        </tbody>
+      </table>
+
+      <h3>3.6 請假與補給</h3>
+      <ul>
+        <li><b>新增彈窗</b>：<code>/leaves?new=1</code>、<code>/mysupply?new=1</code> 直接在列表頁開 <code>&lt;dialog&gt;</code>，不再跳新頁。</li>
+        <li><b>補給看全部</b>：移除前線本人過濾，列表加「員工」篩選；實測可看到袁賡的記錄。</li>
+        <li><b>補給位置</b>：沿用動態選項「個人＋4 個車牌」，已用測試鎖住。</li>
+        <li><b>前線只能為自己建</b>：表單可改姓名，但 <code>saveEntity</code> 對前線強制回填本人姓名與 employee_id；請假狀態強制「待審批」。</li>
+        <li><b>請假天數</b>：由起訖日自動算（含首尾），修掉原本 readOnly 空白的老問題。</li>
+        <li><b>CSV</b>：前線列表出現「匯出 CSV」；只限這兩個模組，補給匯出全部、請假只匯出本人。</li>
+      </ul>
+
+      <h3>3.7 車輛費用</h3>
+      <p>前線可開車輛卡、看牌照／保險到期日、新增費用（油費、隧道費、罰單），金額直接顯示。既有費用的編輯與刪除仍限辦公室／管理層；前線用 URL 硬闖 <code>/edit/vehicle_expenses/:id</code> 或 POST <code>/save</code> 帶 <code>__id</code> 都會 403。</p>
+
+      <h3>3.8 下拉選擇器</h3>
+      <p>原本 <code>.pk-menu</code> 是 absolute，放在 <code>.item-editor{overflow:auto}</code> 或 modal-body 裡會被裁掉，看起來「只有一格」。改為開啟時 <code>position:fixed</code> 按輸入框位置定位、靠近底部自動向上翻、最高 420px、每次取 50 筆；chip 變動時同步 hidden input，item editor 的 tag 多選才能即時寫回 JSON。</p>
+    </section>
+
+    <section id="s4">
+      <h2><span class="no">CHAPTER 4</span>權限矩陣</h2>
+      <p class="lead">「看」與「改」分開列。前線的「看全部」只適用於滅蟲工作、服務報告、補給；請假仍只看自己。</p>
+      <table>
+        <thead><tr><th>模組</th><th>前線</th><th>辦公室</th><th>會計</th><th>管理層</th></tr></thead>
+        <tbody>
+          <tr><td>公告板／我的工作</td><td>自己</td><td>自己</td><td>自己</td><td>全部員工</td></tr>
+          <tr><td>滅蟲工作</td><td>看全部<br>不可改</td><td>看全部</td><td>看全部</td><td>看全部</td></tr>
+          <tr><td>我的出勤</td><td>自己＋打卡</td><td>自己</td><td>自己</td><td>自己</td></tr>
+          <tr><td>補給記錄</td><td>看全部<br>新增自己</td><td>看全部＋新增</td><td>看全部＋新增</td><td>看全部＋新增</td></tr>
+          <tr><td>服務計劃</td><td>看全部<br>不可改</td><td>看＋子集編輯</td><td>看</td><td>看＋子集編輯</td></tr>
+          <tr><td>服務報告</td><td>看全部<br>不可改</td><td>看＋新增／改</td><td>看</td><td>看＋新增／改</td></tr>
+          <tr><td>車輛管理</td><td>看＋新增費用</td><td>看＋改＋刪</td><td>看</td><td>看＋改＋刪</td></tr>
+          <tr><td>請假紀錄</td><td>自己＋新增</td><td>看全部＋新增</td><td>看全部＋新增</td><td>看全部＋審批</td></tr>
+          <tr><td>排班管理</td><td>—</td><td>看＋改</td><td>看</td><td>看＋改</td></tr>
+          <tr><td>定期服務排程</td><td>—</td><td>看＋改</td><td>看</td><td>看＋改</td></tr>
+          <tr><td>合約列表</td><td>—</td><td>看＋新增／改</td><td>看</td><td>看＋新增／改</td></tr>
+          <tr><td>月度出勤／排班Excel</td><td>—</td><td>看／改</td><td>看</td><td>看／改</td></tr>
+          <tr><td>回收桶</td><td>—</td><td>每日 10 條</td><td>—</td><td>不限</td></tr>
+          <tr><td>CSV 匯出</td><td>只請假／補給</td><td>—</td><td>—</td><td>全部</td></tr>
+        </tbody>
+      </table>
+      <p class="small muted">註：前線的「不可改」在 UI 與路由兩層都做；只藏按鈕不算。</p>
+    </section>
+
+    <section id="s5">
+      <h2><span class="no">CHAPTER 5</span>資料模型與相容性</h2>
+      <h3>新增／改型的欄位</h3>
+      <table>
+        <thead><tr><th>位置</th><th>欄位</th><th>型別</th><th>說明</th></tr></thead>
+        <tbody>
+          <tr><td>Schedule.work_items[]</td><td><code>pest_types</code></td><td>array&lt;{id,label,name}&gt;</td><td>新增。舊資料沒有此鍵，讀取為空。</td></tr>
+          <tr><td>Contract</td><td><code>service_type</code></td><td>select：定期／單次／臨時／緊急</td><td>原本 hidden text，改為可見 select；舊值原樣保留。</td></tr>
+          <tr><td>Contract</td><td><code>pest_type</code></td><td>picks（多選）</td><td>舊值是「蚊、蟑螂」字串時，表單自動 split 成 chips，存檔後變 array。</td></tr>
+          <tr><td>Contract</td><td><code>pesticides</code></td><td>picks（多選）</td><td>舊值 array&lt;{name,reg_no}&gt; 可直接顯示。</td></tr>
+          <tr><td>Contract</td><td><code>region</code></td><td>select</td><td>原本 hidden text，改為可見；list 的地區優先讀它。</td></tr>
+        </tbody>
+      </table>
+      <div class="note"><b>不需要遷移</b>：所有實體都存在 <code>records.data</code> 的 JSON 裡，沒有 ALTER TABLE。舊程式回滾後只會把新欄位當成多餘 JSON，不影響讀寫。</div>
+      <h3>向後相容處理</h3>
+      <ul>
+        <li><code>picks</code> 欄位遇到舊字串（含「、」「,」「，」）會自動切成 chips，不會因為 JSON.parse 失敗而丟資料。</li>
+        <li><code>service_type</code> 舊值「單次」保留，不批量改「臨時」；新排班才預設臨時。</li>
+        <li>合約子集彈窗把未顯示欄位以 hidden 原值回寫；即使表單只送 11 個欄位，<code>prepareRecord</code> 也會以 existing 為底，不會清空。</li>
+      </ul>
+    </section>
+
+    <section id="s6">
+      <h2><span class="no">CHAPTER 6</span>代碼地圖</h2>
+      <table>
+        <thead><tr><th style="width:150px">檔案</th><th>改了什麼</th></tr></thead>
+        <tbody>
+          <tr><td class="file">server.mjs</td><td>路由閘門與重定向：<code>/schedules</code> 只給 office/accounting/management；<code>/recurringschedules</code>、<code>/excelschedule</code> 同；<code>/trash</code> 只給 office/management；<code>/checkin</code> GET → <code>/myattendance</code>；<code>/workschedule</code>、<code>/myschedule</code> → <code>/mywork?tab=schedule</code>；新增 <code>/serviceplans/:id</code> 顯式路由；<code>/new/leave_records</code>、<code>/new/supply_records</code> 回列表開彈窗；車輛費用前線禁止改刪。</td></tr>
+          <tr><td class="file">lib/config.mjs</td><td>NAV 重排與回收桶移位；workItemColumns 加 <code>pest_types</code> 與四種 service_type（預設臨時）；Contract 服務欄位改可見與型別；vehicle_expenses editRoles 開放前線；supply_records 加員工篩選。</td></tr>
+          <tr><td class="file">lib/core.mjs</td><td><code>ownsRecord(user,cfg,row,edit)</code> 分看／改；<code>filteredRows</code> 對報告／補給放行全部；<code>canEditRecord</code>；<code>planDialog</code>；<code>recordDialog</code>；列表 CSV 例外與彈窗按鈕；<code>exportEntity</code> 前線例外；服務報告分享區塊對前線隱藏；車輛費用金額白名單。</td></tr>
+          <tr><td class="file">lib/pages.mjs</td><td><code>myWorkPage</code> 三頁簽＋月曆；<code>pestControlWorkPage</code> 全員／今日／分頁／四類篩選／害蟲標籤；<code>servicePlansPage</code> 去新增＋鉛筆；<code>servicePlanDetail</code> 電話回填、金額遮罩、子集彈窗；<code>serviceReportsPage</code> 全量唯讀；<code>myAttendancePage</code> 合併打卡。</td></tr>
+          <tr><td class="file">lib/ui.mjs</td><td>picker 改 fixed 定位＋翻轉＋50 筆＋420px；multi 同步 hidden；item editor 支援 <code>picks</code>；item 新增列套 default；修正 valueMode=text 的欄位回填（客戶名稱顯示空白的老 bug）。</td></tr>
+          <tr><td class="file">lib/pickers.mjs</td><td>新增 <code>PEST_TYPES</code>（23 項雙語）與 <code>pest_types</code> 資料源；<code>/api/pick</code> 上限放寬到 50。</td></tr>
+          <tr><td class="file">lib/actions.mjs</td><td>saveEntity 對前線強制本人 employee_name／employee_id；請假天數自動計算。</td></tr>
+        </tbody>
+      </table>
+      <h3>關鍵路由</h3>
+      <table>
+        <thead><tr><th>路徑</th><th>行為</th><th>角色</th></tr></thead>
+        <tbody>
+          <tr><td><code>/serviceplans</code></td><td>服務計劃列表（唯讀＋鉛筆）</td><td>全部</td></tr>
+          <tr><td><code>/serviceplans/:id</code></td><td>服務計劃詳情（修復 404）</td><td>全部</td></tr>
+          <tr><td><code>/pestcontrolwork</code></td><td>滅蟲工作（今日預設／全員）</td><td>全部</td></tr>
+          <tr><td><code>/mywork?tab=schedule</code></td><td>我的工作 → 排班日曆</td><td>全部</td></tr>
+          <tr><td><code>/myattendance</code></td><td>我的出勤（含打卡）</td><td>全部</td></tr>
+          <tr><td><code>/checkin</code></td><td>302 → /myattendance（POST 仍打卡）</td><td>全部</td></tr>
+          <tr><td><code>/schedules</code></td><td>排班管理</td><td>office/accounting/management</td></tr>
+          <tr><td><code>/trash</code></td><td>回收桶</td><td>office/management</td></tr>
+          <tr><td><code>/export/leave_records.csv</code></td><td>請假 CSV</td><td>前線（本人）／管理層</td></tr>
+          <tr><td><code>/export/supply_records.csv</code></td><td>補給 CSV</td><td>前線（全部）／管理層</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section id="s7">
+      <h2><span class="no">CHAPTER 7</span>驗收證據</h2>
+      <div class="stats" style="margin:4px 0 14px">
+        <div class="stat" style="background:#eef8f3;border-color:#cfe8dd;color:#0d5c48"><b>73 / 73</b><span>verify-frontline.mjs</span></div>
+        <div class="stat" style="background:#eef8f3;border-color:#cfe8dd;color:#0d5c48"><b>55 / 55</b><span>verify-operation-2.mjs（回歸）</span></div>
+        <div class="stat" style="background:#f7f9fa;border-color:#e2e7ea;color:#33424c"><b>0</b><span>失敗</span></div>
+      </div>
+      <p>本輪驗收在 <code>:3101</code> 隔離副本、複製正式庫後執行；腳本拒絕在正式 3000 端口跑。以下為實測值節錄：</p>
+      <table>
+        <thead><tr><th>檢查</th><th>實測</th></tr></thead>
+        <tbody>
+          <tr><td>滅蟲工作總數／每頁</td><td>13,121 項；第 1 / 132 頁；100 列</td></tr>
+          <tr><td>服務類型篩選</td><td>臨時 → 1 項；定期 → 12,969 項</td></tr>
+          <tr><td>服務計劃詳情</td><td>200（原本 404）；電話 2425 6333</td></tr>
+          <tr><td>服務報告</td><td>前線看到 2 筆，標題「唯讀（可查看，不可修改）」</td></tr>
+          <tr><td>請假安全</td><td>提交「陳小明／someone-else」→ 存成「盧力峰／u-front」，3 天，待審批</td></tr>
+          <tr><td>補給安全</td><td>提交「別人」→ 存成「盧力峰」，位置 ZK2944</td></tr>
+          <tr><td>車輛費用</td><td>新增 88.5 → 車輛卡顯示 88.5，無遮罩；刪除 403；編輯頁 403</td></tr>
+          <tr><td>CSV</td><td>前線請假／補給 200；客戶 403；辦公室請假 403；管理層 200</td></tr>
+          <tr><td>會計回收桶</td><td>403，導航不顯示</td></tr>
+        </tbody>
+      </table>
+      <h3>怎麼重跑</h3>
+      <pre><code>cd 系统代码
+copy data.db _verify.db
+set PORT=3101
+set DB_PATH=...\系统代码\_verify.db
+set CPC_UPLOAD_DIR=...\系统代码\_verify-uploads
+node server.mjs
+
+:: 另一個窗口
+set CPC_TEST=1
+set TEST_BASE=http://127.0.0.1:3101
+set DB_PATH=...\系统代码\_verify.db
+node 三次修改\verify-frontline.mjs</code></pre>
+      <p class="small muted">原始結果含每項 PASS 與實測字串：<code>驗收結果_三次修改.json</code>。上一輪 55 項的最新一次回歸在 <code>驗收結果_上一輪回歸_55.json</code>。</p>
+    </section>
+
+    <section id="s8">
+      <h2><span class="no">CHAPTER 8</span>部署與回滾</h2>
+      <h3>上線</h3>
+      <ol>
+        <li>關掉原本的「启动系统.bat」視窗（Node 不會熱載）。</li>
+        <li>雙擊 <span class="kbd">系统代码\启动系统.bat</span>，或 <code>node server.mjs</code>。</li>
+        <li>瀏覽器 <span class="kbd">Ctrl + F5</span> 清快取。</li>
+        <li>用前線帳號登入，確認側欄只剩三個前線項＋四個營運項。</li>
+      </ol>
+      <p>資料庫結構未變，不需要 seed 或遷移。</p>
+      <h3>回滾</h3>
+      <pre><code>copy /Y 系统代码\backup-20261025-010144\server.mjs 系统代码\server.mjs
+copy /Y 系统代码\backup-20261025-010144\lib\*.mjs 系统代码\lib\</code></pre>
+      <p>或直接用 <code>三次修改\程式快照_20261025\</code> 覆蓋。回滾不影響資料。</p>
+      <h3>本次快照與雜湊</h3>
+      <p class="small">7 個改動檔案的 SHA256 見 <code>變更檔案清單_SHA256.csv</code>；交付當下全文在 <code>程式快照_20261025\</code>。</p>
+    </section>
+
+    <section id="s9">
+      <h2><span class="no">CHAPTER 9</span>已知限制與下一輪</h2>
+      <h3>刻意不做／仍待補</h3>
+      <ul>
+        <li><b>服務報告 PDF</b>：等公司模板。目前只有公開報告頁的 HTML 版式，列印仍靠瀏覽器；沒有加下載 .pdf。</li>
+        <li><b>服務計劃詳情仍顯示合約文件與付款條款</b>：本輪只遮金額。若前線不該看掃描件，下一輪加白名單。</li>
+        <li><b>13,115 個舊排班沒有 contract_id</b>：所以服務計劃詳情的「排班記錄」多為空。這是來源資料缺口，不是本輪改壞；要補需另做合約↔排班對應。</li>
+        <li><b>12 份合約只有 6 份能查到電話</b>：其餘客戶檔本身沒有電話（信和、啟勝、華潤、DCL、康文署、C-2026-0005）。詳情會顯示「—」。</li>
+        <li><b>合約編號仍會自動生成</b> C-2026-xxxx（合約列表新增時）。服務計劃已無新增入口，所以不會再從計劃頁產生；若要走真實合約號，新增時手動覆寫即可。</li>
+        <li><b>害蟲種類是代碼常數</b>（23 項），沒有後台維護頁。新增種類要改 <code>pickers.mjs</code>。</li>
+        <li><b>歷史 12,969 筆「定期」不會自動變臨時</b>，也不會有害蟲標籤；新排班才生效。</li>
+        <li><b>滅蟲工作「所有工作」預設由舊到新</b>（沿用原排序）；要最新在前需另改。</li>
+      </ul>
+      <h3>下一輪建議</h3>
+      <table>
+        <thead><tr><th style="width:60px">優先</th><th>項目</th><th>說明</th></tr></thead>
+        <tbody>
+          <tr><td>P1</td><td>服務報告模板與 PDF</td><td>拿到公司 Word／PDF 後，套 <code>workRecordPrint</code>；決定瀏覽器列印或一鍵下載。</td></tr>
+          <tr><td>P1</td><td>員工檔重建</td><td>原 Employee 表 0 筆，排班／出勤／請假仍靠姓名歸納；建檔後才能綁帳號與薪資。</td></tr>
+          <tr><td>P2</td><td>合約 ↔ 排班對應</td><td>讓服務計劃詳情的「排班記錄」有資料；新增排班时可選服務計劃帶入。</td></tr>
+          <tr><td>P2</td><td>害蟲種類主檔</td><td>把 23 項搬到設定頁，讓辦公室自己加減。</td></tr>
+          <tr><td>P2</td><td>車輛費用審批</td><td>前線登記後由辦公室確認，避免誤填直接入賬。</td></tr>
+          <tr><td>P3</td><td>滅蟲工作排序</td><td>「所有工作」可切換新→舊／舊→新。</td></tr>
+        </tbody>
+      </table>
+      <div class="note"><b>交接提醒</b>：這次動到 7 個檔案，最容易被誤改的是 <code>core.mjs</code> 的 <code>ownsRecord</code>（看／改分離）與 <code>pages.mjs</code> 的 <code>servicePlanDetail</code>（子集彈窗）。改之前先跑一次 73 項，改完再跑一次。</div>
+    </section>
+
+    <section id="s10">
+      <h2><span class="no">CHAPTER 10</span>驗收逐項清單（73 項）</h2>
+      <p class="lead">下表是 <code>verify-frontline.mjs</code> 在 <code>:3101</code> 隔離副本跑出的 73 項原始結果，按執行順序排列。每一項都對應一個可重跑的 HTTP 請求或資料庫讀取；沒有「人工目測」項。</p>
+      <div class="note"><b>結果：73 / 73 PASS，0 FAIL。</b>明細欄位過長時截斷，完整字串見 <code>驗收結果_三次修改.json</code>。分類為文件整理用，腳本本身按 A–I 段執行。</div>
+      <table>
+        <thead><tr><th style="width:38px">#</th><th style="width:92px">分類</th><th>檢查項目</th><th style="width:58px">結果</th><th style="width:230px">實測值／備註</th></tr></thead>
+        <tbody>
+<tr><td class="num">1</td><td><span class="pill">導航／權限</span></td><td>登入頁可開</td><td><span class="badge b-done">PASS</span></td><td class="muted small">—</td></tr>
+<tr><td class="num">2</td><td><span class="pill">導航／權限</span></td><td>前線登入</td><td><span class="badge b-done">PASS</span></td><td class="muted small">—</td></tr>
+<tr><td class="num">3</td><td><span class="pill">請假／補給</span></td><td>前線員工組只剩滅蟲工作／我的出勤／補給記錄</td><td><span class="badge b-done">PASS</span></td><td class="muted small"> 標準清潔滅蟲 公司一站式管理系統 主要功能 公告板 我的工作 前線員工 滅蟲工作 我的出勤 補給記錄 營運管理 服務計劃 服務報告 車輛管理 請假紀錄 設置 個人設置 工作單…</td></tr>
+<tr><td class="num">4</td><td><span class="pill">車輛費用</span></td><td>營運管理給前線四項：服務計劃／服務報告／車輛／請假</td><td><span class="badge b-done">PASS</span></td><td class="muted small">—</td></tr>
+<tr><td class="num">5</td><td><span class="pill">滅蟲工作</span></td><td>前線看不到排班管理／定期排程／合約列表／月度出勤／排班Excel</td><td><span class="badge b-done">PASS</span></td><td class="muted small">—</td></tr>
+<tr><td class="num">6</td><td><span class="pill">導航／權限</span></td><td>前線設置沒有回收桶</td><td><span class="badge b-done">PASS</span></td><td class="muted small">—</td></tr>
+<tr><td class="num">7</td><td><span class="pill">導航／權限</span></td><td>前線 /schedules 被拒 403</td><td><span class="badge b-done">PASS</span></td><td class="muted small">—</td></tr>
+<tr><td class="num">8</td><td><span class="pill">導航／權限</span></td><td>前線 /recurringschedules 被拒 403</td><td><span class="badge b-done">PASS</span></td><td class="muted small">—</td></tr>
+<tr><td class="num">9</td><td><span class="pill">導航／權限</span></td><td>前線 /excelschedule 被拒 403</td><td><span class="badge b-done">PASS</span></td><td class="muted small">—</td></tr>
+<tr><td class="num">10</td><td><span class="pill">導航／權限</span></td><td>前線 /trash 被拒 403</td><td><span class="badge b-done">PASS</span></td><td class="muted small">—</td></tr>
+<tr><td class="num">11</td><td><span class="pill">導航／權限</span></td><td>前線 /contracts 被拒 403</td><td><span class="badge b-done">PASS</span></td><td class="muted small">—</td></tr>
+<tr><td class="num">12</td><td><span class="pill">導航／權限</span></td><td>/checkin 導向我的出勤</td><td><span class="badge b-done">PASS</span></td><td class="muted small">/myattendance</td></tr>
+<tr><td class="num">13</td><td><span class="pill">滅蟲工作</span></td><td>/workschedule 導向我的工作排班</td><td><span class="badge b-done">PASS</span></td><td class="muted small">/mywork?tab=schedule</td></tr>
+<tr><td class="num">14</td><td><span class="pill">導航／權限</span></td><td>我的工作有三個頁簽</td><td><span class="badge b-done">PASS</span></td><td class="muted small">—</td></tr>
+<tr><td class="num">15</td><td><span class="pill">滅蟲工作</span></td><td>我的工作可看到排班日曆</td><td><span class="badge b-done">PASS</span></td><td class="muted small">—</td></tr>
+<tr><td class="num">16</td><td><span class="pill">導航／權限</span></td><td>打卡已併入我的出勤</td><td><span class="badge b-done">PASS</span></td><td class="muted small">—</td></tr>
+<tr><td class="num">17</td><td><span class="pill">服務計劃</span></td><td>服務計劃頁沒有新增入口</td><td><span class="badge b-done">PASS</span></td><td class="muted small">—</td></tr>
+<tr><td class="num">18</td><td><span class="pill">服務計劃</span></td><td>前線服務計劃沒有編輯入口</td><td><span class="badge b-done">PASS</span></td><td class="muted small">—</td></tr>
+<tr><td class="num">19</td><td><span class="pill">服務計劃</span></td><td>服務計劃詳情不再 404</td><td><span class="badge b-done">PASS</span></td><td class="muted small">200</td></tr>
+<tr><td class="num">20</td><td><span class="pill">服務計劃</span></td><td>詳情電話由客戶檔回填</td><td><span class="badge b-done">PASS</span></td><td class="muted small">—</td></tr>
+<tr><td class="num">21</td><td><span class="pill">導航／權限</span></td><td>前線詳情不顯示合約金額</td><td><span class="badge b-done">PASS</span></td><td class="muted small">—</td></tr>
+<tr><td class="num">22</td><td><span class="pill">服務計劃</span></td><td>辦公室服務計劃仍有鉛筆編輯</td><td><span class="badge b-done">PASS</span></td><td class="muted small">—</td></tr>
+<tr><td class="num">23</td><td><span class="pill">服務計劃</span></td><td>鉛筆打開服務子集彈窗</td><td><span class="badge b-done">PASS</span></td><td class="muted small">—</td></tr>
+<tr><td class="num">24</td><td><span class="pill">滅蟲工作</span></td><td>子集彈窗含害蟲／用藥／地區／服務種類</td><td><span class="badge b-done">PASS</span></td><td class="muted small">—</td></tr>
+<tr><td class="num">25</td><td><span class="pill">服務計劃</span></td><td>子集彈窗不顯示合約總額欄位</td><td><span class="badge b-done">PASS</span></td><td class="muted small">—</td></tr>
+<tr><td class="num">26</td><td><span class="pill">滅蟲工作</span></td><td>合約彈窗是全集：含害蟲／用藥／地區與合約總額</td><td><span class="badge b-done">PASS</span></td><td class="muted small">—</td></tr>
+<tr><td class="num">27</td><td><span class="pill">導航／權限</span></td><td>辦公室導航回收桶在設置</td><td><span class="badge b-done">PASS</span></td><td class="muted small">—</td></tr>
+<tr><td class="num">28</td><td><span class="pill">服務報告</span></td><td>前線看到全部服務報告</td><td><span class="badge b-done">PASS</span></td><td class="muted small">共 2 筆 · 唯讀（可查看，不可修改）</td></tr>
+<tr><td class="num">29</td><td><span class="pill">服務報告</span></td><td>前線服務報告唯讀且無新增</td><td><span class="badge b-done">PASS</span></td><td class="muted small">—</td></tr>
+<tr><td class="num">30</td><td><span class="pill">服務報告</span></td><td>前線可開服務報告詳情且不可改</td><td><span class="badge b-done">PASS</span></td><td class="muted small">—</td></tr>
+<tr><td class="num">31</td><td><span class="pill">滅蟲工作</span></td><td>滅蟲工作預設今日</td><td><span class="badge b-done">PASS</span></td><td class="muted small">0</td></tr>
+<tr><td class="num">32</td><td><span class="pill">滅蟲工作</span></td><td>滅蟲工作全員可見（&gt;13000 項）</td><td><span class="badge b-done">PASS</span></td><td class="muted small">13121</td></tr>
+<tr><td class="num">33</td><td><span class="pill">滅蟲工作</span></td><td>滅蟲工作分頁每頁 100</td><td><span class="badge b-done">PASS</span></td><td class="muted small">—</td></tr>
+<tr><td class="num">34</td><td><span class="pill">滅蟲工作</span></td><td>服務類型四選篩選</td><td><span class="badge b-done">PASS</span></td><td class="muted small">—</td></tr>
+<tr><td class="num">35</td><td><span class="pill">請假／補給</span></td><td>補給新增是彈窗</td><td><span class="badge b-done">PASS</span></td><td class="muted small">—</td></tr>
+<tr><td class="num">36</td><td><span class="pill">請假／補給</span></td><td>補給位置可選車牌</td><td><span class="badge b-done">PASS</span></td><td class="muted small">—</td></tr>
+<tr><td class="num">37</td><td><span class="pill">請假／補給</span></td><td>補給有員工篩選</td><td><span class="badge b-done">PASS</span></td><td class="muted small">—</td></tr>
+<tr><td class="num">38</td><td><span class="pill">CSV 例外</span></td><td>前線補給有匯出 CSV</td><td><span class="badge b-done">PASS</span></td><td class="muted small">—</td></tr>
+<tr><td class="num">39</td><td><span class="pill">CSV 例外</span></td><td>請假新增是彈窗且有匯出 CSV</td><td><span class="badge b-done">PASS</span></td><td class="muted small">—</td></tr>
+<tr><td class="num">40</td><td><span class="pill">滅蟲工作</span></td><td>建立含害蟲種類的臨時排班</td><td><span class="badge b-done">PASS</span></td><td class="muted small">302</td></tr>
+<tr><td class="num">41</td><td><span class="pill">滅蟲工作</span></td><td>今日工作顯示新排班與害蟲種類</td><td><span class="badge b-done">PASS</span></td><td class="muted small">—</td></tr>
+<tr><td class="num">42</td><td><span class="pill">滅蟲工作</span></td><td>按服務類型「臨時」篩選</td><td><span class="badge b-done">PASS</span></td><td class="muted small">—</td></tr>
+<tr><td class="num">43</td><td><span class="pill">滅蟲工作</span></td><td>按害蟲種類篩選</td><td><span class="badge b-done">PASS</span></td><td class="muted small">—</td></tr>
+<tr><td class="num">44</td><td><span class="pill">請假／補給</span></td><td>請假新增成功</td><td><span class="badge b-done">PASS</span></td><td class="muted small">—</td></tr>
+<tr><td class="num">45</td><td><span class="pill">請假／補給</span></td><td>前線請假強制本人</td><td><span class="badge b-done">PASS</span></td><td class="muted small">盧力峰/u-front</td></tr>
+<tr><td class="num">46</td><td><span class="pill">請假／補給</span></td><td>請假天數自動計算 3 天</td><td><span class="badge b-done">PASS</span></td><td class="muted small">3</td></tr>
+<tr><td class="num">47</td><td><span class="pill">請假／補給</span></td><td>前線請假狀態強制待審批</td><td><span class="badge b-done">PASS</span></td><td class="muted small">待審批</td></tr>
+<tr><td class="num">48</td><td><span class="pill">請假／補給</span></td><td>前線只看到自己的請假</td><td><span class="badge b-done">PASS</span></td><td class="muted small">—</td></tr>
+<tr><td class="num">49</td><td><span class="pill">請假／補給</span></td><td>補給新增成功且強制本人</td><td><span class="badge b-done">PASS</span></td><td class="muted small">盧力峰</td></tr>
+<tr><td class="num">50</td><td><span class="pill">請假／補給</span></td><td>補給位置可存車牌</td><td><span class="badge b-done">PASS</span></td><td class="muted small">ZK2944</td></tr>
+<tr><td class="num">51</td><td><span class="pill">請假／補給</span></td><td>前線補給看全部員工</td><td><span class="badge b-done">PASS</span></td><td class="muted small">—</td></tr>
+<tr><td class="num">52</td><td><span class="pill">車輛費用</span></td><td>前線可開新增車輛費用</td><td><span class="badge b-done">PASS</span></td><td class="muted small">—</td></tr>
+<tr><td class="num">53</td><td><span class="pill">車輛費用</span></td><td>前線新增車輛費用成功</td><td><span class="badge b-done">PASS</span></td><td class="muted small">302</td></tr>
+<tr><td class="num">54</td><td><span class="pill">車輛費用</span></td><td>車輛費用金額對前線可見</td><td><span class="badge b-done">PASS</span></td><td class="muted small">—</td></tr>
+<tr><td class="num">55</td><td><span class="pill">車輛費用</span></td><td>前線不可修改車輛費用</td><td><span class="badge b-done">PASS</span></td><td class="muted small">—</td></tr>
+<tr><td class="num">56</td><td><span class="pill">車輛費用</span></td><td>前線不可刪除車輛費用</td><td><span class="badge b-done">PASS</span></td><td class="muted small">403</td></tr>
+<tr><td class="num">57</td><td><span class="pill">CSV 例外</span></td><td>前線可匯出請假 CSV</td><td><span class="badge b-done">PASS</span></td><td class="muted small">—</td></tr>
+<tr><td class="num">58</td><td><span class="pill">CSV 例外</span></td><td>前線可匯出補給 CSV</td><td><span class="badge b-done">PASS</span></td><td class="muted small">—</td></tr>
+<tr><td class="num">59</td><td><span class="pill">CSV 例外</span></td><td>前線不可匯出客戶 CSV</td><td><span class="badge b-done">PASS</span></td><td class="muted small">—</td></tr>
+<tr><td class="num">60</td><td><span class="pill">CSV 例外</span></td><td>辦公室仍不可匯出請假 CSV</td><td><span class="badge b-done">PASS</span></td><td class="muted small">—</td></tr>
+<tr><td class="num">61</td><td><span class="pill">導航／權限</span></td><td>會計不可進回收桶</td><td><span class="badge b-done">PASS</span></td><td class="muted small">—</td></tr>
+<tr><td class="num">62</td><td><span class="pill">導航／權限</span></td><td>會計導航沒有回收桶</td><td><span class="badge b-done">PASS</span></td><td class="muted small">—</td></tr>
+<tr><td class="num">63</td><td><span class="pill">其他</span></td><td>管理層匯出不受影響</td><td><span class="badge b-done">PASS</span></td><td class="muted small">—</td></tr>
+<tr><td class="num">64</td><td><span class="pill">回歸</span></td><td>回歸 / 200</td><td><span class="badge b-done">PASS</span></td><td class="muted small">—</td></tr>
+<tr><td class="num">65</td><td><span class="pill">回歸</span></td><td>回歸 /schedules 200</td><td><span class="badge b-done">PASS</span></td><td class="muted small">—</td></tr>
+<tr><td class="num">66</td><td><span class="pill">回歸</span></td><td>回歸 /contracts 200</td><td><span class="badge b-done">PASS</span></td><td class="muted small">—</td></tr>
+<tr><td class="num">67</td><td><span class="pill">回歸</span></td><td>回歸 /purchaseorders 200</td><td><span class="badge b-done">PASS</span></td><td class="muted small">—</td></tr>
+<tr><td class="num">68</td><td><span class="pill">回歸</span></td><td>回歸 /deliverynotes 200</td><td><span class="badge b-done">PASS</span></td><td class="muted small">—</td></tr>
+<tr><td class="num">69</td><td><span class="pill">回歸</span></td><td>回歸 /inventory 200</td><td><span class="badge b-done">PASS</span></td><td class="muted small">—</td></tr>
+<tr><td class="num">70</td><td><span class="pill">回歸</span></td><td>回歸 /trash 200</td><td><span class="badge b-done">PASS</span></td><td class="muted small">—</td></tr>
+<tr><td class="num">71</td><td><span class="pill">回歸</span></td><td>回歸 /recurringschedules 200</td><td><span class="badge b-done">PASS</span></td><td class="muted small">—</td></tr>
+<tr><td class="num">72</td><td><span class="pill">回歸</span></td><td>回歸 /settings 200</td><td><span class="badge b-done">PASS</span></td><td class="muted small">—</td></tr>
+<tr><td class="num">73</td><td><span class="pill">其他</span></td><td>測試資料已清理</td><td><span class="badge b-done">PASS</span></td><td class="muted small">5 筆</td></tr>
+        </tbody>
+      </table>
+      <h3>分組統計</h3>
+      <table>
+        <thead><tr><th>分類</th><th>項數</th><th>說明</th></tr></thead>
+        <tbody>
+          <tr><td>導航／權限</td><td>15</td><td>側欄、URL 閘門、重定向、會計回收桶</td></tr>
+          <tr><td>滅蟲工作</td><td>13</td><td>全員可見、今日預設、分頁、四類篩選、害蟲標籤</td></tr>
+          <tr><td>服務計劃</td><td>7</td><td>去新增、鉛筆子集、404 修復、電話回填、金額遮罩</td></tr>
+          <tr><td>服務報告</td><td>3</td><td>全量可見、唯讀、無分享入口</td></tr>
+          <tr><td>請假／補給</td><td>12</td><td>彈窗、全量、車牌、強制本人、天數、CSV 入口</td></tr>
+          <tr><td>車輛費用</td><td>6</td><td>新增、金額可見、不可改刪</td></tr>
+          <tr><td>CSV 例外</td><td>6</td><td>前線兩模組 200、其他 403、管理層不受影響</td></tr>
+          <tr><td>回歸</td><td>9</td><td>管理層主要頁面仍 200</td></tr>
+          <tr><td>其他</td><td>2</td><td>登入頁、清理測試資料</td></tr>
+        </tbody>
+      </table>
+      <h3>怎麼解讀「測試資料已清理」</h3>
+      <p>腳本在隔離庫建立 5 筆暫存資料（1 排班、1 請假、2 補給、1 車輛費用），跑完用主鍵刪除。正式庫沒有被寫入；這也是腳本強制 <code>:3101</code> 的原因。</p>
+    </section>
+
+    <section id="s11">
+      <h2><span class="no">CHAPTER 11</span>關鍵代碼前後對照</h2>
+      <p class="lead">只摘錄最容易被誤改、也最能說明設計意图的八段。完整檔案在 <code>程式快照_20261025\</code>，回滾備份在 <code>系统代码\backup-20261025-010144\</code>。</p>
+
+      <h3>11.1 導航：從「全部角色同一份」到「按角色給最小集」</h3>
+      <div class="grid" style="grid-template-columns:1fr 1fr">
+        <div class="card"><h4>Before（config.mjs）</h4><pre><code>前線員工
+  滅蟲工作 / 服務計劃 / 服務報告
+  工作排班 / 我的排班 / 上班打卡
+  我的出勤 / 請假紀錄 / 補給記錄
+營運管理
+  排班管理 / 定期排程 / 合約列表
+  車輛管理 / 月度出勤 / 排班Excel
+  庫存 / 盤點 / 回收桶</code></pre></div>
+        <div class="card"><h4>After（config.mjs）</h4><pre><code>前線員工
+  滅蟲工作 / 我的出勤 / 補給記錄
+營運管理
+  服務計劃 / 服務報告
+  車輛管理 / 請假紀錄
+  （後台五項只給 BACK_OFFICE）
+設置
+  ...
+  回收桶（只給 office / management）</code></pre></div>
+      </div>
+
+      <h3>11.2 看／改分離：前線能看全部，但只能改自己的</h3>
+      <div class="grid" style="grid-template-columns:1fr 1fr">
+        <div class="card"><h4>Before（core.mjs ownsRecord）</h4><pre><code>if (['work_records', 'leave_records',
+     'supply_records', 'check_ins',
+     'attendances'].includes(cfg.key))
+  return !row.employee_name
+    || row.employee_name === name
+    || row.created_by === user.email;</code></pre></div>
+        <div class="card"><h4>After（core.mjs ownsRecord）</h4><pre><code>// 報告：看全部，改只限本人
+if (cfg.key === 'work_records') return !edit;
+// 補給：看全部，改只限本人
+if (cfg.key === 'supply_records') return edit
+  ? (!row.employee_name || row.employee_name === name)
+  : true;
+// 請假／打卡／出勤：仍只看自己
+if (['leave_records','check_ins',
+     'attendances'].includes(cfg.key))
+  return !row.employee_name
+    || row.employee_name === name;</code></pre></div>
+      </div>
+      <p class="small muted">配套：<code>filteredRows</code> 對 <code>work_records</code>／<code>supply_records</code> 放行全部；<code>canEditRecord</code> 用 <code>edit=true</code> 判斷列級編輯／刪除按鈕；<code>/delete</code> 路由再擋一次。</p>
+
+      <h3>11.3 服務計劃詳情 404：路由被同名 listPath 吃掉</h3>
+      <div class="grid" style="grid-template-columns:1fr 1fr">
+        <div class="card"><h4>Before（server.mjs）</h4><pre><code>if (p === '/serviceplans') { ... }
+if (p.startsWith('/serviceplan/')) { ... }
+// /serviceplans/:id 落到 detailCfg
+// service_plan_dates.listPath = '/serviceplans'
+// → entityDetail(ServicePlanDate, contractId)
+// → 404「找不到該服務計劃紀錄日」</code></pre></div>
+        <div class="card"><h4>After（server.mjs）</h4><pre><code>if (p === '/serviceplans') { ... }
+if (p.startsWith('/serviceplans/')) {
+  assertAccessible(user, 'service_plan_dates');
+  return html(res, servicePlanDetail({
+    store, url, user, csrf,
+    id: decodeURIComponent(p.slice(14))
+  }));
+}
+// /serviceplan/ 保留給舊連結</code></pre></div>
+      </div>
+
+      <h3>11.4 子集彈窗：同一條 Contract，兩個入口</h3>
+      <div class="grid" style="grid-template-columns:1fr 1fr">
+        <div class="card"><h4>Before（pages.mjs）</h4><pre><code>&lt;a class="btn"
+  href="/edit/contracts/${id}"&gt;
+  編輯
+&lt;/a&gt;
+// 開整張合約表單
+// 含合約總額、報價單、客戶編號</code></pre></div>
+        <div class="card"><h4>After（core.mjs planDialog）</h4><pre><code>const PLAN_FIELD_NAMES = new Set([
+  'customer_name', 'work_location',
+  'region', 'service_type', 'pest_type',
+  'pesticides', 'service_frequency',
+  'contract_start_date', 'contract_end_date',
+  'contract_status', 'notes',
+]);
+const fields = cfg.fields.map((f) =&gt;
+  PLAN_FIELD_NAMES.has(f.name)
+    ? f
+    : { ...f, hidden: true });
+// 其餘欄位以 hidden 原值回寫</code></pre></div>
+      </div>
+
+      <h3>11.5 服務報告：全量可見、全面唯讀</h3>
+      <div class="grid" style="grid-template-columns:1fr 1fr">
+        <div class="card"><h4>Before（pages.mjs）</h4><pre><code>let rows = store.list('WorkRecord');
+if (user?.role === 'front')
+  rows = rows.filter((r) =&gt; personRecord(r, user));
+...
+&lt;a class="btn" href="/new/work_records"&gt;
+  新增服務報告
+&lt;/a&gt;</code></pre></div>
+        <div class="card"><h4>After（pages.mjs）</h4><pre><code>let rows = store.list('WorkRecord');
+rows = rows.filter((r) =&gt; !q || ...);
+const canEdit =
+  ENTITIES.work_records.editRoles.includes(user.role);
+// 前線 canEdit=false：不渲染新增
+// detail 的分享區塊也對 front 隱藏
+// /work_records/:id/share 仍要求 editRoles</code></pre></div>
+      </div>
+
+      <h3>11.6 CSV 例外：只開兩個模組</h3>
+      <div class="grid" style="grid-template-columns:1fr 1fr">
+        <div class="card"><h4>Before（core.mjs exportEntity）</h4><pre><code>if (user.role !== 'management')
+  throw new HttpError(403,
+    '匯出 CSV 僅限管理層');</code></pre></div>
+        <div class="card"><h4>After（core.mjs exportEntity）</h4><pre><code>const FRONT_CSV = ['leave_records',
+                   'supply_records'];
+if (user.role !== 'management'
+    &amp;&amp; !(user.role === 'front'
+         &amp;&amp; FRONT_CSV.includes(cfg.key)))
+  throw new HttpError(403,
+    '匯出 CSV 僅限管理層（前線僅開放請假／補給）');</code></pre></div>
+      </div>
+
+      <h3>11.7 下拉被裁切：absolute → fixed + 翻轉</h3>
+      <div class="grid" style="grid-template-columns:1fr 1fr">
+        <div class="card"><h4>Before（ui.mjs CSS）</h4><pre><code>.pk-menu{
+  position:absolute;
+  left:0;right:0;
+  top:calc(100% + 3px);
+  max-height:280px;
+  overflow:auto;
+}
+/* 放在 .item-editor{overflow:auto}
+   或 modal-body 內会被裁掉 */</code></pre></div>
+        <div class="card"><h4>After（ui.mjs place()）</h4><pre><code>function place(){
+  const r = input.getBoundingClientRect();
+  const maxH = Math.max(220,
+    Math.min(420, innerHeight - 24));
+  const openUp = r.bottom &gt; innerHeight*0.6
+    &amp;&amp; r.top &gt; maxH + 20;
+  menu.style.position = 'fixed';
+  menu.style.left = r.left + 'px';
+  menu.style.width = Math.max(r.width,240) + 'px';
+  menu.style.top = openUp
+    ? Math.max(8, r.top - maxH - 3)
+    : Math.min(innerHeight - 8, r.bottom + 3);
+  menu.style.maxHeight = maxH + 'px';
+}</code></pre></div>
+      </div>
+      <p class="small muted">同時把 <code>/api/pick</code> 的 limit 由 20 放到 50；multi 模式在 chip 變動時 <code>dispatchEvent(new Event('input'))</code>，item editor 的 tag 才會即時寫回 JSON。</p>
+
+      <h3>11.8 打卡合併：兩個頁 → 一個頁</h3>
+      <div class="grid" style="grid-template-columns:1fr 1fr">
+        <div class="card"><h4>Before</h4><pre><code>GET /checkin       → checkInPage
+GET /myattendance  → myAttendancePage
+// 兩個菜單項
+// 用戶要自己記得去哪打卡</code></pre></div>
+        <div class="card"><h4>After</h4><pre><code>GET /checkin       → 302 /myattendance
+POST /checkin      → 寫入打卡
+GET /myattendance  → 今日狀態 + 打卡卡
+                     + 本月工時 + 出勤
+                     + 打卡記錄
+// nav 只留「我的出勤」</code></pre></div>
+      </div>
+
+      <h3>11.9 排班表單：害蟲多選與預設臨時</h3>
+      <div class="grid" style="grid-template-columns:1fr 1fr">
+        <div class="card"><h4>Before（config.mjs）</h4><pre><code>service_type: select
+  options ['單次','定期','緊急']
+// 沒有害蟲種類欄位</code></pre></div>
+        <div class="card"><h4>After（config.mjs + ui.mjs）</h4><pre><code>service_type: select
+  options ['定期','單次','臨時','緊急']
+  default '臨時'
+pest_types: picks
+  source 'pest_types'（23 項）
+// item editor 新增列時套 default
+// 新增工作自動帶「臨時」</code></pre></div>
+      </div>
+    </section>
+
+    <section id="s12">
+      <h2><span class="no">CHAPTER 12</span>運維排障 FAQ</h2>
+      <p class="lead">上線後最常被問的十二個問題。先看這裡，再翻代碼。</p>
+
+      <h4>Q1. 改了程式，畫面沒變？</h4>
+      <p>Node 不會熱載。關掉啟動視窗重開，瀏覽器 <span class="kbd">Ctrl + F5</span>。確認你改的是 <code>04. 四期\系统代码</code>，不是三期或 <code>_歷史版本</code>。</p>
+
+      <h4>Q2. 前線為什麼沒有「新增服務計劃」？</h4>
+      <p>Q1 拍板：一約一計劃，只能從「合約列表 → 新增合約」建立。服務計劃頁是唯讀視圖＋鉛筆編輯服務子集。</p>
+
+      <h4>Q3. 滅蟲工作打開是 0 項？</h4>
+      <p>預設「今日工作」。星期日或當天沒有排班就是 0；點「所有工作」或按年／月／日查歷史。全庫 13,121 項，每頁 100 條。</p>
+
+      <h4>Q4. 害蟲種類整列都是「—」？</h4>
+      <p>舊排班沒有 <code>work_items[].pest_types</code>（全庫 0 覆蓋）。只有新建或補填的排班才會有；這是資料現實，不是欄位壞了。</p>
+
+      <h4>Q5. 服務計劃詳情的「排班記錄」是空的？</h4>
+      <p>13,115 個舊排班都沒有 <code>contract_id</code>，無法與合約對上。要補需另做「合約 ↔ 排班」對應，屬下一輪 P2。</p>
+
+      <h4>Q6. 服務計劃詳情的電話是「—」？</h4>
+      <p>先讀 <code>contract.contact_phone</code>，空時退回客戶檔（customer_id → 名稱）。12 份合約只有 6 份能查到；其餘客戶檔本身沒電話。</p>
+
+      <h4>Q7. 合約編號還是自動生成 C-2026-xxxx？</h4>
+      <p>「合約列表 → 新增合約」留空時仍會自動編號（沿用原系統）。要真實合約號，新增時直接覆寫即可；服務計劃頁已不會再產生編號。</p>
+
+      <h4>Q8. 為什麼會計不能進回收桶？</h4>
+      <p>本輪依「只在設置給辦公室／管理層」收緊，nav 與路由都擋。二次修改時 accounting 在白名單，這是刻意變更。</p>
+
+      <h4>Q9. 前線為什麼不能刪車輛費用？</h4>
+      <p>Q5 只要求「能記費用、金額可見」。為避免誤刪，前線可新增；編輯／刪除仍限辦公室／管理層，URL 硬闖會 403。</p>
+
+      <h4>Q10. 為什麼 CSV 只有請假／補給？</h4>
+      <p>Q9 的例外。其他模組仍維持二次修改的「全站 CSV 僅管理層」；辦公室連請假 CSV 也沒有。</p>
+
+      <h4>Q11. 下拉還是被裁掉？</h4>
+      <p>先確認已重啟且 <span class="kbd">Ctrl + F5</span>。新版是 <code>position:fixed</code>，若仍被裁，檢查是否有外層容器加了 <code>transform</code>（會建立新的 containing block）；目前系統沒有。</p>
+
+      <h4>Q12. 怎麼回滾？</h4>
+      <pre><code>copy /Y 系统代码\backup-20261025-010144\server.mjs 系统代码\server.mjs
+copy /Y 系统代码\backup-20261025-010144\lib\*.mjs 系统代码\lib\</code></pre>
+      <p>或用 <code>三次修改\程式快照_20261025\</code> 覆蓋。回滾不影響資料。</p>
+    </section>
+
+    <section id="a1">
+      <h2><span class="no">APPENDIX A</span>交付物與檔案清單</h2>
+      <h3>A.1 本資料夾</h3>
+      <table>
+        <thead><tr><th>檔案／目錄</th><th>用途</th><th style="width:100px">大小</th></tr></thead>
+        <tbody>
+          <tr><td class="file">前線員工改造_交接文件_三次修改_20261025.html</td><td>本文件（12 章＋2 附錄）</td><td class="num">約 73 KB</td></tr>
+          <tr><td class="file">README.txt</td><td>五分鐘索引與快速開始</td><td class="num">約 4.2 KB</td></tr>
+          <tr><td class="file">verify-frontline.mjs</td><td>零依賴 73 項驗收腳本</td><td class="num">約 18 KB</td></tr>
+          <tr><td class="file">驗收結果_三次修改.json</td><td>本輪 73/73 原始結果</td><td class="num">約 7.8 KB</td></tr>
+          <tr><td class="file">驗收結果_上一輪回歸_55.json</td><td>上一輪 55/55 回歸</td><td class="num">5.5 KB</td></tr>
+          <tr><td class="file">變更檔案清單_SHA256.csv</td><td>7 個改動檔案的雜湊</td><td class="num">0.7 KB</td></tr>
+          <tr><td class="file">程式快照_20261025\</td><td>server.mjs + lib\*.mjs 交付原文</td><td class="num">約 500 KB</td></tr>
+        </tbody>
+      </table>
+
+      <h3>A.2 七個改動檔案</h3>
+      <table>
+        <thead><tr><th>檔案</th><th style="width:64px">行數</th><th style="width:90px">位元組</th><th style="width:180px">SHA256 前 16 碼</th></tr></thead>
+        <tbody>
+<tr><td class="file">server.mjs</td><td class="num">838</td><td class="num">76,134</td><td class="file" title="d48d7a94002c1e187d9529c53d9574824215a54b91c2b7b098bcf6a82982b85c">d48d7a94002c1e18…</td></tr>
+<tr><td class="file">lib/config.mjs</td><td class="num">817</td><td class="num">92,357</td><td class="file" title="145fb99105f0185e2fe67251eed7b39e35f0810739e77392d45d41114002bf2e">145fb99105f0185e…</td></tr>
+<tr><td class="file">lib/core.mjs</td><td class="num">552</td><td class="num">52,239</td><td class="file" title="a27b6a83e3a1938d8a6a5a0f38addef18fb5428672b9fe47056662bfc9c2baaa">a27b6a83e3a1938d…</td></tr>
+<tr><td class="file">lib/pages.mjs</td><td class="num">727</td><td class="num">89,778</td><td class="file" title="447b34c20c513207bf1fd362f08d0d250a4acd5233a366b553e2f77ff5463dfd">447b34c20c513207…</td></tr>
+<tr><td class="file">lib/ui.mjs</td><td class="num">649</td><td class="num">57,617</td><td class="file" title="f4105882cc741270027053e6d2cfb601a0a64c615161f2031df42ac7a550aaf2">f4105882cc741270…</td></tr>
+<tr><td class="file">lib/pickers.mjs</td><td class="num">266</td><td class="num">13,610</td><td class="file" title="b1e3b2e2edf97265809a5c283161e8008e5c6fefb03f09b1d4fc68ec9f204456">b1e3b2e2edf97265…</td></tr>
+<tr><td class="file">lib/actions.mjs</td><td class="num">772</td><td class="num">47,527</td><td class="file" title="d43b70d1e17f8b730df449e0e8a63d234149a5534b3daed2757e74c69f90006f">d43b70d1e17f8b73…</td></tr>
+        </tbody>
+      </table>
+      <p class="small muted">完整 64 位雜湊見 <code>變更檔案清單_SHA256.csv</code>；交付快照與正式碼 7/7 雜湊一致（已核對）。</p>
+
+      <h3>A.3 接手檢查清單</h3>
+      <ol>
+        <li>先跑一次 <code>verify-frontline.mjs</code>，確認 73/73，再改任何東西。</li>
+        <li>改 <code>core.mjs</code> 的 <code>ownsRecord</code> 前，先確認「看」與「改」兩個分支沒有被合併。</li>
+        <li>改 <code>pages.mjs</code> 的 <code>servicePlanDetail</code> 前，先確認 <code>PLAN_FIELD_NAMES</code> 與 hidden 回寫沒有漏欄位。</li>
+        <li>改 <code>ui.mjs</code> 的 picker 前，先確認 fixed 定位與 multi 的 input 事件。</li>
+        <li>上線後從前線、辦公室、管理層三個帳號各點一次側欄與詳情。</li>
+      </ol>
+    </section>
+
+    <section id="a2">
+      <h2><span class="no">APPENDIX B</span>交付前資料快照</h2>
+      <p class="lead">2026-10-25 00:30 對正式庫複本的唯讀統計。用來判斷「頁面顯示的數字對不對」，也是下一輪做資料清理的基線。</p>
+      <h3>B.1 實體筆數</h3>
+      <table>
+        <thead><tr><th>實體</th><th style="width:90px">筆數</th><th>備註</th></tr></thead>
+        <tbody>
+          <tr><td>Schedule（排班）</td><td class="num">13,115</td><td>2026-02 至 2027-03；全部沒有 contract_id</td></tr>
+          <tr><td>工作項（work_items 展開）</td><td class="num">13,121</td><td>定期 12,969／單次 138／空白 14／臨時 0／緊急 0</td></tr>
+          <tr><td>Contract（合約／服務計劃）</td><td class="num">12</td><td>生效中 9、已結束 3；電話可回填 6</td></tr>
+          <tr><td>WorkRecord（服務報告）</td><td class="num">2</td><td>員工均為馮泓叡；前線盧力峰可見全部</td></tr>
+          <tr><td>SupplyRecord（補給）</td><td class="num">0</td><td>本輪前無資料；介面已用測試資料驗證</td></tr>
+          <tr><td>LeaveRecord（請假）</td><td class="num">3</td><td>袁賡 2、Melody 1；盧力峰 0</td></tr>
+          <tr><td>CheckInRecord（打卡）</td><td class="num">2</td><td>舊資料保留，合併頁只讀展示</td></tr>
+          <tr><td>Attendance（出勤）</td><td class="num">88</td><td>2026-03／04</td></tr>
+          <tr><td>Vehicle（車輛）</td><td class="num">4</td><td>TG4278／WR7935／WS6355／ZK2944</td></tr>
+          <tr><td>Pesticide（藥物）</td><td class="num">38</td><td>用藥 tag 的資料源</td></tr>
+          <tr><td>Customer（客戶）</td><td class="num">1,608</td><td>部分客戶檔沒有電話</td></tr>
+        </tbody>
+      </table>
+
+      <h3>B.2 已知資料缺口（不是本輪改壞）</h3>
+      <table>
+        <thead><tr><th>現象</th><th>影響</th><th>建議</th></tr></thead>
+        <tbody>
+          <tr><td>排班沒有 contract_id</td><td>服務計劃詳情的「排班記錄」為空</td><td>下一輪做合約↔排班對應，或在新增排班時強制選服務計劃</td></tr>
+          <tr><td>排班沒有 pest_types</td><td>滅蟲工作害蟲欄為「—」</td><td>新建排班時選；舊資料可批次補或保持空白</td></tr>
+          <tr><td>6 份合約查不到電話</td><td>詳情電話「—」</td><td>補客戶檔電話，或日後加「合約聯絡電話」覆寫欄</td></tr>
+          <tr><td>12 份合約 pest_type 全空</td><td>服務計劃看不到害蟲</td><td>用子集彈窗逐份補；不影響功能</td></tr>
+          <tr><td>合約編號格式不一</td><td>C-2026-xxxx、SQP-、KTD-、純數字並存</td><td>不強制統一；新增時手動覆寫真實合約號</td></tr>
+        </tbody>
+      </table>
+      <div class="note"><b>數字對不上時先看這裡</b>：本輪沒有刪任何正式資料，也沒有批量改寫历史排班；所有「0」或「—」都應能在本節找到來源。</div>
+    </section>
+
+
+    <footer>標準清潔滅蟲 · 四期 · 三次修改 · 2026-10-25 · 交付快照 程式快照_20261025</footer>
+  </main>
+</div>
+</body>
+</html>

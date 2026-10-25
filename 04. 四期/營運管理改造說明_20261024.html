@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>營運管理改造說明 · 四期第二輪</title>
+<style>
+:root{--brand:#0f6e56;--brand2:#0a5946;--line:#e3e7eb;--ink:#182027;--muted:#6c7883;--warn:#9a5b00;--danger:#a32d2d}
+*{box-sizing:border-box}
+body{margin:0;background:#f4f6f8;color:var(--ink);font:14px/1.65 "Microsoft JhengHei","PingFang HK",system-ui,sans-serif}
+.wrap{max-width:1080px;margin:0 auto;padding:34px 22px 70px}
+h1{font-size:26px;margin:0 0 6px}
+.sub{color:var(--muted);margin-bottom:26px;font-size:13px}
+h2{font-size:17px;margin:34px 0 12px;padding-bottom:8px;border-bottom:1px solid var(--line)}
+h3{font-size:14px;margin:20px 0 8px;color:var(--brand)}
+.card{background:#fff;border:1px solid var(--line);border-radius:10px;padding:18px 20px;margin-bottom:14px}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th,td{border-bottom:1px solid #eef1f3;padding:9px 10px;text-align:left;vertical-align:top}
+th{background:#fafbfc;color:#5c6873;font-size:12px;font-weight:600}
+tr:last-child td{border-bottom:0}
+code{background:#f2f5f6;border-radius:4px;padding:1px 5px;font:12px/1.5 Consolas,ui-monospace,monospace}
+.tag{display:inline-block;border-radius:10px;padding:1px 9px;font-size:11.5px;background:#eaf5f0;color:var(--brand);white-space:nowrap}
+.tag.w{background:#fff3dd;color:var(--warn)}
+.tag.g{background:#eef1f4;color:#53606b}
+.tag.r{background:#fdecec;color:var(--danger)}
+ul{margin:8px 0 0 20px;padding:0}
+li{margin:4px 0}
+.note{border-left:3px solid var(--brand);background:#edf7f2;padding:11px 14px;border-radius:0 7px 7px 0;margin:12px 0}
+.note.warn{border-color:var(--warn);background:#fff6e8}
+.note.risk{border-color:var(--danger);background:#fff0f0}
+.kv{display:grid;grid-template-columns:130px 1fr;gap:6px 14px;font-size:13px}
+.kv dt{color:var(--muted)}
+.kv dd{margin:0}
+.done{color:var(--brand);font-weight:700}
+</style>
+</head>
+<body>
+<div class="wrap">
+<h1>四期 · 營運管理改造說明（第二輪）</h1>
+<div class="sub">2026-10-25 00:00 · 依 10/24 業務審核會議逐條整改 · 對照原系統源碼 <code>05. 源碼分析/frontend</code> 與真實資料庫（排班 13,115／定期 94／合約 12／車輛 4／庫存調整 9,566／盤點 47／產品 132／PO 902）</div>
+
+<div class="note warn">
+<b>本輪範圍</b>：只動「營運管理」與相關列表／詳情頁，未改財務、市場、前線模組的業務邏輯。資料庫結構未變（<code>records</code> 表存 JSON），無需遷移；新欄位（<code>deleted_at / deleted_by / stock_reversed</code>）只寫進 JSON。
+</div>
+
+<h2>一、本輪 9 個決策（提問確認結果）</h2>
+<div class="card">
+<table>
+<thead><tr><th style="width:26%">問題</th><th>決定</th></tr></thead>
+<tbody>
+<tr><td>回收桶形態</td><td><b>統一回收桶頁 <code>/trash</code></b> + 各列表保留「回收筒」切換（雙入口）；要有搜尋、模組篩選、<b>回收時間</b>、操作人、可勾選批次還原／永久刪除</td></tr>
+<tr><td>庫存刪除對象</td><td><b>兩類都刪、各刪各的</b>：庫存列表勾選刪「產品檔案」；調整記錄刪「調整單」；盤點記錄刪「盤點單」</td></tr>
+<tr><td>回收桶權限</td><td>辦公室可還原＋永久刪除，但<b>每日 10 條上限</b>；超出即拒絕並推送通知給管理層</td></tr>
+<tr><td>合約彈窗欄位</td><td>對齊原系統 <b>13 個業務欄</b>＋保留合約文件上傳；移除客戶 ID／工作單位 ID／報價單 ID 顯示（值仍保存）；合約名稱自動生成</td></tr>
+<tr><td>合約列表超連結</td><td><b>合約編號 → 合約詳情</b>；<b>客戶名稱 → 客戶詳情</b>（客戶詳情改成原系統版面）</td></tr>
+<tr><td>PO 帶工作單位</td><td><b>PO → 報價單 → 合約 逐級反查</b>，全部沒有才留空</td></tr>
+<tr><td>「前往排班」</td><td>依原系統行為：<b>只跳排班首頁</b>（<code>/schedules</code>）</td></tr>
+<tr><td>已過賬盤點刪除</td><td><b>自動反向沖銷</b>再進回收桶；還原時重新過賬，全程留調整單</td></tr>
+<tr><td>CSV 匯出</td><td><b>全站僅管理層</b>可見、可下載；辦公室／會計／前線一律 403</td></tr>
+</tbody>
+</table>
+</div>
+
+<h2>二、原系統源碼核查結論（先查再改）</h2>
+<div class="card">
+<ul>
+<li><b>回收桶不是獨立頁</b>：全站只有「送貨單」有 <code>is_deleted</code> 軟刪除，做法是列表內 <code>回收筒</code> 切換 + 勾選批次 <code>移至回收筒 (n)</code>／<code>還原 (n)</code>／<code>永久刪除 (n)</code>，確認框帶條數，空狀態寫「回收筒沒有送貨單」。<b>本輪保留這套操作語法，再升級為可聚合的統一頁。</b></li>
+<li><b>採購單行操作</b>（<code>app.js</code> @805335）：編輯（鉛筆）→ 刪除（紅垃圾桶，<code>確定刪除此PO？</code>）→ 轉為發票（綠，<code>CreateInvoice?poId=</code>）→ 轉為送貨單（橙，僅產品類）→ 前往排班安排（青，僅待安排／已安排）。本輪按會議要求固定為 <b>4 個按鈕</b>。</li>
+<li><b>PO 名稱與客戶都是超連結</b>：<code>po_name → ViewPurchaseOrder</code>（藍色 <code>text-blue-700 hover:underline</code>），<code>customer_name → ViewCustomer</code>。</li>
+<li><b>客戶詳情頁</b>：頂部「返回＋客戶名＋編輯／合併／刪除」→ 三張 KPI（總報價單／已接受報價／總收入）→ 左側聯絡人卡 → 右側 6 個頁簽（報價記錄／合約列表／送貨單記錄／報告文件／合約文件／PO文件）。</li>
+<li><b>合約編輯頁</b>：基本資料（合約編號、PO 編號、客戶名稱 To、工作單位 From、工作地點、工作內容、合約名稱自動生成）＋合約條款（起訖、頻率、總額、付款、狀態、備註）。</li>
+</ul>
+</div>
+
+<h2>三、實際改了什麼</h2>
+
+<h3>1. 回收桶（新增）</h3>
+<div class="card">
+<ul>
+<li>新增 <code>/trash</code> 頁與左側「營運管理 → 回收桶」入口（辦公室／會計／管理層可見，前線 403）。</li>
+<li>表格欄位：勾選框／模組／名稱（可點進詳情）／摘要／<b>移至回收桶時間</b>／<b>操作人</b>／查看。</li>
+<li>工具列：關鍵字搜尋＋模組下拉（帶各模組筆數）＋<b>還原選取</b>／<b>永久刪除選取</b>；單條也可在右側或詳情頁操作。</li>
+<li>軟刪除寫入 <code>deleted_at</code>（香港時間）、<code>deleted_by</code>、<code>deleted_by_id</code>；還原時清除。</li>
+<li>永久刪除只允許對「回收桶內」的記錄執行（<code>store.purge</code> 二次守門）。</li>
+<li>辦公室每日 10 條（還原＋永久刪除合計）：超出回錯誤頁並寫 <code>notifications</code> 推送管理層。</li>
+<li>各列表頁（合約／車輛／產品／盤點／定期排程／報價／送貨單／PO）同時保留「回收筒 (n)」切換，內含逐條還原／永久刪除。</li>
+</ul>
+<div class="note">舊資料：來源系統本身有 30 張報價單、15 張送貨單是 <code>is_deleted</code>，現在第一次打開回收桶就會看到，屬正常歷史資料（沒有 <code>deleted_at</code> 時顯示最後更新時間）。</div>
+</div>
+
+<h3>2. 排班管理（<code>/schedules</code>）</h3>
+<div class="card">
+<ul>
+<li>新增排班／編輯排班的<b>彈窗底部加「移至回收桶」</b>（紅色，二次確認），旁邊加「查看詳情」。</li>
+<li>日曆下方「當日詳情」每張排班卡加 <b>刪除</b> 與 <b>檢視</b>。</li>
+<li><b>新增後不再「消失」</b>：儲存後回跳同月同日曆，頂部顯示「已儲存 YYYY-MM-DD 的排班」，該日期格子加綠框並自動捲動到畫面中央。</li>
+<li>支援 <code>/schedules?po=&lt;id&gt;</code>：頂部提示「此採購單待安排」，可一鍵帶入該 PO 的工作日期。</li>
+<li>「前往排班」維持原系統行為：只跳 <code>/schedules</code>。</li>
+</ul>
+</div>
+
+<h3>3. 合約列表／新增合約（<code>/contracts</code>）</h3>
+<div class="card">
+<ul>
+<li><b>新增／編輯改成頁內彈窗</b>：列表頁「新增合約」直接開彈窗（不跳頁）；行內「編輯」→ <code>?edit=id</code> 自動開同一彈窗並預填。</li>
+<li>欄位縮到原系統的業務欄：合約編號*、合約名稱（自動生成）、PO 編號、客戶名稱（可搜）、工作單位（可搜）、工作地點、工作內容（可搜工作細則）、聯絡人、聯絡電話、起訖日期、服務頻率、合約總額、付款條款、合約狀態、備註＋<b>合約文件上傳</b>。</li>
+<li><b>合約名稱自動生成</b>：<code>合約編號_客戶_地點_工作內容</code>（可手動覆蓋）。</li>
+<li>客戶 ID／客戶編號／工作單位 ID／報價單 ID／服務地址等改為<b>隱藏欄位</b>：表單不顯示，提交時原值寫回，舊資料不斷鏈。</li>
+<li>列表：<b>合約編號 → 合約詳情</b>、<b>客戶名稱 → 客戶詳情</b>（藍色可點）。</li>
+<li>合約詳情頁加「查看客戶：XXX」「建立定期排程」「查看關聯 PO」。</li>
+<li>列印／PDF 不再輸出隱藏 ID 欄位。</li>
+</ul>
+</div>
+
+<h3>4. 客戶詳情（改成原系統版面）</h3>
+<div class="card">
+<ul>
+<li>頂部：客戶名＋編號／英文名，右側 編輯／合併／刪除／返回。</li>
+<li>三張 KPI：<b>總報價單</b>、<b>已接受報價</b>、<b>總收入</b>（已成交報價合計）。</li>
+<li>左側客戶資訊卡（聯絡人／電話／傳真／電郵／服務地址／送貨地址／類型／備註）。</li>
+<li>右側 6 個頁簽：報價記錄／合約列表／送貨單記錄／報告文件／合約文件／PO文件，各帶筆數。</li>
+<li>保留原有辦公室時間窗／每日查看額度／審計邏輯（<code>customerOfficeAccess</code>）。</li>
+</ul>
+</div>
+
+<h3>5. 車輛管理（<code>/vehicles</code>）</h3>
+<div class="card">
+<ul>
+<li>刪除「車輛類型」欄位與列表欄（值保留在資料內，只是不再顯示）。</li>
+<li>狀態固定三選：<b>可用／維修中／停用</b>。同時修好下拉只看得到「可用」的根因：<code>datalist</code> 在輸入框有值時只顯示匹配項，現在聚焦即展開全部選項、未輸入則失焦還原。</li>
+<li>列表「車牌號碼」可點 → <b>彈窗</b>：車牌、狀態、牌照到期日、保險到期日、費用筆數／合計、<b>按年／月篩選的費用記錄</b>（日期／時間／類型／金額／地點／參考編號）、按類型小計、添加費用記錄／易通行匯入。</li>
+<li>車輛可刪除（進回收桶）；詳情頁仍保留完整費用區塊。</li>
+<li><b>「車輛費用」選單已移除</b>，<code>/vehicleexpenses</code> 自動跳回 <code>/vehicles</code>；費用資料仍可從車輛彈窗與詳情頁新增／查看。</li>
+</ul>
+</div>
+
+<h3>6. 庫存管理（<code>/inventory</code>）</h3>
+<div class="card">
+<ul>
+<li>庫存列表：<b>產品編號左邊加勾選框</b>＋全選，工具列「刪除選取」批量移入回收桶；每行也有紅色「刪除」。</li>
+<li>調整記錄：每行加紅色「刪除」→ 回收桶。</li>
+<li>盤點記錄：<b>「項目數」不再顯示一串 JSON</b>，改為 <code>N 項</code>，滑過可看前 3 項的「系統數量→實際數量」；展開可看明細。</li>
+<li>盤點記錄新增「已過賬」欄（是／已沖銷／否）。</li>
+<li>頁面加說明卡：盤點狀態改「已完成」→ 寫回庫存並生成盤點調整單；<b>刪除已過賬盤點 → 自動反向沖銷 → 進回收桶</b>；還原 → 重新過賬。三步都生成調整單（自動調整／自動沖銷／自動重新過賬），賬可追。</li>
+</ul>
+</div>
+
+<h3>7. 採購單管理（<code>/purchaseorders</code>）</h3>
+<div class="card">
+<ul>
+<li>行操作固定 <b>4 個按鈕</b>：<b>編輯／轉為發票／刪除／前往排班</b>（刪除進回收桶，二次確認）。</li>
+<li><b>採購單名稱 → PO 詳情</b>（藍色連結）；<b>客戶 → 客戶詳情</b>（有 customer_id 才連結，沒有則純文字，與原系統一致）。</li>
+<li>PO 詳情頁按鈕改為「工程滿意紙／由 PO 新增送貨單／<b>轉為發票</b>／<b>前往排班</b>／簽署連結」。</li>
+<li>選 PO 帶入排班時，工作單位沿 <b>PO → 報價單 → 合約</b> 反查補齊（會議點名問題）。</li>
+</ul>
+</div>
+
+<h3>8. 定期服務排程（<code>/recurringschedules</code>）</h3>
+<div class="card">
+<ul>
+<li>表單最前面改成 <b>合約選擇器</b>（可搜合約編號／客戶），選中帶出合約編號與客戶名稱。</li>
+<li>排程名稱留空時自動生成 <code>合約編號_服務排程</code>。</li>
+<li>列表可刪除（進回收桶），回收桶可還原／永久刪除。</li>
+</ul>
+</div>
+
+<h3>9. 權限與字體</h3>
+<div class="card">
+<ul>
+<li><b>匯出 CSV 全站只給管理層</b>：列表按鈕對其他角色不渲染；直接訪問 <code>/export/*.csv</code> 一律 403；月度出勤表的「導出CSV」也一併隱藏。</li>
+<li>左側導航主欄目字體由 <code>10px 灰色小字</code> 改為 <b>13px 深色加粗</b>，與次欄目同字號、視覺更重。</li>
+<li>回收桶權限：辦公室／會計／管理層可用；辦公室每日 10 條上限。</li>
+</ul>
+</div>
+
+<h2>四、逐條驗收路徑</h2>
+<div class="card">
+<table>
+<thead><tr><th style="width:36%">要驗證的行為</th><th>操作</th></tr></thead>
+<tbody>
+<tr><td>回收桶聚合＋回收時間</td><td>任一列表刪一條 → 左側「回收桶」→ 看到模組、名稱、時間、操作人；搜尋／模組下拉可篩</td></tr>
+<tr><td>批次還原</td><td>回收桶勾 2 條 → 還原選取 → 列表回來；詳情頁不再顯示「回收筒」標籤</td></tr>
+<tr><td>辦公室限額</td><td>用辦公室帳號當天操作 11 條 → 第 11 條被拒，管理層收到通知（管理後台「告警」）</td></tr>
+<tr><td>排班可刪</td><td><code>/schedules</code> → 點日曆上的排班 → 彈窗底部「移至回收桶」→ 日曆消失、回收桶出現</td></tr>
+<tr><td>新增排班定位</td><td>新增 10/29 排班 → 儲存後頁面捲到 10/29，格子綠框，頂部提示「已儲存」</td></tr>
+<tr><td>合約彈窗</td><td><code>/contracts</code> → 新增合約 → 不跳頁直接彈窗；填編號＋客戶＋地點＋內容 → 合約名稱自動帶出</td></tr>
+<tr><td>合約超連結</td><td>合約列表點合約編號 → 合約詳情；點客戶名稱 → 客戶詳情（KPI＋6 頁簽）</td></tr>
+<tr><td>車輛狀態三選</td><td><code>/vehicles</code> → 新增/編輯 → 狀態點一下，三個選項都在（之前只有「可用」）</td></tr>
+<tr><td>車輛彈窗</td><td><code>/vehicles</code> → 點車牌 → 彈窗顯示到期日＋費用；選年份／月份即時刷新</td></tr>
+<tr><td>庫存勾選刪除</td><td><code>/inventory</code> → 勾 2 個產品 → 刪除選取 → 回收桶「產品」有 2 條</td></tr>
+<tr><td>盤點項目數</td><td><code>/inventory?tab=counts</code> → 項目數顯示「125 項」，不再是 JSON</td></tr>
+<tr><td>盤點沖銷</td><td>新增盤點（已完成，實際數－3）→ 庫存減 3＋生成調整單；刪除 → 庫存回補＋生成「自動沖銷」；回收桶還原 → 再扣 3＋「自動重新過賬」</td></tr>
+<tr><td>PO 四按鈕</td><td><code>/purchaseorders</code> → 每行 編輯／轉為發票／刪除／前往排班；點名稱進詳情、點客戶進客戶詳情</td></tr>
+<tr><td>PO 帶工作單位</td><td>排班 → 新增工作 → 選 PO → 工作單位有值（PO 沒有時由報價單／合約補）</td></tr>
+<tr><td>CSV 權限</td><td>辦公室／會計登入 → 列表看不到「匯出 CSV」；直接開 <code>/export/contracts.csv</code> → 403</td></tr>
+<tr><td>字體</td><td>左側「營運管理」「公司財務」等主欄目為 13px 粗體，不再是淡灰小字</td></tr>
+</tbody>
+</table>
+</div>
+
+<h2>五、改動檔案</h2>
+<div class="card">
+<dl class="kv">
+<dt>lib/store.mjs</dt><dd><code>setDeleted</code> 寫入回收時間／操作人；新增 <code>purge()</code>（只刪回收桶內）與 <code>trashRows()</code>（跨實體聚合）</dd>
+<dt>lib/config.mjs</dt><dd>軟刪除開關（排班／定期／合約／車輛／PO／產品／調整／盤點／費用）；合約 13 欄＋隱藏 ID；PO／合約／車輛可點欄位；移除車輛類型與車輛費用選單；回收桶選單；盤點項目數可讀</dd>
+<dt>lib/core.mjs</dt><dd>列表：CSV 僅管理層、逐行刪除、PO 四按鈕、合約彈窗與 <code>?edit=</code> 自動開、車輛彈窗腳本、回收筒切換下的還原／永久刪除；詳情：還原＋永久刪除、合約查看客戶、PO 轉發票／前往排班</dd>
+<dt>lib/ui.mjs</dt><dd>主欄目字體；<code>dataTable</code> 支援可點欄位與自訂操作列；<code>formGrid/formPage/detailPage</code> 支援隱藏欄位；datalist 聚焦展開全部；彈窗自動開啟與日期捲動</dd>
+<dt>lib/pages.mjs</dt><dd>新增 <code>trashPage</code>／<code>vehicleCard</code>／<code>customerDetailPage</code>；排班彈窗刪除、儲存提示與定位、PO 提示；排班Excel 刪除列與回收桶入口；月度出勤 CSV 僅管理層</dd>
+<dt>lib/actions.mjs</dt><dd>新增 <code>reverseStockCount()</code>（沖銷／重新過賬）；合約與定期排程名稱自動生成</dd>
+<dt>lib/documents.mjs</dt><dd>列印／PDF 跳過隱藏欄位</dd>
+<dt>lib/pickers.mjs</dt><dd>PO → 報價單 → 合約 逐級補工作單位</dd>
+<dt>server.mjs</dt><dd>新增 <code>/trash</code>、<code>/trash/restore</code>、<code>/trash/purge</code>、<code>/vehicle-card/:id</code>、<code>/inventory/delete</code>；<code>/vehicleexpenses</code> 導向；<code>/view/customers/:id</code> 走新客戶頁；刪除／還原接入盤點沖銷；排班存檔回跳帶 <code>saved</code>；CSV 導出收緊</dd>
+</dl>
+</div>
+
+<h2>六、已知限制</h2>
+<div class="card">
+<ul>
+<li><b>「前往排班」只跳排班首頁</b>（依會議決定與原系統行為），不會自動定位到該 PO 的工作日期；要帶日期可用 <code>/schedules?date=YYYY-MM-DD&amp;po=&lt;id&gt;</code>。</li>
+<li>回收桶<b>沒有自動清理</b>（不按天數自動永久刪除），需人工永久刪除或資料庫備份。</li>
+<li>辦公室 10 條上限是<b>每日合計</b>，還原與永久刪除都計入；管理層／會計不受限。</li>
+<li>合約「工作地點」仍是自由文字（未接地址庫）；合約 12 筆歷史資料本身沒有工作單位／聯絡人，選中時為空。</li>
+<li>車輛費用「按年月查看」在彈窗內即時刷新；若要跨車輛匯總，仍可從車輛詳情頁或資料庫匯出（僅管理層）。</li>
+<li>庫存「刪除產品」只做軟刪除，<b>不动历史调整单</b>；歷史單仍指向該產品 ID，還原後即恢復關聯。</li>
+</ul>
+</div>
+
+<div class="note risk">
+<b>部署提醒</b>：本次改了 <code>lib/*.mjs</code> 與 <code>server.mjs</code>，Node 必須重啟才會生效。請關掉 <code>启动系统.bat</code> 的黑色視窗，重新雙擊啟動；瀏覽器按 <code>Ctrl+F5</code> 清快取。<code>data.db</code> 結構未變，不需要遷移或重建。
+</div>
+
+</div>
+</body>
+</html>

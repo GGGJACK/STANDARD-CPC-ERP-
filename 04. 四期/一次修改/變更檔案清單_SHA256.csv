@@ -1,0 +1,9 @@
+﻿檔案,類型,行數,SHA256,改動摘要
+lib/pickers.mjs,新增,231,2039a56921c94685b1bcc0b593211679b5fab5f39f81c16dcffd740e368ce1c0,"可搜尋選擇器資料源：10 類資料、快取、模糊比對、/api/pick 的查詢核心"
+server.mjs,修改,733,b6541c5b3a866cdc05863d4974d91708044c509a1771d463f7b887b8da4d1a83,"新增 GET /api/pick 與 POST /leaves/:id/decide 兩條路由"
+lib/config.mjs,修改,802,1d8d38cadb99f8e3b7e3f5b6648f7fdfe14c679f1f91ffe3619ad8ada8a40a25,"NAV key 去重；排班工作列表 9 欄＋隱藏 ID；合約/請假/補給/車輛費用欄位改造"
+lib/ui.mjs,修改,553,4d7d4232f2346ba38a36ba8447ae0c2110b852fea005de25bffaadbcb2940ad3,"導航折疊、picker 元件與 CSS、下拉可搜、items 編輯器（卡片/隱藏欄/選擇器）、詳情卡片式明細"
+lib/core.mjs,修改,463,0023baa943c6147f166f458aa0eff2d163f078f0547656bb2ad1ce5bf41ef44c,"pick/picks 渲染、車輛費用區塊、請假審批按鈕、日期預設、詳情操作列合併"
+lib/pages.mjs,修改,526,be20e26a5d3cf6bb98d3cb911164de6803ee1a70136a27d63efabc33d3d03526,"排班彈窗 scheduleDialog、日曆與排班Excel 入口、active key 修正、工作單位反查"
+lib/actions.mjs,修改,709,e650408c6d9ddb632a8e78bc74fd56a380b52584a7dddbd80d1f48322f3b5ebe,"picks 欄位保存、非管理層請假狀態守門、補給位置動態選項"
+lib/documents.mjs,修改,416,b12999a198545bb16ae4d64beb722872566b59d79933396fe65eb5b4b5733d0f,"列印時隱藏欄位不輸出、picks 欄位可讀化"

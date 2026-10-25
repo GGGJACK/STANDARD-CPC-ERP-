@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>原系统源码与结构分析包</title>
+<style>
+:root{--ink:#15181c;--ink2:#4a5158;--ink3:#828a93;--line:#e4e7eb;--soft:#f6f7f9;--brand:#0f6e56;--brand-soft:#e9f5f0;--warn:#9a5b00;--warn-soft:#fdf4e6;--risk:#a32d2d;--risk-soft:#fceceb}
+*{box-sizing:border-box}body{margin:0;background:#eef0f3;color:var(--ink);font-size:14.5px;line-height:1.75;font-family:"PingFang SC","Microsoft YaHei",system-ui,sans-serif}
+.page{max-width:980px;margin:0 auto;background:#fff;padding:52px 58px 80px;min-height:100vh}
+@media(max-width:800px){.page{padding:24px 16px}}
+header{border-bottom:2px solid var(--ink);padding-bottom:20px;margin-bottom:28px}
+.kicker{font-size:11px;letter-spacing:.2em;color:var(--ink3);text-transform:uppercase;margin-bottom:9px}
+h1{font-size:26px;margin:0 0 10px;font-weight:600;line-height:1.35}
+.sub{color:var(--ink2);font-size:13.5px}
+h2{font-size:19px;margin:40px 0 12px;font-weight:600;padding-left:12px;border-left:4px solid var(--brand)}
+h3{font-size:14.5px;margin:22px 0 8px;font-weight:600}
+p{margin:9px 0}small{color:var(--ink3)}
+code{background:var(--soft);padding:1px 5px;border-radius:4px;font-size:12.3px;font-family:ui-monospace,Consolas,monospace;color:#2a3a4a}
+pre{background:#1e242b;color:#dfe6ee;padding:14px 16px;border-radius:8px;overflow:auto;font-size:12px;line-height:1.6}
+table{width:100%;border-collapse:collapse;margin:14px 0;font-size:12.8px}
+th,td{border:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top}
+th{background:var(--soft);font-weight:600;font-size:12.2px;color:var(--ink2)}
+.tag{display:inline-block;padding:0 8px;border-radius:9px;font-size:11px;line-height:1.7;font-weight:500}
+.ok{background:var(--brand-soft);color:var(--brand)}.no{background:var(--risk-soft);color:var(--risk)}.part{background:var(--warn-soft);color:var(--warn)}
+.callout{background:var(--brand-soft);border-left:3px solid var(--brand);padding:12px 16px;margin:16px 0;border-radius:0 7px 7px 0}
+.callout.warn{background:var(--warn-soft);border-color:var(--warn)}
+.callout.risk{background:var(--risk-soft);border-color:var(--risk)}
+.callout strong{display:block;margin-bottom:3px}
+ul,ol{margin:8px 0;padding-left:21px}li{margin:4px 0}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0}
+.chip{border:1px solid var(--line);border-radius:6px;padding:3px 9px;font-size:11.8px;background:var(--soft);font-family:ui-monospace,Consolas,monospace}
+footer{margin-top:48px;padding-top:16px;border-top:1px solid var(--line);font-size:12.2px;color:var(--ink3)}
+</style>
+</head>
+<body>
+<div class="page">
+
+<header>
+  <div class="kicker">Source &amp; Structure Analysis · 2026-10-24</div>
+  <h1>原系统源码与结构分析包</h1>
+  <div class="sub">standardcpc.base44.app · 前端全量代码 · 后端契约 · 交互审计 · PDF 证据</div>
+</header>
+
+<div class="callout risk">
+  <strong>先说结论，避免误会</strong>
+  <b>后端没有代码可以下载。</b>这个系统建在 Base44（托管型 BaaS）上，后端不是放在服务器上的源码文件，
+  而是平台上的表结构 + 自动生成的 API。我试过应用级接口（<code>/api/apps/{id}</code>、<code>/schema</code>、
+  <code>/entity-schemas</code>、<code>/config</code>），用当前账号全部返回 <b>401 / 404</b>——只有实体数据接口可用。<br>
+  能拿到的是：<b>前端全部代码</b>、<b>从数据反推的完整表结构</b>、<b>从前端 SDK 提取的 API 契约</b>、<b>逐页交互审计</b>。
+</div>
+
+<h2>一、前端</h2>
+
+<table>
+  <tr><th style="width:22%">内容</th><th>说明</th><th style="width:16%">位置</th></tr>
+  <tr><td>主包 <code>app.js</code></td><td>818 KB，含路由表、布局、权限判断、Base44 SDK、全部 UI 组件库</td><td><code>frontend\app.js</code></td></tr>
+  <tr><td>页面分块 <code>chunks\</code></td><td><b>133 个文件</b>，其中约 <b>90 个是页面级模块</b>，其余是图标/工具</td><td><code>frontend\chunks\</code></td></tr>
+  <tr><td>反混淆版 <code>beautified\</code></td><td>用 js-beautify 缩进展开，变量名仍是压缩的，但结构可读</td><td><code>frontend\beautified\</code></td></tr>
+  <tr><td>Sourcemap</td><td><span class="tag no">不存在</span> 全部 404，无法还原原始工程（组件名、注释、目录结构都拿不到）</td><td>—</td></tr>
+</table>
+
+<h3>1.1 页面模块清单（从分块文件名还原）</h3>
+<p>这是原系统真正拥有的页面，<b>比左侧菜单的 34 项多得多</b>——每个业务对象都有「列表 / 新建 / 编辑 / 查看」四套页面：</p>
+<div class="chips">
+<span class="chip">Dashboard</span><span class="chip">MyWork</span><span class="chip">MySchedule</span><span class="chip">MyAttendance</span><span class="chip">MySupply</span><span class="chip">WorkSchedule</span><span class="chip">CheckIn</span><span class="chip">PestControlWork</span><span class="chip">PestControlWorkDetail</span><span class="chip">ServicePlans</span><span class="chip">ServicePlanDetail</span><span class="chip">ServicePlanRecordDay</span><span class="chip">ServiceReports</span><span class="chip">ServiceReportDetail</span><span class="chip">ServiceLogCard</span><span class="chip">Customers</span><span class="chip">ViewCustomer</span><span class="chip">CustomerMergeDialog</span><span class="chip">Quotations</span><span class="chip">CreateQuotation</span><span class="chip">EditQuotation</span><span class="chip">ViewQuotation</span><span class="chip">ImportQuotations</span><span class="chip">Invoices</span><span class="chip">CreateInvoice</span><span class="chip">EditInvoice</span><span class="chip">ViewInvoice</span><span class="chip">Receipts</span><span class="chip">EditReceipt</span><span class="chip">ViewReceipt</span><span class="chip">Payments</span><span class="chip">CreatePayment</span><span class="chip">ViewPayment</span><span class="chip">Bills</span><span class="chip">CreateBill</span><span class="chip">ViewBill</span><span class="chip">Contracts</span><span class="chip">EditContract</span><span class="chip">ViewContract</span><span class="chip">SignCertificate</span><span class="chip">PurchaseOrders</span><span class="chip">CreatePurchaseOrder</span><span class="chip">EditPurchaseOrder</span><span class="chip">ViewPurchaseOrder</span><span class="chip">DeliveryNotes</span><span class="chip">CreateDeliveryNote</span><span class="chip">ViewDeliveryNote</span><span class="chip">Products</span><span class="chip">ViewProduct</span><span class="chip">Inventory</span><span class="chip">Services</span><span class="chip">ViewService</span><span class="chip">Suppliers</span><span class="chip">ViewSupplier</span><span class="chip">Employees</span><span class="chip">ViewEmployee</span><span class="chip">Attendances</span><span class="chip">MonthlyAttendance</span><span class="chip">LeaveRecords</span><span class="chip">Schedules</span><span class="chip">ExcelSchedule</span><span class="chip">RecurringSchedules</span><span class="chip">Vehicles</span><span class="chip">ViewVehicle</span><span class="chip">Accounting</span><span class="chip">GeneralLedger</span><span class="chip">Accounts</span><span class="chip">Leads</span><span class="chip">CreateLead</span><span class="chip">ViewLead</span><span class="chip">FollowUps</span><span class="chip">UserManagement</span><span class="chip">Settings</span><span class="chip">PersonalSettings</span><span class="chip">WorkUnits</span><span class="chip">Pesticides</span><span class="chip">WorkInstructions</span><span class="chip">AddressLibrary</span><span class="chip">EmailTemplates</span><span class="chip">PublicReportView</span><span class="chip">WorkingSchedulePDF</span><span class="chip">CompletionCertificateInlinePreview</span>
+</div>
+
+<div class="callout warn">
+  <strong>这份清单暴露了我之前实现的最大偏差</strong>
+  我只做了「列表页」，而原系统每个对象都有<b>新建 / 编辑 / 查看</b>三套独立页面。例如报价单就有
+  <code>CreateQuotation</code>、<code>EditQuotation</code>、<code>ViewQuotation</code>、<code>ImportQuotations</code> 四个模块。
+  这才是"交互逻辑"的主体，不是列表页那几个筛选器。
+</div>
+
+<h2>二、后端</h2>
+
+<table>
+  <tr><th style="width:24%">资产</th><th>内容</th><th style="width:18%">位置</th></tr>
+  <tr><td>表结构 <code>_schema.json</code></td><td><b>40 张表、559 个字段</b>，含类型、非空率、样例值（从 34,046 条真实数据反推）</td><td><code>backend\_schema.json</code></td></tr>
+  <tr><td>API 契约</td><td>见下方 2.1，从前端 SDK 代码直接提取</td><td>本页</td></tr>
+  <tr><td>接口探测报告</td><td>10 个应用级端点的实际返回（401/404 证据）</td><td><code>backend\_probe_report.json</code></td></tr>
+</table>
+
+<h3>2.1 API 契约（从前端 SDK 反推，可直接照着实现）</h3>
+<pre><code>BASE   https://base44.app
+APP    69814e2192f68b7de4fb2564
+AUTH   Authorization: Bearer &lt;access_token&gt;   （存 localStorage.base44_access_token）
+
+实体（每个实体自动拥有以下 9 个方法）
+  GET    /api/apps/{app}/entities/{Entity}?limit=&amp;skip=&amp;sort=&amp;fields=
+  GET    /api/apps/{app}/entities/{Entity}?q={json}&amp;limit=&amp;skip=     ← filter
+  GET    /api/apps/{app}/entities/{Entity}/{id}
+  POST   /api/apps/{app}/entities/{Entity}
+  PUT    /api/apps/{app}/entities/{Entity}/{id}
+  DELETE /api/apps/{app}/entities/{Entity}/{id}
+  DELETE /api/apps/{app}/entities/{Entity}          （body: id 数组，批量删）
+  POST   /api/apps/{app}/entities/{Entity}/bulk      （批量创建）
+  PATCH  /api/apps/{app}/entities/{Entity}/update-many
+  GET    /api/apps/{app}/entities/User/me
+
+认证
+  POST /api/apps/{app}/auth/login ／ register ／ logout
+  POST /api/apps/{app}/auth/change-password ／ reset-password-request ／ reset-password ／ resend-otp ／ verify-otp
+  GET  /api/apps/{app}/auth/sso/login
+  GET  /api/apps/{app}/auth/connectors
+
+文件
+  GET  /api/apps/{app}/files/{public|mp}/public/{app}/{fileId}_{name}   → 302 跳 media.base44.com
+
+其它
+  /api/apps/{app}/agents ／ analytics/track/batch ／ users/invite-user</code></pre>
+
+<h2>三、交互审计</h2>
+
+<table>
+  <tr><th style="width:24%">文件</th><th>内容</th></tr>
+  <tr><td><code>交互审计\_交互审计.json</code></td><td>34 个页面：表头、按钮、筛选器、页签、行操作、分页文案（全部来自真实 DOM）</td></tr>
+  <tr><td><code>交互审计\_弹窗表单审计.json</code></td><td>10 个「新增」弹窗的完整字段清单（客戶 12 项、採購 17 项、合約 14 项、員工 9 项、車輛 6 项、請假 7 项、排班 5 项、庫存調整 8 项）</td></tr>
+</table>
+
+<h3>3.1 审计中发现、我此前漏掉的交互</h3>
+<table>
+  <tr><th style="width:20%">页面</th><th>漏掉的交互</th></tr>
+  <tr><td>滅蟲工作</td><td>「今日工作 / 所有工作」页签、按年/按月/按日切换、狀態與種類篩選</td></tr>
+  <tr><td>服務計劃</td><td>地區分組頁签（全港 9 / 香港 1 / 九龍 1 / 新界 2 / 離島 0 / 未分類 5 / 已結束 3）、新增服務計劃</td></tr>
+  <tr><td>客戶管理</td><td>11 列表头（含客戶編號、主客戶、英文名稱）、匯出 CSV / 匯入 CSV、類型與主客戶篩選、頁碼分頁（共 1,608 筆 / 33 頁）</td></tr>
+  <tr><td>報價管理</td><td>13 列表头、垃圾桶 (N)、導出/導入/批量導入、6 個篩選器（年份/類型/階段/員工/工作單位/投標方式）</td></tr>
+  <tr><td>採購單</td><td>服務/產品頁签（868 / 34）、年份/月份/狀態/工作狀態四個篩選、工程滿意紙入口</td></tr>
+  <tr><td>全部模組</td><td>新建 / 編輯 / 查看三套獨立頁面（見第 1.1 節清單）</td></tr>
+</table>
+
+<h2>四、PDF 的真相</h2>
+
+<div class="callout">
+  <strong>你给的那份报价单 PDF，内部是一张整页位图</strong>
+  595×842pt 的 A4 页面上，只嵌了一张 <b>1920×2558 的位图</b>，文字层完全为空
+  （pdfminer 提取文字长度为 0）。也就是说：原系统出 PDF 的方式是「把网页渲染成图，再包进 PDF」，
+  不是矢量排版。<br>
+  我已把这张图原样抽出来：<code>03. 三期\_原始报价单_参考图.png</code>（1920×2558），
+  另存了一份 PDF 原件：<code>_原始报价单样例.pdf</code>。
+</div>
+
+<p><b>这对复刻意味着什么：</b></p>
+<ul>
+  <li>无法从 PDF 里取字号、行距、坐标（没有文本对象）——只能按图像目测比例；</li>
+  <li>但好处是：<b>「一模一样」的标准就是这张图</b>，我用浏览器把新页面渲染成 1920 宽的图，逐块对照即可；</li>
+  <li>版式已确认是<b>信件式</b>而非表格：抬头 → 编号/电话 → 客户 → 居中标题 → 工作地點/服務範圍/工作細則/採用藥物/工作日期 → 服務費用（金额右对齐）→ 付款方法 → 備註 → 左签名右「接納及確認」。</li>
+</ul>
+
+<h2>五、这轮材料暴露的差距</h2>
+<table>
+  <tr><th style="width:26%">项目</th><th style="width:12%">现状</th><th>说明</th></tr>
+  <tr><td>列表页</td><td><span class="tag part">部分</span></td><td>页面在，但筛选器数量、页签、页签分页、导入导出按钮缺</td></tr>
+  <tr><td>新建/编辑/查看页</td><td><span class="tag no">缺</span></td><td>约 45 个页面（每个对象 3 套），是最大的缺口</td></tr>
+  <tr><td>PDF 版式</td><td><span class="tag no">错</span></td><td>我做成了表格式，实际是信件式，需重做</td></tr>
+  <tr><td>后端</td><td><span class="tag">不可得</span></td><td>托管平台，无源码；已有表结构与 API 契约可照着重写</td></tr>
+</table>
+
+<h2>六、目录</h2>
+<pre><code>05. 源码分析/
+├─ 源码分析说明.html          ← 本页
+├─ frontend/
+│  ├─ app.js                  主包（818 KB）
+│  ├─ chunks/                 133 个页面分块
+│  └─ beautified/             反混淆版（app.js + chunks）
+├─ backend/
+│  ├─ _schema.json            40 表 / 559 字段
+│  ├─ _probe_report.json      应用级接口探测结果（401/404 证据）
+│  └─ app.json 等             探测到的可用响应
+└─ 交互审计/
+   ├─ _交互审计.json           34 页 DOM 清单
+   └─ _弹窗表单审计.json        10 个新增弹窗字段</code></pre>
+
+<footer>
+  材料来源：对 standardcpc.base44.app 的实际抓取与接口探测 · 2026-10-24<br>
+  仅供内部重建分析使用，不对外分发
+</footer>
+
+</div>
+</body>
+</html>

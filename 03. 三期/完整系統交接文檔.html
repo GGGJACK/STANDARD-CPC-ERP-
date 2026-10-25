@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>標準清潔滅蟲 · 完整交接文檔 v2</title>
+<style>
+:root{--ink:#15181c;--ink2:#4a5158;--ink3:#828a93;--line:#e4e7eb;--soft:#f6f7f9;--brand:#0f6e56;--brand-soft:#e9f5f0;--warn:#9a5b00;--warn-soft:#fdf4e6;--risk:#a32d2d;--risk-soft:#fceceb;--blue:#1f5f9e;--blue-soft:#eaf2fa}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;background:#eef0f3;color:var(--ink);font-size:14.5px;line-height:1.75;font-family:"PingFang SC","Microsoft YaHei","Hiragino Sans GB",system-ui,sans-serif}
+.wrap{display:flex;max-width:1280px;margin:0 auto;background:#fff;min-height:100vh}
+nav{width:248px;flex:none;padding:32px 0 80px;border-right:1px solid var(--line);position:sticky;top:0;height:100vh;overflow:auto;background:#fbfcfd}
+nav .t{font-size:10.5px;letter-spacing:.16em;color:var(--ink3);padding:0 20px 10px}
+nav a{display:block;padding:6px 20px;font-size:12.8px;color:var(--ink2);text-decoration:none;border-left:3px solid transparent}
+nav a:hover{background:#f2f4f6;color:var(--ink)}
+nav a.sub{padding-left:32px;font-size:12px;color:var(--ink3)}
+main{flex:1;padding:48px 56px 90px;min-width:0}
+@media(max-width:900px){nav{display:none}main{padding:22px 16px 60px}}
+header{border-bottom:2px solid var(--ink);padding-bottom:20px;margin-bottom:28px}
+.kicker{font-size:11px;letter-spacing:.2em;color:var(--ink3);text-transform:uppercase;margin-bottom:9px}
+h1{font-size:26px;margin:0 0 10px;font-weight:600;line-height:1.35}
+.sub{color:var(--ink2);font-size:13.5px}
+h2{font-size:19px;margin:44px 0 12px;font-weight:600;padding-left:12px;border-left:4px solid var(--brand);scroll-margin-top:16px}
+h3{font-size:15px;margin:24px 0 8px;font-weight:600}
+p{margin:9px 0}small{color:var(--ink3)}
+code{background:var(--soft);padding:1px 5px;border-radius:4px;font-size:12.3px;font-family:ui-monospace,Consolas,monospace;color:#2a3a4a}
+pre{background:#1e242b;color:#dfe6ee;padding:14px 16px;border-radius:8px;overflow:auto;font-size:12.2px;line-height:1.6}
+pre code{background:none;color:inherit;padding:0}
+table{width:100%;border-collapse:collapse;margin:14px 0;font-size:12.8px}
+th,td{border:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top}
+th{background:var(--soft);font-weight:600;font-size:12.2px;color:var(--ink2)}
+td.n{text-align:right;font-variant-numeric:tabular-nums}
+.tag{display:inline-block;padding:0 8px;border-radius:9px;font-size:11px;line-height:1.7;white-space:nowrap;font-weight:500}
+.ok{background:var(--brand-soft);color:var(--brand)}.part{background:var(--warn-soft);color:var(--warn)}
+.no{background:var(--risk-soft);color:var(--risk)}.info{background:var(--blue-soft);color:var(--blue)}
+.callout{background:var(--brand-soft);border-left:3px solid var(--brand);padding:12px 16px;margin:16px 0;border-radius:0 7px 7px 0}
+.callout.warn{background:var(--warn-soft);border-color:var(--warn)}
+.callout.risk{background:var(--risk-soft);border-color:var(--risk)}
+.callout.info{background:var(--blue-soft);border-color:var(--blue)}
+.callout strong{display:block;margin-bottom:3px}
+ul,ol{margin:8px 0;padding-left:21px}li{margin:5px 0}
+.kpis{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin:16px 0}
+@media(max-width:800px){.kpis{grid-template-columns:repeat(2,1fr)}}
+.kpi{border:1px solid var(--line);border-radius:9px;padding:13px 14px;background:#fff}
+.kpi b{display:block;font-size:20px;color:var(--brand);line-height:1.3;font-variant-numeric:tabular-nums}
+.kpi span{font-size:11.5px;color:var(--ink3)}
+.flow{display:flex;flex-wrap:wrap;align-items:center;gap:7px;margin:14px 0;font-size:12.5px}
+.flow span{border:1px solid var(--line);border-radius:6px;padding:6px 11px;background:var(--soft)}
+.flow i{color:var(--ink3);font-style:normal}
+.check{list-style:none;padding-left:0}
+.check li{position:relative;padding-left:28px;margin:10px 0}
+.check li:before{content:"";position:absolute;left:0;top:5px;width:15px;height:15px;border:1.5px solid #b9c0c8;border-radius:4px}
+.steps{counter-reset:s;list-style:none;padding-left:0}
+.steps li{counter-increment:s;position:relative;padding-left:38px;margin:14px 0}
+.steps li:before{content:counter(s);position:absolute;left:0;top:1px;width:24px;height:24px;border-radius:50%;background:var(--brand);color:#fff;text-align:center;font-size:12px;line-height:24px;font-weight:600}
+footer{margin-top:54px;padding-top:16px;border-top:1px solid var(--line);font-size:12.2px;color:var(--ink3)}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav>
+  <div class="t">目录</div>
+  <a href="#s0">0 · 一页速览</a>
+  <a href="#s1">1 · 如何访问原系统</a>
+  <a href="#s2">2 · 如何访问现在的系统</a>
+  <a href="#s3">3 · 到底缺什么</a>
+  <a href="#s3a" class="sub">3.1 72 项逐条状态</a>
+  <a href="#s3b" class="sub">3.2 四类缺口</a>
+  <a href="#s3c" class="sub">3.3 缺口的优先级</a>
+  <a href="#s4">4 · 如何审查</a>
+  <a href="#s4a" class="sub">4.1 页面级对照</a>
+  <a href="#s4b" class="sub">4.2 交互级对照</a>
+  <a href="#s4c" class="sub">4.3 数据级核对</a>
+  <a href="#s4d" class="sub">4.4 权限级核对</a>
+  <a href="#s4e" class="sub">4.5 版式级核对</a>
+  <a href="#s4f" class="sub">4.6 记录方式</a>
+  <a href="#s5">5 · 注定不一样的偏差</a>
+  <a href="#s6">6 · 数据资产</a>
+  <a href="#s7">7 · 上线与运维</a>
+  <a href="#s8">8 · 开发交接</a>
+  <a href="#s9">9 · 附录</a>
+</nav>
+<main>
+
+<header>
+  <div class="kicker">Master Handover v2 · 2026-10-24 19:20</div>
+  <h1>標準清潔滅蟲 · 管理系統<br>完整交接文檔 v2</h1>
+  <div class="sub">本版取代之前的一期/二期/三期分冊。核心内容：<b>两套系统怎么访问</b>、<b>到底缺什么</b>、<b>怎么审查</b>。</div>
+</header>
+
+<h2 id="s0">0 · 一页速览</h2>
+
+<div class="kpis">
+  <div class="kpi"><b>36</b><span>新系统可用页面</span></div>
+  <div class="kpi"><b>93</b><span>原系统页面（含新建/编辑/查看）</span></div>
+  <div class="kpi"><b>13</b><span>完全一致</span></div>
+  <div class="kpi"><b>34</b><span>部分实现</span></div>
+  <div class="kpi"><b>23</b><span>尚未实现</span></div>
+</div>
+
+<div class="callout risk">
+  <strong>三句话说清现状</strong>
+  ① <b>能看，能查，能算钱</b>——36 个页面在用真实数据跑，权限、配额、审计、报价转发票、收款核销都通了；<br>
+  ② <b>不能开单</b>——原系统每个业务对象都有「新建/编辑/查看」三套页面（共约 60 个），我只做了列表，这是最大缺口；<br>
+  ③ <b>PDF 版式做错了</b>——我做成了表格，原版是信件式，需要用你给的样本重做。
+</div>
+
+<h2 id="s1">1 · 如何访问原系统</h2>
+
+<h3>1.1 地址与入口</h3>
+<table>
+  <tr><th style="width:24%">项</th><th>值</th></tr>
+  <tr><td>主网址</td><td><code>https://standardcpc.base44.app</code></td></tr>
+  <tr><td>登录页</td><td><code>https://standardcpc.base44.app/login</code></td></tr>
+  <tr><td>直接开业务页</td><td>如 <code>/quotations</code>、<code>/customers</code>；未登录会自动跳到 <code>/login?from_url=…</code></td></tr>
+  <tr><td>手机访问</td><td>同一网址，Safari / Chrome 都可</td></tr>
+  <tr><td>平台后台</td><td><code>https://base44.app</code>（这是 Base44 平台的开发者后台，<b>只有应用所有者能进</b>）</td></tr>
+</table>
+
+<h3>1.2 登录方式（三种，都在登录页）</h3>
+<ol>
+  <li><b>Continue with Google</b> —— 用任意 Google 账号<br>
+      <small>页面下方还有一行 <code>Need an account? Sign up</code>，说明<b>自助注册是开着的</b>，任何有 Google 账号的人都能注册进来</small></li>
+  <li><b>邮箱 + 密码</b> —— 用注册时填的邮箱</li>
+  <li><b>Forgot password</b> —— 走邮箱重置</li>
+</ol>
+
+<div class="callout warn">
+  <strong>目前在用的账号</strong>
+  高恩靖 · <code>enjinggao36@gmail.com</code>，登录后右上角显示角色为 <b><code>user</code></b>（不是 admin）。<br>
+  这个账号能读全部业务数据（客户 1,608、报价 1,826、发票 205…），但<b>不能</b>读用户列表、不能改系统设置、不能删数据。
+</div>
+
+<h3>1.3 你方对原系统的真实权限边界</h3>
+<table>
+  <tr><th style="width:40%">能做</th><th>不能做</th></tr>
+  <tr>
+    <td>用现有账号登录、浏览、导出 CSV（界面上的导出按钮）</td>
+    <td>改密码归属、转移所有权、关闭自助注册</td>
+  </tr>
+  <tr>
+    <td>读 40 张表的全部数据（含已删除记录）</td>
+    <td>读 <code>User</code> 表（HTTP 403「Only collaborators can view the list of users」）</td>
+  </tr>
+  <tr>
+    <td>打开各页面的「新增/编辑」表单（填了不提交不会污染数据）</td>
+    <td>删除平台上的数据、改实体结构、看平台账单</td>
+  </tr>
+  <tr>
+    <td>—</td>
+    <td>阻止应用所有者（离职员工）改密码或关停应用</td>
+  </tr>
+</table>
+
+<h3>1.4 访问原系统的风险（必须知道）</h3>
+<div class="callout risk">
+  <strong>应用是用离职员工的个人邮箱注册的</strong>
+  这意味着：他随时可以改密码、关停应用、导出全部客户与报价。<b>你们现在的访问权，完全建立在他的「不作为」之上。</b><br>
+  建议（按先后）：① 现在就不要再在旧系统里新建任何数据；② 由 HR 或律师发一封正式函件要求移交或书面确认删除（留痕，不是为了他会照做）；
+  ③ 所有业务逐步切到新系统；④ 旧系统保留只读 6–12 个月后再议处置。
+</div>
+<p><b>登不上时怎么办：</b></p>
+<ul>
+  <li>提示密码错误 → 用「Continue with Google」试（多数人其实是 Google 登录）</li>
+  <li>提示应用不存在 → 应用可能已被关停，立刻检查备份是否完整</li>
+  <li>页面转圈不动 → 先试无痕窗口；仍不行说明平台侧问题，隔 30 分钟再试</li>
+</ul>
+
+<h2 id="s2">2 · 如何访问现在的系统</h2>
+
+<h3>2.1 启动（三步）</h3>
+<ol class="steps">
+  <li>确认电脑装了 <b>Node.js 22 或以上</b>：开命令行输入 <code>node -v</code>，能看到版本号即可</li>
+  <li>双击 <code>F:\04 STANDARD CPC SYSTEM\03. 三期\系统代码\启动系统.bat</code></li>
+  <li>浏览器打开 <code>http://127.0.0.1:3000/login</code></li>
+</ol>
+<div class="callout info">
+  <strong>启动窗口要一直开着</strong>
+  那个黑窗口就是服务器。关掉它，网站就打不开了（但数据不会丢，都在 <code>data.db</code> 里）。<br>
+  窗口里会打印两行地址：第一行是<b>本机</b>，第二行是<b>同一 WiFi 的手机/同事</b>可用的局域网地址（形如 <code>http://192.168.x.x:3000</code>）。
+</div>
+
+<h3>2.2 账号</h3>
+<table>
+  <tr><th>角色</th><th>账号</th><th>密码</th><th>能进的分组</th></tr>
+  <tr><td>管理層</td><td>enjinggao36@gmail.com</td><td>demo1234</td><td>全部 + 管理後台</td></tr>
+  <tr><td>辦公室</td><td>office@demo.hk</td><td>demo1234</td><td>主要功能 · 前線 · 市場 · 營運</td></tr>
+  <tr><td>會計</td><td>acc@demo.hk</td><td>demo1234</td><td>市場 · 營運 · 公司財務</td></tr>
+  <tr><td>前線員工</td><td>front@demo.hk</td><td>demo1234</td><td>主要功能 · 前線員工</td></tr>
+</table>
+<p>登录页底部有四个快捷按钮（辦公室/前線/會計/管理層），点一下直接进，<b>不用输密码</b>，方便演示。</p>
+
+<h3>2.3 日常操作</h3>
+<table>
+  <tr><th style="width:26%">要做的事</th><th>怎么做</th></tr>
+  <tr><td>停止系统</td><td>关掉命令行窗口，或按 Ctrl+C</td></tr>
+  <tr><td>重新登录所有人</td><td>重启系统即可（会话存在内存，重启即失效）</td></tr>
+  <tr><td>备份数据</td><td>直接复制 <code>系统代码\data.db</code> 这一个文件（关掉服务再复制更稳）</td></tr>
+  <tr><td>重置数据（回到初始）</td><td>先停服务，再执行 <code>node seed.mjs</code>，会用 <code>02. 数据导出</code> 重新建库</td></tr>
+  <tr><td>换端口</td><td>命令行前加 <code>PORT=3100 node server.mjs</code></td></tr>
+  <tr><td>让外网访问</td><td>本地做不到，需要部署到服务器（见第 7 节）</td></tr>
+</table>
+
+<h3>2.4 打不开时的排查顺序</h3>
+<table>
+  <tr><th style="width:30%">现象</th><th>原因与处理</th></tr>
+  <tr><td><code>node</code> 不是内部命令</td><td>没装 Node，或没加入 PATH。装 Node 22 LTS 后重开命令行</td></tr>
+  <tr><td>窗口一闪就没了</td><td>通常是端口被占用。换成 <code>PORT=3100</code> 再启，或关掉占用 3000 的程序</td></tr>
+  <tr><td>浏览器「无法访问此网站」</td><td>服务没在跑。看命令行窗口是否还开着、有没有报错</td></tr>
+  <tr><td>打开是登录页，登录后又回登录页</td><td>服务重启过，会话失效。重新点快捷按钮即可</td></tr>
+  <tr><td>看到「你沒有權限查看此頁」</td><td>正常的权限拦截。用对应角色的账号登录，或到管理後台确认</td></tr>
+  <tr><td>客户页一直「資料暫時無法載入」</td><td>办公室角色配额用完（每日 50 次），或当前不在工作时段。管理员在后台可追加额度 / 关时间窗</td></tr>
+  <tr><td>手机打不开局域网地址</td><td>不在同一 WiFi，或 Windows 防火墙拦了。放行 Node 的入站即可</td></tr>
+</table>
+
+<h2 id="s3">3 · 到底缺什么</h2>
+
+<p>原系统真正的页面数是 <b>93 个</b>（从 133 个前端分块里剔掉图标和工具后得出），不是菜单上的 34 个——
+因为<b>每个业务对象都有「新建 / 编辑 / 查看」三套独立页面</b>。这是本次核对最重要的发现。</p>
+
+<h3 id="s3a">3.1 逐条状态（完整表见 <code>03. 三期\_審查核對表.csv</code>）</h3>
+
+<table>
+  <tr><th style="width:9%">状态</th><th style="width:8%">数量</th><th>含义</th></tr>
+  <tr><td><span class="tag ok">完成</span></td><td class="n">13</td><td>页面、数据、交互基本一致，可直接用</td></tr>
+  <tr><td><span class="tag part">部分</span></td><td class="n">34</td><td>页面在、数据在，但缺页签/筛选器/新增按钮/详情版式</td></tr>
+  <tr><td><span class="tag no">缺</span></td><td class="n">23</td><td>完全没有：新建页、编辑页、查看页、导入、合并等</td></tr>
+  <tr><td><span class="tag">空</span></td><td class="n">2</td><td>原系统本身就是 0 笔数据（補給記錄、地址庫）</td></tr>
+</table>
+
+<h3 id="s3b">3.2 四类缺口，按性质分</h3>
+
+<h4 style="font-size:14px;margin:18px 0 6px">① 页面级缺口（最严重，23 个）</h4>
+<table>
+  <tr><th style="width:18%">类别</th><th>具体页面</th><th style="width:10%">数量</th></tr>
+  <tr><td>新建页</td><td>CreateQuotation、CreateInvoice、CreatePurchaseOrder、CreateDeliveryNote、CreateBill、CreatePayment、CreateTransaction、CreateLead</td><td class="n">8</td></tr>
+  <tr><td>编辑页</td><td>EditQuotation、EditInvoice、EditPurchaseOrder、EditContract、EditReceipt</td><td class="n">5</td></tr>
+  <tr><td>查看页</td><td>ViewQuotation、ViewCustomer、ViewInvoice、ViewReceipt、ViewContract、ViewPurchaseOrder、ViewDeliveryNote、ViewBill、ViewPayment、ViewLead、ViewEmployee、ViewProduct、ViewService、ViewSupplier、ViewVehicle</td><td class="n">15</td></tr>
+  <tr><td>专项页</td><td>PublicReportView（客户公开报告）、SignCertificate（签署证书）、WorkingSchedulePDF、CompletionCertificateInlinePreview（工程满意纸）、TollEmailImport（易通行费用导入）、ImportQuotations（批量导入）、CustomerMergeDialog（客户合并）、GeneralLedger（总账）、Accounts（科目表）、Payments、Bills、Leads、FollowUps、RecurringSchedules</td><td class="n">14</td></tr>
+</table>
+<p><small>注：部分「查看页」我用了统一详情页替代（如 <code>/customers/:id</code>），功能有但版式不同，所以在表里标「部分」而非「缺」。</small></p>
+
+<h4 style="font-size:14px;margin:18px 0 6px">② 交互级缺口（页面在，但操作不全）</h4>
+<table>
+  <tr><th style="width:20%">页面</th><th>缺的交互</th></tr>
+  <tr><td>滅蟲工作</td><td>「今日工作 / 所有工作」页签；按年/按月/按日切换；狀態與種類篩選</td></tr>
+  <tr><td>服務計劃</td><td>地區分組页签（全港 9 / 香港 1 / 九龍 1 / 新界 2 / 離島 0 / 未分類 5 / 已結束 3）；新增服務計劃</td></tr>
+  <tr><td>客戶管理</td><td>匯出 CSV / 匯入 CSV 按钮；類型與主客戶篩選；頁碼分頁（原系统底部有 1 2 3…33）</td></tr>
+  <tr><td>報價管理</td><td>垃圾桶 (N)；導出/導入/批量導入；6 个筛选器（年份/類型/階段/員工/工作單位/投標方式）</td></tr>
+  <tr><td>採購單</td><td>服務/產品页签（868 / 34）；年份/月份/狀態/工作狀態四个筛选；工程滿意紙入口</td></tr>
+  <tr><td>排班管理</td><td>打印按钮；新增排班；拖拽调整</td></tr>
+  <tr><td>車輛/請假/合約/員工/工作單位</td><td>页面上有「新增」按钮，我这边只有部分接了表单</td></tr>
+</table>
+
+<h4 style="font-size:14px;margin:18px 0 6px">③ 版式级缺口</h4>
+<div class="callout risk">
+  <strong>报价单 PDF 做错了版式</strong>
+  我做成了「表格式明细 + 合计」，而原版是<b>信件式</b>：<br>
+  抬头（LOGO + 中英文公司全称 + 地址电话传真邮箱）→ 報價單編號 / TEL → 客戶與 Attn → 居中标题「滅鼠服務報價」→
+  工作地點 / 服務範圍 / 工作細則 / 採用藥物 / 工作日期 → 服務費用（<b>金额右对齐，无表格线</b>）→ 付款方法 → 備註(1)(2)(3) →
+  左下公司签名 + 總經理 蕭啟然 + 日期，右下「接納及確認」+ 横线 + 「簽署及(公司)蓋章」。<br>
+  你给的 PDF 已抽成 <code>_原始报价单_参考图.png</code>（1920×2558），这就是比对基准。
+</div>
+
+<h4 style="font-size:14px;margin:18px 0 6px">④ 数据级与非功能缺口</h4>
+<table>
+  <tr><th style="width:26%">项</th><th>说明</th></tr>
+  <tr><td>人员账号（50 个）</td><td>原系统 <code>User</code> 表 403 拿不到；<code>Employee</code> 表 0 笔。现只有 4 个演示账号，员工管理里是<b>从排班反推的 9 个名字</b></td></tr>
+  <tr><td>会计凭证 / 科目表 / 总账</td><td>只做了开票-收款-应收的汇总，没有复式记账</td></tr>
+  <tr><td>邮件 / WhatsApp / 手机推送</td><td>通知只在站内，没接外部通道</td></tr>
+  <tr><td>附件在系统内预览</td><td>943 MB 附件已下载，但系统里没有入口能点开看</td></tr>
+  <tr><td>修改密码 / 用户自助</td><td>个人设置里只显示资料，改密未做</td></tr>
+  <tr><td>HTTPS / 登录失败锁定 / 强密码策略</td><td>本地演示不需要，上公网前必须补</td></tr>
+</table>
+
+<h3 id="s3c">3.3 缺口的优先级</h3>
+<table>
+  <tr><th style="width:8%">序</th><th style="width:30%">先补什么</th><th>为什么</th></tr>
+  <tr><td>1</td><td>报价单信件式 PDF</td><td>你已有样本可比对；它是办公室每天真正在用的产出</td></tr>
+  <tr><td>2</td><td>新建报价单 / 新建客户 / 新建采购单 / 新建排班</td><td>四个高频动作，表单字段已从弹窗审计里拿到</td></tr>
+  <tr><td>3</td><td>列表页的筛选器、页签、页码分页、导入导出按钮</td><td>工作量小、可见度高，能迅速"看起来一样"</td></tr>
+  <tr><td>4</td><td>编辑页与查看页</td><td>数量多但模式统一，可批量做</td></tr>
+  <tr><td>5</td><td>会计凭证、附件预览、通知通道</td><td>属于增强，不影响"能不能替换旧系统"</td></tr>
+</table>
+
+<h2 id="s4">4 · 如何审查</h2>
+
+<p>审查不是"看一眼像不像"。下面五套方法，<b>每一套都能给出可判定的结论</b>。</p>
+
+<h3 id="s4a">4.1 页面级对照（四列法）</h3>
+<ol class="steps">
+  <li>打开原系统某一页，整页截图（或看 <code>01. 截图\</code> 里已抓的 34 张）</li>
+  <li>打开新系统对应页，同样截图</li>
+  <li>只对四样东西，逐项打勾：<b>①表头列及顺序 ②按钮及位置 ③筛选器 ④行内操作</b></li>
+  <li>四项全对 = 完成；缺 1–2 项 = 部分；页面不存在 = 缺</li>
+</ol>
+<div class="callout">
+  <strong>判定口径要统一</strong>
+  「字段多一个 / 少一个」算部分；「列顺序不同」也算部分；「颜色/字号不同」<b>不算</b>，那属于版式，走 4.5。
+</div>
+
+<h3 id="s4b">4.2 交互级对照（点开弹窗对字段）</h3>
+<p>列表页长得像不算数，<b>点「新增」才是真功夫</b>。逐页点开原系统的「新增」按钮，数三样：</p>
+<ul>
+  <li>字段个数（例：客戶 12 项、採購單 17 项、合約 14 项、員工 9 项、車輛 6 项、請假 7 项、排班 5 项、庫存調整 8 项）</li>
+  <li>哪些是必填（原系统用 <code>*</code> 标注）</li>
+  <li>下拉的选项内容（例：客戶類型＝標準/行家/主客戶；採購工作狀態＝待安排/已安排/進行中/已完成）</li>
+</ul>
+<p>这些已全部抓在 <code>05. 源码分析\交互审计\_弹窗表单审计.json</code> 里，可直接对照。</p>
+
+<h3 id="s4c">4.3 数据级核对（数字必须对得上）</h3>
+<table>
+  <tr><th style="width:34%">核对点</th><th>原系统</th><th>新系统应显示</th></tr>
+  <tr><td>客户总数</td><td>列表底部「共 1,608 筆」</td><td>1,608</td></tr>
+  <tr><td>报价单（含垃圾桶）</td><td>1,796 + 垃圾桶 30</td><td>1,826 / 垃圾桶 30</td></tr>
+  <tr><td>采购单</td><td>902（待安排 94 / 已安排 601 / 已完成 187）</td><td>同</td></tr>
+  <tr><td>送货单</td><td>1,011 + 垃圾桶 15</td><td>1,026</td></tr>
+  <tr><td>发票 / 收据</td><td>205 / 57</td><td>同</td></tr>
+  <tr><td>排班（2026-10）</td><td>月历每日条目数</td><td>本月 1,974 项</td></tr>
+</table>
+<p><b>更硬的核对：</b>在新系统点「匯出 CSV」，用 Excel 数行数，与 <code>02. 数据导出\csv</code> 里的同名文件对——行数一致才算数据整体搬对了。</p>
+<pre><code># 直接查新系统数据库
+node -e "const{DatabaseSync}=require('node:sqlite');const d=new DatabaseSync('data.db');
+console.log(d.prepare('SELECT COUNT(*) c FROM customers').get())"</code></pre>
+
+<h3 id="s4d">4.4 权限级核对（四角色 × 关键页）</h3>
+<p>用四个快捷账号各登一次，按下表核对「能不能进」。<b>关键：不是看菜单有没有藏，而是直接敲网址能不能进。</b></p>
+<table>
+  <tr><th style="width:24%">页面</th><th>前線</th><th>辦公室</th><th>會計</th><th>管理層</th></tr>
+  <tr><td>/customers</td><td>403</td><td>200（打码）</td><td>200</td><td>200</td></tr>
+  <tr><td>/quotations</td><td>403</td><td>200（金额遮）</td><td>200</td><td>200</td></tr>
+  <tr><td>/invoices</td><td>403</td><td>403</td><td>200</td><td>200</td></tr>
+  <tr><td>/receivables</td><td>403</td><td>403</td><td>200</td><td>200</td></tr>
+  <tr><td>/users · /settings</td><td>403</td><td>403</td><td>403</td><td>200</td></tr>
+</table>
+
+<h3 id="s4e">4.5 版式级核对（PDF）</h3>
+<ol class="steps">
+  <li>打开新系统报价单详情 → 点「列印 / 出 PDF」</li>
+  <li>浏览器选 A4、边距默认、勾「背景图形」→ 另存 PDF</li>
+  <li>把它转成图片，与 <code>_原始报价单_参考图.png</code> 并排看</li>
+  <li>只比七处：<b>抬头位置 · 编号行 · 客户块 · 标题居中 · 正文标签对齐 · 金额右对齐 · 签名与「接納及確認」位置</b></li>
+</ol>
+<p><small>字体不可能完全一样（原版是位图渲染，中文用的是系统字体），所以比的是<b>位置与结构</b>，不是像素。</small></p>
+
+<h3 id="s4f">4.6 怎么记录审查结果</h3>
+<p>用 <code>03. 三期\_審查核對表.csv</code>（Excel 直接打开）。表头已预置：</p>
+<pre><code>分組 | 原系統頁面 | 原系統路徑 | 新系統路由 | 狀態 | 備註/差異 | 表頭核對 | 按鈕核對 | 篩選核對 | 審查人 | 日期</code></pre>
+<p>后四列留空给你填：核对过就打 <code>√</code>，不一致就写清差在哪。<b>这张表就是验收依据</b>——72 行全部打勾，才算复刻完成。</p>
+
+<h2 id="s5">5 · 注定不一样的偏差（不必当成 bug）</h2>
+<table>
+  <tr><th style="width:26%">偏差</th><th>原因</th></tr>
+  <tr><td>人员是 4 个演示账号</td><td>原系统 User 表 403，50 个真实账号取不到</td></tr>
+  <tr><td>员工管理只有 9 个名字</td><td>同样原因，这 9 个是从排班指派记录反推的</td></tr>
+  <tr><td>「服務管理」「供應商管理」的口径</td><td>原表 Service 21 笔、Supplier 151 笔；新系统暂用报价明细/产品档归纳，数字会不同</td></tr>
+  <tr><td>会计系统显示 205 张发票，原系统会计页签显示 200</td><td>原系统会计口径过滤了 5 笔（如已取消），数据本身没少</td></tr>
+  <tr><td>补给记录、地址库、Leads、FollowUps 是空页</td><td>原系统这些表本来就是 0 笔，不是我没做</td></tr>
+  <tr><td>PDF 字体不同</td><td>原版是整页位图（1920×2558），新系统是 HTML 渲染，字体会走系统字体</td></tr>
+  <tr><td>数据只到 2026-10-24</td><td>导出那天的快照；之后旧系统新产生的数据没进来</td></tr>
+  <tr><td>办公室访问客户会「像故障一样」被拦</td><td>这是设计要求（静默拦截），不是 bug</td></tr>
+</table>
+
+<h2 id="s6">6 · 数据资产</h2>
+<table>
+  <tr><th>内容</th><th>位置</th><th class="n">规模</th></tr>
+  <tr><td>结构化数据（42 表全字段）</td><td><code>F:\03 Standard CPC DataBase\02. 数据导出\json</code></td><td class="n">34,046 笔</td></tr>
+  <tr><td>Excel 版</td><td><code>…\02. 数据导出\csv</code></td><td class="n">21 MB</td></tr>
+  <tr><td>附件</td><td><code>…\03. 附件</code></td><td class="n">2,012 个 / 943 MB</td></tr>
+  <tr><td>页面截图</td><td><code>…\01. 截图</code></td><td class="n">34 张</td></tr>
+  <tr><td>新系统数据库</td><td><code>04 STANDARD CPC SYSTEM\03. 三期\系统代码\data.db</code></td><td class="n">28 表 / 31,610 行</td></tr>
+  <tr><td>原系统源码分析</td><td><code>04 STANDARD CPC SYSTEM\05. 源码分析</code></td><td class="n">134 文件 / 40 表结构 / 审计</td></tr>
+  <tr><td>PDF 参考图</td><td><code>03. 三期\_原始报价单_参考图.png</code></td><td class="n">1920×2558</td></tr>
+  <tr><td>审查核对表</td><td><code>03. 三期\_審查核對表.csv</code></td><td class="n">72 行</td></tr>
+</table>
+
+<h2 id="s7">7 · 上线与运维</h2>
+<h3>7.1 上线前六件事</h3>
+<ol>
+  <li>SQLite → PostgreSQL，遮蔽下沉为视图 + 行级安全</li>
+  <li>附件接对象存储（阿里云 OSS 香港），按 <code>表/记录ID/字段</code> 上传</li>
+  <li>备份：每日 <code>pg_dump</code> + 附件增量；办公室电脑用 rclone 每日拉一份到机械盘；<b>超 24 小时没备份就告警</b></li>
+  <li>HTTPS（Let's Encrypt）</li>
+  <li>按真实名单开号，首次登录强制改密</li>
+  <li>压测：50 并发开客户列表与报价单</li>
+</ol>
+<h3>7.2 服务器</h3>
+<p><b>阿里云轻量应用服务器 · 香港 · 4 核 8G · 100GB ESSD · 5Mbps · Ubuntu 24.04</b>（约 ¥250–400/月）。
+附件走 OSS 直连，不占服务器带宽。域名 + HTTPS 另计。</p>
+
+<h2 id="s8">8 · 开发交接</h2>
+<h3>8.1 代码结构</h3>
+<pre><code>03. 三期/
+├─ 完整系統交接文檔.html      ← 本页
+├─ _審查核對表.csv            72 项审查清单
+├─ _原始报价单样例.pdf        你提供的原件
+├─ _原始报价单_参考图.png     从中抽出的基准图
+└─ 系统代码/
+   ├─ 启动系统.bat            双击运行（勿移动）
+   ├─ server.mjs              全部后端（路由/权限/配额/审计/打印）
+   ├─ seed.mjs                从 02. 数据导出 重建库
+   └─ data.db                 28 表 / 31,610 行 / 11 MB</code></pre>
+
+<h3>8.2 加一个模块的四步</h3>
+<ol>
+  <li><code>seed.mjs</code> 建表导入（字段名沿用原系统）</li>
+  <li><code>server.mjs</code> 加路由：列表 + 详情</li>
+  <li>详情先 <code>audit()</code> 落审计，再按角色决定输出字段</li>
+  <li><code>NAV</code> 常量加一行 <code>[路径, 名称, 高亮key, 允许角色]</code></li>
+</ol>
+
+<h3>8.3 五个不要改坏的地方</h3>
+<div class="callout risk">
+  <strong>① 遮蔽必须在服务端</strong>　字段不出库才算遮住。<br>
+  <strong>② 拦截不要用 403</strong>　用 200 + 中性文案，403 会暴露机制。<br>
+  <strong>③ 计数不要放前端</strong>　改时钟、刷新就绕过了。<br>
+  <strong>④ 路由顺序</strong>　<code>/invoices/:id</code> 会吃掉 <code>/invoices/:id/receipt</code>，详情路由要排除子路径。<br>
+  <strong>⑤ 启动脚本不能含中文路径</strong>　cmd 按 GBK 解析 .bat，只能用 <code>%~dp0</code>。
+</div>
+
+<h2 id="s9">9 · 附录</h2>
+<h3>9.1 运行参数</h3>
+<table>
+  <tr><th style="width:26%">参数</th><th style="width:18%">当前值</th><th>含义</th></tr>
+  <tr><td>quota_limit</td><td>50</td><td>办公室每人每日客户查看上限</td></tr>
+  <tr><td>work_start / work_end</td><td>08:30 / 18:00</td><td>允许查看时段</td></tr>
+  <tr><td>work_weekdays</td><td>1,2,3,4,5</td><td>工作日（周六已排除）</td></tr>
+  <tr><td>window_enforced</td><td>0（演示中）</td><td>时间窗总开关，上线前改回 1</td></tr>
+</table>
+
+<h3>9.2 术语</h3>
+<table>
+  <tr><th style="width:20%">词</th><th>意思</th></tr>
+  <tr><td>遮蔽</td><td>服务端就把「林小姐」换成「林XX」、总额换成「•••••」</td></tr>
+  <tr><td>静默拦截</td><td>超限时显示得像系统故障，不暴露真实原因</td></tr>
+  <tr><td>信件式</td><td>报价单的版式类型：整篇像一封信，带标签与段落，不用表格线</td></tr>
+  <tr><td>四列法</td><td>页面审查的判定口径：表头 / 按钮 / 筛选 / 行操作</td></tr>
+</table>
+
+<footer>
+  標準清潔滅蟲 · 管理系統復刻 — 完整交接文檔 v2 · 2026-10-24<br>
+  本版取代 <code>01. 一期</code> / <code>02. 二期</code> 内的分册文档；所有数字来自实际读取与运行验证，未使用估算值。
+</footer>
+
+</main>
+</div>
+</body>
+</html>

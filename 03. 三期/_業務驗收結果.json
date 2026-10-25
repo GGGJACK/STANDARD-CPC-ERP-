@@ -1,0 +1,2078 @@
+{
+  "base": "http://127.0.0.1:3100",
+  "database": "C:/Users/Lenovo/WorkBuddy/2026-10-24-16-04-13/out/cpc-test-v4-r4.db",
+  "runId": "mvmepkt5",
+  "passed": 411,
+  "failed": 0,
+  "total": 411,
+  "state": {
+    "ids": {
+      "customer": "t_mvmepkt5_cust",
+      "quotation": "t_mvmepkt5_quote",
+      "po": "pur_mvmepw36_7fe72489eae6",
+      "contract": "con_mvmepw3b_d3a964ba78fa",
+      "invoice": "inv_mvmepw3f_8180c4a33062",
+      "receipt": "rec_mvmepw3j_8c4b72c872ac",
+      "dn": "t_mvmepkt5_dn",
+      "employee": "t_mvmepkt5_emp"
+    },
+    "imageUrl": "https://base44.app/api/apps/69814e2192f68b7de4fb2564/files/public/69814e2192f68b7de4fb2564/4cf50a147_17706085264218842395604251987660.jpg"
+  },
+  "results": [
+    {
+      "name": "登入角色 management",
+      "pass": true,
+      "details": "302"
+    },
+    {
+      "name": "取得 management CSRF",
+      "pass": true,
+      "details": ""
+    },
+    {
+      "name": "登入角色 office",
+      "pass": true,
+      "details": "302"
+    },
+    {
+      "name": "取得 office CSRF",
+      "pass": true,
+      "details": ""
+    },
+    {
+      "name": "登入角色 accounting",
+      "pass": true,
+      "details": "302"
+    },
+    {
+      "name": "取得 accounting CSRF",
+      "pass": true,
+      "details": ""
+    },
+    {
+      "name": "登入角色 front",
+      "pass": true,
+      "details": "302"
+    },
+    {
+      "name": "取得 front CSRF",
+      "pass": true,
+      "details": ""
+    },
+    {
+      "name": "資料筆數 customers=1608",
+      "pass": true,
+      "details": "1608"
+    },
+    {
+      "name": "資料筆數 quotations=1826",
+      "pass": true,
+      "details": "1826"
+    },
+    {
+      "name": "資料筆數 contracts=12",
+      "pass": true,
+      "details": "12"
+    },
+    {
+      "name": "資料筆數 invoices=205",
+      "pass": true,
+      "details": "205"
+    },
+    {
+      "name": "資料筆數 receipts=57",
+      "pass": true,
+      "details": "57"
+    },
+    {
+      "name": "資料筆數 purchase_orders=902",
+      "pass": true,
+      "details": "902"
+    },
+    {
+      "name": "資料筆數 delivery_notes=1026",
+      "pass": true,
+      "details": "1026"
+    },
+    {
+      "name": "資料筆數 products=132",
+      "pass": true,
+      "details": "132"
+    },
+    {
+      "name": "資料筆數 services=21",
+      "pass": true,
+      "details": "21"
+    },
+    {
+      "name": "資料筆數 suppliers=151",
+      "pass": true,
+      "details": "151"
+    },
+    {
+      "name": "資料筆數 stock_adjustments=9566",
+      "pass": true,
+      "details": "9566"
+    },
+    {
+      "name": "資料筆數 stock_counts=47",
+      "pass": true,
+      "details": "47"
+    },
+    {
+      "name": "資料筆數 attendances=88",
+      "pass": true,
+      "details": "88"
+    },
+    {
+      "name": "資料筆數 schedules=13113",
+      "pass": true,
+      "details": "13113"
+    },
+    {
+      "name": "資料筆數 recurring_schedules=94",
+      "pass": true,
+      "details": "94"
+    },
+    {
+      "name": "資料筆數 work_records=2",
+      "pass": true,
+      "details": "2"
+    },
+    {
+      "name": "資料筆數 work_units=16",
+      "pass": true,
+      "details": "16"
+    },
+    {
+      "name": "資料筆數 notifications=5103",
+      "pass": true,
+      "details": "5103"
+    },
+    {
+      "name": "原始總記錄 34,046",
+      "pass": true,
+      "details": "34046"
+    },
+    {
+      "name": "報價回收筒 30",
+      "pass": true,
+      "details": "30"
+    },
+    {
+      "name": "送貨單回收筒 15",
+      "pass": true,
+      "details": "15"
+    },
+    {
+      "name": "服務使用原表 21",
+      "pass": true,
+      "details": "21"
+    },
+    {
+      "name": "供應商使用原表 151",
+      "pass": true,
+      "details": "151"
+    },
+    {
+      "name": "GET /customers",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "GET /viewcustomer view",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "GET /quotations",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "GET /viewquotation view",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "GET /createquotation",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "GET /editquotation edit",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "GET /contracts",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "GET /viewcontract view",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "GET /editcontract edit",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "GET /invoices",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "GET /viewinvoice view",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "GET /createinvoice",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "GET /editinvoice edit",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "GET /receipts",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "GET /viewreceipt view",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "GET /CreateReceipt",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "GET /editreceipt edit",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "GET /bills",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "SKIP /viewbill（原 0 筆）",
+      "pass": true,
+      "details": ""
+    },
+    {
+      "name": "GET /createbill",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "GET /payments",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "SKIP /viewpayment（原 0 筆）",
+      "pass": true,
+      "details": ""
+    },
+    {
+      "name": "GET /createpayment",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "GET /generalledger",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "GET /createtransaction",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "GET /purchaseorders",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "GET /viewpurchaseorder view",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "GET /createpurchaseorder",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "GET /editpurchaseorder edit",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "GET /deliverynotes",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "GET /viewdeliverynote view",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "GET /CreateDeliveryNote",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "GET /products",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "GET /viewproduct view",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "GET /services",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "GET /viewservice view",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "GET /suppliers",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "GET /viewsupplier view",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "GET /inventory",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "GET /employees",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "SKIP /viewemployee（原 0 筆）",
+      "pass": true,
+      "details": ""
+    },
+    {
+      "name": "GET /monthlyattendance",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "GET /checkin",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "GET /leaverecords",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "GET /schedules",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "GET /recurringschedules",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "GET /servicereports",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "GET /servicereport view",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "GET /workunits",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "GET /serviceplanrecordday view",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "GET /mysupply",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "GET /workinstructions",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "GET /vehicles",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "GET /viewvehicle view",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "GET /pesticides",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "GET /leads",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "SKIP /viewlead（原 0 筆）",
+      "pass": true,
+      "details": ""
+    },
+    {
+      "name": "GET /createlead",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "GET /followups",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "GET /EmailTemplates",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "GET /addresslibrary",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "GET /accounts",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "GET /settings",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "GET /pestcontrolwork",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "GET /PestControlWork",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "GET /serviceplans",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "GET /ServicePlans",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "GET /ServiceReports",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "GET /workschedule",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "GET /WorkSchedule",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "GET /CheckIn",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "GET /myattendance",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "GET /MyAttendance",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "GET /myschedule",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "GET /MySchedule",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "GET /MySupply",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "GET /Customers",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "GET /Quotations",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "GET /PurchaseOrders",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "GET /DeliveryNotes",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "GET /Products",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "GET /Inventory",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "GET /Services",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "GET /Suppliers",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "GET /Schedules",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "GET /Contracts",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "GET /Vehicles",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "GET /LeaveRecords",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "GET /MonthlyAttendance",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "GET /Invoices",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "GET /Receipts",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "GET /Settings",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "GET /Employees",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "GET /WorkUnits",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "GET /AddressLibrary",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "GET /WorkInstructions",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "GET /Pesticides",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "GET /Leads",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "GET /FollowUps",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "GET /Payments",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "GET /Bills",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "GET /GeneralLedger",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "GET /Accounts",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "GET /RecurringSchedules",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "GET /ExcelSchedule",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "CreateDeliveryNote?editId 進入編輯",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "通用新建 /new/customers",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "通用詳情 /view/customers/:id",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "通用新建 /new/quotations",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "通用詳情 /view/quotations/:id",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "通用新建 /new/contracts",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "通用詳情 /view/contracts/:id",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "通用新建 /new/invoices",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "通用詳情 /view/invoices/:id",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "通用新建 /new/receipts",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "通用詳情 /view/receipts/:id",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "通用新建 /new/bills",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "通用新建 /new/payments",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "通用新建 /new/transactions",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "通用新建 /new/purchase_orders",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "通用詳情 /view/purchase_orders/:id",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "通用新建 /new/delivery_notes",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "通用詳情 /view/delivery_notes/:id",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "通用新建 /new/products",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "通用詳情 /view/products/:id",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "通用新建 /new/services",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "通用詳情 /view/services/:id",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "通用新建 /new/suppliers",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "通用詳情 /view/suppliers/:id",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "通用新建 /new/stock_adjustments",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "通用詳情 /view/stock_adjustments/:id",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "通用新建 /new/stock_counts",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "通用詳情 /view/stock_counts/:id",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "通用新建 /new/employees",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "通用新建 /new/attendances",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "通用詳情 /view/attendances/:id",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "通用新建 /new/check_ins",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "通用新建 /new/leave_records",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "通用詳情 /view/leave_records/:id",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "通用新建 /new/schedules",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "通用詳情 /view/schedules/:id",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "通用新建 /new/recurring_schedules",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "通用詳情 /view/recurring_schedules/:id",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "通用新建 /new/work_records",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "通用詳情 /view/work_records/:id",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "通用新建 /new/work_units",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "通用詳情 /view/work_units/:id",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "通用新建 /new/service_plan_logs",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "通用詳情 /view/service_plan_logs/:id",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "通用新建 /new/service_plan_dates",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "通用詳情 /view/service_plan_dates/:id",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "通用新建 /new/supply_records",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "通用新建 /new/work_instructions",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "通用詳情 /view/work_instructions/:id",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "通用新建 /new/vehicles",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "通用詳情 /view/vehicles/:id",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "通用新建 /new/vehicle_expenses",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "通用新建 /new/pesticides",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "通用詳情 /view/pesticides/:id",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "通用新建 /new/leads",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "通用新建 /new/follow_ups",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "通用新建 /new/announcements",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "通用詳情 /view/announcements/:id",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "通用新建 /new/email_templates",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "通用詳情 /view/email_templates/:id",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "通用新建 /new/addresses",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "通用新建 /new/accounts",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "通用新建 /new/company_settings",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "通用詳情 /view/company_settings/:id",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "補充路由 /myschedule",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "補充路由 /myattendance",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "補充路由 /recurringschedules",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "補充路由 /accounts",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "補充路由 /payments",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "補充路由 /bills",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "補充路由 /leads",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "補充路由 /followups",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "補充路由 /addresses",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "補充路由 /TollEmailImport",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "補充路由 /importquotations",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "補充路由 /customers/merge",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "補充路由 /WorkingSchedulePDF",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "補充路由 /print-attendance",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "補充路由 /print-excelschedule",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "補充路由 /excelschedule",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "補充路由 /admin",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "補充路由 /notifications",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "補充路由 /CreateReceipt",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "補充路由 /products/catalog",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "原名大小寫别名 /Dashboard",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "原名大小寫别名 /MyWork",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "原名大小寫别名 /PestControlWork",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "原名大小寫别名 /ServicePlans",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "原名大小寫别名 /ServiceReports",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "原名大小寫别名 /WorkSchedule",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "原名大小寫别名 /MySchedule",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "原名大小寫别名 /CheckIn",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "原名大小寫别名 /MyAttendance",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "原名大小寫别名 /MonthlyAttendance",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "原名大小寫别名 /MySupply",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "原名大小寫别名 /Customers",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "原名大小寫别名 /Quotations",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "原名大小寫别名 /PurchaseOrders",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "原名大小寫别名 /Inventory",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "原名大小寫别名 /Accounting",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "原名大小寫别名 /UserManagement",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "原名大小寫别名 /PersonalSettings",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "原名大小寫别名 /Employee",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "原名大小寫别名 /WorkUnit",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "原名大小寫别名 /Address",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "原名大小寫别名 /WorkInstruction",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "原名大小寫别名 /Pesticide",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "原名大小寫别名 /Leads",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "原名大小寫别名 /FollowUps",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "原名大小寫别名 /Bills",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "原名大小寫别名 /Payments",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "原名大小寫别名 /GeneralLedger",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "原名大小寫别名 /Accounts",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "原名大小寫别名 /RecurringSchedules",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "原名大小寫别名 /ExcelSchedule",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "原名大小寫别名 /EmailTemplates",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "原名大小寫别名 /Settings",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "专项打印/签署 /completion-certificate?id=6adb29abbad0c86a73fa6546",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "专项打印/签署 /sign-certificate?po=6adb29abbad0c86a73fa6546",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "专项打印/签署 /print-schedule?m=2026-10",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "公開報告無 token 拒絕",
+      "pass": true,
+      "details": "403"
+    },
+    {
+      "name": "權限 front /customers => 403",
+      "pass": true,
+      "details": "403"
+    },
+    {
+      "name": "權限 front /quotations => 403",
+      "pass": true,
+      "details": "403"
+    },
+    {
+      "name": "權限 front /invoices => 403",
+      "pass": true,
+      "details": "403"
+    },
+    {
+      "name": "權限 front /users => 403",
+      "pass": true,
+      "details": "403"
+    },
+    {
+      "name": "權限 front /settings => 403",
+      "pass": true,
+      "details": "403"
+    },
+    {
+      "name": "權限 front /viewcustomer?id=6adab48d696337e4cda7e78b => 403",
+      "pass": true,
+      "details": "403"
+    },
+    {
+      "name": "權限 front /viewinvoice?id=6adacdc4ccc5331322350271 => 403",
+      "pass": true,
+      "details": "403"
+    },
+    {
+      "name": "權限 front /workinstructions => 200",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "權限 front /pesticides => 200",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "權限 office /customers => 200",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "權限 office /quotations => 200",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "權限 office /invoices => 403",
+      "pass": true,
+      "details": "403"
+    },
+    {
+      "name": "權限 office /receivables => 403",
+      "pass": true,
+      "details": "403"
+    },
+    {
+      "name": "權限 office /users => 403",
+      "pass": true,
+      "details": "403"
+    },
+    {
+      "name": "權限 office /workunits => 200",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "權限 office /employees => 403",
+      "pass": true,
+      "details": "403"
+    },
+    {
+      "name": "權限 office /viewcustomer?id=6adab48d696337e4cda7e78b => 200",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "權限 office /viewinvoice?id=6adacdc4ccc5331322350271 => 403",
+      "pass": true,
+      "details": "403"
+    },
+    {
+      "name": "權限 office /edit/quotations/6adb139979ea83c2dd11cc2f => 200",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "權限 office /print/quotations/6adb139979ea83c2dd11cc2f => 403",
+      "pass": true,
+      "details": "403"
+    },
+    {
+      "name": "權限 accounting /invoices => 200",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "權限 accounting /customers => 200",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "權限 accounting /users => 403",
+      "pass": true,
+      "details": "403"
+    },
+    {
+      "name": "權限 accounting /employees => 200",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "權限 accounting /schedules => 200",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "權限 accounting /excelschedule => 200",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "權限 accounting /new/schedules => 403",
+      "pass": true,
+      "details": "403"
+    },
+    {
+      "name": "權限 accounting /viewinvoice?id=6adacdc4ccc5331322350271 => 200",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "權限 management /print/quotations/6adb139979ea83c2dd11cc2f => 200",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "權限 management /viewquotation?id=6adb139979ea83c2dd11cc2f => 200",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "寫操作缺 CSRF 返回 403",
+      "pass": true,
+      "details": "403"
+    },
+    {
+      "name": "新增 customers",
+      "pass": true,
+      "details": "302 "
+    },
+    {
+      "name": "讀回新增 customers",
+      "pass": true,
+      "details": ""
+    },
+    {
+      "name": "客戶保存主鍵",
+      "pass": true,
+      "details": "t_mvmepkt5_cust"
+    },
+    {
+      "name": "客戶編輯 302",
+      "pass": true,
+      "details": "302"
+    },
+    {
+      "name": "客戶編輯落庫",
+      "pass": true,
+      "details": ""
+    },
+    {
+      "name": "詳情 XSS 已轉義",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "CSV 匯出含新客戶",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "CSV 匯入成功",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "客戶合併頁成功",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "合併來源進回收筒",
+      "pass": true,
+      "details": ""
+    },
+    {
+      "name": "客戶可還原",
+      "pass": true,
+      "details": "302"
+    },
+    {
+      "name": "新增 quotations",
+      "pass": true,
+      "details": "302 "
+    },
+    {
+      "name": "讀回新增 quotations",
+      "pass": true,
+      "details": ""
+    },
+    {
+      "name": "報價自動編號",
+      "pass": true,
+      "details": "SQP-2026-1086"
+    },
+    {
+      "name": "報價合計 220",
+      "pass": true,
+      "details": "200/220"
+    },
+    {
+      "name": "報價客戶關聯已回填",
+      "pass": true,
+      "details": "t_mvmepkt5_cust"
+    },
+    {
+      "name": "報價階段更新",
+      "pass": true,
+      "details": "302"
+    },
+    {
+      "name": "服務報價為信件式",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "報價轉 PO",
+      "pass": true,
+      "details": "302"
+    },
+    {
+      "name": "PO 保留來源與明細",
+      "pass": true,
+      "details": ""
+    },
+    {
+      "name": "報價轉合約",
+      "pass": true,
+      "details": "302"
+    },
+    {
+      "name": "報價轉發票",
+      "pass": true,
+      "details": "302"
+    },
+    {
+      "name": "發票初始餘額 220",
+      "pass": true,
+      "details": ""
+    },
+    {
+      "name": "發票收款生成收據",
+      "pass": true,
+      "details": "302"
+    },
+    {
+      "name": "收款後已收/餘額正確",
+      "pass": true,
+      "details": ""
+    },
+    {
+      "name": "收據金額正確",
+      "pass": true,
+      "details": ""
+    },
+    {
+      "name": "超額收款被拒",
+      "pass": true,
+      "details": "400"
+    },
+    {
+      "name": "收據打印含免簽名文字",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "產生 PO 簽署連結",
+      "pass": true,
+      "details": "302"
+    },
+    {
+      "name": "簽署連結含安全 token",
+      "pass": true,
+      "details": "/sign-certificate?token=sign_mvmepw3r_521102848517xhDikwUmpncKzBlsFmhYhXhk"
+    },
+    {
+      "name": "公開簽署頁可用",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "公開簽署落庫",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "重複簽署拒絕",
+      "pass": true,
+      "details": "409"
+    },
+    {
+      "name": "找到庫存測試產品",
+      "pass": true,
+      "details": ""
+    },
+    {
+      "name": "新增 delivery_notes",
+      "pass": true,
+      "details": "302 "
+    },
+    {
+      "name": "讀回新增 delivery_notes",
+      "pass": true,
+      "details": ""
+    },
+    {
+      "name": "送貨單自動編號",
+      "pass": true,
+      "details": "DNP2610057"
+    },
+    {
+      "name": "送貨單送達過賬 302",
+      "pass": true,
+      "details": "302"
+    },
+    {
+      "name": "送達只扣一次庫存",
+      "pass": true,
+      "details": "60 -> 59"
+    },
+    {
+      "name": "送貨單標記已同步",
+      "pass": true,
+      "details": ""
+    },
+    {
+      "name": "送貨出庫調整記錄正確",
+      "pass": true,
+      "details": ""
+    },
+    {
+      "name": "再次保存不重複扣庫存",
+      "pass": true,
+      "details": "302"
+    },
+    {
+      "name": "已過賬明細不可改",
+      "pass": true,
+      "details": "409"
+    },
+    {
+      "name": "缺貨返回 409",
+      "pass": true,
+      "details": "409"
+    },
+    {
+      "name": "缺貨整筆回滾",
+      "pass": true,
+      "details": ""
+    },
+    {
+      "name": "新增 stock_adjustments",
+      "pass": true,
+      "details": "302 "
+    },
+    {
+      "name": "讀回新增 stock_adjustments",
+      "pass": true,
+      "details": ""
+    },
+    {
+      "name": "入庫調整增加 5",
+      "pass": true,
+      "details": "59 -> 64"
+    },
+    {
+      "name": "調整記錄不可直接編輯",
+      "pass": true,
+      "details": "409"
+    },
+    {
+      "name": "新增 stock_counts",
+      "pass": true,
+      "details": "302 "
+    },
+    {
+      "name": "讀回新增 stock_counts",
+      "pass": true,
+      "details": ""
+    },
+    {
+      "name": "盤點差異更新庫存",
+      "pass": true,
+      "details": "64 -> 66"
+    },
+    {
+      "name": "盤點產生差異調整",
+      "pass": true,
+      "details": ""
+    },
+    {
+      "name": "新增 schedules",
+      "pass": true,
+      "details": "302 "
+    },
+    {
+      "name": "讀回新增 schedules",
+      "pass": true,
+      "details": ""
+    },
+    {
+      "name": "排班同步 PO 工作日期",
+      "pass": true,
+      "details": ""
+    },
+    {
+      "name": "拖曳排班更新日期",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "移動後同步 PO 日期",
+      "pass": true,
+      "details": ""
+    },
+    {
+      "name": "新增 recurring_schedules",
+      "pass": true,
+      "details": "302 "
+    },
+    {
+      "name": "讀回新增 recurring_schedules",
+      "pass": true,
+      "details": ""
+    },
+    {
+      "name": "定期排程生成成功",
+      "pass": true,
+      "details": "302"
+    },
+    {
+      "name": "每週排程只生成到期一次",
+      "pass": true,
+      "details": "1"
+    },
+    {
+      "name": "重複生成不重複建班",
+      "pass": true,
+      "details": "1"
+    },
+    {
+      "name": "完成報告缺 2 類照片被拒",
+      "pass": true,
+      "details": "400"
+    },
+    {
+      "name": "生成服務報告公開連結",
+      "pass": true,
+      "details": "302"
+    },
+    {
+      "name": "公開報告 token 可用",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "錯誤公開 token 拒絕",
+      "pass": true,
+      "details": "403"
+    },
+    {
+      "name": "公開附件只憑報告 token 訪問",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "新增 accounts",
+      "pass": true,
+      "details": "302 "
+    },
+    {
+      "name": "讀回新增 accounts",
+      "pass": true,
+      "details": ""
+    },
+    {
+      "name": "新增 transactions",
+      "pass": true,
+      "details": "302 "
+    },
+    {
+      "name": "讀回新增 transactions",
+      "pass": true,
+      "details": ""
+    },
+    {
+      "name": "憑證借貸合計 100",
+      "pass": true,
+      "details": ""
+    },
+    {
+      "name": "不平衡憑證拒絕",
+      "pass": true,
+      "details": "400"
+    },
+    {
+      "name": "新增 bills",
+      "pass": true,
+      "details": "302 "
+    },
+    {
+      "name": "讀回新增 bills",
+      "pass": true,
+      "details": ""
+    },
+    {
+      "name": "帳單合計與餘額 100",
+      "pass": true,
+      "details": ""
+    },
+    {
+      "name": "新增 payments",
+      "pass": true,
+      "details": "302 "
+    },
+    {
+      "name": "讀回新增 payments",
+      "pass": true,
+      "details": ""
+    },
+    {
+      "name": "付款新建頁可保存",
+      "pass": true,
+      "details": ""
+    },
+    {
+      "name": "新增 leads",
+      "pass": true,
+      "details": "302 "
+    },
+    {
+      "name": "讀回新增 leads",
+      "pass": true,
+      "details": ""
+    },
+    {
+      "name": "Lead 新建可保存",
+      "pass": true,
+      "details": ""
+    },
+    {
+      "name": "新增 follow_ups",
+      "pass": true,
+      "details": "302 "
+    },
+    {
+      "name": "讀回新增 follow_ups",
+      "pass": true,
+      "details": ""
+    },
+    {
+      "name": "FollowUp 新建可保存",
+      "pass": true,
+      "details": ""
+    },
+    {
+      "name": "新增 addresses",
+      "pass": true,
+      "details": "302 "
+    },
+    {
+      "name": "讀回新增 addresses",
+      "pass": true,
+      "details": ""
+    },
+    {
+      "name": "地址庫新建可保存",
+      "pass": true,
+      "details": ""
+    },
+    {
+      "name": "新增 work_instructions",
+      "pass": true,
+      "details": "302 "
+    },
+    {
+      "name": "讀回新增 work_instructions",
+      "pass": true,
+      "details": ""
+    },
+    {
+      "name": "工作細則新建可保存",
+      "pass": true,
+      "details": ""
+    },
+    {
+      "name": "新增 email_templates",
+      "pass": true,
+      "details": "302 "
+    },
+    {
+      "name": "讀回新增 email_templates",
+      "pass": true,
+      "details": ""
+    },
+    {
+      "name": "電郵範本新建可保存",
+      "pass": true,
+      "details": ""
+    },
+    {
+      "name": "新增 employees",
+      "pass": true,
+      "details": "302 "
+    },
+    {
+      "name": "讀回新增 employees",
+      "pass": true,
+      "details": ""
+    },
+    {
+      "name": "員工新建可保存",
+      "pass": true,
+      "details": ""
+    },
+    {
+      "name": "新增 supply_records",
+      "pass": true,
+      "details": "302 "
+    },
+    {
+      "name": "讀回新增 supply_records",
+      "pass": true,
+      "details": ""
+    },
+    {
+      "name": "補給記錄新建可保存",
+      "pass": true,
+      "details": ""
+    },
+    {
+      "name": "取得可編輯圖片",
+      "pass": true,
+      "details": ""
+    },
+    {
+      "name": "圖片編輯器可打開",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "圖片另存成功",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "取得新圖片路徑",
+      "pass": true,
+      "details": "<!DOCTYPE html><html lang=\"zh-Hant\"><head><meta charset=\"utf-8\"><meta name=\"viewport\" content=\"width=device-width,initial-scale=1\"><meta name=\"csrf\" content=\"1FuRyhZFef5APtOLfJWuElR0\"><title>圖片編輯器 · 標準清潔滅蟲</title><style>\n:root{--brand:#0f6e56;--brand2:#0a5946;--soft:#f5f7f8;--line:#e3e7eb;--ink:#182"
+    },
+    {
+      "name": "新圖片可訪問",
+      "pass": true,
+      "details": "200/image/png"
+    },
+    {
+      "name": "出勤新工時保存",
+      "pass": true,
+      "details": "302"
+    },
+    {
+      "name": "出勤工時落庫 7.5",
+      "pass": true,
+      "details": "{\"employee_id\":\"t_mvmepkt5_emp\",\"employee_name\":\"驗收員工\",\"attendance_date\":\"2026-10-24\",\"hours\":7.5,\"attendance_type\":\"正常上班\",\"notes\":\"\",\"id\":\"att_mvmepxm5_7d81bdb95656\",\"created_date\":\"2026-10-24T13:00:42.989Z\",\"updated_date\":\"2026-10-24T13:00:42.989Z\",\"created_by\":\"enjinggao36@gmail.com\",\"created_by_id\":\"u-mgmt\"}"
+    },
+    {
+      "name": "出勤類型修改落庫",
+      "pass": true,
+      "details": "{\"employee_id\":\"t_mvmepkt5_emp\",\"employee_name\":\"驗收員工\",\"attendance_date\":\"2026-10-24\",\"hours\":0,\"attendance_type\":\"年假\",\"notes\":\"\",\"id\":\"att_mvmepxm5_7d81bdb95656\",\"created_date\":\"2026-10-24T13:00:42.989Z\",\"updated_date\":\"2026-10-24T13:00:42.993Z\",\"created_by\":\"enjinggao36@gmail.com\",\"created_by_id\":\"u-mgmt\"}"
+    },
+    {
+      "name": "出勤清空為缺勤",
+      "pass": true,
+      "details": "{\"employee_id\":\"t_mvmepkt5_emp\",\"employee_name\":\"驗收員工\",\"attendance_date\":\"2026-10-24\",\"hours\":0,\"attendance_type\":\"缺勤\",\"notes\":\"\",\"id\":\"att_mvmepxm5_7d81bdb95656\",\"created_date\":\"2026-10-24T13:00:42.989Z\",\"updated_date\":\"2026-10-24T13:00:42.996Z\",\"created_by\":\"enjinggao36@gmail.com\",\"created_by_id\":\"u-mgmt\"}"
+    },
+    {
+      "name": "會計出勤批量保存唯讀",
+      "pass": true,
+      "details": "403"
+    },
+    {
+      "name": "建立白名單用戶",
+      "pass": true,
+      "details": "302"
+    },
+    {
+      "name": "白名單允許 Customers",
+      "pass": true,
+      "details": ""
+    },
+    {
+      "name": "白名單阻擋 Quotations",
+      "pass": true,
+      "details": ""
+    },
+    {
+      "name": "用戶可自行改密",
+      "pass": true,
+      "details": "302"
+    },
+    {
+      "name": "新密碼可登入",
+      "pass": true,
+      "details": "302"
+    },
+    {
+      "name": "用戶可安全停用帳號",
+      "pass": true,
+      "details": "302"
+    },
+    {
+      "name": "停用帳號不能再登入",
+      "pass": true,
+      "details": "200"
+    },
+    {
+      "name": "原白名單 Dashboard/MyWork",
+      "pass": true,
+      "details": ""
+    },
+    {
+      "name": "原白名單 PestControlWork",
+      "pass": true,
+      "details": ""
+    },
+    {
+      "name": "原白名單 UserManagement",
+      "pass": true,
+      "details": ""
+    },
+    {
+      "name": "原白名單仍阻擋未授權頁",
+      "pass": true,
+      "details": ""
+    },
+    {
+      "name": "連續失敗後登入鎖定",
+      "pass": true,
+      "details": "429"
+    }
+  ]
+}

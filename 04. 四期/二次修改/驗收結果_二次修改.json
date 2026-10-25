@@ -1,0 +1,283 @@
+{
+  "at": "2026-10-24T16:17:56.651Z",
+  "base": "http://127.0.0.1:3101",
+  "pass": 55,
+  "fail": 0,
+  "results": [
+    {
+      "name": "登入頁可開",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "管理層登入",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "排班管理 200",
+      "pass": true,
+      "detail": "200"
+    },
+    {
+      "name": "合約列表 200",
+      "pass": true,
+      "detail": "200"
+    },
+    {
+      "name": "車輛管理 200",
+      "pass": true,
+      "detail": "200"
+    },
+    {
+      "name": "庫存管理 200",
+      "pass": true,
+      "detail": "200"
+    },
+    {
+      "name": "盤點頁 200",
+      "pass": true,
+      "detail": "200"
+    },
+    {
+      "name": "採購單管理 200",
+      "pass": true,
+      "detail": "200"
+    },
+    {
+      "name": "回收桶 200",
+      "pass": true,
+      "detail": "200"
+    },
+    {
+      "name": "盤點記錄 200",
+      "pass": true,
+      "detail": "200"
+    },
+    {
+      "name": "定期排程 200",
+      "pass": true,
+      "detail": "200"
+    },
+    {
+      "name": "客戶詳情（新版）200",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "合約頁內建彈窗",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "合約表單不再顯示客戶 ID 欄",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "合約客戶 ID 以隱藏欄位保存",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "合約彈窗含文件上傳",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "合約自動命名提示",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "採購單操作列有「編輯」",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "採購單操作列有「轉為發票」",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "採購單操作列有「刪除」",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "採購單操作列有「前往排班」",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "採購單名稱可點進詳情",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "採購單客戶可點進客戶詳情",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "車輛列表可點車牌開彈窗",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "車輛類型欄已移除",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "車輛彈窗片段 200",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "車輛彈窗含費用年月篩選",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "盤點項目數為可讀格式",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "盤點頁不再輸出結構化 JSON 按鈕",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "盤點與庫存聯動說明",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "回收桶有批次還原",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "回收桶有批次永久刪除",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "回收桶顯示回收時間欄",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "主欄目字體已加大加粗",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "辦公室看不到匯出 CSV 按鈕",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "辦公室仍有新增合約",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "辦公室直接下載 CSV 被拒 403",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "辦公室可進回收桶",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "前線不可進回收桶 403",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "管理層可下載 CSV",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "新增合約成功",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "合約名稱自動生成四段",
+      "pass": true,
+      "detail": "CON-VERIFY-mvmlriuv_房屋署（上水彩園邨）_測試地點_滅鼠"
+    },
+    {
+      "name": "隱藏客戶 ID 有保存",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "刪除後進回收桶",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "寫入回收時間",
+      "pass": true,
+      "detail": "2026-10-25 00:17:55"
+    },
+    {
+      "name": "寫入操作人",
+      "pass": true,
+      "detail": "高恩靖"
+    },
+    {
+      "name": "回收桶列出該合約",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "還原成功",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "還原後清除回收時間",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "盤點建立並過賬",
+      "pass": true,
+      "detail": "5 → 2"
+    },
+    {
+      "name": "刪除盤點自動沖銷庫存",
+      "pass": true,
+      "detail": "2 → 5"
+    },
+    {
+      "name": "盤點標記為已沖銷",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "還原盤點重新過賬",
+      "pass": true,
+      "detail": "5 → 2"
+    },
+    {
+      "name": "沖銷／重過賬留下調整單",
+      "pass": true,
+      "detail": "3 張"
+    },
+    {
+      "name": "測試資料已清理",
+      "pass": true,
+      "detail": "產品庫存回復 5"
+    }
+  ]
+}
