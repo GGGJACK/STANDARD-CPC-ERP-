@@ -52,8 +52,13 @@ export const PEST_TYPES = [
   '倉儲霧氣 (Container Fumigation)', '蜱 (Ticks)', '蜘蛛 (Spiders)', '其他 (Others)',
 ];
 
+// 授權策略（server.mjs 的 /api/pick 依此執行，避免把整個來源一刀切 403 打斷前線表單）：
+//   strict — 依 ENTITIES[entity].viewRoles 校驗，無權限直接 403；客戶／合約／採購單含聯絡方式與金額
+//   scrub  — 全員可讀，但按角色刪除 fill 內的敏感欄位；產品（成本）與員工（名冊）
+//   open   — 全員可讀的基礎資料，不裁剪
 export const PICK_SOURCES = {
   customers: {
+    entity: 'customers', policy: 'strict',
     label: '客戶',
     build: (store) => store.list('customers').map((r) => ({
       id: r.id,
@@ -71,6 +76,7 @@ export const PICK_SOURCES = {
     })),
   },
   contracts: {
+    entity: 'contracts', policy: 'strict',
     label: '合約',
     build: (store) => store.list('contracts').map((r) => ({
       id: r.id,
@@ -91,6 +97,7 @@ export const PICK_SOURCES = {
     })),
   },
   purchase_orders: {
+    entity: 'purchase_orders', policy: 'strict',
     label: '採購單',
     build: (store) => {
       // 會議點名：選 PO 沒帶出工作單位。原因是部分 PO 記錄本身沒有 work_unit_name，
@@ -131,6 +138,7 @@ export const PICK_SOURCES = {
     },
   },
   work_units: {
+    entity: 'work_units', policy: 'open',
     label: '工作單位',
     build: (store) => store.list('work_units').map((r) => ({
       id: r.id,
@@ -141,6 +149,7 @@ export const PICK_SOURCES = {
     })),
   },
   employees: {
+    entity: 'employees', policy: 'scrub',
     label: '員工',
     build: (store) => employeePool(store).map((e) => ({
       id: e.id || e.name,
@@ -151,6 +160,7 @@ export const PICK_SOURCES = {
     })),
   },
   products: {
+    entity: 'products', policy: 'scrub',
     label: '產品',
     build: (store) => store.list('products').map((r) => ({
       id: r.id,
@@ -165,10 +175,12 @@ export const PICK_SOURCES = {
     })),
   },
   pest_types: {
+    entity: null, policy: 'open',
     label: '害蟲種類',
     build: () => PEST_TYPES.map((name) => ({ id: name, label: name, sub: '', text: name, fill: {} })),
   },
   pesticides: {
+    entity: 'pesticides', policy: 'open',
     label: '藥物',
     build: (store) => store.list('pesticides').map((r) => ({
       id: r.id,
@@ -179,6 +191,7 @@ export const PICK_SOURCES = {
     })),
   },
   vehicles: {
+    entity: 'vehicles', policy: 'open',
     label: '車輛',
     build: (store) => store.list('vehicles').map((r) => ({
       id: r.id,
@@ -189,6 +202,7 @@ export const PICK_SOURCES = {
     })),
   },
   work_instructions: {
+    entity: 'work_instructions', policy: 'open',
     label: '工作細則',
     build: (store) => store.list('work_instructions').map((r) => ({
       id: r.id,
@@ -202,6 +216,7 @@ export const PICK_SOURCES = {
     })),
   },
   tools: {
+    entity: null, policy: 'open',
     label: '工具',
     build: (store) => {
       const seen = new Map();
@@ -222,39 +237,37 @@ export const PICK_SOURCES = {
 
 export const PICK_SOURCE_NAMES = Object.keys(PICK_SOURCES);
 
-// SEC-01：每個資料源對應的實體。路由層用它做 assertEntity，讓選擇器與實體頁面
-// 共用同一套權限，而不是「只要登入了就放行」。pest_types 是靜態清單，不對應實體。
-export const PICK_SOURCE_ENTITY = {
-  customers: 'customers',
-  contracts: 'contracts',
-  purchase_orders: 'purchase_orders',
-  work_units: 'work_units',
-  employees: 'employees',
-  products: 'products',
-  pest_types: null,
-  pesticides: 'pesticides',
-  vehicles: 'vehicles',
-  work_instructions: 'work_instructions',
-  tools: 'supply_records',
-};
+// 欄位裁剪：成本類欄位只給會計／管理層；前線另外看不到聯絡方式。
+// pickRows 有 30 秒快取，rows 物件是共用的，必須先複製再 delete，否則會污染其他角色的結果。
+const COST_FIELDS = ['cost_price', 'supplier_price', 'unit_cost'];
+const CONTACT_FIELDS = ['phone', 'fax', 'email', 'contact_person', 'contact_phone', 'customer_tel', 'customer_fax', 'customer_email'];
+const COST_ROLES = ['accounting', 'management'];
+const bareName = (value) => str(value).replace(/（[^）]*）/g, '').trim();
 
-// SEC-01：按角色裁剪回填欄位。
-// 金額只給會計／管理層；前線一律不帶聯絡資料（他們本來也進不了客戶頁）。
-const PICK_MONEY_FIELDS = ['cost_price', 'unit_cost', 'supplier_price', 'total_amount', 'subtotal'];
-const PICK_CONTACT_FIELDS = ['phone', 'fax', 'email', 'customer_tel', 'customer_fax', 'customer_email', 'contact_person', 'contact_phone'];
-export function pickFillForRole(fill, user) {
-  const out = { ...(fill || {}) };
-  if (!['accounting', 'management'].includes(user?.role)) for (const key of PICK_MONEY_FIELDS) delete out[key];
-  if (user?.role === 'front') for (const key of PICK_CONTACT_FIELDS) delete out[key];
-  return out;
+// 前線只返回自己那一條員工記錄：補給／請假表單要能選到自己，但不能看到整個名冊。
+function selfOnly(rows, user) {
+  const selfId = str(user?.employee_id).trim();
+  const selfName = bareName(user?.name);
+  if (!selfId && !selfName) return [];
+  return rows.filter((row) => (selfId && str(row.fill.employee_id) === selfId)
+    || (selfName && bareName(row.fill.employee_name) === selfName));
 }
 
-// 選擇器權限的來源仍是實體的 viewRoles；只有「實體頁面不對前線開放，
-// 但前線的表單確實需要選這份資料」時，才在這裡列例外。
-// employees：補給／請假由前線自己填，必須能選人（Employee 實體頁面僅管理層可看）。
-export const PICK_SOURCE_EXTRA_ROLES = {
-  employees: ['front'],
-};
+function scrubRow(row, role) {
+  const fill = { ...row.fill };
+  if (!COST_ROLES.includes(role)) for (const key of COST_FIELDS) delete fill[key];
+  if (role === 'front') for (const key of CONTACT_FIELDS) delete fill[key];
+  return { ...row, fill };
+}
+
+function scopedRows(store, source, user) {
+  const def = PICK_SOURCES[source];
+  if (!def) return [];
+  const rows = pickRows(store, source);
+  if (def.policy === 'open') return rows;
+  const scoped = def.entity === 'employees' && user?.role === 'front' ? selfOnly(rows, user) : rows;
+  return scoped.map((row) => scrubRow(row, user?.role));
+}
 
 export function pickRows(store, source) {
   const def = PICK_SOURCES[source];
@@ -262,10 +275,10 @@ export function pickRows(store, source) {
   return memo(`rows:${source}`, 30_000, () => def.build(store));
 }
 
-export function searchPick(store, source, query, limit = 20) {
+export function searchPick(store, source, query, limit = 20, user = null) {
   const def = PICK_SOURCES[source];
   if (!def) return [];
-  const rows = pickRows(store, source);
+  const rows = scopedRows(store, source, user);
   const q = str(query).trim().toLowerCase();
   if (!q) return rows.slice(0, limit);
   const tokens = q.split(/\s+/).filter(Boolean);
