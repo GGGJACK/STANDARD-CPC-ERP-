@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Standard CPC · 施工顺序表 v1</title>
+<style>
+:root{
+  --brand:#0f6e56; --brand-soft:#e6f4ef; --brand-line:#b8e0d2;
+  --ink:#16202a; --ink2:#3f4b56; --ink3:#6b7783; --line:#e2e7ea; --soft:#f6f8f9;
+  --red:#a32d2d; --red-soft:#fbeceb; --red-line:#f0c9c6;
+  --amber:#946000; --amber-soft:#fdf3e3; --amber-line:#f2ddb5;
+  --blue:#1d4ed8; --blue-soft:#eef3fe; --violet:#5b21b6; --violet-soft:#f3eefe;
+}
+*{box-sizing:border-box}
+body{margin:0;background:#eef1f3;color:var(--ink);
+  font:14.5px/1.75 "Microsoft YaHei","PingFang SC",system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+.page{max-width:1180px;margin:0 auto;background:#fff;padding:44px 52px 78px;min-height:100vh;
+  box-shadow:0 1px 3px rgba(16,24,40,.06)}
+header.top{border-bottom:2px solid var(--ink);padding-bottom:18px;margin-bottom:26px}
+.kicker{font-size:11.5px;letter-spacing:.16em;color:var(--ink3);text-transform:uppercase;margin-bottom:8px}
+h1{font-size:28px;line-height:1.28;margin:0 0 9px;font-weight:700;letter-spacing:-.02em}
+.sub{color:var(--ink3);font-size:13.5px}
+h2{font-size:19px;margin:38px 0 13px;padding-left:12px;border-left:4px solid var(--brand);font-weight:700}
+h3{font-size:15px;margin:24px 0 8px;font-weight:700}
+p{margin:8px 0}
+code{background:var(--soft);border:1px solid var(--line);border-radius:4px;padding:1px 5px;
+  font:12.2px/1.6 ui-monospace,Consolas,monospace;color:#0f172a;word-break:break-all}
+table{width:100%;border-collapse:collapse;margin:12px 0 16px;font-size:12.7px}
+th,td{border:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top}
+th{background:var(--soft);font-weight:700;font-size:12px;color:var(--ink2)}
+td.nw,th.nw{white-space:nowrap}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:20px 0 4px}
+.kpi{border:1px solid var(--line);border-radius:9px;padding:13px 14px}
+.kpi b{display:block;font-size:23px;line-height:1.15;color:var(--brand);font-variant-numeric:tabular-nums}
+.kpi span{font-size:11.3px;color:var(--ink3)}
+.card{border:1px solid var(--line);border-radius:10px;padding:15px 18px;margin:13px 0}
+.card.lead{background:linear-gradient(180deg,var(--brand-soft),#fff);border-color:var(--brand-line)}
+.card h3{margin-top:0}
+.callout{padding:12px 16px;border-radius:0 7px 7px 0;margin:13px 0;border-left:3px solid var(--brand);background:var(--brand-soft)}
+.callout b{display:block;margin-bottom:3px}
+.callout p:last-child{margin-bottom:0}
+.callout.warn{border-color:var(--amber);background:var(--amber-soft)}
+.callout.warn b{color:var(--amber)}
+.callout.risk{border-color:var(--red);background:var(--red-soft)}
+.callout.risk b{color:var(--red)}
+.pill{display:inline-block;padding:1px 8px;border-radius:11px;font-size:11.3px;font-weight:700;
+  white-space:nowrap;border:1px solid transparent;line-height:1.75}
+.p-r{background:var(--red-soft);color:var(--red);border-color:var(--red-line)}
+.p-a{background:var(--amber-soft);color:var(--amber);border-color:var(--amber-line)}
+.p-g{background:var(--brand-soft);color:var(--brand);border-color:var(--brand-line)}
+.p-b{background:var(--blue-soft);color:var(--blue)}
+.p-v{background:var(--violet-soft);color:var(--violet)}
+.p-n{background:var(--soft);color:var(--ink3);border-color:var(--line)}
+.stage{display:flex;gap:9px;flex-wrap:wrap;margin:16px 0 6px}
+.stage div{flex:1;min-width:150px;border:1px solid var(--line);border-radius:9px;padding:11px 13px;background:#fff}
+.stage div.cur{border-color:var(--brand);background:var(--brand-soft)}
+.stage b{display:block;font-size:13px}
+.stage span{font-size:11.3px;color:var(--ink3)}
+.stage em{display:block;font-style:normal;font-size:20px;font-weight:700;color:var(--brand);margin-bottom:2px}
+.tk{font-family:ui-monospace,Consolas,monospace;font-size:11.8px;font-weight:700;color:var(--violet);white-space:nowrap}
+.dep{font-size:11.5px;color:var(--ink3);white-space:nowrap}
+ul,ol{margin:8px 0;padding-left:21px}
+li{margin:4px 0}
+.crit{background:#fbfcfc;border:1px solid var(--line);border-left:3px solid var(--amber);border-radius:0 6px 6px 0;padding:5px 10px;font-size:12.2px}
+footer{margin-top:44px;padding-top:14px;border-top:1px solid var(--line);font-size:12.2px;color:var(--ink3)}
+@media (max-width:900px){.page{padding:24px 16px}.kpis{grid-template-columns:repeat(2,1fr)}}
+@media print{body{background:#fff}.page{padding:0;box-shadow:none;max-width:none}}
+</style>
+</head>
+<body>
+<div class="page">
+
+<header class="top">
+  <div class="kicker">Execution Plan · v1 · 2026-10-25</div>
+  <h1>Standard CPC · 施工顺序表</h1>
+  <div class="sub">把九轮决策串成可执行的任务链 —— 每项都带产出、验收判据、依赖与前序风险</div>
+</header>
+
+<div class="card lead">
+  <h3>怎么用这张表</h3>
+  <p><b>不要按阶段顺序闷头做</b>，按<b>里程碑放行</b>做：M0 不绿就不进阶段 1，M1 不绿就不进阶段 2。
+  每个任务都写了「验收判据」—— 判据是可测量的（毫秒、行数、差额 = 0），不是「感觉能用了」。</p>
+  <p style="margin-bottom:0">关键路径只有一条：<code>T0 止血 → T1-1 查询下推 → T2-1 明细补 product_id → T2-3 建表迁移 → T2-4 停机切换</code>。
+  其余任务都可以并行或后置。</p>
+</div>
+
+<div class="kpis">
+  <div class="kpi"><b>5</b><span>阶段</span></div>
+  <div class="kpi"><b>22</b><span>任务</span></div>
+  <div class="kpi"><b>37</b><span>人日（约 7–8 周）</span></div>
+  <div class="kpi"><b>4</b><span>里程碑放行点</span></div>
+</div>
+
+<div class="stage">
+  <div class="cur"><em>0</em><b>止血</b><span>2 天 · 关掉三个 P0</span></div>
+  <div><em>1</em><b>收敛</b><span>10 天 · 性能 + 开票闭环</span></div>
+  <div><em>2</em><b>数据</b><span>15 天 · 明细补 id → 迁移</span></div>
+  <div><em>3</em><b>工程化</b><span>5 天 · 可并行</span></div>
+  <div><em>4</em><b>上线</b><span>5 天 · 云 + HTTPS</span></div>
+</div>
+
+<h2>阶段 0 · 止血（2 天）</h2>
+
+<p>目标只有一个：<b>让三个已复现的 P0 在今天之后不可能再出现</b>。不改结构、不加抽象，全部是局部改动。</p>
+
+<table>
+  <thead><tr><th class="nw" style="width:8%">编号</th><th style="width:26%">任务</th><th class="nw" style="width:6%">人日</th><th>验收判据（可测量）</th><th class="nw" style="width:9%">依赖</th></tr></thead>
+  <tbody>
+    <tr>
+      <td class="tk">T0-1</td>
+      <td><b><code>/api/pick</code> 加授权 + 字段裁剪</b><br><small>加 <code>entity</code> 到 9 个 picker；入口 <code>assertEntity</code>；按角色删 <code>cost_price / phone / fax / email / contact_*</code>；写 <code>action='pick'</code> 审计</small></td>
+      <td class="nw">0.5</td>
+      <td class="crit">① front 调 <code>source=customers</code> → 403<br>② front 调 <code>source=products</code> → 返回值中 <b>不含 <code>cost_price</code> 键</b><br>③ office 同上，含 <code>price</code> 但不含 <code>cost_price</code><br>④ 每次调用在 <code>audit_log</code> 留一行</td>
+      <td class="dep">—</td>
+    </tr>
+    <tr>
+      <td class="tk">T0-2</td>
+      <td><b>编辑表单金额掩码 + hidden 保值</b><br><small><code>fieldInput()</code> 遇 <code>canSeeAmounts===false</code> 且金额字段：<code>value=""</code> + 占位 <code>•••••</code> + 同名字段用 hidden 下发原值</small></td>
+      <td class="nw">0.5</td>
+      <td class="crit">① office 打开报价编辑页，HTML 源码中<b>搜不到</b> <code>value="7500"</code><br>② 提交后 <code>total_amount</code> 与改动前<b>逐字节相同</b><br>③ management 打开同一页，仍见真实数字</td>
+      <td class="dep">—</td>
+    </tr>
+    <tr>
+      <td class="tk">T0-3</td>
+      <td><b><code>normalizeRelations</code> 改 id 优先</b><br><small>先按 <code>customer_id</code> 认；按名只做新增补齐；同名多条抛 409 让用户选。产品侧同改</small></td>
+      <td class="nw">0.5</td>
+      <td class="crit">① 对 261 份高风险单据逐条「打开→保存」，<code>customer_id</code> <b>零变化</b><br>② 故意选同名客户提交 → 409 且提示可选列表</td>
+      <td class="dep">—</td>
+    </tr>
+    <tr>
+      <td class="tk">T0-4</td>
+      <td><b><code>demo_mode</code> 默认 0 + 启动告警</b></td>
+      <td class="nw">0.1</td>
+      <td class="crit">① 全新库启动后 <code>/demo?as=management</code> <b>不发出会话</b><br>② 显式设为 1 时，终端打印红字警告</td>
+      <td class="dep">—</td>
+    </tr>
+    <tr>
+      <td class="tk">T0-5</td>
+      <td><b>移除报价表头「折扣」输入</b><br><small>字段保留在 JSON（历史 0 使用），表单不再渲染；明细 <code>Disc</code> 列<b>保留</b>（PDF 版式需要）</small></td>
+      <td class="nw">0.2</td>
+      <td class="crit">① 报价表单无「折扣」<br>② 报价 PDF 版式与现在<b>完全一致</b>（含 Disc 空列）<br>③ 转发票金额 = 报价金额</td>
+      <td class="dep">—</td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="callout">
+  <b>M0 放行条件</b>
+  <p>三个 P0 的验收判据全绿 + 原有 411 项业务验收全绿 + 34 页 DOM 对照全绿。<b>任一项不绿，不进阶段 1。</b>
+  理由：阶段 1 会改查询层和表单层，如果带着未关闭的权限洞进去，回归时无法区分「新引入」还是「旧有」。</p>
+</div>
+
+<h2>阶段 1 · 收敛（10 天）</h2>
+
+<table>
+  <thead><tr><th class="nw" style="width:8%">编号</th><th style="width:26%">任务</th><th class="nw" style="width:6%">人日</th><th>验收判据（可测量）</th><th class="nw" style="width:9%">依赖</th></tr></thead>
+  <tbody>
+    <tr>
+      <td class="tk">T1-1</td>
+      <td><b>查询下推 SQL</b><br><small><code>filteredRows</code> 改为：<code>WHERE entity=? AND deleted=0 AND 日期区间</code> + <code>ORDER BY</code> + <code>LIMIT/OFFSET</code>，只取当页 50 行</small></td>
+      <td class="nw">3</td>
+      <td class="crit">① <code>/quotations</code> P95 <b>&lt; 80 ms</b>（现 211）<br>② <code>/schedules</code> P95 <b>&lt; 120 ms</b>（现 277）<br>③ 搜索/筛选/排序结果与改造前<b>逐条一致</b>（用同一组 20 个查询对拍）</td>
+      <td class="dep">M0</td>
+    </tr>
+    <tr>
+      <td class="tk">T1-2</td>
+      <td><b>去掉 <code>listEntity</code> 的二次全量</b><br><small><code>core.mjs:188-189</code> 两行各 <code>store.list</code> 一次</small></td>
+      <td class="nw">0.5</td>
+      <td class="crit">单页对 <code>records</code> 的查询次数从 2 降为 1（加计数打点验证）</td>
+      <td class="dep">T1-1</td>
+    </tr>
+    <tr>
+      <td class="tk">T1-3</td>
+      <td><b>应收 / 总账接分页</b><br><small>复用现成 <code>pager()</code>，per=50</small></td>
+      <td class="nw">1</td>
+      <td class="crit">① <code>/generalledger</code> 响应 <b>&lt; 120 KB</b>（现 230）<br>② <code>/receivables</code> &lt; 90 KB（现 147）<br>③ 合计行仍按<b>全量</b>计算，不受分页影响</td>
+      <td class="dep">M0</td>
+    </tr>
+    <tr>
+      <td class="tk">T1-4</td>
+      <td><b>开票累计 + 超开拦截</b><br><small>报价详情嵌已开票清单；未开余额 = total − Σ未作废；超开 409；management 授权越额 + 原因 + 审计</small></td>
+      <td class="nw">3</td>
+      <td class="crit">① 同一报价连开 3 张（2k/3k/4k，总额 8k）→ 第 4 张 409<br>② 提示文案含剩余额度<br>③ 授权越额后放行，<code>audit_log</code> 有原因<br>④ 作废一张后，未开余额正确回升</td>
+      <td class="dep">T0-5</td>
+    </tr>
+    <tr>
+      <td class="tk">T1-5</td>
+      <td><b>客户查重软提示 + 最小必填</b></td>
+      <td class="nw">1.5</td>
+      <td class="crit">① 新建同名客户 → 显示已有列表（编码/地址/电话）<br>② 地址与电话都为空 → <b>无法保存</b><br>③ 不同名客户不受影响</td>
+      <td class="dep">T1-6</td>
+    </tr>
+    <tr>
+      <td class="tk">T1-6</td>
+      <td><b><code>customer_code</code> 唯一 + 补 522 笔</b><br><small>从 <code>C1063</code> 顺延；<code>UNIQUE(customer_code)</code>；名称只建非唯一索引</small></td>
+      <td class="nw">1.5</td>
+      <td class="crit">① 非空编码数 = 1,608，唯一数 = 1,608<br>② 原有 1,086 个编码<b>零变更</b><br>③ 插入重复编码被数据库拒绝</td>
+      <td class="dep">M0</td>
+    </tr>
+    <tr>
+      <td class="tk">T1-7</td>
+      <td><b>空壳客户自动回填</b><br><small>138 笔从单据 <code>work_location</code> 反填唯一地址</small></td>
+      <td class="nw">1</td>
+      <td class="crit">① 138 笔 <code>service_address</code> 非空<br>② 抽 10 笔人工比对，与单据地点一致<br>③ 92 笔多地址的<b>不被覆盖</b></td>
+      <td class="dep">T1-6</td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="callout">
+  <b>M1 放行条件</b>
+  <p>性能两项达标 + 开票闭环验收全绿 + 客户编码唯一。此时系统已经「能安全给办公室用」，可以先小范围上线，
+  <b>不必等阶段 2 的数据迁移</b>。</p>
+</div>
+
+<h2>阶段 2 · 数据（15 天）</h2>
+
+<div class="callout warn">
+  <b>顺序很重要：先补 <code>product_id</code>，再建表。反了会做无用功。</b>
+  <p>因为「按名字找产品/客户」这个根因出在<b>明细行</b>，不在表头。8,631 条明细行里有 <b>3,768 条没有 <code>product_id</code></b>。
+  先做 T2-1，<code>productForAdjustment()</code> 的模糊匹配 bug 当场消失，而且<b>一行新表都不用建</b>。</p>
+</div>
+
+<table>
+  <thead><tr><th class="nw" style="width:8%">编号</th><th style="width:26%">任务</th><th class="nw" style="width:6%">人日</th><th>验收判据（可测量）</th><th class="nw" style="width:9%">依赖</th></tr></thead>
+  <tbody>
+    <tr>
+      <td class="tk">T2-1</td>
+      <td><b>明细行补 <code>product_id</code></b><br><small>按 <code>code_no</code> 精确匹配回填（预计 6,622 条）；剩余按名称唯一匹配；再剩余出清单人工</small></td>
+      <td class="nw">3</td>
+      <td class="crit">① 明细行带 <code>product_id</code> 从 4,863 → <b>≥ 6,622</b><br>② 送货单过账<b>不再调用</b> <code>productForAdjustment()</code> 的名称分支<br>③ 未被匹配的行有 CSV 清单</td>
+      <td class="dep">M1</td>
+    </tr>
+    <tr>
+      <td class="tk">T2-2</td>
+      <td><b>接 <code>schedule_employees</code></b><br><small>973 行 / 488 排班；权限判定改用 <code>employee_id</code></small></td>
+      <td class="nw">1</td>
+      <td class="crit">① <code>ownsRecord()</code> 不再出现 <code>includes(name)</code><br>② front 账号只能看到 <code>employee_id</code> 匹配的排班<br>③ 488 条历史指派<b>零丢失</b></td>
+      <td class="dep">M1</td>
+    </tr>
+    <tr>
+      <td class="tk">T2-3</td>
+      <td><b>建 8 张关系表 + 迁移脚本</b><br><small>customers / products / quotations(+items) / purchase_orders(+items) / delivery_notes(+items) / invoices(+items) / receipts / stock_adjustments</small></td>
+      <td class="nw">8</td>
+      <td class="crit">① 脚本幂等：连跑两次，第二次 <code>changes = 0</code><br>② 对账全绿（行数 / 金额 Σ <b>精确相等</b> / 单号唯一 / 孤儿外键 0）<br>③ 副本上演练 <b>3 次</b>结果逐字节一致</td>
+      <td class="dep">T2-1</td>
+    </tr>
+    <tr>
+      <td class="tk">T2-4</td>
+      <td><b>停机切换</b><br><small>周末 2h；<code>VACUUM INTO</code> 备份；单事务迁移；冒烟 12 条</small></td>
+      <td class="nw">0.5</td>
+      <td class="crit">① 12 条冒烟全过<br>② 抽查 10 张单据（报价/PO/送货/发票/收款/排班…）逐字段一致<br>③ 回滚演练：改 <code>DB_PATH</code> 重启后系统可用，<b>&lt; 5 分钟</b></td>
+      <td class="dep">T2-3</td>
+    </tr>
+    <tr>
+      <td class="tk">T2-5</td>
+      <td><b>T+7 复核后才 DROP 旧表</b></td>
+      <td class="nw">0.2</td>
+      <td class="crit">连续 7 天无 500、无错单号、无金额不符</td>
+      <td class="dep">T2-4</td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="callout">
+  <b>M2 放行条件</b>
+  <p>关系表成为主存储、<code>records</code> 转为只读归档、对账报告归档留证。此时才有<b>外键与唯一约束</b>，
+  并发重号、孤儿单据这两类问题从「靠代码守」变成「数据库拒绝」。</p>
+</div>
+
+<h2>阶段 3 · 工程化（5 天，可与阶段 2 并行）</h2>
+
+<table>
+  <thead><tr><th class="nw" style="width:8%">编号</th><th style="width:26%">任务</th><th class="nw" style="width:6%">人日</th><th>验收判据</th><th class="nw" style="width:9%">依赖</th></tr></thead>
+  <tbody>
+    <tr>
+      <td class="tk">T3-1</td>
+      <td><b><code>package.json</code> + engines + 迁移版本表</b><br><small><code>engines.node &gt;= 22</code>；<code>schema_version</code> 表；启动时校验版本</small></td>
+      <td class="nw">0.5</td>
+      <td class="crit">Node 20 启动时报明确错误而非崩在 <code>node:sqlite</code></td>
+      <td class="dep">—</td>
+    </tr>
+    <tr>
+      <td class="tk">T3-2</td>
+      <td><b>验收脚本改造（Q9 = A）</b><br><small>结构断言保留；字面 CSS 断言改为截图快照 + 人工确认</small></td>
+      <td class="nw">2</td>
+      <td class="crit">① 改一次 <code>font-weight</code>，验收<b>仍全绿</b><br>② 快照 diff 需人工点确认才通过<br>③ 改造前后各跑一次全量，通过项数差异有书面说明</td>
+      <td class="dep">M1</td>
+    </tr>
+    <tr>
+      <td class="tk">T3-3</td>
+      <td><b>备份脚本 + 超期告警</b><br><small>每日 <code>VACUUM INTO</code> + uploads 打包 + SHA256；超 24h 未备份发通知</small></td>
+      <td class="nw">1</td>
+      <td class="crit">① 手动断网一天 → 收到告警<br>② 备份包含<b>数据 + 附件本体</b>，不只 db</td>
+      <td class="dep">—</td>
+    </tr>
+    <tr>
+      <td class="tk">T3-4</td>
+      <td><b>恢复演练</b><br><small>干净机器上只用备份复原</small></td>
+      <td class="nw">0.5</td>
+      <td class="crit">能登录、能打开一张报价单、能看到附件。<b>没演练过的备份等于没有备份</b></td>
+      <td class="dep">T3-3</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2>阶段 4 · 上线（5 天，Q3 = B）</h2>
+
+<table>
+  <thead><tr><th class="nw" style="width:8%">编号</th><th style="width:26%">任务</th><th class="nw" style="width:6%">人日</th><th>验收判据</th><th class="nw" style="width:9%">依赖</th></tr></thead>
+  <tbody>
+    <tr>
+      <td class="tk">T4-1</td>
+      <td><b>服务器 + 域名</b><br><small>香港 4C8G / 100GB ESSD / Ubuntu 24.04；域名实名（提前 3 天）</small></td>
+      <td class="nw">0.5</td>
+      <td class="crit">用<b>公司账号</b>购买；重置凭据单独存放</td>
+      <td class="dep">—</td>
+    </tr>
+    <tr>
+      <td class="tk">T4-2</td>
+      <td><b>nginx + HTTPS + 回环绑定</b><br><small><code>server.listen(PORT,'127.0.0.1')</code>；<code>$proxy_add_x_forwarded_for</code>；<code>client_max_body_size 32m</code></small></td>
+      <td class="nw">1</td>
+      <td class="crit">① 从公网 <code>:3000</code> <b>连不上</b>（只 443）<br>② 32MB 附件上传成功<br>③ 证书自动续期生效</td>
+      <td class="dep">T4-1</td>
+    </tr>
+    <tr>
+      <td class="tk">T4-3</td>
+      <td><b><code>clientIp()</code> + 两级锁定 + 解锁按钮</b><br><small>XFF 从右往左取；<code>acct:</code> 8 次 / <code>ip:</code> 40 次；登录成功只清 acct</small></td>
+      <td class="nw">1.5</td>
+      <td class="crit">① 伪造 <code>X-Forwarded-For: 8.8.8.8</code> → 审计记录<b>真实 IP</b><br>② 锁住 A 账号后，B 账号<b>仍可登录</b><br>③ 管理层解锁后 A 立即恢复<br>④ 对外提示文案始终一致</td>
+      <td class="dep">T4-2</td>
+    </tr>
+    <tr>
+      <td class="tk">T4-4</td>
+      <td><b>Cookie 加固 + 会话落表</b><br><small><code>__Host-sid</code> + <code>Secure</code>；sessions 表</small></td>
+      <td class="nw">1</td>
+      <td class="crit">① 重启服务后已登录用户<b>不掉线</b><br>② Cookie 含 <code>Secure</code> 且无 <code>Domain</code></td>
+      <td class="dep">T4-2</td>
+    </tr>
+    <tr>
+      <td class="tk">T4-5</td>
+      <td><b>50 并发压测</b></td>
+      <td class="nw">1</td>
+      <td class="crit">P95 &lt; 800 ms、无 5xx、无 429 误伤正常用户</td>
+      <td class="dep">T1-1 · T4-4</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2>风险登记</h2>
+
+<table>
+  <thead><tr><th class="nw" style="width:6%">编号</th><th style="width:26%">风险</th><th class="nw" style="width:8%">概率</th><th class="nw" style="width:8%">影响</th><th>应对</th></tr></thead>
+  <tbody>
+    <tr>
+      <td class="tk">R1</td>
+      <td>明细行 2,009 条（23.3%）无法按编码回填 <code>product_id</code></td>
+      <td><span class="pill p-a">高</span></td>
+      <td><span class="pill p-a">中</span></td>
+      <td>先出清单，按「同名唯一匹配 → 人工」两级处理；<b>不允许</b>用模糊匹配兜底（那正是现在 bug 的来源）。工作日预留 1 天缓冲</td>
+    </tr>
+    <tr>
+      <td class="tk">R2</td>
+      <td>停机窗口超时</td>
+      <td><span class="pill p-g">低</span></td>
+      <td><span class="pill p-r">高</span></td>
+      <td>副本演练 3 次 + 记时；「加表不删表」保证回滚 &lt; 5 分钟；窗口选周日凌晨</td>
+    </tr>
+    <tr>
+      <td class="tk">R3</td>
+      <td>业务不接受「客户名称可重复」</td>
+      <td><span class="pill p-a">中</span></td>
+      <td><span class="pill p-a">中</span></td>
+      <td>提前用真实数据说明：4 个房屋署对应 0/3/6/85 张单据、跨四个区，合并会毁账。<b>这一条要在 T1-6 之前谈定</b></td>
+    </tr>
+    <tr>
+      <td class="tk">R4</td>
+      <td>验收脚本改造期间回归失效</td>
+      <td><span class="pill p-a">中</span></td>
+      <td><span class="pill p-r">高</span></td>
+      <td>改造前后各跑一次全量；<b>改造期间冻结其他改动</b>，避免分不清是谁引入的</td>
+    </tr>
+    <tr>
+      <td class="tk">R5</td>
+      <td>阶段 2 做完才发现关系表与业务口径不符</td>
+      <td><span class="pill p-a">中</span></td>
+      <td><span class="pill p-r">高</span></td>
+      <td>T2-3 先建表<b>不切读</b>，用影子读跑 3 天对拍（同一页用两套数据渲染，比对 HTML 差异 = 0）</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2>一页速查</h2>
+
+<div class="card">
+  <h3>现在就能做的三件事（今天，不依赖任何人）</h3>
+  <ol>
+    <li><b><code>demo_mode</code> 改成 0</b> —— 一行改动，堵掉免密管理入口。</li>
+    <li><b><code>/api/pick</code> 加 <code>assertEntity</code></b> —— 一行改动，堵掉客户与成本价泄漏。</li>
+    <li><b><code>fieldInput()</code> 加金额掩码</b> —— 十行改动，让字段级屏蔽真正成立。</li>
+  </ol>
+  <p style="margin-bottom:0">这三件加起来不到半天，但它们决定了「这套系统现在能不能给人用」。</p>
+</div>
+
+<footer>
+  <b>Standard CPC 施工顺序表 v1</b> · 2026-10-25 · 依据《架构审核报告_第一期》§0–§九 的九项决策<br>
+  人日为净开发时间，不含评审与等待；风险项 R1/R3 需业务方参与，可能外挂 2–3 天。<br>
+  判据均为可测量指标，未达标不得进入下一里程碑。
+</footer>
+
+</div>
+</body>
+</html>
