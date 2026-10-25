@@ -367,10 +367,16 @@ async function handle(req, res) {
 
   if (p === '/api/pick' && req.method === 'GET') {
     const source = str(url.searchParams.get('source'));
-    if (!PICK_SOURCES[source]) throw new HttpError(404, '未知選擇器資料源');
+    const def = PICK_SOURCES[source];
+    if (!def) throw new HttpError(404, '未知選擇器資料源');
+    // strict 來源沿用實體 viewRoles（客戶／合約／採購單含聯絡方式與金額）；
+    // products / employees 不能 403，補給記錄與請假表單的前線 editRoles 需要它們，改為裁剪欄位。
+    if (def.policy === 'strict') assertEntity(user, ENTITIES[def.entity]);
     const query = str(url.searchParams.get('q'));
     const limit = Math.min(50, Math.max(5, Number(url.searchParams.get('limit') || 20)));
-    return json(res, searchPick(store, source, query, limit));
+    const rows = searchPick(store, source, query, limit, user);
+    store.audit({ user, action: 'pick', entity: source, label: query, shown: source, via: '/api/pick', req });
+    return json(res, rows);
   }
   if (p.startsWith('/save/') && req.method === 'POST') {
     const cfg = ENTITIES[p.slice(6)];
@@ -832,6 +838,14 @@ const server = http.createServer(async (req, res) => {
   }
 });
 server.listen(PORT, HOST, () => {
+  // 演示登入 = 免密碼取得管理層帳號。預設已關閉，但舊資料庫可能仍留著 demo_mode=1，
+  // 只要還開著就大聲警示，避免帶著後門上公網。
+  if (store.setting('demo_mode', '0') === '1') {
+    const alert = (text) => console.log(`\x1b[41m\x1b[93m ${text} \x1b[0m`);
+    alert('警告：演示登入（demo_mode=1）已開啟');
+    alert('任何能連到這台機器的人，都可以用 /demo 免密碼取得管理層帳號權限。');
+    alert('公網部署前必須關閉：/settings 關掉演示登入，或將 settings.demo_mode 設為 0。');
+  }
   const nets = Object.values(os.networkInterfaces()).flat().filter((n) => n && n.family === 'IPv4' && !n.internal);
   console.log(`本機：  http://127.0.0.1:${PORT}`);
   for (const n of nets) console.log(`同一 WiFi 的手機／同事：  http://${n.address}:${PORT}`);
