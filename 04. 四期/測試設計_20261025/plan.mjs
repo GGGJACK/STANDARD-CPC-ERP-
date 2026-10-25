@@ -94,7 +94,7 @@ export const MODULES = [
     auto: '編號、明細小計/總額、必填、階段、轉 PO/合同、軟刪除',
     cases: [
       { id: 'QUO-01', title: '報價自動編號', p: 'P0', t: '功能', pre: 'office', steps: ['quotation_number 留空，類型=服務提交', '再看產品類型'], expect: '服務 SQP-YYYY-####；產品 SQM-YYYY-####；序號不跳號不重號' },
-      { id: 'QUO-02', title: '明細小計與總額', p: 'P0', t: '資料', pre: 'office', steps: ['2×100 折扣 10；運費 20；整單折扣 5', '讀 DB'], expect: '行小計 190；subtotal 190；total=190+20-5=205；前端顯示同值' },
+      { id: 'QUO-02', title: '明細小計與總額', p: 'P0', t: '資料', pre: 'office', steps: ['2×100 折扣 10；運費 20', '讀 DB'], expect: '行小計 190；subtotal 190；total=190+20=210；整單折扣已依 T0-5 從表單移除（欄位留 JSON 兼容舊資料）' },
       { id: 'QUO-03', title: '必填與空明細', p: 'P0', t: '異常', pre: 'office', steps: ['缺 customer_name', '缺 items', 'items=[]'], expect: '均 400 並指出欄位；不得產生半成品記錄' },
       { id: 'QUO-04', title: '報價階段與成交標記', p: 'P1', t: '功能', pre: '已有報價', steps: ['POST /quotations/:id/stage stage=已成交', '再提交非法 stage'], expect: '已成交時 accepted=true、accepted_date 有值；非法值 400' },
       { id: 'QUO-05', title: '報價轉採購單', p: 'P1', t: '功能', pre: '報價含 2 行明細', steps: ['POST /quotations/:id/to-po', '讀 PO 與報價'], expect: '302 → PO 詳情；quotation_id/customer/total 一致；PO 編號與名稱為非空（PO-YYYY-####）' },

@@ -295,14 +295,15 @@ async function run() {
       req('management', '/api/pick?source=products&limit=5'),
       req('front', '/api/pick?source=employees&limit=5'),
     ]);
-    const officeRows = parse(op); const mgmtRows = parse(mp);
+    const officeRows = parse(op); const mgmtRows = parse(mp); const frontRows = parse(fp);
     const leak = officeRows.some((x) => x.fill && Object.hasOwn(x.fill, 'cost_price'));
     const mgmtHas = mgmtRows.some((x) => x.fill && Object.hasOwn(x.fill, 'cost_price'));
+    const frontLeak = frontRows.some((x) => x.fill && Object.hasOwn(x.fill, 'cost_price'));
     const audited = db.prepare("SELECT COUNT(*) c FROM audit_log WHERE action='pick'").get().c;
     return {
-      pass: fc.status === 403 && fp.status === 403 && op.status === 200 && !leak && mgmtHas && fe.status === 200 && audited >= 3,
-      expected: 'front→customers/products 403；office 無 cost_price；mgmt 有；front→employees 200；每次調用留審計',
-      actual: `${fc.status}/${fp.status}/${op.status} leak=${leak} mgmt=${mgmtHas} emp=${fe.status} audit=${audited}`,
+      pass: fc.status === 403 && fp.status === 200 && !frontLeak && op.status === 200 && !leak && mgmtHas && fe.status === 200 && audited >= 3,
+      expected: 'front→customers 403；front→products 200 但無 cost_price（補給要選產品）；office 無 cost_price；mgmt 有；front→employees 200；每次調用留審計',
+      actual: `${fc.status}/${fp.status} frontLeak=${frontLeak} officeLeak=${leak} mgmt=${mgmtHas} emp=${fe.status} audit=${audited}`,
     };
   });
   // SEC-02：屏蔽必須做在序列化層，不能只做在 renderValue
@@ -362,7 +363,7 @@ async function run() {
     const r = await post('office', '/save/quotations', basePayload('quotations', {
       quotation_type: '服務', customer_name: `${tag}-客戶`, customer_type: '標準', work_content: '滅蟲服務', service_location: '測試地點',
       work_unit_name: '測試單位', items: JSON.stringify([{ item_name: '服務費', quantity: 2, unit_price: 100, discount: 10, unit: '次' }]),
-      freight_charges: '20', discount: '5',
+      freight_charges: '20',
     }));
     const id = idFrom(r.location); X.quotationId = id;
     const row = id && rowOf('quotations', id);
@@ -371,7 +372,9 @@ async function run() {
   });
   await check('QUO-02', 'QUO', '報價明細與總額', 'P0', '資料', async () => {
     const row = rowOf('quotations', X.quotationId);
-    return { pass: row.subtotal === 190 && row.total_amount === 205 && row.items?.[0]?.total === 190, expected: '小計 190、總額 205', actual: `${row.subtotal}/${row.total_amount}` };
+    // 整單折扣已從表單移除（施工順序表 T0-5，歷史 0 使用；欄位仍留在 JSON 裡兼容舊資料），
+    // 所以總額 = 小計 + 運費，不再減表頭折扣。行級 Disc 保留。
+    return { pass: row.subtotal === 190 && row.total_amount === 210 && row.items?.[0]?.total === 190, expected: '小計 190、總額 190+20=210', actual: `${row.subtotal}/${row.total_amount}` };
   });
   await check('QUO-03', 'QUO', '報價必填與空明細', 'P0', '異常', async () => {
     const a = await post('office', '/save/quotations', basePayload('quotations', { quotation_type: '服務', customer_type: '標準', work_content: 'x', items: JSON.stringify([{ quantity: 1, unit_price: 1 }]) }));

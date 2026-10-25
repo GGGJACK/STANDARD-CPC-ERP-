@@ -103,7 +103,10 @@ try {
   check('SEC-01a', a1.status === 403, `front → customers 期望 403，實得 ${a1.status}`);
 
   const a2 = await get('/api/pick?source=products&limit=5', front);
-  check('SEC-01b', a2.status === 403, `front → products 期望 403（實體 viewRoles 不含 front），實得 ${a2.status}`);
+  let j2 = []; try { j2 = JSON.parse(a2.text); } catch {}
+  const leak2 = j2.some((r) => r.fill && Object.hasOwn(r.fill, 'cost_price'));
+  check('SEC-01b', a2.status === 200 && !leak2,
+    `front → products 期望 200 且無 cost_price（補給要選產品，不能一刀切 403），實得 ${a2.status}，洩漏=${leak2}`);
 
   const a3 = await get('/api/pick?source=products&limit=5', office);
   let j3 = []; try { j3 = JSON.parse(a3.text); } catch {}
