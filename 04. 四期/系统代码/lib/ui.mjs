@@ -155,6 +155,7 @@ td.actions form{display:inline}
 td.empty::before,.card.empty::before{content:'';display:block;width:34px;height:34px;margin:0 auto 10px;opacity:.45;background:currentColor;mask:url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.6'%3E%3Cpath d='M3 13h4l2 3h6l2-3h4'/%3E%3Cpath d='M5 5h14l2 8v6H3v-6z'/%3E%3C/svg%3E") center/contain no-repeat;-webkit-mask:url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.6'%3E%3Cpath d='M3 13h4l2 3h6l2-3h4'/%3E%3Cpath d='M5 5h14l2 8v6H3v-6z'/%3E%3C/svg%3E") center/contain no-repeat}
 .card.empty{padding:50px 20px;box-shadow:none;border-style:dashed;background:#fcfdfe}
 .mask{letter-spacing:3px;color:#98a2b1}
+input.masked-amount{letter-spacing:3px;color:#98a2b1;background:#f8fafc;cursor:not-allowed}
 
 /* ── 標籤 ─────────────────────────────────────────────── */
 .pill{display:inline-flex;align-items:center;gap:4px;border-radius:999px;background:#f1f5f9;color:#475569;padding:2px 9px;font-size:11.5px;font-weight:600;line-height:1.65;white-space:nowrap;border:1px solid transparent}
@@ -992,6 +993,13 @@ export function pickerControl({ source, name = '', value = '', valueLabel = '', 
   return `<div class="pk" data-source="${esc(source)}" data-multi="0" data-valuemode="${esc(valueMode)}"><input type="hidden" class="pk-val"${name ? ` name="${esc(name)}"` : ''} value="${esc(value ?? '')}"><input type="text" class="pk-input" autocomplete="off" value="${esc(label)}" placeholder="${esc(placeholder || '輸入關鍵字搜尋…')}"><div class="pk-menu" hidden></div></div>`;
 }
 
+// 明細行內屬於「金額」的衍生欄位。這幾個值由 actions.recalculate() 用數量 × 單價重算，
+// 所以前端剝掉不會寫壞資料；仍要剔除，否則 HTML 原始碼會把每行小計漏給無金額權限的角色。
+const DERIVED_ITEM_KEYS = ['total', 'subtotal', 'amount'];
+// 只有 recalculate() 會重建 items 的實體才能安全剝掉。receipts 的 items[].subtotal 是實際收款額
+// 且沒有重算邏輯（見 lib/actions.mjs 的 recalculate），剝掉就是真遺失，故不列入。
+const ITEM_TOTALS_RECALCULATED = new Set(['quotations', 'invoices', 'purchase_orders', 'bills']);
+
 function fieldInput(field, value, ctx) {
   const name = esc(field.name);
   const id = `f_${name}`;
@@ -999,11 +1007,11 @@ function fieldInput(field, value, ctx) {
   const readonly = field.readOnly ? 'readonly' : '';
   const common = `id="${id}" name="${name}" ${required} ${readonly}`;
   const placeholder = field.placeholder ? ` placeholder="${esc(field.placeholder)}"` : '';
-  // SEC-02：金額欄位在無權限時只顯示佔位符，原值改用 hidden 提交。
-  // 必須在通用 input 之前攔截，否則編輯頁的 value 會把總額原樣吐進 HTML。
-  if (ctx.canSeeAmounts === false && (field.type === 'money' || AMOUNT_FIELDS.has(field.name))) {
-    const raw = value === null || value === undefined ? '' : value;
-    return `<input type="text" id="${id}" value="" placeholder="•••••" readonly autocomplete="off" aria-label="金額依權限隱藏"><input type="hidden" name="${name}" value="${esc(raw)}">`;
+  // 金額欄位：無權限時用「無 name 的遮罩框 + hidden 真值」取代原本直接寫真值的輸入框。
+  // 遮罩框刻意不帶 name（否則與 hidden 同名，parseBody 會收成陣列，存回去變成 "7500,7500"），
+  // 並用 disabled 而非 readonly，保證改不動也不參與提交。
+  if ((field.type === 'money' || AMOUNT_FIELDS.has(field.name)) && ctx.canSeeAmounts === false) {
+    return `<input type="text" id="${id}" class="masked-amount" value="•••••" readonly disabled${placeholder}><input type="hidden" name="${name}" value="${esc(value ?? '')}">`;
   }
   if (field.type === 'textarea' || field.type === 'json') return `<textarea ${common} rows="${field.type === 'json' ? 6 : 3}"${placeholder}>${esc(field.type === 'json' && value && typeof value === 'object' ? JSON.stringify(value, null, 2) : value ?? '')}</textarea>`;
   if (field.type === 'richtext') return `<div data-rich="${id}"><div class="rich-toolbar noprint"><button type="button" data-cmd="bold"><b>B</b></button><button type="button" data-cmd="italic"><i>I</i></button><button type="button" data-cmd="underline"><u>U</u></button><button type="button" data-cmd="insertUnorderedList">• 列表</button><button type="button" data-cmd="insertOrderedList">1. 列表</button><button type="button" data-cmd="removeFormat">清除格式</button></div><div class="rich-editor" contenteditable="true"></div></div><textarea class="hidden" ${common}>${esc(value ?? '')}</textarea>`;
@@ -1024,8 +1032,14 @@ function fieldInput(field, value, ctx) {
   }
   if (field.type === 'checkbox') return `<input type="hidden" name="${name}" value="0"><label style="display:flex;align-items:center;gap:7px;font-weight:400"><input type="checkbox" name="${name}" value="1" ${value === true || value === 1 || value === '1' ? 'checked' : ''}> ${esc(field.checkboxLabel || '是')}</label>`;
   if (field.type === 'items') {
-    const items = Array.isArray(value) ? value : [];
-    const itemCols = (field.itemColumns || []).map((c) => ({ ...c, integer: isIntegerField(c) }));
+    const raw = Array.isArray(value) ? value : [];
+    const hideTotals = ctx.canSeeAmounts === false && ITEM_TOTALS_RECALCULATED.has(ctx.cfg?.key);
+    const items = hideTotals
+      ? raw.map((item) => { const copy = { ...item }; for (const key of DERIVED_ITEM_KEYS) delete copy[key]; return copy; })
+      : raw;
+    const itemCols = (field.itemColumns || [])
+      .filter((c) => !(hideTotals && DERIVED_ITEM_KEYS.includes(c.name)))
+      .map((c) => ({ ...c, integer: isIntegerField(c) }));
     return `<textarea class="hidden items-json" ${common}>${esc(JSON.stringify(items))}</textarea><div class="item-editor" data-target="${id}" data-columns="${esc(JSON.stringify(itemCols))}" data-layout="${esc(field.layout || 'table')}" data-add-label="${esc(field.addLabel || '新增一行')}" data-row-label="${esc(field.rowLabel || '工作')}"></div>`;
   }
   if (field.type === 'files') {
