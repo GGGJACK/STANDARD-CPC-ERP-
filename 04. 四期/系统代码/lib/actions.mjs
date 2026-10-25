@@ -317,6 +317,7 @@ function saveDeliveryNote({ store, cfg, data, existing, user, skipStock = false 
       op.product.stock_quantity = op.after;
       store.save('products', op.product, { id: op.product.id, user });
       const adjustment = {
+        adjustment_number: '', // 鍵必須先存在，defaultNumber() 才會編號（缺鍵會直接 return，調整單就沒有編號可追溯）
         adjustment_date: data.dn_date || hkNow().date, adjustment_type: '送貨出庫',
         product_id: op.product.id, product_name: op.product.product_name, product_code: op.product.product_code,
         quantity_before: op.before, quantity_change: -op.qty, quantity_after: op.after,
@@ -364,6 +365,7 @@ export function reverseStockCount({ store, id, user, redo = false }) {
       op.product.stock_quantity = after;
       store.save('products', op.product, { id: op.product.id, user });
       const adjustment = {
+        adjustment_number: '', // 同上：缺鍵則不編號
         adjustment_date: hkNow().date, adjustment_type: '盤點調整',
         product_id: op.product.id, product_name: op.product.product_name, product_code: op.product.product_code,
         quantity_before: before, quantity_change: change, quantity_after: after,
@@ -416,6 +418,7 @@ function saveStockCount({ store, cfg, data, existing, user }) {  return store.tr
       store.save('products', op.product, { id: op.product.id, user });
       if (op.difference !== 0) {
         const adjustment = {
+          adjustment_number: '', // 同上：缺鍵則不編號
           adjustment_date: data.count_date || hkNow().date, adjustment_type: '盤點調整', product_id: op.product.id,
           product_name: op.product.product_name, product_code: op.product.product_code, quantity_before: op.before,
           quantity_change: op.difference, quantity_after: op.actual, unit_cost: op.product.cost_price || 0,
