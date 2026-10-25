@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>四期 · 第四次修改 · Agent 交接手冊</title>
+<style>
+  :root{
+    --brand:#0f766e;--brand-2:#0b5f58;--grad:linear-gradient(135deg,#2563eb,#0d9488);
+    --ink:#0f172a;--ink2:#334155;--muted:#64748b;--line:#e4e9f0;--bg:#f6f8fb;
+    --red:#b42318;--amber:#b54708;--green:#047857;--blue:#1d4ed8;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font:15px/1.75 "Microsoft JhengHei","PingFang HK","PingFang SC",system-ui,-apple-system,"Segoe UI",sans-serif;
+    -webkit-font-smoothing:antialiased}
+  .wrap{display:grid;grid-template-columns:268px minmax(0,1fr);max-width:1520px;margin:0 auto}
+  nav.toc{position:sticky;top:0;align-self:start;height:100vh;overflow:auto;padding:24px 14px 40px;background:#fff;border-right:1px solid var(--line)}
+  .toc-brand{display:flex;align-items:center;gap:10px;padding-bottom:14px;margin-bottom:12px;border-bottom:1px solid var(--line)}
+  .toc-logo{width:36px;height:36px;border-radius:10px;background:var(--grad);display:flex;align-items:center;justify-content:center;box-shadow:0 4px 10px rgba(37,99,235,.28);flex:none}
+  .toc-logo svg{width:19px;height:19px;stroke:#fff;fill:none;stroke-width:1.8}
+  .toc-brand b{display:block;font-size:13.5px;line-height:1.35}
+  .toc-brand span{display:block;font-size:11px;color:var(--muted)}
+  .toc-title{font-size:10.5px;font-weight:700;letter-spacing:.1em;color:#94a3b8;padding:10px 8px 6px}
+  nav.toc a{display:block;padding:6px 9px;border-radius:7px;color:#475569;font-size:13px;text-decoration:none;line-height:1.5}
+  nav.toc a:hover{background:#f1f5f9;color:var(--brand)}
+  nav.toc a.sub{padding-left:20px;font-size:12.5px;color:#64748b}
+  nav.toc a.sub::before{content:"·";margin-right:6px;color:#cbd5e1}
+  main{padding:32px 40px 96px;min-width:0}
+  header.hero{background:#fff;border:1px solid var(--line);border-radius:16px;padding:26px 30px;margin-bottom:24px;box-shadow:0 1px 3px rgba(16,24,40,.06)}
+  .hero .kicker{font-size:11.5px;font-weight:700;letter-spacing:.12em;color:var(--brand);text-transform:uppercase}
+  header.hero h1{font-size:30px;line-height:1.25;letter-spacing:-.02em;margin:8px 0 10px;font-weight:700}
+  header.hero p{margin:0;color:var(--muted);font-size:14px;max-width:900px}
+  .meta{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+  .meta span{background:#f1f5f9;border:1px solid var(--line);border-radius:999px;padding:3px 11px;font-size:12px;color:#475569}
+  h2{font-size:21px;letter-spacing:-.01em;margin:40px 0 14px;padding-top:8px;font-weight:700;scroll-margin-top:16px}
+  h2 .num{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:8px;background:var(--grad);color:#fff;font-size:13px;margin-right:9px;vertical-align:2px}
+  h3{font-size:15.5px;margin:26px 0 10px;font-weight:700}
+  h4{font-size:13.8px;margin:18px 0 8px;font-weight:700;color:var(--ink2)}
+  p{margin:0 0 12px}
+  ul,ol{margin:0 0 14px;padding-left:22px}
+  li{margin:4px 0}
+  code{font:12.5px/1.6 ui-monospace,Consolas,"Courier New",monospace;background:#f1f5f9;border:1px solid #e2e8f0;border-radius:4px;padding:1px 5px;color:#0f172a}
+  pre{background:#0f172a;color:#e2e8f0;border-radius:10px;padding:14px 16px;overflow:auto;font:12.5px/1.65 ui-monospace,Consolas,monospace;margin:0 0 16px}
+  pre .c{color:#7dd3fc}
+  pre .g{color:#86efac}
+  .card{background:#fff;border:1px solid var(--line);border-radius:13px;padding:16px 20px;margin:0 0 16px;box-shadow:0 1px 2px rgba(16,24,40,.05)}
+  .tldr{background:linear-gradient(180deg,#f0fdfa,#fff);border:1px solid #ccece5;border-left:4px solid var(--brand)}
+  .tldr h3{margin-top:0;display:flex;align-items:center;gap:8px}
+  .tldr ol{margin-bottom:0}
+  .callout{background:#fff7ed;border:1px solid #fed7aa;border-left:4px solid var(--amber);border-radius:10px;padding:12px 16px;margin:0 0 16px;font-size:13.8px}
+  .callout>b{display:block;margin-bottom:3px;color:var(--amber)}
+  .callout>p{margin:0}
+  .callout ul,.callout ol{margin:2px 0 0;padding-left:20px}
+  .callout li{margin:2px 0}
+  .callout.risk{background:#fef2f2;border-color:#fecaca;border-left-color:var(--red)}
+  .callout.risk b{color:var(--red)}
+  .callout.ok{background:#ecfdf5;border-color:#b8e8d6;border-left-color:var(--brand)}
+  .callout.ok b{color:var(--brand)}
+  table{width:100%;border-collapse:separate;border-spacing:0;font-size:13.4px;background:#fff;border:1px solid var(--line);border-radius:11px;overflow:hidden;margin:0 0 18px}
+  th{background:#f8fafc;text-align:left;font-size:12px;font-weight:700;color:#64748b;letter-spacing:.03em;padding:10px 13px;border-bottom:1px solid var(--line);white-space:nowrap}
+  td{padding:10px 13px;border-bottom:1px solid #eef2f7;vertical-align:top}
+  tr:last-child td{border-bottom:0}
+  tbody tr:hover{background:#f9fbfd}
+  td.nw,th.nw{white-space:nowrap}
+  .pill{display:inline-flex;align-items:center;border-radius:999px;padding:1px 9px;font-size:11.5px;font-weight:600;white-space:nowrap;border:1px solid transparent}
+  .pill.g{background:#ecfdf5;color:var(--green);border-color:#b8e8d6}
+  .pill.r{background:#fef3f2;color:var(--red);border-color:#f6d2ce}
+  .pill.a{background:#fffbeb;color:var(--amber);border-color:#fde68a}
+  .pill.b{background:#eff6ff;color:var(--blue);border-color:#bfdbfe}
+  .pill.n{background:#f1f5f9;color:#475569;border-color:#e2e8f0}
+  .flow{display:grid;grid-template-columns:1fr;gap:0}
+  .steps{counter-reset:s;list-style:none;padding:0;margin:0 0 18px}
+  .steps li{counter-increment:s;position:relative;padding:0 0 14px 34px;margin:0}
+  .steps li::before{content:counter(s);position:absolute;left:0;top:1px;width:22px;height:22px;border-radius:7px;background:#e6f4f1;color:var(--brand);font-size:11.5px;font-weight:700;display:flex;align-items:center;justify-content:center}
+  .steps li::after{content:"";position:absolute;left:10.5px;top:24px;bottom:2px;width:1px;background:#e2e8f0}
+  .steps li:last-child::after{display:none}
+  .steps b{display:block;font-size:13.5px}
+  .steps span{font-size:12.8px;color:var(--muted)}
+  .kv{display:grid;grid-template-columns:132px 1fr;gap:6px 12px;font-size:13.4px}
+  .kv dt{color:var(--muted)}
+  .kv dd{margin:0}
+  .footer{margin-top:44px;padding-top:18px;border-top:1px solid var(--line);color:var(--muted);font-size:12.5px}
+  .footer b{color:var(--ink2)}
+  @media (max-width:1100px){.wrap{grid-template-columns:1fr}nav.toc{display:none}main{padding:22px 18px 60px}}
+  @media print{nav.toc{display:none}.wrap{display:block}main{padding:0}body{background:#fff}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="toc">
+  <div class="toc-brand">
+    <div class="toc-logo"><svg viewBox="0 0 24 24"><path d="M4 7h16M4 12h10M4 17h7"/><circle cx="18.5" cy="16.5" r="2.5"/></svg></div>
+    <div><b>Agent 交接手冊</b><span>四期 · 第四次修改</span></div>
+  </div>
+  <div class="toc-title">先讀</div>
+  <a href="#s0">0 · 30 秒摘要</a>
+  <a href="#s1">1 · 開機、身份、資料</a>
+  <a href="#s2">2 · 代碼地圖</a>
+  <a href="#s3">3 · 資料模型</a>
+  <div class="toc-title">理解系統</div>
+  <a href="#s4">4 · 一次請求怎麼走</a>
+  <a href="#s5">5 · 第四次修改做了什麼</a>
+  <a class="sub" href="#s5a">5.1 UI 系統性改造</a>
+  <a class="sub" href="#s5b">5.2 補給／請假存檔 404</a>
+  <a class="sub" href="#s5c">5.3 數量一律整數</a>
+  <a class="sub" href="#s5d">5.4 彈窗欄位調整</a>
+  <a class="sub" href="#s5e">5.5 下拉「一滑就關」</a>
+  <a href="#s6">6 · 不可破壞的不變量</a>
+  <div class="toc-title">動手前</div>
+  <a href="#s7">7 · 驗收怎麼跑</a>
+  <a href="#s8">8 · 已知坑</a>
+  <a href="#s9">9 · 待辦與建議</a>
+  <a href="#s10">10 · 回滾與檔案指紋</a>
+  <a href="#s11">11 · 第一小時清單</a>
+  <a href="#s12">12 · 資料與文檔索引</a>
+</nav>
+<main>
+
+<header class="hero">
+  <div class="kicker">Handover · for the next agent</div>
+  <h1>四期 · 第四次修改 · Agent 交接手冊</h1>
+  <p>這份文件不談設計理念，只回答四件事：<b>怎麼把它跑起來</b>、<b>代碼長什麼樣</b>、<b>這一輪動了哪些地方</b>、<b>哪些地方一碰就壞</b>。寫給下一個接手的人或 agent，假設你完全沒有上下文。</p>
+  <div class="meta">
+    <span>2026-10-25 19:20</span>
+    <span>Node v22.22.2</span>
+    <span>11 個檔案 / 6,284 行</span>
+    <span>38 個實體</span>
+    <span>34,053 筆記錄</span>
+    <span>回歸 73 + 55 + 29 + 176</span>
+  </div>
+</header>
+
+<h2 id="s0"><span class="num">0</span>30 秒摘要</h2>
+
+<div class="card tldr">
+  <h3>如果你只讀一段</h3>
+  <ol>
+    <li>這是一個<b>零依賴</b>的 Node 22 應用：<code>node:http</code> 手寫路由 + <code>node:sqlite</code>。沒有框架、沒有 build、沒有 <code>node_modules</code>。</li>
+    <li>全部業務資料存在 <code>data.db</code> 的<b>一張</b> <code>records</code> 表裡（<code>entity + id + data(JSON)</code>），欄位定義在 <code>lib/config.mjs</code> 的 <code>ENTITIES</code>。</li>
+    <li>起服務就是 <code>node server.mjs</code>，開 <code>http://127.0.0.1:3000</code>，用 <code>/demo?as=front</code> 之類的連結免密登入。</li>
+    <li>這一輪（第四次）只動了 <b>UI 與 4 個真實缺陷</b>：沒有改 DB schema、沒有加依賴、沒有動路由與權限模型。</li>
+    <li>改完 <code>lib/*.mjs</code> 或 <code>server.mjs</code> <b>一定要重啟</b>，沒有熱重載。</li>
+  </ol>
+</div>
+
+<div class="callout risk">
+  <b>三件會直接弄壞系統的事</b>
+  <ol>
+    <li>改 <code>.navgrp&gt;summary</code> 的字重——<code>verify-operation-2.mjs</code> 用字面 CSS 斷言 <code>font-size:13px;font-weight:700</code>，改了 55 項驗收直接紅。</li>
+    <li>給「新增」彈窗填 <code>__id</code>——後端會當成編輯一筆不存在的記錄，回 404，而且錯誤訊息會被二次 404 吞掉（這就是第 5.2 節的原始 bug）。</li>
+    <li>在瀏覽器端呼叫 <code>isIntegerField()</code>——它是 Node 端函式，<code>ReferenceError</code> 會讓整個明細編輯器初始化失敗，「新增一行」完全沒反應。</li>
+  </ol>
+</div>
+
+<h2 id="s1"><span class="num">1</span>開機、身份、資料</h2>
+
+<h3>1.1 啟動</h3>
+<pre>cd "F:/04 STANDARD CPC SYSTEM/04. 四期/系统代码"
+node server.mjs                      <span class="c"># → http://127.0.0.1:3000</span></pre>
+<p><code>启动系统.bat</code> 只是同一條命令的包裝。啟動後終端會印出本機位址、同網段手機可用的位址，以及實際使用的資料庫路徑——<b>先看最後那行 <code>資料庫：</code></b>，確認你連的是哪個 db，這是排查「資料不見了」的第一站。</p>
+
+<h3>1.2 環境變數</h3>
+<table>
+  <thead><tr><th class="nw">變數</th><th class="nw">預設值</th><th>作用</th></tr></thead>
+  <tbody>
+    <tr><td class="nw"><code>PORT</code></td><td class="nw">3000</td><td>監聽埠。驗收固定用 <code>3101</code>，測試腳本會拒絕在非 3101 執行。</td></tr>
+    <tr><td class="nw"><code>HOST</code></td><td class="nw">0.0.0.0</td><td>同網段同事／手機要連就靠這個，別改成 127.0.0.1。</td></tr>
+    <tr><td class="nw"><code>DB_PATH</code></td><td class="nw">./data.db</td><td>SQLite 檔。驗收一定要指向副本，不要指向正式庫。</td></tr>
+    <tr><td class="nw"><code>CPC_DATA_DIR</code></td><td class="nw">F:/03 Standard CPC DataBase/02. 数据导出/json</td><td><code>seed.mjs</code> 匯入來源（原系統匯出的 JSON）。</td></tr>
+    <tr><td class="nw"><code>CPC_ATTACHMENT_DIR</code></td><td class="nw">F:/03 Standard CPC DataBase/03. 附件</td><td>原系統附件目錄。</td></tr>
+    <tr><td class="nw"><code>CPC_UPLOAD_DIR</code></td><td class="nw">./uploads</td><td>本系統上傳目錄。<b>驗收必須改成副本目錄</b>，否則會污染正式附件。</td></tr>
+  </tbody>
+</table>
+
+<h3>1.3 身份與登入</h3>
+<p>四種角色：<code>front</code>（前線）、<code>office</code>（辦公室）、<code>accounting</code>（會計）、<code>management</code>（管理層）。</p>
+<table>
+  <thead><tr><th class="nw">角色</th><th class="nw">免密登入</th><th class="nw">帳號</th><th>大致能看到什麼</th></tr></thead>
+  <tbody>
+    <tr><td class="nw"><code>front</code></td><td class="nw"><code>/demo?as=front</code></td><td class="nw">front@demo.hk</td><td>公告板、我的工作、滅蟲工作、我的出勤、補給、請假、排班（只看自己）</td></tr>
+    <tr><td class="nw"><code>office</code></td><td class="nw"><code>/demo?as=office</code></td><td class="nw">office@demo.hk</td><td>市場管理全部、營運管理全部、回收桶</td></tr>
+    <tr><td class="nw"><code>accounting</code></td><td class="nw"><code>/demo?as=accounting</code></td><td class="nw">acc@demo.hk</td><td>公司財務全部，且是少數能看金額的角色</td></tr>
+    <tr><td class="nw"><code>management</code></td><td class="nw"><code>/demo?as=management</code></td><td class="nw">enjinggao36@gmail.com</td><td>全部，含用戶管理、系統設置</td></tr>
+  </tbody>
+</table>
+<p>正式登入密碼統一為 <code>demo1234</code>（<code>store.ensureUsers()</code> 首次建庫時寫入）。<code>/demo?as=</code> 需要同時滿足 <code>settings.demo_mode='1'</code> 與環境變數 <code>CPC_DEMO</code> 不等於 <code>0</code>。</p>
+
+<h3>1.4 權限其實有兩層</h3>
+<ul>
+  <li><b>角色</b>：<code>assertRole(user, roles, pageKey)</code>，roles 寫在 <code>NAV</code> 與每個實體的 <code>viewRoles/editRoles</code>。</li>
+  <li><b>頁面白名單</b>：<code>assertAccessible(user, pageKey)</code>，讀 <code>users.accessible_pages</code>（JSON 陣列或逗號字串）。留空＝不限制。這裡有一張 <code>PAGE_ALIASES</code> 表，把新舊頁面名對到同一組 key，改頁名時要一起改。</li>
+  <li><b>記錄級</b>：<code>ownsRecord()</code> 只對 <code>front</code> 生效。規則容易記錯，直接列出來：
+    <ul>
+      <li><code>schedules</code>：只能看/改「指派給自己」的。</li>
+      <li><code>work_records</code>：全部可看，<b>不可編輯</b>。</li>
+      <li><code>supply_records</code>：全部可看，<b>只能改自己的</b>（<code>employee_name</code> 或 <code>created_by</code> 相符）。</li>
+      <li><code>leave_records</code> / <code>check_ins</code> / <code>attendances</code>：只能看自己的。</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="s2"><span class="num">2</span>代碼地圖</h2>
+
+<table>
+  <thead><tr><th class="nw">檔案</th><th class="nw">行數</th><th>職責</th><th class="nw">改動風險</th></tr></thead>
+  <tbody>
+    <tr><td class="nw"><code>server.mjs</code></td><td class="nw">841</td><td>HTTP 服務、session/CSRF、路由分發、列印/匯出/匯入、金流與排班等專門動作路由</td><td><span class="pill a">中</span> 路由順序有講究</td></tr>
+    <tr><td class="nw"><code>lib/config.mjs</code></td><td class="nw">817</td><td><code>NAV</code>（6 組導航）、<code>ENTITIES</code>（38 個實體的欄位/欄目/權限）、<code>AMOUNT_FIELDS</code>、<code>ORIGINAL_ROUTES</code></td><td><span class="pill g">低</span> 純資料</td></tr>
+    <tr><td class="nw"><code>lib/store.mjs</code></td><td class="nw">455</td><td>SQLite 封裝：<code>records</code> 單表讀寫、軟刪除、users/settings/quota/audit/signatures、<code>importAll()</code></td><td><span class="pill r">高</span> 動到就碰資料</td></tr>
+    <tr><td class="nw"><code>lib/utils.mjs</code></td><td class="nw">280</td><td><code>esc/money/date/uid/toCSV</code>、<code>INTEGER_FIELD_NAMES</code>、<code>isIntegerField</code></td><td><span class="pill g">低</span></td></tr>
+    <tr><td class="nw"><code>lib/ui.mjs</code></td><td class="nw">1,105</td><td>設計令牌與全部 CSS、側欄、頁首、圖示庫、<code>dataTable</code>、表單、KPI、<code>pager</code>、明細編輯器、picker 腳本</td><td><span class="pill a">中</span> 牽一髮動全身</td></tr>
+    <tr><td class="nw"><code>lib/core.mjs</code></td><td class="nw">554</td><td>權限判斷、<code>filteredRows</code>、<code>listEntity</code>、<code>entityForm</code>、<code>entityDetail</code>、三種彈窗</td><td><span class="pill r">高</span> 業務入口</td></tr>
+    <tr><td class="nw"><code>lib/pages.mjs</code></td><td class="nw">727</td><td>客製頁：我的工作、滅蟲工作、服務計劃、排班、出勤、會計、應收、總帳、回收桶、客戶詳情、車輛卡</td><td><span class="pill a">中</span></td></tr>
+    <tr><td class="nw"><code>lib/actions.mjs</code></td><td class="nw">814</td><td><code>saveEntity</code>、<code>prepareRecord</code>、<code>assertIntegerQuantities</code>、庫存、報價轉單、收款、匯入、定期排程</td><td><span class="pill r">高</span> 寫入路徑</td></tr>
+    <tr><td class="nw"><code>lib/documents.mjs</code></td><td class="nw">416</td><td>報價單/發票/收據/合約/採購單/送貨單/服務報告的列印 HTML</td><td><span class="pill a">中</span> 動到就是對外文件</td></tr>
+    <tr><td class="nw"><code>lib/pickers.mjs</code></td><td class="nw">266</td><td>產品／員工／客戶選擇器的資料來源、搜尋與 <code>fill</code> 回填規則</td><td><span class="pill a">中</span></td></tr>
+    <tr><td class="nw"><code>lib/image-editor.mjs</code></td><td class="nw">9</td><td>上傳圖片的裁切工具入口</td><td><span class="pill g">低</span></td></tr>
+  </tbody>
+</table>
+
+<div class="card">
+  <h3 style="margin-top:0">你大概率會改的三個檔</h3>
+  <ul>
+    <li><b>加欄位／改列表欄目</b> → <code>lib/config.mjs</code> 的 <code>ENTITIES</code>。不用碰 HTML。</li>
+    <li><b>改外觀</b> → <code>lib/ui.mjs</code>。先讀第 6 節的不變量，再動手。</li>
+    <li><b>改保存邏輯／加校驗</b> → <code>lib/actions.mjs</code> 的 <code>prepareRecord()</code> 與 <code>saveEntity()</code>。</li>
+  </ul>
+</div>
+
+<h3>2.1 加一個實體（實測可行，三步）</h3>
+<ol class="steps">
+  <li><b>在 <code>ENTITIES</code> 加一個 <code>define({...})</code></b><span>至少要有 <code>key</code>、<code>entity</code>、<code>plural</code>、<code>listPath</code>、<code>fields</code>、<code>columns</code>、<code>viewRoles/editRoles</code>。</span></li>
+  <li><b>在 <code>NAV</code> 加一個 item</b><span><code>{ path: cfg.listPath, label, key, roles }</code>。沒有加就不會出現在側欄，但網址仍可直達。</span></li>
+  <li><b>不用寫路由</b><span><code>server.mjs</code> 末尾用 <code>listPath</code> 反查 <code>ENTITIES</code>，列表／詳情／新增／編輯／保存（<code>/save/:key</code>）／刪除／還原／匯出全部自動生效。</span></li>
+</ol>
+
+<h2 id="s3"><span class="num">3</span>資料模型</h2>
+
+<p>只有一張業務表。所有實體共用它，靠 <code>entity</code> 區分：</p>
+<pre>CREATE TABLE records (
+  entity       TEXT NOT NULL,      <span class="c">-- 'Quotation' / 'Customer' / 'SupplyRecord' …</span>
+  id           TEXT NOT NULL,
+  data         TEXT NOT NULL,      <span class="c">-- 整筆記錄的 JSON</span>
+  deleted      INTEGER DEFAULT 0,  <span class="c">-- 軟刪除，回收桶靠它</span>
+  created_date TEXT,
+  updated_date TEXT,
+  PRIMARY KEY (entity, id)
+);</pre>
+
+<table>
+  <thead><tr><th class="nw">項目</th><th>現況</th></tr></thead>
+  <tbody>
+    <tr><td class="nw">實體數</td><td>38 個（定義在 <code>ENTITIES</code>）</td></tr>
+    <tr><td class="nw">記錄總數</td><td>34,053 筆，其中 46 筆在回收桶</td></tr>
+    <tr><td class="nw">最大三個</td><td>Schedule 13,116 · StockAdjustment 9,566 · Notification 5,103</td></tr>
+    <tr><td class="nw">其他系統表</td><td><code>users</code> / <code>settings</code> / <code>quota</code> / <code>audit_log</code> / <code>notifications</code> / <code>holidays</code> / <code>login_failures</code> / <code>signatures</code></td></tr>
+    <tr><td class="nw">刪除策略</td><td>軟刪除 <code>deleted=1</code>；回收桶每日還原／清除上限 10 次（<code>TRASH_DAILY_LIMIT</code>）</td></tr>
+  </tbody>
+</table>
+
+<div class="callout">
+  <b>資料庫裡那 30 張舊表不要碰</b>
+  <code>data.db</code> 裡還有 <code>customers</code>、<code>quotations</code>、<code>invoices</code>… 等 30 張表，那是原系統結構的殘留，<b>應用程式一行都沒讀寫</b>（已全域搜過 <code>FROM customers</code> 之類的語句，零命中）。真正在跑的是 <code>records</code>。要清理舊表是獨立的一件事，先備份再動，別在功能開發中順手做。
+</div>
+
+<p>資料從哪來：<code>seed.mjs</code> 讀 <code>CPC_DATA_DIR</code> 下的 <code>&lt;Entity&gt;.json</code>，<code>INSERT OR IGNORE</code> 進 <code>records</code>。它<b>不會覆蓋</b>既有業務修改，也可以只補單一實體：<code>node seed.mjs Customer Quotation</code>。</p>
+
+<h2 id="s4"><span class="num">4</span>一次請求怎麼走</h2>
+
+<h3>4.1 讀：列表頁</h3>
+<pre>GET /contracts?q=xxx&amp;page=2
+  └─ server.mjs handle()
+       ├─ sessionFrom(req)                       <span class="c">// sid cookie → sessions Map</span>
+       ├─ 專門路由優先（/pestcontrolwork、/serviceplans、/print/…）
+       ├─ /new/ /edit/ /view/ → entityForm / entityDetail
+       └─ 反查 ENTITIES：listPath === '/contracts'
+            └─ core.listEntity({store,cfg,url,user,csrf})
+                 ├─ assertEntity(user,cfg)          <span class="c">// 角色 + 頁面白名單</span>
+                 ├─ filteredRows(store,cfg,url,user)<span class="c">// 全量載入 → 搜尋/篩選（記憶體）</span>
+                 ├─ rows.slice((page-1)*50, page*50) <span class="c">// 每頁 50</span>
+                 ├─ dataTable()                     <span class="c">// ui.mjs：欄寬 / nowrap / sticky 操作列</span>
+                 └─ layout({body})                  <span class="c">// ui.mjs：側欄 + splitHead() + pagehead</span></pre>
+
+<h3>4.2 寫：保存</h3>
+<pre>POST /save/contracts
+  └─ bodyWithCsrf(req, session)                 <span class="c">// CSRF 不符 → 403</span>
+       └─ actions.saveEntity({store,cfg,fields,user})
+            ├─ id = cleanId(fields.__id)
+            ├─ existing = id ? store.get(cfg.key,id) : null
+            ├─ 防禦回退：id 有值但查不到、且沒有 __expected_updated → 當新增
+            ├─ prepareRecord()                  <span class="c">// 預設值、型別轉換、必填、整數校驗</span>
+            │    ├─ for field of cfg.fields → required 檢查
+            │    └─ assertIntegerQuantities(data,cfg,existing)
+            ├─ 樂觀鎖：__expected_updated ≠ existing.updated_date → 409「已被其他人更新」
+            └─ store.save() → redirect(__back || cfg.listPath)</pre>
+
+<div class="callout risk">
+  <b>保存失敗時走的那條路，是上一輪 bug 的現場</b>
+  錯誤發生後，<code>server.mjs</code> 的 <code>catch</code> 會呼叫 <code>entityForm({id: body.fields.__id, error})</code> 想「把表單連同錯誤訊息重繪」。但 <code>entityForm()</code> 開頭也有一道「記錄必須存在」的檢查——如果 <code>__id</code> 是壞的，這裡會<b>再拋一次 404</b>，使用者最後看到的是沒有任何訊息的空白錯誤頁。現在的寫法是先確認記錄還在，不在就清空 <code>__id</code> 再重繪。
+</div>
+
+<h2 id="s5"><span class="num">5</span>第四次修改做了什麼</h2>
+
+<p>五個批次，全部圍繞「介面一致性」與「使用者回報的三個具體故障」。<b>沒有改</b> DB schema、路由表、權限模型、列印模板。</p>
+
+<table>
+  <thead><tr><th class="nw">批次</th><th class="nw">起因</th><th>涉及檔案</th><th class="nw">狀態</th></tr></thead>
+  <tbody>
+    <tr><td class="nw">5.1 UI 系統性改造</td><td>與原系統對照後的 16 項視覺/密度問題</td><td><code>ui.mjs</code> <code>pages.mjs</code> <code>server.mjs</code></td><td><span class="pill g">已交付</span></td></tr>
+    <tr><td class="nw">5.2 補給／請假存檔 404</td><td>使用者回報「無法保存補給記錄」</td><td><code>core.mjs</code> <code>actions.mjs</code> <code>server.mjs</code></td><td><span class="pill g">已修</span></td></tr>
+    <tr><td class="nw">5.3 數量一律整數</td><td>「產品和數量不能有小數」</td><td><code>ui.mjs</code> <code>actions.mjs</code> <code>utils.mjs</code></td><td><span class="pill g">已修</span></td></tr>
+    <tr><td class="nw">5.4 彈窗欄位調整</td><td>「員工 ID 沒有人看」</td><td><code>config.mjs</code></td><td><span class="pill g">已改</span></td></tr>
+    <tr><td class="nw">5.5 下拉一滑就關</td><td>「產品／工具下拉滑動就關閉」</td><td><code>ui.mjs</code></td><td><span class="pill g">已修</span></td></tr>
+  </tbody>
+</table>
+
+<h3 id="s5a">5.1 UI 系統性改造（ui.mjs +521 / −89）</h3>
+<p>先審原系統（<code>standardcpc.base44.app</code> 的 CSS 令牌、Prettier 美化後的 <code>app.js</code>、34 張截圖），再用 Headless Chrome 對 44 頁逐頁取 <code>getComputedStyle</code>，最後才動手。落地內容：</p>
+<ul>
+  <li><b>設計令牌</b>：25 個 CSS 變數（顏色、圓角、陰影、間距）。</li>
+  <li><b>側欄</b>：6 組導航、每組一個圖示、Logo 漸層方塊、選中態漸層膠囊、底部頭像卡。</li>
+  <li><b>頁首</b>：<code>splitHead()</code> 把 <code>&lt;h1&gt;</code> + <code>.sub</code> + 第一個「純按鈕」<code>.bar</code> 抽成 <code>pagehead</code>（標題左、操作右）。<b>遇到 input/select/textarea/form 就放棄提升</b>——否則篩選列會被拉到右上角。</li>
+  <li><b>圖示</b>：內嵌 Lucide 風格 SVG 圖示庫；<code>decorateActions()</code> 依中文關鍵字自動配圖示。</li>
+  <li><b>表格</b>：<code>colNw()</code> 讓編號/日期/金額等欄位不換行；<code>colMin()</code> 給欄寬下限（名稱 210、單位地點 148、編號 104）；操作列 <code>.act-col</code> 用 <code>position:sticky;right:0</code> 吸附在右緣；<code>isNum()</code> 讓 <code>money</code>/<code>AMOUNT_FIELDS</code> 自動右對齊。</li>
+  <li><b>KPI</b>：<code>kpis()</code> 改成「圖示磁貼 + 數值 + 標籤」，tone 支援 amber/rose。</li>
+  <li><b>表單</b>：底部 <code>儲存／取消</code> 貼在卡片內（<code>form.card&gt;.bar</code>），不再是浮在頁面底色上的兩個按鈕；textarea rows 4→3。</li>
+  <li><b>登入頁</b>：品牌區、卡片居中、Demo 角色 2×2 網格。</li>
+</ul>
+<div class="callout">
+  <b>一個刻意的取捨，不要「順手修正」</b>
+  <p>原系統主色偏黑白藍，但本系統保留<strong>墨綠 <code>#0f766e</code></strong> 作主色，只把「藍→青綠漸層」用在 Logo 與側欄選中膠囊。原因是前三輪已驗收的介面不能大改造成視覺漂移。要換成原系統配色是獨立決策，先問需求方。</p>
+</div>
+
+<h3 id="s5b">5.2 補給／請假存檔 404（真實缺陷，影響兩個功能）</h3>
+<p><b>症狀</b>：<code>/mysupply</code> 按「新增記錄」→ 填完 → 按「建立記錄」→ 沒有任何提示，記錄也沒出現。</p>
+<pre>GET  /mysupply?new=1      → 200，彈窗內含
+     &lt;input type="hidden" name="__id" value="sup_mvnigg9s_661c25f30d8b"&gt;
+POST /save/supply_records → <span style="color:#fca5a5">404</span>（空白錯誤頁）</pre>
+<p><b>根因</b>：<code>recordDialog()</code>（<code>lib/core.mjs</code>）預先生成一個新 ID 給 <code>__new_id</code>，<b>同時也寫進了 <code>__id</code></b>。後端 <code>saveEntity()</code> 看到非空 <code>__id</code> 就當成「編輯既有記錄」，<code>store.get()</code> 找不到 → 404；<code>catch</code> 再呼叫 <code>entityForm(壞 id)</code> → 二次 404，連錯誤訊息都吞掉。</p>
+<p><b>修法（三處）</b>：</p>
+<table>
+  <thead><tr><th class="nw">檔案</th><th>改動</th><th>作用</th></tr></thead>
+  <tbody>
+    <tr><td class="nw"><code>lib/core.mjs</code></td><td><code>hiddenInput('__id', '')</code></td><td>新增彈窗只送 <code>__new_id</code>（根治）</td></tr>
+    <tr><td class="nw"><code>lib/actions.mjs</code></td><td><code>__id</code> 查不到且無 <code>__expected_updated</code> → 當新增處理</td><td>擋住同類寫法再次造成 404</td></tr>
+    <tr><td class="nw"><code>server.mjs</code></td><td>重繪前確認記錄還在，否則清空 <code>__id</code></td><td>錯誤訊息能顯示，使用者填的內容不丟</td></tr>
+  </tbody>
+</table>
+<div class="callout warn">
+  <b>為什麼前三輪驗收沒抓到</b>
+  <code>verify-frontline.mjs</code> 是<b>直接對 <code>/save/leave_records</code> 發 POST</b>，payload 自己寫 <code>__id:''</code>——正好繞過壞掉的那個欄位。它測的是「後端能不能存」，不是「畫面送出來的東西能不能存」。所以後來補了一支專門斷言「彈窗 <code>__id</code> 必須為空」的腳本。
+</div>
+
+<h3 id="s5c">5.3 數量一律整數</h3>
+<p>原本明細裡的數字輸入是全域 <code>&lt;input type="number" step="0.01"&gt;</code>，數量、單價、金額共用一套，所以可以打 <code>2.5</code> 瓶。</p>
+<table>
+  <thead><tr><th class="nw">層</th><th>實作</th><th>效果</th></tr></thead>
+  <tbody>
+    <tr><td class="nw">前端</td><td><code>type="text" inputmode="numeric" pattern="[0-9]*"</code>，input 時把 <code>2.5</code> 截成 <code>2</code></td><td>手機彈數字鍵盤，打不進小數點/負號</td></tr>
+    <tr><td class="nw">後端</td><td><code>assertIntegerQuantities()</code> 掛在 <code>prepareRecord()</code></td><td>直送 <code>2.5</code> → 400「第 1 行的『數量』必須為整數，不可有小數」</td></tr>
+    <tr><td class="nw">歷史資料</td><td>編輯既有記錄且該值<b>未改動</b>時放行</td><td>原系統匯入的 <code>204.5</code> 庫存仍可改名、改價、存檔</td></tr>
+  </tbody>
+</table>
+<pre><span class="c">// lib/utils.mjs</span>
+export const INTEGER_FIELD_NAMES = /^(quantity|qty|stock_quantity|quantity_change)$/;
+export const isIntegerField = (field) =&gt; field?.integer === true
+  || (field?.integer !== false &amp;&amp; INTEGER_FIELD_NAMES.test(String(field?.name || field?.key || '')));</pre>
+<p>刻意<b>不</b>納入 <code>quantity_before</code> / <code>quantity_after</code> / <code>difference</code> / <code>actual_quantity</code>——這些是「現有庫存 ± 變動」推出來的，起點本身可能是 204.5，硬性取整會讓數字對不上。</p>
+<p>覆蓋：補給（產品/工具數量）、報價／帳單／送貨單明細、服務報告使用產品、產品庫存、庫存調整。<b>未覆蓋</b>：盤點單的 <code>actual_quantity</code>（4,853 項中有 40 筆歷史小數，見 §9）。</p>
+
+<h3 id="s5d">5.4 彈窗欄位調整（員工 ID）</h3>
+<p>補給與請假彈窗都有「員工 ID」，實際操作時沒人會看。改成 <code>hidden: true</code>——畫面上不渲染，但仍以隱藏 input 提交；<code>formGrid()</code> 會輸出 <code>&lt;input type="hidden"&gt;</code>，員工選擇器的 <code>pkApplyFill()</code> 仍找得到 <code>[name="employee_id"]</code> 回填，所以「辦公室替某位員工登記」的關聯不會丟。</p>
+<p>移除後 2 欄 grid 出現空格，順手重排：</p>
+<ul>
+  <li><b>補給</b>：日期 ｜ 補給位置 → 員工姓名（整列）</li>
+  <li><b>請假</b>：員工姓名 ｜ 類型 → 開始 ｜ 結束 → 請假天數 ｜ 狀態 → 原因（整列）→ 備註（整列）</li>
+</ul>
+
+<h3 id="s5e">5.5 下拉「一滑就關」</h3>
+<pre><span class="c">// 修好之前：一行就讓 50 筆的清單無法滾動</span>
+window.addEventListener('scroll', close, true);   <span class="c">// true = 捕獲階段</span></pre>
+<p>捕獲階段會在事件到達目標<b>之前</b>就觸發，所以「在清單裡面自己捲」也會被 window 收到 → 直接 <code>close()</code>。產品清單 50 筆、<code>scrollHeight</code> 1,694px、可視高度 418px，一滑就關。</p>
+<pre><span class="c">// 修好之後：分三種情況</span>
+window.addEventListener('scroll', function (e) {
+  if (menu.hidden) return;
+  var t = e.target;
+  if (t &amp;&amp; t !== document &amp;&amp; (t === menu || menu.contains(t))) return;   <span class="c">// ① 清單自己捲 → 不關</span>
+  if (!input.isConnected) { close(); return; }
+  var r = input.getBoundingClientRect();
+  if (r.bottom &lt; 0 || r.top &gt; window.innerHeight) { close(); return; }   <span class="c">// ③ 錨點離屏 → 關</span>
+  place();                                                              <span class="c">// ② 頁面/彈窗捲動 → 重定位</span>
+}, true);</pre>
+<p>順帶修好另一半：以前在彈窗裡往下捲找欄位，只要下拉開著也會被關掉；現在它會跟著輸入框移動。</p>
+
+<h2 id="s6"><span class="num">6</span>不可破壞的不變量</h2>
+
+<p>這些不是風格偏好，是<b>會讓功能或驗收直接壞掉</b>的硬約束。動手前掃一眼。</p>
+
+<table>
+  <thead><tr><th class="nw">#</th><th>規則</th><th>破壞後會怎樣</th><th>怎麼檢查</th></tr></thead>
+  <tbody>
+    <tr>
+      <td class="nw">1</td>
+      <td><code>.navgrp&gt;summary</code> 必須是 <code>font-size:13px;font-weight:700</code></td>
+      <td><code>verify-operation-2.mjs</code> 用字面 CSS 斷言，改了就 55 項紅</td>
+      <td><code>grep -o "\.navgrp&gt;summary{[^}]*}" lib/ui.mjs</code></td>
+    </tr>
+    <tr>
+      <td class="nw">2</td>
+      <td>「新增」彈窗的 <code>__id</code> 必須為空，只填 <code>__new_id</code></td>
+      <td>後端當成編輯不存在的記錄 → 404，且錯誤訊息被二次 404 吞掉</td>
+      <td><code>grep -n "hiddenInput('__id'" lib/core.mjs</code></td>
+    </tr>
+    <tr>
+      <td class="nw">3</td>
+      <td><code>isIntegerField</code> 只能在 Node 端呼叫</td>
+      <td>寫進 <code>COMMON_JS</code> 會在瀏覽器 <code>ReferenceError</code>，整個明細編輯器初始化失敗</td>
+      <td>前端只讀 <code>col.integer</code>；<code>data-columns</code> 由伺服器序列化</td>
+    </tr>
+    <tr>
+      <td class="nw">4</td>
+      <td><code>money()</code> 已含 <code>HK$</code>，模板不要再加前綴</td>
+      <td>出現「HK$ HK$ 0」</td>
+      <td><code>grep -rn 'HK\$ \${money' lib server.mjs</code></td>
+    </tr>
+    <tr>
+      <td class="nw">5</td>
+      <td>class <code>empty</code> 只留給表格空狀態</td>
+      <td><code>.empty::before</code> 會插圖標，且被 <code>padding:46px!important</code> 撐高——日曆空格會爆開</td>
+      <td>日曆用 <code>is-empty</code>；<code>grep -rn 'calendar-cell' lib/pages.mjs</code></td>
+    </tr>
+    <tr>
+      <td class="nw">6</td>
+      <td><code>.frow</code> 內的 color / checkbox / radio / file 要單獨設寬度</td>
+      <td><code>.frow input{width:100%}</code> 同特異度、後出現，顏色選擇器會變整條黑條</td>
+      <td>開一次「排班顏色」欄位看</td>
+    </tr>
+    <tr>
+      <td class="nw">7</td>
+      <td><code>server.mjs</code> 保持 CRLF；<code>lib/*.mjs</code> 保持 LF</td>
+      <td>diff 從幾十行爆成整檔重寫，review 失效</td>
+      <td>用 Node 數 <code>\r\n</code> 與 <code>\n</code>，不要用編輯器猜</td>
+    </tr>
+    <tr>
+      <td class="nw">8</td>
+      <td>表格操作列 <code>.act-col</code> 需要 <code>.table-wrap</code> 容器與不透明白底</td>
+      <td>橫向滾動時欄位透出、或 sticky 失效</td>
+      <td>用 1366px 寬開報價頁，橫向滾到底</td>
+    </tr>
+    <tr>
+      <td class="nw">9</td>
+      <td>前線可見範圍寫在 <code>ownsRecord()</code></td>
+      <td>放寬會讓前線看到別人的請假/出勤；收緊會讓補給列表空掉</td>
+      <td><code>sed -n '52,70p' lib/core.mjs</code></td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="s7"><span class="num">7</span>驗收怎麼跑</h2>
+
+<p>四套，全部<b>只允許</b>在隔離副本跑。腳本自己會檢查 <code>CPC_TEST=1</code> 且 <code>TEST_BASE</code> 含 <code>:3101</code>，不符合就退出——這是故意的，別繞過。</p>
+
+<h3>7.1 標準流程</h3>
+<pre><span class="c"># ① 先 checkpoint，再複製。否則 WAL 裡最近的寫入不會被帶走</span>
+cd "F:/04 STANDARD CPC SYSTEM/04. 四期"
+node -e "const {DatabaseSync}=require('node:sqlite');const db=new DatabaseSync('系统代码/data.db');db.exec('PRAGMA wal_checkpoint(TRUNCATE)');db.close()"
+
+rm -rf _verify &amp;&amp; mkdir -p _verify/_uploads
+cp -r "系统代码/lib" "系统代码/server.mjs" "系统代码/schema.json" _verify/
+cp "系统代码/data.db" _verify/_verify.db
+
+<span class="c"># ② 另一個終端起隔離服務（佔用 3101）</span>
+cd _verify
+PORT=3101 DB_PATH="$PWD/_verify.db" CPC_UPLOAD_DIR="$PWD/_uploads" CPC_TEST=1 node server.mjs
+
+<span class="c"># ③ 回到四期根目錄，跑四套</span>
+cd ..
+CPC_TEST=1 TEST_BASE=http://127.0.0.1:3101 DB_PATH="$PWD/_verify/_verify.db" \
+  node "三次修改/verify-frontline.mjs"
+
+CPC_TEST=1 TEST_BASE=http://127.0.0.1:3101 DB_PATH="$PWD/_verify/_verify.db" \
+  TEST_OUTPUT="$PWD/_verify/op2.json" node "二次修改/verify-operation-2.mjs"
+
+CPC_TEST=1 TEST_BASE=http://127.0.0.1:3101 DB_PATH="$PWD/_verify/_verify.db" \
+  node "四次修改/驗收_補給請假存檔.mjs"
+
+CPC_TEST=1 TEST_BASE=http://127.0.0.1:3101 node "四次修改/回歸腳本_頁面冒煙.mjs"</pre>
+
+<h3>7.2 基準數字</h3>
+<table>
+  <thead><tr><th class="nw">套件</th><th class="nw">腳本</th><th class="nw">項目</th><th>涵蓋</th></tr></thead>
+  <tbody>
+    <tr><td class="nw">前線回歸</td><td class="nw"><code>三次修改/verify-frontline.mjs</code></td><td class="nw"><b>73 / 73</b></td><td>前線可及的頁面、自己的記錄邊界、補給與請假</td></tr>
+    <tr><td class="nw">營運回歸</td><td class="nw"><code>二次修改/verify-operation-2.mjs</code></td><td class="nw"><b>55 / 55</b></td><td>市場/營運/財務頁面結構、樣式斷言、金額遮蔽</td></tr>
+    <tr><td class="nw">補給請假＋整數＋彈窗</td><td class="nw"><code>四次修改/驗收_補給請假存檔.mjs</code></td><td class="nw"><b>29 / 29</b></td><td>彈窗 <code>__id</code> 為空、存檔落地、小數被擋、員工 ID 隱藏、下拉不誤關</td></tr>
+    <tr><td class="nw">頁面冒煙</td><td class="nw"><code>四次修改/回歸腳本_頁面冒煙.mjs</code></td><td class="nw"><b>176 / 176</b></td><td>44 頁 × 4 角色：HTTP &lt; 500、無 undefined/NaN、pagehead 不重複、div 配平</td></tr>
+  </tbody>
+</table>
+
+<div class="callout ok">
+  <b>這一輪的最終結果</b>
+  73/73 · 55/55 · 29/29 · 176 頁冒煙 0 問題。三套腳本跑完會自動清除自己建的測試記錄，正式 <code>data.db</code> 未被測試寫入。
+</div>
+
+<div class="callout">
+  <b>另有系統自帶的 <code>系统代码/test.mjs</code></b>
+  36 KB 的綜合驗收，要求 <code>TEST_BASE</code> 含 <code>:3100</code> 或 <code>CPC_TEST</code>，且必須給 <code>DB_PATH</code>。它不是本輪的驗收門檻，跑之前先確認它與現在的欄位定義沒有脫節。
+</div>
+
+<h2 id="s8"><span class="num">8</span>已知坑</h2>
+
+<table>
+  <thead><tr><th class="nw">#</th><th>現象</th><th>原因與解法</th></tr></thead>
+  <tbody>
+    <tr><td class="nw">1</td><td>Git Bash 把 <code>/deliverynotes</code> 變成 <code>C:/Program Files/Git/deliverynotes</code></td><td>MSYS 路徑轉換。跑帶路徑參數的 Node 腳本時加 <code>MSYS_NO_PATHCONV=1</code>。</td></tr>
+    <tr><td class="nw">2</td><td>改幾行，diff 卻顯示整檔重寫</td><td>Python <code>open(p,'w')</code> 在 Windows 會把 LF 轉 CRLF。寫檔用二進位或 <code>newline=''</code>，收尾再驗一次換行。</td></tr>
+    <tr><td class="nw">3</td><td>複製 <code>data.db</code> 後，驗證環境少最新資料</td><td>WAL 模式：資料還在 <code>data.db-wal</code>（當時 1.6 MB）。先 <code>PRAGMA wal_checkpoint(TRUNCATE)</code>，或一併複製 <code>-wal</code>／<code>-shm</code>。</td></tr>
+    <tr><td class="nw">4</td><td>改了 <code>lib/*.mjs</code> 但畫面沒變</td><td>沒有熱重載。停掉 <code>node server.mjs</code> 再起。</td></tr>
+    <tr><td class="nw">5</td><td>終端被 <code>ExperimentalWarning: SQLite is an experimental feature</code> 洗版</td><td><code>node:sqlite</code> 在 Node 22 仍是實驗特性。過濾：<code>| grep -v "Experimental\|trace-warnings"</code>。</td></tr>
+    <tr><td class="nw">6</td><td>測試腳本拒絕執行</td><td>保護機制：需要 <code>CPC_TEST=1</code>、<code>TEST_BASE</code> 含 <code>:3101</code>、<code>DB_PATH</code> 存在。不要改這段去遷就環境。</td></tr>
+    <tr><td class="nw">7</td><td>顏色選擇器變成整條黑色長條</td><td><code>.frow input{width:100%}</code> 與 <code>input[type=color]</code> 同特異度，後者寫在前面就被蓋掉。要補 <code>.frow input[type=color]{width:62px}</code>。</td></tr>
+    <tr><td class="nw">8</td><td>日曆空格突然變得超高、中間一個圖標</td><td><code>.empty::before</code> 命中了 <code>.calendar-cell.empty</code>。已改名 <code>is-empty</code>，新代碼不要再用 <code>empty</code> 當佈局類。</td></tr>
+    <tr><td class="nw">9</td><td>長名稱被截成「…」</td><td><code>td.nw{max-width:210px;text-overflow:ellipsis}</code>。需要完整顯示就在欄位定義加 <code>nw:false</code>，不要直接改全域 CSS。</td></tr>
+    <tr><td class="nw">10</td><td>樂觀鎖誤報「已被其他人更新」</td><td>提交時 <code>__expected_updated</code> 必須等於載入時的 <code>updated_date</code>。手搓 POST 常漏這個欄位。</td></tr>
+  </tbody>
+</table>
+
+<h2 id="s9"><span class="num">9</span>待辦與建議</h2>
+
+<p>按「體感影響 ÷ 改動風險」排。每一項都標了具體位置，不需要重新探索。</p>
+
+<table>
+  <thead><tr><th class="nw">優先</th><th>事項</th><th>現況與建議做法</th><th class="nw">風險</th></tr></thead>
+  <tbody>
+    <tr>
+      <td class="nw"><span class="pill r">P0</span></td>
+      <td><b>應收台賬／總帳分頁</b></td>
+      <td><code>receivablesPage()</code>、<code>generalLedgerPage()</code>（<code>lib/pages.mjs</code>）一次渲染全部，實測 378 / 522 行，頁高 1.8–2.5 萬 px。<code>pager()</code> 已存在（<code>lib/ui.mjs:977</code>），照 <code>listEntity</code> 的 <code>per=50</code> 接上即可。</td>
+      <td><span class="pill a">中</span> 會動到匯總數字</td>
+    </tr>
+    <tr>
+      <td class="nw"><span class="pill r">P0</span></td>
+      <td><b>盤點單小數清理</b></td>
+      <td>4,853 個盤點項目中有 40 筆 <code>actual_quantity</code> 是小數（原系統匯入）。要收緊整數規則，得先做一輪資料整理：四捨五入 + 留一筆調整記錄說明原值，再開 <code>actual_quantity</code> 的整數校驗。</td>
+      <td><span class="pill r">高</span> 動歷史資料</td>
+    </tr>
+    <tr>
+      <td class="nw"><span class="pill a">P1</span></td>
+      <td><b>列表查詢下推 SQL</b></td>
+      <td><code>filteredRows()</code> 先把整個 entity 載進記憶體再過濾／排序。Schedule 13,116 筆、StockAdjustment 9,566 筆，每次列表請求都全量 <code>JSON.parse</code>。建議先在 SQL 做 entity + deleted + 日期範圍過濾。</td>
+      <td><span class="pill a">中</span></td>
+    </tr>
+    <tr>
+      <td class="nw"><span class="pill a">P1</span></td>
+      <td><b>表格排序</b></td>
+      <td>後端 <code>filteredRows</code> 沒有 <code>sort</code> 參數，<code>columns</code> 也沒有 <code>sortable</code>。要做的話：query 加 <code>sort=field&amp;dir=asc</code>，在 <code>dataTable</code> 的 <code>th</code> 包一層連結。</td>
+      <td><span class="pill a">中</span></td>
+    </tr>
+    <tr>
+      <td class="nw"><span class="pill a">P1</span></td>
+      <td><b>12 欄表格在 1366px 的體驗</b></td>
+      <td>報價頁 12 欄必然橫向滾動。目前策略是「寧可滾動也不折行」+ 操作列吸附。若同事多用小屏，可把「工作內容」改成 hover 展開，或做欄位顯示切換。</td>
+      <td><span class="pill g">低</span> 純前端</td>
+    </tr>
+    <tr>
+      <td class="nw"><span class="pill b">P2</span></td>
+      <td><b>Picker 大列表</b></td>
+      <td>產品 50 筆一次渲染 1,694px。可加虛擬滾動或分頁；至少把「最近使用」排前面。</td>
+      <td><span class="pill g">低</span></td>
+    </tr>
+    <tr>
+      <td class="nw"><span class="pill b">P2</span></td>
+      <td><b>深色模式</b></td>
+      <td>令牌已集中在 <code>:root</code>，加一組 <code>prefers-color-scheme:dark</code> 覆寫即可；注意表格 sticky 欄與 picker 浮層的白底。</td>
+      <td><span class="pill a">中</span></td>
+    </tr>
+    <tr>
+      <td class="nw"><span class="pill n">P3</span></td>
+      <td><b>舊表清理</b></td>
+      <td>30 張未被讀寫的舊業務表。確認無人依賴後可 <code>DROP</code>，先備份 <code>data.db</code>。</td>
+      <td><span class="pill r">高</span> 不可逆</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="s10"><span class="num">10</span>回滾與檔案指紋</h2>
+
+<h3>10.1 回滾</h3>
+<ul>
+  <li><b>整包回到第四次修改開始前</b>：<code>系统代码/backup-ui-20261025-112240/</code> 內含當時的 <code>lib/</code> 與 <code>server.mjs</code>。覆蓋回去、重啟即可。<b>注意這會一併退掉 5.2～5.5 的修復。</b></li>
+  <li><b>只退 UI</b>：只覆蓋 <code>lib/ui.mjs</code>，其他不動。</li>
+  <li><b>資料</b>：本輪沒有 migration，<code>data.db</code> 不需要回滾。測試產生的記錄已清除。</li>
+</ul>
+<pre>cd "F:/04 STANDARD CPC SYSTEM/04. 四期/系统代码"
+cp -r "backup-ui-20261025-112240/lib/." lib/
+cp "backup-ui-20261025-112240/server.mjs" server.mjs
+<span class="c"># 重啟</span></pre>
+
+<h3>10.2 目前檔案指紋</h3>
+<table>
+  <thead><tr><th class="nw">檔案</th><th class="nw">行數</th><th class="nw">本輪增/刪</th><th class="nw">SHA256 前 12 碼</th></tr></thead>
+  <tbody>
+    <tr><td class="nw"><code>lib/ui.mjs</code></td><td class="nw">1,105</td><td class="nw">+521 / −89</td><td class="nw"><code>08ac4bdb89cf</code></td></tr>
+    <tr><td class="nw"><code>lib/actions.mjs</code></td><td class="nw">814</td><td class="nw">+44 / −3</td><td class="nw"><code>a9709a147dd5</code></td></tr>
+    <tr><td class="nw"><code>lib/utils.mjs</code></td><td class="nw">280</td><td class="nw">+6 / −0</td><td class="nw"><code>77baf63e36dd</code></td></tr>
+    <tr><td class="nw"><code>lib/config.mjs</code></td><td class="nw">817</td><td class="nw">+3 / −3</td><td class="nw"><code>668e78b6309e</code></td></tr>
+    <tr><td class="nw"><code>lib/core.mjs</code></td><td class="nw">554</td><td class="nw">+3 / −1</td><td class="nw"><code>854d1cbe1ad4</code></td></tr>
+    <tr><td class="nw"><code>lib/pages.mjs</code></td><td class="nw">727</td><td class="nw">+5 / −5</td><td class="nw"><code>99b0e0cb7c54</code></td></tr>
+    <tr><td class="nw"><code>server.mjs</code></td><td class="nw">841</td><td class="nw">+5 / −2</td><td class="nw"><code>62d95b8f9442</code></td></tr>
+    <tr><td class="nw"><code>lib/pickers.mjs</code></td><td class="nw">266</td><td class="nw">—</td><td class="nw"><code>b1e3b2e2edf9</code></td></tr>
+    <tr><td class="nw"><code>lib/store.mjs</code></td><td class="nw">455</td><td class="nw">—</td><td class="nw"><code>a804d2b325f0</code></td></tr>
+  </tbody>
+</table>
+<p>完整清單（含位元組數）在 <code>四次修改/變更檔案清單_SHA256.csv</code>；程式快照在 <code>四次修改/程式快照_20261025/</code>，內容與正式碼逐檔比對過。</p>
+
+<h2 id="s11"><span class="num">11</span>第一小時清單</h2>
+
+<ol class="steps">
+  <li><b>先跑起來，用四個身份各點 5 頁</b><span><code>node server.mjs</code> → <code>/demo?as=front</code> / <code>office</code> / <code>accounting</code> / <code>management</code>。重點看側欄、列表、詳情、新增彈窗。</span></li>
+  <li><b>跑一次基準驗收</b><span>照 §7.1 建副本、起 3101、跑四套。看到 73/55/29/176 才代表你的環境與這份文件一致。</span></li>
+  <li><b>讀 §6 的 9 條不變量</b><span>特別是第 1、2、3 條——這三條各有一次實際事故。</span></li>
+  <li><b>確認你要改的檔案屬於哪一層</b><span>config（資料）→ core（流程）→ actions（寫入）→ ui（呈現）。跨層改動先寫下影響面。</span></li>
+  <li><b>改完重啟，再跑一次 §7</b><span>不要只截圖看畫面。這一輪的教訓是：畫面正常不代表保存正常。</span></li>
+  <li><b>更新文件與指紋</b><span>改動記進 <code>四次修改/UI改造_交接文件_四次修改_20261025.html</code> 的新章節，SHA 清單重算。下一個人才不用重新考古。</span></li>
+</ol>
+
+<h2 id="s12"><span class="num">12</span>資料與文檔索引</h2>
+
+<table>
+  <thead><tr><th class="nw">用途</th><th>路徑</th><th>說明</th></tr></thead>
+  <tbody>
+    <tr><td class="nw">系統程式</td><td><code>F:/04 STANDARD CPC SYSTEM/04. 四期/系统代码/</code></td><td>入口 <code>server.mjs</code>；資料 <code>data.db</code></td></tr>
+    <tr><td class="nw">原系統</td><td><code>https://standardcpc.base44.app</code></td><td>UI 對照基準；截圖在 <code>F:/03 Standard CPC DataBase/01. 截图/</code>（34 張）</td></tr>
+    <tr><td class="nw">原系統源碼</td><td><code>F:/04 STANDARD CPC SYSTEM/05. 源码分析/frontend/beautified/app.js</code></td><td>Prettier 美化後可讀；CSS 在 <code>frontend/</code> 的 <code>index-*.css</code></td></tr>
+    <tr><td class="nw">匯入來源</td><td><code>F:/03 Standard CPC DataBase/02. 数据导出/json/</code></td><td><code>seed.mjs</code> 讀這裡的 <code>&lt;Entity&gt;.json</code></td></tr>
+    <tr><td class="nw">本輪使用者向交付</td><td><code>四次修改/UI改造_交接文件_四次修改_20261025.html</code></td><td>含 16 項問題清單、8 組前後截圖、第 9 章缺陷分析</td></tr>
+    <tr><td class="nw">本輪截圖對照</td><td><code>四次修改/截圖對照/</code></td><td>8 組前後對照（1600×1000）</td></tr>
+    <tr><td class="nw">驗收腳本</td><td><code>三次修改/</code>、<code>二次修改/</code>、<code>四次修改/</code></td><td>依序 73 / 55 / 29 項；冒煙在 <code>四次修改/回歸腳本_頁面冒煙.mjs</code></td></tr>
+    <tr><td class="nw">歷史版本</td><td><code>04. 四期/_歷史版本/</code>、<code>系统代码/backup-*/</code></td><td>每輪備份；<code>backup-ui-20261025-112240</code> 是本輪起點</td></tr>
+  </tbody>
+</table>
+
+<div class="footer">
+  <b>四期 · 第四次修改 · Agent 交接手冊</b> · 2026-10-25 19:20 · 基於 <code>系统代码/</code> 當時狀態（ui 1105 / actions 814 / server 841 行）<br>
+  這份文件只寫「現在是什麼、為什麼、怎麼驗」。設計理由、16 項問題清單與前後截圖在上一層的使用者向交付：<code>../四次修改/UI改造_交接文件_四次修改_20261025.html</code>。
+</div>
+
+</main>
+</div>
+</body>
+</html>

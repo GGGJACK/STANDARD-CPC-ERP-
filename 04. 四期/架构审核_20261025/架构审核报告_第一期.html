@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Standard CPC · 架构审核报告 · 第一期</title>
+<style>
+:root{
+  --brand:#0f6e56; --brand-soft:#e6f4ef; --brand-line:#b8e0d2;
+  --ink:#16202a; --ink2:#3f4b56; --ink3:#6b7783; --line:#e2e7ea; --soft:#f6f8f9;
+  --red:#a32d2d; --red-soft:#fbeceb; --red-line:#f0c9c6;
+  --amber:#946000; --amber-soft:#fdf3e3; --amber-line:#f2ddb5;
+  --blue:#1d4ed8; --blue-soft:#eef3fe;
+}
+*{box-sizing:border-box}
+body{margin:0;background:#eef1f3;color:var(--ink);
+  font:14.5px/1.78 "Microsoft YaHei","PingFang SC","Hiragino Sans GB",system-ui,sans-serif;
+  -webkit-font-smoothing:antialiased}
+.page{max-width:1120px;margin:0 auto;background:#fff;padding:46px 54px 80px;min-height:100vh;
+  box-shadow:0 1px 3px rgba(16,24,40,.06)}
+header.top{border-bottom:2px solid var(--ink);padding-bottom:20px;margin-bottom:30px}
+.kicker{font-size:11.5px;letter-spacing:.16em;color:var(--ink3);text-transform:uppercase;margin-bottom:8px}
+h1{font-size:29px;line-height:1.28;margin:0 0 10px;font-weight:700;letter-spacing:-.02em}
+.sub{color:var(--ink3);font-size:13.5px}
+h2{font-size:20px;margin:42px 0 14px;padding-left:12px;border-left:4px solid var(--brand);font-weight:700}
+h3{font-size:15.5px;margin:26px 0 9px;font-weight:700}
+h4{font-size:13.8px;margin:18px 0 7px;font-weight:700;color:var(--ink2)}
+p{margin:9px 0}
+code{background:var(--soft);border:1px solid var(--line);border-radius:4px;padding:1px 5px;
+  font:12.3px/1.6 ui-monospace,Consolas,monospace;color:#0f172a;word-break:break-all}
+pre{background:#182127;color:#e5edf1;border-radius:9px;padding:14px 16px;overflow:auto;
+  font:12.3px/1.62 ui-monospace,Consolas,monospace;margin:10px 0 16px}
+pre .c{color:#7dd3fc} pre .r{color:#fca5a5} pre .g{color:#86efac}
+table{width:100%;border-collapse:collapse;margin:14px 0 18px;font-size:13.2px}
+th,td{border:1px solid var(--line);padding:9px 11px;text-align:left;vertical-align:top}
+th{background:var(--soft);font-weight:700;font-size:12.3px;color:var(--ink2)}
+td.nw,th.nw{white-space:nowrap}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:11px;margin:22px 0 6px}
+.kpi{border:1px solid var(--line);border-radius:9px;padding:14px 15px;background:#fff}
+.kpi b{display:block;font-size:25px;line-height:1.15;color:var(--brand);font-variant-numeric:tabular-nums}
+.kpi.bad b{color:var(--red)}
+.kpi span{font-size:11.5px;color:var(--ink3)}
+.card{border:1px solid var(--line);border-radius:10px;padding:16px 19px;margin:14px 0;background:#fff}
+.card.lead{background:linear-gradient(180deg,var(--brand-soft),#fff);border-color:var(--brand-line)}
+.card h3{margin-top:0}
+.callout{padding:13px 17px;border-radius:0 7px 7px 0;margin:14px 0;border-left:3px solid var(--brand);background:var(--brand-soft)}
+.callout b{display:block;margin-bottom:3px}
+.callout p:last-child{margin-bottom:0}
+.callout.warn{border-color:var(--amber);background:var(--amber-soft)}
+.callout.risk{border-color:var(--red);background:var(--red-soft)}
+.callout.risk b{color:var(--red)}
+.callout.warn b{color:var(--amber)}
+.pill{display:inline-block;padding:1px 9px;border-radius:11px;font-size:11.5px;font-weight:700;
+  white-space:nowrap;border:1px solid transparent;line-height:1.75}
+.p-r{background:var(--red-soft);color:var(--red);border-color:var(--red-line)}
+.p-a{background:var(--amber-soft);color:var(--amber);border-color:var(--amber-line)}
+.p-g{background:var(--brand-soft);color:var(--brand);border-color:var(--brand-line)}
+.p-b{background:var(--blue-soft);color:var(--blue)}
+.p-n{background:var(--soft);color:var(--ink3);border-color:var(--line)}
+ul,ol{margin:9px 0;padding-left:22px}
+li{margin:5px 0}
+.ev{background:#fbfcfc;border:1px solid var(--line);border-left:3px solid var(--ink3);
+  border-radius:0 7px 7px 0;padding:11px 15px;margin:10px 0;font-size:12.8px}
+.ev b{display:block;color:var(--ink2);margin-bottom:4px;font-size:12px;letter-spacing:.03em}
+.ev pre{background:#182127;margin:7px 0 0;font-size:11.8px;padding:10px 12px}
+.flow{display:flex;flex-wrap:wrap;align-items:center;gap:7px;margin:12px 0;font-size:12.5px}
+.flow span{border:1px solid var(--line);border-radius:6px;padding:5px 10px;background:var(--soft)}
+.flow i{color:var(--ink3);font-style:normal}
+.q{border:1px solid var(--line);border-radius:10px;padding:15px 18px;margin:12px 0;background:#fff}
+.q .qh{font-weight:700;font-size:14px;margin-bottom:6px}
+.q .qh em{font-style:normal;color:var(--brand);margin-right:7px}
+.q ol{margin:6px 0 0;font-size:13.2px}
+.q .why{font-size:12.6px;color:var(--ink3);margin-top:8px;padding-top:8px;border-top:1px dashed var(--line)}
+footer{margin-top:50px;padding-top:16px;border-top:1px solid var(--line);font-size:12.3px;color:var(--ink3)}
+@media (max-width:900px){.page{padding:26px 18px}.kpis{grid-template-columns:repeat(2,1fr)}}
+@media print{body{background:#fff}.page{padding:0;box-shadow:none;max-width:none}}
+</style>
+</head>
+<body>
+<div class="page">
+
+<header class="top">
+  <div class="kicker">Architecture Review · Phase 4 · Round 1 of 3</div>
+  <h1>Standard CPC 复刻系统 · 架构审核报告</h1>
+  <div class="sub">对照《復刻藍圖》、原系统源码与四期实际代码 —— 结论、证据、优化路线与待决策问题</div>
+</header>
+
+<div class="card" style="background:var(--blue-soft);border-color:#c7d7fb">
+  <h3 style="margin-top:0">决策记录 · 第 1–2 轮已定</h3>
+  <table style="margin:6px 0 0">
+    <thead><tr><th class="nw" style="width:8%">编号</th><th class="nw" style="width:34%">问题</th><th class="nw" style="width:11%">决定</th><th>对路线的影响</th></tr></thead>
+    <tbody>
+      <tr><td class="nw">Q1</td><td>数据模型走向</td><td><span class="pill p-b">B</span></td><td>核心 8 张表回归关系表，其余留 JSON。见 §1.2 更正 —— 22 张旧表只能当校验基准，迁移脚本要重写。</td></tr>
+      <tr><td class="nw">Q2</td><td>办公室打码 / 配额</td><td><span class="pill p-b">最小实现</span></td><td>不建策略层，只在 <code>/api/pick</code> 加一道授权 + 字段裁剪（约 25 行）。<b>但 §2.1 必须修</b> —— 见下方补充说明。</td></tr>
+      <tr><td class="nw">Q3</td><td>上线形态</td><td><span class="pill p-b">B</span></td><td>香港轻量云 + HTTPS + nginx 反代。IP 信任与锁定策略见<b>第六章</b>。</td></tr>
+      <tr><td class="nw">Q4</td><td>报价转发票是否分次</td><td><span class="pill p-b">B 分次</span></td><td>不查重，改为「累计开票 + 未开余额 + 超开拦截」。规格见 §7.4。</td></tr>
+      <tr><td class="nw">Q5</td><td>重名客户处理</td><td><span class="pill p-b">A+C</span></td><td>可行，但 C 的唯一键是 <code>customer_code</code> 而非名称，且<b>不合并、不加地点字段</b>。理由见 §7.1–7.3。</td></tr>
+      <tr><td class="nw">Q6</td><td>切换方式</td><td><span class="pill p-b">A 停机</span></td><td>周末 2 小时窗口。核心原则：<b>加表不删表</b>，回滚成本≈0。见 §八。</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="callout warn" style="margin-top:14px">
+  <b>关于 Q2「没有人会用 /api/pick」—— 有一个例外，建议仍然修</b>
+  <p><code>supply_records</code>（補給記錄）的物料明细里有 <code>source: 'products'</code> 的 picker，而这个实体的
+  <code>editRoles</code> <b>包含 front</b>。也就是说：<b>前线正常操作「新增一行物料、输入产品名」时，浏览器会自动请求
+  <code>/api/pick?source=products</code></b>，返回里带 <code>cost_price</code>。这不是构造 URL，是常规流程。</p>
+  <p style="margin-bottom:0">所以这条不是"理论上有人可能滥用"，而是"成本价每天都会经过前线的浏览器"。好消息是修它确实只要约 25 行，
+  符合"最小实现"的要求，不需要建策略层。</p>
+</div>
+
+<h2>零 · 一句话结论</h2>
+
+<div class="card lead">
+  <h3>页面层已经过关，<span style="color:var(--red)">权限层和数据完整性层是架构性欠债</span></h3>
+  <p>34/34 页 DOM 对照通过、411 项业务验收通过、73+55+29+176 回归通过 —— 这说明<b>功能覆盖</b>做到了。但三个已复现的缺陷表明：
+  这套系统的<b>权限判据散在三个地方、字段屏蔽只做在渲染层、外键靠"名字字符串"匹配</b>。这三件都不是加个 if 能解决的，
+  它们属于分层设计缺失，越往后改代价越高。</p>
+  <p style="margin-bottom:0">好消息：<b>不需要重写</b>。核心业务动作（库存过账、收款冲销、转换链）已经有事务包裹，
+  比多数同类项目扎实。缺的是"横切层"：一个权限策略层、一个序列化层、一次查询下推。</p>
+</div>
+
+<div class="kpis">
+  <div class="kpi"><b>38</b><span>实体定义（29 有数据 / 9 空）</span></div>
+  <div class="kpi"><b>34,053</b><span>记录 · 46 笔在回收桶</span></div>
+  <div class="kpi bad"><b>3</b><span>已复现的架构级缺陷</span></div>
+  <div class="kpi bad"><b>261</b><span>份单据存在关联漂移风险</span></div>
+</div>
+
+<h2>一 · 与蓝图的四处实质偏离</h2>
+
+<p>蓝图画的是 PostgreSQL + Next.js + RLS 的路线，实际交付是零依赖 Node + SQLite 单表。技术选型偏离本身不算错 ——
+<b>但如果偏离的同时把蓝图里"必须有"的能力也丢了，那就是问题</b>。逐条对照如下。</p>
+
+<table>
+  <thead><tr><th class="nw" style="width:15%">蓝图要求</th><th style="width:37%">实际实现</th><th class="nw" style="width:9%">判定</th><th>影响</th></tr></thead>
+  <tbody>
+    <tr>
+      <td class="nw"><b>权限写在数据库层</b><br><small>「字段在出库时就已经是 NULL，前端拿到的响应里根本没有这个数字」</small></td>
+      <td>权限判据分散在三处：<code>viewRoles/editRoles</code>（角色）、<code>accessible_pages</code>（页面白名单）、<code>ownsRecord()</code>（姓名匹配）。字段屏蔽发生在 <code>renderValue()</code>，即 HTML 渲染那一刻。</td>
+      <td><span class="pill p-r">偏离</span></td>
+      <td>数据本身没有被裁剪。任何不走 <code>renderValue</code> 的出口（编辑表单、picker API）都会原样吐出金额。已复现，见 §2.2。</td>
+    </tr>
+    <tr>
+      <td class="nw"><b>排班必须拆 <code>schedule_employees</code> 关联表</b><br><small>「否则你的第一条权限规则就实现不了」</small></td>
+      <td>库里 <code>schedule_employees</code> 表已建好、<b>973 行数据在</b>，但应用层完全没读它 —— 仍在读 <code>records</code> 里 <code>assigned_employees</code> 的 JSON 数组，并用<b>员工姓名字符串</b>判断"这条是不是我的"。</td>
+      <td><span class="pill p-r">偏离</span></td>
+      <td>表建了没接线，等于蓝图这一条只完成一半。姓名匹配遇到同名/改名会直接失效，见 §3.2。</td>
+    </tr>
+    <tr>
+      <td class="nw"><b>办公室：客户/产品<br>限时 + 每日 50 次 + 静默拦截</b></td>
+      <td>只对 <code>customers</code> 的详情页做了时间窗 + 配额（<code>customerOfficeAccess</code>）。<b>产品完全没有</b>；列表页的配额漏口靠 <code>decorateRow()</code> 打码补。</td>
+      <td><span class="pill p-a">部分</span></td>
+      <td>配额只管"点进去"，而 <code>/api/pick</code> 可以批量拉全表，配额机制被旁路。见 §2.1。</td>
+    </tr>
+    <tr>
+      <td class="nw"><b>报价 → 发票 转换链</b></td>
+      <td>转 PO、转合约都有 <code>existing</code> 查重；<b>转发票没有</b>。<code>convertQuotation()</code> 的 <code>target === 'invoices'</code> 分支直接 <code>store.save</code>。</td>
+      <td><span class="pill p-r">缺失</span></td>
+      <td>重复点一次就多一张发票，金额重复计入应收。是否算 bug 取决于业务规则，见 §5 问题 4。</td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="callout">
+  <b>顺带纠正交接文档的一处数字</b>
+  <p>文档写「<code>data.db</code> 里还有 30 张旧表」。实际是 <b>22 张</b>（另 9 张是本期新建的系统表，再加 <code>sqlite_sequence</code>，共 32 张）。
+  数量不重要，重要的是下一节 —— 这 22 张表<b>不是空的</b>。</p>
+</div>
+
+<h3>1.1 那 22 张「一行都没读写」的旧表，装着完整的第二份数据</h3>
+
+<p>交接文档说「应用程式一行都没读写（已全域搜过 <code>FROM customers</code> 之类语句，零命中）」。代码层面这句话成立。
+但数据层面，这些表里是<b>原系统全量数据的归一化副本</b>：</p>
+
+<table>
+  <thead><tr><th class="nw">旧表</th><th class="nw">行数</th><th class="nw">对应 <code>records</code> 实体</th><th>状态</th></tr></thead>
+  <tbody>
+    <tr><td class="nw"><code>customers</code></td><td class="nw">1,608</td><td class="nw">Customer 1,608</td><td>两边一致，但<b>互为独立副本</b></td></tr>
+    <tr><td class="nw"><code>quotations</code> / <code>quotation_items</code></td><td class="nw">1,826 / 1,602</td><td class="nw">Quotation 1,826</td><td>头表对齐，明细行只有关系表有</td></tr>
+    <tr><td class="nw"><code>schedules</code> / <code>schedule_employees</code></td><td class="nw">13,113 / <b>973</b></td><td class="nw">Schedule 13,116</td><td><b>关联表有数据，应用没接</b></td></tr>
+    <tr><td class="nw"><code>invoices</code> / <code>invoice_items</code></td><td class="nw">205 / 261</td><td class="nw">Invoice 205</td><td>同上</td></tr>
+    <tr><td class="nw">其余 15 张</td><td class="nw">—</td><td class="nw">—</td><td>全部有数据</td></tr>
+  </tbody>
+</table>
+
+<div class="callout warn">
+  <b>为什么这是个架构隐患，而不是"以后清理一下"</b>
+  <p>任何未来的读者 —— 包括下一个 agent、做报表的人、接 BI 的人 —— 只要写一句 <code>SELECT * FROM customers</code>，
+  拿到的就是<b>冻结在 2026-10-24 的旧数据</b>，而且它看起来完全正常。这份副本没有任何标记说明它是弃用的。
+  这比"多占 20MB"严重得多：它是一份会骗人的数据源。</p>
+  <p style="margin-bottom:0">二选一，别放着：<b>要么接上</b>（把关系表变成主存储，见 §5 问题 1），<b>要么明确封存</b>（改名 <code>_legacy_*</code> 或导出成归档文件后 DROP）。</p>
+</div>
+
+<h3>1.2 更正：这 22 张表<b>不是</b>「已经归一化好的数据」</h3>
+
+<div class="callout risk">
+  <b>我在第 1 轮口头说过「选 B 的话迁移成本比想象低很多，数据已经是归一化好的」。这句话不准确，在这里更正。</b>
+  <p>逐表核对字段后，这 22 张表是<b>一次性的投影</b>（改了名、丢了大半字段），不是可直接接管的主存储。原判断低估了 B 的工作量约一周。</p>
+</div>
+
+<table>
+  <thead><tr><th class="nw" style="width:19%">旧表</th><th class="nw" style="width:9%">列数</th><th class="nw" style="width:11%">JSON 键数</th><th>字段差异（实例）</th><th class="nw" style="width:9%">可直接用？</th></tr></thead>
+  <tbody>
+    <tr><td class="nw"><code>customers</code></td><td class="nw">12</td><td class="nw">18</td><td><code>code / name / type / contact / address</code> vs 应用侧 <code>customer_code / customer_name / customer_type / contact_person / service_address</code> —— <b>全部改名</b></td><td><span class="pill p-r">否</span></td></tr>
+    <tr><td class="nw"><code>products</code></td><td class="nw">10</td><td class="nw">29</td><td>缺 <code>afcd_reg_no / active_ingredients / msds_file_url / stock_quantity / supplier_price</code> 等 19 项</td><td><span class="pill p-r">否</span></td></tr>
+    <tr><td class="nw"><code>purchase_orders</code></td><td class="nw">13</td><td class="nw">38</td><td>缺 <code>quotation_id / work_unit_id / work_dates / items</code> 等 25 项</td><td><span class="pill p-r">否</span></td></tr>
+    <tr><td class="nw"><code>schedules</code></td><td class="nw">11</td><td class="nw">14</td><td>缺 <code>assigned_employees / work_items / vehicle_plate</code>（拆成了独立列）</td><td><span class="pill p-r">否</span></td></tr>
+    <tr><td class="nw"><code>quotation_items</code></td><td class="nw">7</td><td class="nw">—</td><td>1,602 行真明细（<code>quotation_id / item_name / quantity / unit_price / amount</code>），结构干净</td><td><span class="pill p-g">是</span></td></tr>
+    <tr><td class="nw"><code>invoice_items</code></td><td class="nw">9</td><td class="nw">—</td><td>261 行，同上且多 <code>code / description</code></td><td><span class="pill p-g">是</span></td></tr>
+    <tr><td class="nw"><code>schedule_employees</code></td><td class="nw">3</td><td class="nw">—</td><td>973 行 / 488 排班，<b>488 个 schedule_id 全部能在 records 找到</b></td><td><span class="pill p-g">是</span></td></tr>
+  </tbody>
+</table>
+
+<p><b>但这三件事确实是便宜的</b>，它们让 B 仍然明显优于 C：</p>
+<ol>
+  <li><b>主键完全对齐</b> —— <code>schedule_employees.schedule_id</code> 488/488 命中 <code>records.id</code>，迁移可以逐行 join 对账，不需要模糊匹配。</li>
+  <li><b>行数可作迁移校验</b> —— customers 1,608 / quotations 1,826 / schedules 13,113，抽完直接比对，差值必须是 0。</li>
+  <li><b>三张明细/关联表已经是对的</b> —— 报价明细、发票明细、排班人员，这三张直接接管，不用重建。</li>
+</ol>
+
+<div class="callout">
+  <b>另一个核对结论：<code>schedule_employees</code> 的覆盖率是 100%，不是 3.7%</b>
+  <p>13,115 条排班里只有 488 条有 <code>assigned_employees</code>，看起来像丢了 96%。但我回去翻了原始导出
+  <code>Schedule.json</code>：<b>原始 13,113 笔里也只有 488 笔的 <code>assigned_employees</code> 非空</b>。
+  所以导入是忠实的，没有数据丢失 —— 是原系统本身就有 96% 的排班没指派人员（历史数据或走的是别的指派入口）。</p>
+  <p style="margin-bottom:0">这个事实的实践含义：<b>「前线只看自己的班」这条权限规则，只对这 488 条生效</b>。剩下 12,627 条对任何人都是"无主"的。
+  真正需要这条规则的是<b>今后新建的排班</b>，所以接 <code>schedule_employees</code> 的工作量很小，价值却集中在新增数据上。</p>
+</div>
+
+<h2>二 · 已复现的缺陷（有证据）</h2>
+
+<p>以下三条都不是读代码推出来的，是在<b>隔离副本</b>上起服务、用真实 HTTP 请求复现的。
+原库 <code>data.db</code> 全程未被写入（测试前后时间戳一致）。</p>
+
+<h3>2.1 P0 · 选择性 API 没有授权校验，前线可拉走全部客户与成本价</h3>
+
+<div class="ev">
+  <b>证据 1 —— 正常入口确实被挡住了</b>
+<pre>curl -b front.jar <span class="c">http://127.0.0.1:3199/customers</span>
+  <span class="g">-> HTTP 403</span>          <span class="c">// 符合 viewRoles 设定</span></pre>
+</div>
+
+<div class="ev">
+  <b>证据 2 —— 但同一个 session 调选择器接口，拿到了完整未打码数据</b>
+<pre>curl -b front.jar <span class="c">"http://…/api/pick?source=customers&amp;limit=3"</span>
+<span class="g">[{"label":"房屋署（上水彩園邨）",
+   "sub":"林小姐 · 2672 6927",
+   "fill":{"contact_person":"林小姐","phone":"2672 6927",
+           "fax":"2677 9009","customer_tel":"2672 6927", …}}]</span>
+
+<span class="c">// 单次上限 50 条，1608 个客户可枚举完</span>
+单次返回条数: 50   含电话条数: 28</pre>
+</div>
+
+<div class="ev">
+  <b>证据 3 —— 产品成本价同样泄漏（蓝图规定产品对前线「不可见」、对办公室「不含成本价」）</b>
+<pre><span class="r">P-S075 麥米                                 | cost_price= 170
+P-S005 Agenda EC 1L                        | cost_price= 300
+P-S175 Deter SG Dinotefuran 40% SG 350G    | cost_price= 125</span></pre>
+</div>
+
+<p><b>根因</b>：<code>server.mjs:368</code> 的 <code>/api/pick</code> 分支只检查"有没有登录"，之后直接
+<code>searchPick(store, source, ...)</code>，<b>没有 <code>assertEntity</code>、没有按角色裁剪 <code>fill</code>、也不写审计</b>。
+而 <code>pickers.mjs</code> 的 <code>build()</code> 是按"管理员视角"写的，把 <code>phone / fax / email / cost_price / service_address</code> 全部塞进返回值。</p>
+
+<p><b>影响面</b>：这一条同时击穿了三件事 —— 角色矩阵（front 本不该见客户）、办公室打码（<code>decorateRow</code> 白做了）、
+配额与时间窗（<code>/api/pick</code> 完全绕过 <code>customerOfficeAccess</code>）。而且<b>不留审计</b>，出了事查不到。</p>
+
+<p><b>修法</b>（约 40 行）：在 <code>/api/pick</code> 入口加 <code>assertEntity(user, PICK_SOURCES[source].entity)</code>；
+把 <code>fill</code> 拆成 <code>fill</code>（安全字段）与 <code>sensitive</code>（按角色合并）；每次调用写一条 <code>action='pick'</code> 审计。</p>
+
+<h3>2.2 P0 · 字段级屏蔽只挡住了列表，点「编辑」就现原形</h3>
+
+<div class="ev">
+  <b>证据 —— 同一个 office 账号，同一个报价单</b>
+<pre><span class="c">// 列表页：确实打码了</span>
+curl -b office.jar /quotations   ->  出现 <span class="g">•••••</span>
+
+<span class="c">// 编辑页：金额以明文出现在 input value 里</span>
+curl -b office.jar /edit/quotations/6adb1399…
+  name="total_amount"  readonly value="<span class="r">7500</span>" step="0.01"
+  name="subtotal"      readonly value="<span class="r">7500</span>" step="0.01"</pre>
+</div>
+
+<p><b>根因</b>：屏蔽逻辑写在 <code>ui.mjs</code> 的 <code>renderValue()</code>（第 880 行），而表单控件走的是 <code>fieldInput()</code>（第 995 行），
+后者<b>完全不看 <code>ctx.canSeeAmounts</code></b>，直接把 <code>esc(value ?? '')</code> 填进 <code>value=""</code>。
+所以"看不到金额"只在列表和详情成立，编辑页一律明文。</p>
+
+<p><b>影响面</b>：报价、采购单、发票、产品（成本价）、库存（库存值）全部适用。
+蓝图的核心验收标准之一是「办公室看客户到第 51 条被拦下」，但真正敏感的不是客户名，是<b>报价总额和成本价</b> ——
+这一条现在等于没做。而且 <code>readonly</code> 只是不可编辑，不是不可见。</p>
+
+<p><b>修法</b>：<code>fieldInput()</code> 遇到 <code>canSeeAmounts === false</code> 且字段是金额类时，输出
+<code>value=""</code> + <code>placeholder="•••••"</code> + 一个 <code>hidden</code> 保留原值（避免保存时把金额清空）。
+更彻底的做法是 §4 阶段 1 的序列化层。</p>
+
+<h3>2.3 P0 · 外键靠"名字"匹配，重名客户会把单据改到别人名下</h3>
+
+<div class="ev">
+  <b>数据事实</b>
+<pre>客户 1,608 笔，其中 <span class="r">25 组重名</span>（涉及 62 笔）
+  例：「房屋署」x4、「碧霞花園管理有限公司」x4、「中國水利電力對外有限公司」x2、「何生」x2
+产品 132 笔，<span class="r">2 组重名</span>
+  例：「SafePRO BirdShield 驅鳥劑」x2、「雙鎖鼠餌盒」x2</pre>
+</div>
+
+<div class="ev">
+  <b>模拟 <code>normalizeRelations()</code> 的实际解析结果</b>
+<pre>保存时会指向「第一个同名客户」而非原客户的文件数：<span class="r">261 份</span>
+
+  Contract      SQP-2026-0260  康文署              原 id 69a7af95 -> 会被改成 6a3def25
+  Contract     （无编号）       房屋署              原 id 69a6aa74 -> 会被改成 6a9157d7
+  DeliveryNote  DNP2607080     宜居顧問服務有限公司  原 id 69b0dab1 -> 会被改成 6a3b61c2
+  DeliveryNote  DNP2606115     領先管理有限公司      原 id 69a6a82f -> 会被改成 6a3361ca
+  …</pre>
+</div>
+
+<p><b>根因</b>：<code>actions.mjs:71</code></p>
+<pre>const customer = store.list('customers')
+  .find(<span class="r">r =&gt; r.customer_name === data.customer_name || r.id === data.customer_id</span>);
+// find 返回第一个满足任一条件的行。
+// 若同名客户排在前面，name 分支先命中 -> 拿到的 id 不是这本单据原本的 id。</pre>
+<p>随后第 80 行对 <code>customer_id</code> 是<b>无条件覆盖</b>：</p>
+<pre>if (… <span class="r">|| field === 'customer_id' || field === 'customer_code'</span>) data[field] = value || '';</pre>
+
+<p><b>影响面</b>：任何带 <code>customer_name</code> 的表单保存都会触发。261 份单据在<b>下一次被编辑保存时静默改挂到另一个客户</b>，
+没有报错、没有审计差异。客户对账、应收归集、历史报价追溯会全部错位。同类问题在 <code>productForAdjustment()</code>（按产品名匹配库存调整目标）也成立。</p>
+
+<p><b>修法</b>：改成 <b>id 优先、name 只做"新增时补齐"</b>：</p>
+<pre><span class="c">// 正确顺序：先按 id 认，id 认不到才按名字查，且名字命中多条时拒绝自动改写</span>
+let customer = data.customer_id ? store.get('customers', data.customer_id) : null;
+if (!customer &amp;&amp; data.customer_name) {
+  const hits = store.list('customers').filter(r =&gt; r.customer_name === data.customer_name);
+  if (hits.length === 1) customer = hits[0];
+  else if (hits.length &gt; 1) <span class="c">/* 抛 409 让用户从下拉里选，不要猜 */</span>
+}
+if (customer) { data.customer_id = customer.id; … }</pre>
+
+<h2>三 · 架构层问题（不是 bug，是分层缺失）</h2>
+
+<h3>3.1 权限判据有三套，且默认放行</h3>
+
+<table>
+  <thead><tr><th class="nw" style="width:22%">判据</th><th class="nw" style="width:20%">位置</th><th>语义</th><th class="nw" style="width:9%">默认值</th></tr></thead>
+  <tbody>
+    <tr><td class="nw"><b>角色</b></td><td class="nw"><code>viewRoles/editRoles</code></td><td>这个角色能不能进这一类实体</td><td><span class="pill p-g">拒绝</span></td></tr>
+    <tr><td class="nw"><b>页面白名单</b></td><td class="nw"><code>accessible_pages</code></td><td>这个账号能不能看这个页面</td><td><span class="pill p-r">放行</span> 空值=不限制</td></tr>
+    <tr><td class="nw"><b>记录级</b></td><td class="nw"><code>ownsRecord()</code></td><td>这条记录是不是我的（<b>按姓名比</b>）</td><td><span class="pill p-r">放行</span> 非 front 一律 true</td></tr>
+  </tbody>
+</table>
+
+<p>三套判据分散在 <code>core.mjs</code>、<code>server.mjs</code> 两个文件、十几个调用点。任何新增路由只要漏写一句
+<code>assertEntity</code>，就是 §2.1 那种缺口 —— 而 §2.1 已经真实发生了一次。<b>这不是执行疏忽，是结构没有收敛点。</b></p>
+
+<p>另外 <code>ownsRecord()</code> 用姓名比对：</p>
+<pre>const name = str(user.name).replace(/（[^）]*）/g, '').trim();
+if (cfg.key === 'schedules') return arrEmployees(row.assigned_employees).some(n =&gt; n === name || n.includes(name));</pre>
+<p><code>n.includes(name)</code> 是子串匹配 —— 员工「陳大文」会命中「陳大文（夜班）」，也可能命中任何包含这三个字的组合。
+排班 13,116 条、员工来自历史排班反推（9 个姓名），这个匹配精度不足以承载"只看自己的"这条硬规则。</p>
+
+<h3>3.2 列表查询：每页读两次全表，且在单线程上同步执行</h3>
+
+<div class="ev">
+  <b>实测（隔离库）</b>
+<pre>Quotation  1,796 笔 / 3.2 MB JSON   单次全量载入 <span class="r">27 ms</span>
+Schedule  13,115 笔 / 8.5 MB JSON   单次载入 + JSON.parse <span class="r">116 ms</span>
+
+页面响应：/quotations <span class="r">211 ms</span>   /schedules <span class="r">277 ms</span>   /inventory <span class="r">177 ms</span></pre>
+</div>
+
+<p><b>根因</b>：<code>core.mjs:188-189</code></p>
+<pre>const source = store.list(cfg.key, …).filter(r =&gt; !r._draft);   <span class="c">// 第 1 次全量</span>
+const rows   = filteredRows(store, cfg, url, user);              <span class="c">// 第 2 次全量（内部又 store.list）</span></pre>
+<p>拿到全部行之后，搜索、筛选、排序全在 JS 里做，排序还用 <code>localeCompare(…, 'zh-Hant')</code> —— 13,115 行意味着上万次 ICU 排序调用。
+最后才 <code>slice((page-1)*50, …)</code> 取 50 条。<b>为了 50 行，读了 13,115 行。</b></p>
+
+<p>单线程 Node + 同步 <code>node:sqlite</code>，这 277 ms 期间<b>整个服务无法响应任何其他请求</b>。
+50 人规模下并发一上来就是串行排队。这不是"以后优化"，是上线即会遇到的第一个投诉。</p>
+
+<div class="callout">
+  <b>另外两处无分页</b>
+  <p>应收台账与总账一次渲染全部：实测 <code>/receivables</code> 381 行 / 147 KB，<code>/generalledger</code> <b>524 行 / 230 KB</b>。
+  页面本身 50 ms 就返回了，但 230 KB 的 HTML 在手机上渲染会明显卡。交接文档已把它列为 P0，确认属实。</p>
+</div>
+
+<h3>3.3 单表 JSON：没有外键，也没有唯一约束</h3>
+
+<p><code>records(entity, id, data JSON, deleted)</code> 这张表设计得很省事，代价是数据库<b>无法保护任何业务不变量</b>：</p>
+
+<ul>
+  <li><b>没有外键</b> —— 删客户不会管单据；<code>mergeCustomers</code> 只能写脚本手工扫全表（38 实体 × 34k 行，在一个事务里跑）。</li>
+  <li><b>没有唯一约束</b> —— 单号靠 <code>nextNumber()</code> 扫全表取 max+1，<b>并发下会重号</b>。报价 1,826 笔，扫一次全表。</li>
+  <li><b>没有类型</b> —— 金额存成字符串还是数字取决于谁写的。<code>num()</code> 到处兜底，掩盖了脏数据。</li>
+  <li><b>没有字段级并发控制</b> —— <code>store.save()</code> 是 <code>{...previous, ...data}</code> 整条覆盖，乐观锁靠 <code>updated_date</code> 字符串相等。</li>
+</ul>
+
+<p>这套模型在 3 万条、10 人用时完全够。问题不在现在，在<b>它无法平滑长大</b> —— 见 §5 问题 1。</p>
+
+<h3>3.4 运行期基础设施缺三样</h3>
+
+<table>
+  <thead><tr><th class="nw" style="width:19%">缺什么</th><th>现状</th><th>后果</th></tr></thead>
+  <tbody>
+    <tr><td class="nw"><b>定时任务</b></td><td><code>server.mjs</code> 里没有任何 <code>setInterval</code> / cron。定期排程只能靠人在详情页点「立即产生到期排班」。</td><td>「定期服务」这个功能的名字和实际行为不一致。一旦没人点，排班就不生成，前线当天看不到工单。</td></tr>
+    <tr><td class="nw"><b>会话持久化</b></td><td><code>const sessions = new Map()</code>，存内存；Cookie 只有 <code>HttpOnly; SameSite=Lax</code>，<b>无 <code>Secure</code></b>。</td><td>每次重启全员掉线。多进程/多实例无法工作。上 HTTPS 后 Cookie 仍可能走明文。</td></tr>
+    <tr><td class="nw"><b>工程化基线</b></td><td>无 <code>package.json</code> / <code>engines</code> / <code>.nvmrc</code> / Dockerfile / 迁移版本表。<code>migrate()</code> 靠 <code>CREATE IF NOT EXISTS</code> + <code>ensureColumn</code>。</td><td>换台机器 Node 版本不对就起不来（<code>node:sqlite</code> 是 Node 22 实验特性）。没有 schema 版本号，将来改结构无法回溯"这个库是第几版"。</td></tr>
+  </tbody>
+</table>
+
+<div class="callout risk">
+  <b>一个必须先拆的地雷：演示登录默认是开的</b>
+  <p><code>migrate()</code> 写入 <code>demo_mode = '1'</code>，<code>/demo?as=management</code> 直接发一个 management 会话。
+  我在隔离库上<b>没有输入任何密码</b>就拿到了 front 和 office 的会话（HTTP 302 + 有效 Cookie），management 走同一个 <code>ids</code> 映射分支。</p>
+  <p style="margin-bottom:0">目前靠 <code>settings.demo_mode='0'</code> 或环境变量 <code>CPC_DEMO=0</code> 关闭 —— 也就是说，
+  <b>“是否对局域网开放完全管理权限”取决于一个默认值为「开」的配置项</b>。部署当天忘了改，就是后门。
+  建议：默认改成 <code>'0'</code>；启动时若检测到 <code>'1'</code>，在终端打一条显眼红字警告。</p>
+</div>
+
+<h3>3.5 代码组织：6,762 行，没有模块边界</h3>
+
+<table>
+  <thead><tr><th class="nw">文件</th><th class="nw">行数</th><th class="nw">大小</th><th>实际承担的职责</th></tr></thead>
+  <tbody>
+    <tr><td class="nw"><code>server.mjs</code></td><td class="nw">841</td><td class="nw">75 KB</td><td>HTTP、会话、CSRF、<b>约 60 个路由</b>、打印、导入导出、金流、排班、上传、图片编辑、设置页 HTML</td></tr>
+    <tr><td class="nw"><code>lib/ui.mjs</code></td><td class="nw">1,105</td><td class="nw">84 KB</td><td><b>全部 CSS</b>（模板字符串）+ 侧栏 + 图标库 + 表格 + 表单 + picker 前端脚本 + 登录页</td></tr>
+    <tr><td class="nw"><code>lib/pages.mjs</code></td><td class="nw">727</td><td class="nw">88 KB</td><td>12 个客制页面的 HTML，每个都是几百行内联模板</td></tr>
+    <tr><td class="nw"><code>lib/config.mjs</code></td><td class="nw">817</td><td class="nw">90 KB</td><td>38 个实体的字段/栏目/权限（纯数据，但和展示耦合）</td></tr>
+  </tbody>
+</table>
+
+<p>单文件路由 + 内联 HTML 模板是这个项目<b>能在四周内做完 34 个页面</b>的原因，不是缺点。真正的代价是<b>改一处要看三个文件</b>：
+加一个按钮要动 <code>pages.mjs</code>（HTML）→ <code>server.mjs</code>（路由）→ <code>config.mjs</code>（权限）。
+交接文档里那张"改动的三个文件"表其实是在描述这个成本。</p>
+
+<p><b>不需要现在拆</b>。但如果 §5 问题 1 选 C（关系化），就必须同时拆出 <code>routes/</code>、<code>views/</code>、<code>policy/</code> 三层，否则重写会撞在一起。</p>
+
+<h2>四 · 优化路线（按风险/收益排序，不重写）</h2>
+
+<p>原则：<b>先止血、再收敛、最后演进</b>。阶段 0 和 1 加起来约两周，做完系统的安全与性能面貌就不同了；
+阶段 2 才涉及结构，取决于 §5 的答案。</p>
+
+<table>
+  <thead><tr><th class="nw" style="width:9%">阶段</th><th class="nw" style="width:20%">动作</th><th>具体做法</th><th class="nw" style="width:9%">风险</th></tr></thead>
+  <tbody>
+    <tr>
+      <td class="nw"><span class="pill p-r">0 止血</span><br><small>约 2 天</small></td>
+      <td><b>堵 §2 的三个口子</b></td>
+      <td>
+        ① <code>/api/pick</code> 加 <code>assertEntity</code> + <code>fill</code> 按角色裁剪 + 写审计<br>
+        ② <code>fieldInput()</code> 对不可见金额输出掩码 + hidden 保值<br>
+        ③ <code>normalizeRelations()</code> 改 id 优先，重名抛 409<br>
+        ④ <code>demo_mode</code> 默认 0 + 启动告警<br>
+        ⑤ 报价转发票加 <code>quotation_id</code> 查重
+      </td>
+      <td><span class="pill p-g">低</span></td>
+    </tr>
+    <tr>
+      <td class="nw"><span class="pill p-a">1 收敛</span><br><small>约 2 周</small></td>
+      <td><b>建两个横切层</b></td>
+      <td>
+        ① <code>policy.mjs</code>：唯一入口 <code>can(user, action, entity, record)</code>，吃掉三套判据<br>
+        ② <code>serialize.mjs</code>：按角色输出字段，屏蔽发生在序列化而非渲染<br>
+        ③ <code>filteredRows</code> 下推 SQL（entity + deleted + 日期范围），排序交给 SQL，去掉重复 <code>store.list</code><br>
+        ④ 应收/总账接 <code>pager()</code>，per=50
+      </td>
+      <td><span class="pill p-a">中</span></td>
+    </tr>
+    <tr>
+      <td class="nw"><span class="pill p-b">2 演进</span><br><small>3–4 周</small></td>
+      <td><b>数据模型 + 调度</b></td>
+      <td>
+        ① 按 §5 问题 1 的答案走 A/B/C<br>
+        ② 接入 <code>schedule_employees</code>（973 行现成数据），权限判据从姓名换成 id<br>
+        ③ 定期排程加后台任务（哪怕只是个 <code>setInterval</code> + 启动补跑）<br>
+        ④ 会话外置（若上云）
+      </td>
+      <td><span class="pill p-r">高</span></td>
+    </tr>
+    <tr>
+      <td class="nw"><span class="pill p-n">3 工程化</span></td>
+      <td><b>可交付基线</b></td>
+      <td>
+        <code>package.json</code> + <code>engines: node&gt;=22</code>；迁移版本表 <code>schema_version</code>；<br>
+        验收脚本从「字面 CSS 断言」改为「行为断言」（现在改一个 <code>font-weight</code> 就 55 项红，这会阻止后续所有 UI 迭代）
+      </td>
+      <td><span class="pill p-g">低</span></td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="callout warn">
+  <b>关于"验收脚本断言字面 CSS"这件事，值得单独说一句</b>
+  <p>交接文档把它列为"不可破坏的不变量 #1"：<code>.navgrp&gt;summary{font-size:13px;font-weight:700}</code> 一改，55 项直接红。
+  这在<b>本轮</b>是对的（防止视觉漂移），但在<b>长期</b>是有害的 —— 它把一次设计调整变成 55 个假失败，
+  团队很快就会学会"别跑验收"，那时验收就彻底失效了。</p>
+  <p style="margin-bottom:0">建议改成：结构断言（这个元素存在、这个按钮可点、这个角色看不到）保留；<b>像素级 CSS 断言改成截图快照 + 人工确认</b>。</p>
+</div>
+
+<h2>五 · 待决策：三问（第 1 轮 / 共 3 轮）</h2>
+
+<p>下面三个问题的答案会决定 §4 阶段 2 怎么做，以及阶段 0/1 的取舍。<b>不需要现在全答完，按你的判断给方向即可。</b></p>
+
+<div class="q">
+  <div class="qh"><em>问题 1</em>数据模型要往哪走？—— 决定 3–4 周的工作量</div>
+  <ol type="A">
+    <li><b>保持 <code>records</code> 单表 JSON，只加索引/生成列</b>：最快，两周内可收尾。代价是外键和唯一约束永远靠代码守。</li>
+    <li><b>核心 8 张表回归关系表，其余留 JSON</b>：客户 / 报价 + 明细 / PO / 发票 / 收款 / 产品 / 排班 / 合约。混合模式，最平衡，但要写迁移脚本 + 双写过渡。</li>
+    <li><b>全面关系化，对齐蓝图 Postgres</b>：最干净，也最贵；且必须先拆 <code>server.mjs</code>，否则重写会撞车。</li>
+  </ol>
+  <div class="why">为什么问这个：库里已经躺着 22 张带全量数据的关系表 —— 但见 §1.2 的更正，<b>它们字段对不齐，只能当校验基准，不能直接接管</b>。
+  选 B 的真实理由不是"省迁移"，而是"换来外键与唯一约束"，同时不必像 C 那样先拆 <code>server.mjs</code>。</div>
+</div>
+
+<div class="q">
+  <div class="qh"><em>问题 2</em>办公室的「打码 + 每日 50 次 + 时间窗」是真业务要求，还是演示效果？</div>
+  <ol type="A">
+    <li><b>真要求</b>：那就必须做到"接口层不可绕"，阶段 1 的序列化层是硬需求，<code>/api/pick</code> 是必须堵的洞。</li>
+    <li><b>演示用</b>：可以整段删掉，把配额相关的 <code>quota</code> 表、<code>customerOfficeAccess</code>、打码逻辑一并下掉，代码会清爽很多。</li>
+    <li><b>真要求但可放宽</b>：只要求列表打码（防批量抄），不做配额和拦截。那 §2.1 和 §2.2 仍然必须修。</li>
+  </ol>
+  <div class="why">为什么问这个：现在这套机制<b>三种状态混在一起</b>——打码做了、配额做了、拦截做了，但都能被同一个接口绕过。
+  要么做实，要么删掉；维持现状最糟：既有维护成本，又没有实际防护。</div>
+</div>
+
+<div class="q">
+  <div class="qh"><em>问题 3</em>上线形态定了吗？—— 决定现在要不要为"上云"付成本</div>
+  <ol type="A">
+    <li><b>继续单机 + 局域网</b>（办公室一台机器，50 人内）：SQLite 完全够，阶段 2 的会话外置可以不做。</li>
+    <li><b>上香港轻量云 + HTTPS</b>（对齐蓝图）：必须处理 <code>Secure</code> Cookie、会话外置、反向代理下的 <code>X-Forwarded-For</code> 信任问题、以及每日异地备份。</li>
+    <li><b>先内部试用，上线时间未定</b>：那阶段 0 照做，阶段 1 里只做"查询下推"，其余等定。</li>
+  </ol>
+  <div class="why">为什么问这个：有个具体隐患等你定 —— <code>audit</code> 里记录的 IP 取自 <code>x-forwarded-for</code>（可伪造），
+  但登录锁定用的是 <code>socket.remoteAddress</code>（反向代理后所有人同一个 IP，导致"锁一个人等于锁全部"）。这两处信任策略必须和部署形态一起定。</div>
+</div>
+
+<h2>六 · 部署安全基线：代理后的真实 IP 与锁定策略</h2>
+
+<p>这是 <b>Q3 = B（香港云 + HTTPS + nginx 反代）</b> 引出的必答题。现状两个 bug 互为镜像 —— 根因是<b>没有「谁是我的对端」这个单一事实来源</b>，两个调用点各自猜。</p>
+
+<table>
+  <thead><tr><th class="nw" style="width:22%">调用点</th><th class="nw" style="width:26%">现在取的 IP</th><th>代理之后的结果</th></tr></thead>
+  <tbody>
+    <tr><td class="nw"><code>audit()</code> 写审计</td><td class="nw"><code>x-forwarded-for</code> 第一段</td><td><b>可伪造</b>。攻击者自带 <code>X-Forwarded-For: 8.8.8.8</code>，审计里就永远是 8.8.8.8</td></tr>
+    <tr><td class="nw"><code>recordLoginFailure()</code></td><td class="nw"><code>socket.remoteAddress</code></td><td><b>恒为 127.0.0.1</b>。锁定键 <code>ip|email</code> 退化成 <code>127.0.0.1|email</code></td></tr>
+  </tbody>
+</table>
+
+<div class="callout warn">
+  <b>第 2 行意味着什么：一个针对性 DoS</b>
+  <p>所有用户共享同一个"IP"。攻击者只要连续输错某人邮箱 5 次，锁定键就被写死，<b>受害者本人从任何设备都登不进去</b>，
+  而且攻击者可以轮着锁所有人。反过来，攻击者自己换台机器（或直接打 <code>localhost</code>）就能绕过自己的锁定。</p>
+</div>
+
+<h3>6.1 第一步：Node 只跟 nginx 说话</h3>
+<pre><span class="c">// server.mjs 末尾</span>
+server.listen(PORT, <span class="g">'127.0.0.1'</span>);   <span class="c">// 不是默认的 0.0.0.0</span></pre>
+<p>绑定回环，公网只暴露 443。这样 <code>socket.remoteAddress</code> 恒为 <code>127.0.0.1</code> —— 听起来正是问题所在，
+但它同时确立了一个前提：<b>「对端是 127.0.0.1」本身就等于「这个请求经过了 nginx」，于是 XFF 可信</b>。信任判断从此有了依据。</p>
+
+<h3>6.2 第二步：一个函数，两个调用点</h3>
+<pre><span class="c">// lib/net.mjs</span>
+const TRUST = new Set(['127.0.0.1', '::1']);
+const norm = (v) =&gt; String(v || '').trim().replace(/^::ffff:/, '');
+
+export function clientIp(req) {
+  const peer = norm(req.socket.remoteAddress);
+  <span class="c">// 对端不是本机 → 说明有人直连 Node（配置错了），此时只能信 socket</span>
+  if (!TRUST.has(peer)) return peer;
+  const chain = String(req.headers['x-forwarded-for'] || '')
+    .split(',').map(norm).filter((v) =&gt; v &amp;&amp; /^[0-9a-fA-F:.]{3,45}$/.test(v));
+  <span class="c">// 关键：从右往左，第一个「不可信」的地址才是真实客户端</span>
+  for (let i = chain.length - 1; i &gt;= 0; i--) {
+    if (!TRUST.has(chain[i])) return chain[i];
+  }
+  return chain[0] || peer;
+}</pre>
+
+<div class="callout risk">
+  <b>为什么必须从右往左 —— 这是全篇最容易做错的一处</b>
+  <p>nginx 的 <code>$proxy_add_x_forwarded_for</code> 语义是「把对端 IP <b>追加</b>到请求头里已有的字符串后面」。
+  攻击者发 <code>X-Forwarded-For: 1.2.3.4</code>，nginx 转给 Node 的是 <code>1.2.3.4, &lt;真实IP&gt;</code>。</p>
+  <p style="margin-bottom:0"><b>最左边那一段是攻击者自己写的</b>，取它 = 审计里记了个假 IP（现状的 bug）。
+  取「最右的非可信地址」才是真实 IP。任何"取第一段"的实现都是错的，包括很多教程。</p>
+</div>
+
+<h3>6.3 第三步：锁定改成两级计数，废掉 <code>ip|email</code> 联合键</h3>
+
+<p>单键锁定无法同时满足两件事：只锁 IP 会被换 IP 绕过；只锁账号会被恶意锁死别人。<b>拆成两个独立计数器，各解决一半。</b>
+复用现有 <code>login_failures</code> 表，key 加前缀即可，不需要改表结构。</p>
+
+<table>
+  <thead><tr><th class="nw" style="width:12%">维度</th><th class="nw" style="width:20%">key</th><th class="nw" style="width:11%">阈值</th><th class="nw" style="width:11%">窗口</th><th>挡住什么 / 不会挡住什么</th></tr></thead>
+  <tbody>
+    <tr><td class="nw">账号</td><td class="nw"><code>acct:&lt;email&gt;</code></td><td class="nw">8 次</td><td class="nw">15 分钟</td><td>挡针对某个账号的暴力破解；<b>不影响其他任何账号</b> → 「锁一个人等于锁全部」消失</td></tr>
+    <tr><td class="nw">来源</td><td class="nw"><code>ip:&lt;clientIp&gt;</code></td><td class="nw">40 次</td><td class="nw">15 分钟</td><td>挡撞库喷洒（一个 IP 试很多账号）；办公区 NAT 后多人共用出口，阈值要放大，故取 40</td></tr>
+  </tbody>
+</table>
+
+<p>三条实现纪律：</p>
+<ol>
+  <li><b>登录成功只清 <code>acct:</code>，不清 <code>ip:</code>。</b>否则攻击者注册/持有一个自己的账号，登录一次就把 IP 计数清零，喷洒限制形同虚设。</li>
+  <li><b>对外提示必须一致</b>（统一「帳號或密碼錯誤」），不能让人从文案推断是哪一级触发 —— 否则等于告诉攻击者"这个账号存在且已被锁"。</li>
+  <li><b>账号锁定要可解除</b>：<code>/users</code> 页给管理层一个「解锁」按钮（删 <code>acct:</code> 行）。15 分钟自动过期是兜底，不是唯一手段 —— 否则员工被锁只能干等。</li>
+</ol>
+
+<h3>6.4 第四步：HTTPS 下必须同步改的三件小事</h3>
+<table>
+  <thead><tr><th class="nw" style="width:20%">项</th><th>做法</th><th>不改的后果</th></tr></thead>
+  <tbody>
+    <tr><td class="nw">Cookie 属性</td><td>改为 <code>__Host-sid=…; Path=/; <b>Secure</b>; HttpOnly; SameSite=Lax</code>（<code>__Host-</code> 前缀强制 Secure + 禁止 Domain，防子域覆盖）</td><td>没有 <code>Secure</code>，浏览器可能在明文 HTTP 下也发送会话 Cookie</td></tr>
+    <tr><td class="nw">协议判断</td><td>nginx 传 <code>X-Forwarded-Proto</code>；Node 仅在 <code>https</code> 时下发 Secure</td><td>写死 Secure 会让本地 <code>http://127.0.0.1:3000</code> 调试直接登不进去</td></tr>
+    <tr><td class="nw">会话持久化</td><td>把 <code>sessions</code> 从 <code>new Map()</code> 落一张 <code>sessions</code> 表（约 20 行）</td><td>每次重启/发版全员掉线；云上每日重启一次 = 每天早上一片"登录失效"投诉</td></tr>
+  </tbody>
+</table>
+
+<div class="callout">
+  <b>一条边界：IP 不是身份</b>
+  <p>即使 <code>clientIp()</code> 完全正确，IP 也只是网络层线索 —— NAT 后几十人共用一个出口，手机换基站就变。
+  蓝图要审计回答的是「谁看了哪个客户」，靠的是 <code>actor_id</code>；IP 只用于「异地登录」「同一账号多人共用」这类辅助判断。</p>
+  <p style="margin-bottom:0">所以优先级是 <b>actor_id 正确 &gt; action 正确 &gt; IP 正确</b>。现在前两项是对的，IP 这项修到"不可伪造"即可，
+  不必为它引入设备指纹之类的东西 —— 那是另一个量级的复杂度。</p>
+</div>
+
+<h3>6.5 完整 nginx 片段（可直接用）</h3>
+<pre>server {
+  listen 443 ssl http2;
+  server_name erp.example.hk;
+
+  ssl_certificate     /etc/letsencrypt/live/erp.example.hk/fullchain.pem;
+  ssl_certificate_key /etc/letsencrypt/live/erp.example.hk/privkey.pem;
+
+  client_max_body_size 32m;          <span class="c"># 与应用 readRawBody 的 32MB 上限对齐</span>
+
+  location / {
+    proxy_pass http://127.0.0.1:3000;
+    proxy_http_version 1.1;
+
+    <span class="c"># 追加而非覆盖：真实 IP 在链的最右端，由 clientIp() 从右往左取</span>
+    proxy_set_header X-Forwarded-For   $proxy_add_x_forwarded_for;
+    proxy_set_header X-Forwarded-Proto $scheme;
+    proxy_set_header Host              $host;
+
+    <span class="c"># 导出/PDF 这类长请求别被 60s 掐断</span>
+    proxy_read_timeout 180s;
+  }
+}
+<span class="c"># 80 端口只做跳转</span>
+server { listen 80; server_name erp.example.hk; return 301 https://$host$request_uri; }</pre>
+
+<h2>七 · 客户主档与开票口径（Q4 / Q5 落地设计）</h2>
+
+<h3>7.1 先看数据：重名的真实成因不是「同名不同址」</h3>
+
+<p>25 组重名、62 笔记录，逐组看能不能靠地址或联系人区分：</p>
+
+<table>
+  <thead><tr><th class="nw" style="width:34%">情形</th><th class="nw" style="width:9%">组数</th><th>含义</th></tr></thead>
+  <tbody>
+    <tr><td class="nw">地址可完全区分</td><td class="nw">1</td><td>真的是不同地点，只是名字没写清</td></tr>
+    <tr><td class="nw">地址不足、联系人/电话可区分</td><td class="nw">11</td><td>有信息，但不足以唯一识别</td></tr>
+    <tr><td class="nw"><b>地址与联系人全空</b></td><td class="nw">13</td><td><b>只是名字，没有任何可区分信息</b></td></tr>
+  </tbody>
+</table>
+
+<p>把范围放大到全库，原因就清楚了：</p>
+
+<table>
+  <thead><tr><th class="nw" style="width:38%">指标</th><th class="nw" style="width:11%">数量</th><th>说明</th></tr></thead>
+  <tbody>
+    <tr><td class="nw">空壳客户（无地址/电话/联系人/编码）</td><td class="nw"><b>308</b></td><td>占 19.2%。<code>created_date</code> 全在 2026，<code>created_by</code> 是原系统账号 —— 是「随手输个名字就建了客户」的产物</td></tr>
+    <tr><td class="nw">其中被单据引用</td><td class="nw">243</td><td>579 报价 + 241 PO + 23 送货单 + 3 发票 + 3 合约，共 849 份</td></tr>
+    <tr><td class="nw">其中从未被引用</td><td class="nw">65</td><td>可归档</td></tr>
+    <tr><td class="nw">无 <code>customer_code</code></td><td class="nw">522</td><td>= 308 空壳 + 214 真实但漏填码</td></tr>
+  </tbody>
+</table>
+
+<div class="callout risk">
+  <b>关键事实：地点不属于客户，属于单据</b>
+  <p>我按「4 笔房屋署」逐笔反查了它们挂的单据：<b>0 张 / 3 张 / 6 张 / 85 张</b>，而那个 85 张的客户，其单据
+  <code>work_location</code> 横跨 <b>紅磡邨、上水清河邨、屯門蝴蝶邨、馬坑邨</b> 四个不相干的地方。</p>
+  <p style="margin-bottom:0">所以「一个客户对应一个地点」这个假设<b>不成立</b> —— 同一个客户档案本身就在跨地点下单。
+  <b>给 <code>customers</code> 加 <code>site_label</code> 是错的</b>，会把一个跨地点账户强行压成一个地点。
+  地点的一等公民是单据上的 <code>work_location / service_location / delivery_site</code>，它已经在那儿了。</p>
+</div>
+
+<h3>7.2 结论：A + C 可行，但要改三处</h3>
+
+<table>
+  <thead><tr><th class="nw" style="width:15%">原方案</th><th class="nw" style="width:30%">改成</th><th>为什么</th></tr></thead>
+  <tbody>
+    <tr><td class="nw">A · id 优先</td><td><span class="pill p-g">照做</span> <code>normalizeRelations()</code> 改 id 优先，重名不再按名反查</td><td>这是 P0-3 的修法，与客户模型无关</td></tr>
+    <tr><td class="nw">C · 唯一编码</td><td><b>唯一键是 <code>customer_code</code>，不是 <code>customer_name</code></b><br><code>UNIQUE(customer_code)</code>；名称上只建非唯一索引</td><td>同名是合法业务状态（不同区的房屋署），设成唯一会逼人改名或造假</td></tr>
+    <tr><td class="nw">（我上轮的设想）加 <code>site_label</code></td><td><span class="pill p-r">不做</span></td><td>见 7.1 的反证：一个客户跨四个地点，压不进一个字段</td></tr>
+    <tr><td class="nw">合并重名</td><td><span class="pill p-r">不合并</span></td><td>85 张单据的房屋署与 3 张的房屋署显然是两个业务账户；合并不可逆，且合完更分不清</td></tr>
+  </tbody>
+</table>
+
+<p><b>补 <code>customer_code</code> 的规则</b>：现有编码形如 <code>C0960</code>，最大 <code>C1062</code>，4 位制余量 8,937 足够。
+从 <code>C1063</code> 起顺延补齐 522 笔。<b>注意：<code>customer_code</code> 一旦生成不再变更</b> —— 它是单据追溯的锚点。</p>
+
+<h3>7.3 空壳客户的处置：能自动补的比想象多</h3>
+
+<p>按单据上的 <code>work_location</code> 反查，308 笔空壳可以分成四类：</p>
+
+<table>
+  <thead><tr><th class="nw" style="width:34%">类别</th><th class="nw" style="width:9%">数量</th><th class="nw" style="width:16%">处置</th><th>依据</th></tr></thead>
+  <tbody>
+    <tr><td class="nw">单据指向<b>唯一</b>地址</td><td class="nw">138</td><td><span class="pill p-g">自动回填</span></td><td>把该地址写进 <code>service_address</code>，脚本可完成，人工只需抽查</td></tr>
+    <tr><td class="nw">单据指向<b>多个</b>地址</td><td class="nw">92</td><td><span class="pill p-b">保留现状</span></td><td>说明它也是"跨地点账户"，本来就不该只有一个地址</td></tr>
+    <tr><td class="nw">单据也没有地址</td><td class="nw">78</td><td><span class="pill p-a">列入待补</span></td><td>只能问业务</td></tr>
+    <tr><td class="nw">从未被引用</td><td class="nw">65</td><td><span class="pill p-n">归档</span></td><td>软删除，可还原</td></tr>
+  </tbody>
+</table>
+
+<p><b>真正要人工的只有 78 笔</b>，不是 308 笔。这才是 A+C 可落地的底气。</p>
+
+<div class="callout">
+  <b>新建客户时怎么防止继续产生空壳</b>
+  <p>不硬拦（会挡住正常业务），改为<b>软提示 + 最小必填</b>：输入名称后若已存在同名，弹出
+  「已有 2 个同名客户：<code>C0960 碧霞花園管理有限公司</code>（碧霞花園 / 2697 6690）、<code>C1204 …</code>（无地址）」，
+  并强制至少填 <b>地址 或 联系人电话</b> 才能保存。这一条能挡住今后 90% 的空壳。</p>
+</div>
+
+<h3>7.4 Q4=B 的开票累计与超开拦截（实现规格）</h3>
+
+<p>现状：205 张发票里只有 <b>12 张</b>挂了 <code>quotation_id</code>，其余 193 张是独立开票；且<b>没有任何一个报价被开过两张以上发票</b>。
+所以这个功能是新加的，不是改造既有逻辑。</p>
+
+<table>
+  <thead><tr><th class="nw" style="width:22%">环节</th><th>规则</th></tr></thead>
+  <tbody>
+    <tr><td class="nw"><b>口径</b></td><td>未开余额 = <code>quotation.total_amount</code> − Σ(同 <code>quotation_id</code> 的发票 <code>total_amount</code>)，<b>作废发票不计入</b></td></tr>
+    <tr><td class="nw"><b>展示</b></td><td>报价详情与列表加一列：<code>已开 2 张 / 累计 12,000 / 未开 3,000</code>；报价详情内嵌已开票清单（单号、日期、金额、状态）</td></tr>
+    <tr><td class="nw"><b>入口</b></td><td>报价详情 →「开票」按钮，金额默认带出未开余额，可改小（分次）</td></tr>
+    <tr><td class="nw"><b>拦截</b></td><td>保存发票时若 <code>Σ(其他) + 本张 &gt; 报价总额 + 0.01</code> → 409，提示「报价 SQP-2026-0288 总额 15,000，已开 12,000，最多还可开 3,000」</td></tr>
+    <tr><td class="nw"><b>越额授权</b></td><td><code>management</code> 可勾「授权越额」并填原因 → 放行 + 写审计。<b>必须留这条路</b>，工程变更是常态，硬拦会逼人去改报价单</td></tr>
+    <tr><td class="nw"><b>边界</b></td><td>发票无 <code>quotation_id</code>（独立开票）不做校验；报价本身被修改后，已开票金额不变，需人工判断</td></tr>
+  </tbody>
+</table>
+
+<h3>7.5 一个连带问题：发票根本没有折扣字段</h3>
+
+<div class="callout risk">
+  <b>转发票会丢掉表头折扣，导致发票金额高于报价</b>
+  <p>四种单据的 <code>total_amount</code> 公式各不相同（代码事实）：</p>
+  <pre>Quotation      total = subtotal + freight <span class="g">- discount</span>
+Invoice        total = subtotal + freight        <span class="r">← 没有 discount 字段</span>
+PurchaseOrder  total = subtotal + tax            <span class="r">← 没有 freight</span>
+Bill           total = subtotal + tax            <span class="r">← 没有 freight，且忽略明细折扣</span></pre>
+  <p><code>convertQuotation()</code> 转发票时复制了 <code>freight_charges</code>，但 <b><code>discount</code> 无处可放，直接丢弃</b>。
+  结果：<b>发票金额 = 报价金额 + 折扣额</b>，等于多收客户一笔折扣钱。</p>
+  <p style="margin-bottom:0">目前 <b>0 张</b>报价用过表头折扣 / 运费 / 税，所以<b>没有真实错账</b>。但这是个埋着的雷：
+  一旦有人填了折扣，开票就多收，而且没人会发现（因为发票和报价单看起来都"正常"）。→ 这是第 3 轮问题 7。</p>
+</div>
+
+<h2>八 · 停机迁移单（Q6 = A）</h2>
+
+<h3>8.1 唯一原则：加表，不删表</h3>
+
+<p>迁移只<b>新建</b>关系表并写入，<code>records</code> 表原样保留。这样回滚不需要恢复备份 ——
+<b>把 <code>DB_PATH</code> 指回旧文件、重启即可，5 分钟内完成</b>。任何"迁移时顺便清理旧数据"的冲动都要压住，那是 T+7 之后的事。</p>
+
+<h3>8.2 时间线</h3>
+
+<table>
+  <thead><tr><th class="nw" style="width:12%">时点</th><th class="nw" style="width:24%">动作</th><th>验收</th></tr></thead>
+  <tbody>
+    <tr><td class="nw">T-7d</td><td>冻结 schema 变更；在副本上跑<b>三次</b>完整演练</td><td>三次结果逐字节一致（脚本幂等）；产出对账报告</td></tr>
+    <tr><td class="nw">T-1d</td><td>全量备份：<code>VACUUM INTO</code> 冷备 + uploads 打包 + SHA256 清单</td><td>在一台干净机器上能打开备份并读到第一张报价单</td></tr>
+    <tr><td class="nw">T-0<br>（2h 窗口）</td><td>
+      ① 停服务<br>
+      ② <code>VACUUM INTO 'backup-T0.db'</code>（<b>不要直接 cp</b>，WAL 未合并会拷出不一致副本）<br>
+      ③ 跑迁移脚本（单事务，失败自动 ROLLBACK）<br>
+      ④ 跑对账脚本<br>
+      ⑤ 抽查 10 张单据<br>
+      ⑥ 起服务 + 12 条冒烟
+    </td><td>对账全绿 + 抽查全对 + 冒烟全过，才开放给用户</td></tr>
+    <tr><td class="nw">T+1d</td><td>盯审计与错误日志；业务反馈收集</td><td>无 500、无错单号、无金额不符</td></tr>
+    <tr><td class="nw">T+7d</td><td>确认稳定后才允许 <code>DROP</code> 旧表</td><td>此前 <code>records</code> 一直保留</td></tr>
+  </tbody>
+</table>
+
+<h3>8.3 对账清单（不通过就不许开放）</h3>
+
+<table>
+  <thead><tr><th class="nw" style="width:26%">检查项</th><th>判据</th></tr></thead>
+  <tbody>
+    <tr><td class="nw">行数</td><td>8 张表逐一等于 <code>records</code> 中对应实体的 <code>deleted=0</code> 计数（<code>customers 1608 / quotations 1826 / schedules 13116 …</code>）</td></tr>
+    <tr><td class="nw">金额合计</td><td>报价 <code>subtotal / total_amount</code> 的 Σ 与迁移前<b>差额 = 0</b>（不是"接近"，是精确相等）</td></tr>
+    <tr><td class="nw">单号唯一</td><td>报价、PO、发票、收据的单号重复数 = 0</td></tr>
+    <tr><td class="nw">孤儿外键</td><td>单据的 <code>customer_id</code> 在新 <code>customers</code> 里找不到的 = 0</td></tr>
+    <tr><td class="nw">明细完整</td><td><code>quotation_items</code> 行数 ≥ 1796（每张报价至少 1 行，或有明确空明细白名单）</td></tr>
+    <tr><td class="nw">幂等</td><td>脚本连跑两次，第二次 <code>changes = 0</code></td></tr>
+  </tbody>
+</table>
+
+<h3>8.4 回滚单（一页，贴在墙上）</h3>
+<pre>1. 停服务
+2. 设 DB_PATH=<span class="g">旧 data.db 路径</span>
+3. 起服务，登录 4 个角色各开一页
+预计耗时 &lt; 5 分钟。旧库全程只读，未被迁移脚本修改。</pre>
+
+<h2>九 · 附：本轮核对清单</h2>
+
+<table>
+  <thead><tr><th class="nw" style="width:26%">核对项</th><th class="nw" style="width:12%">结果</th><th>说明</th></tr></thead>
+  <tbody>
+    <tr><td class="nw">页面覆盖 vs 原系统</td><td><span class="pill p-g">通过</span></td><td>34/34 DOM 对照通过，无缺失表头/按钮/下拉</td></tr>
+    <tr><td class="nw">实体定义 vs 蓝图「跳过空表」</td><td><span class="pill p-a">偏多</span></td><td>蓝图说跳过 14 张空表，实际定义了 38 实体，其中 9 个为空（Bill/Payment/Transaction/Employee/VehicleExpense/Lead/FollowUp/Address/Account）—— 与原系统一致：建了没人用</td></tr>
+    <tr><td class="nw">库存过账事务性</td><td><span class="pill p-g">通过</span></td><td>调整/盘点/送货都包在 <code>BEGIN IMMEDIATE</code> 里，且有反向冲销路径，设计正确</td></tr>
+    <tr><td class="nw">收款冲销</td><td><span class="pill p-g">通过</span></td><td>超额收款被拒，<code>balance_due</code> 自动重算，状态机正确</td></tr>
+    <tr><td class="nw">数据质量（历史遗留）</td><td><span class="pill p-a">已知</span></td><td>负库存 22、小数库存 1、盘点小数 40 —— 与交接文档数字一致，未见恶化</td></tr>
+    <tr><td class="nw">审计覆盖面</td><td><span class="pill p-a">不足</span></td><td><code>audit_log</code> 仅 72 条（自 10-24 起），说明系统尚未真实运行；<code>/api/pick</code>、列表搜索均不记审计，违背蓝图「列表搜索也要记」</td></tr>
+    <tr><td class="nw">版本控制</td><td><span class="pill p-a">部分</span></td><td>17 个文件已入库；<code>uploads/</code> 未忽略，2 张用户上传图片被提交进 git</td></tr>
+  </tbody>
+</table>
+
+<footer>
+  <b>Standard CPC 架构审核 · 第一期</b> · 2026-10-25 · 基于 <code>04. 四期/系统代码</code>（server 841 / lib 5,921 行 / data.db 34,053 笔）<br>
+  所有缺陷均在隔离副本（端口 3199、独立 DB 与 uploads 目录）复现，正式 <code>data.db</code> 全程未写入。<br>
+  对照基准：《復刻藍圖》<code>03 Standard CPC DataBase/00. 復刻藍圖.html</code> · 交接手册 <code>Agent交接_第四次修改_20261025.html</code> · 原系统 34 页截图与 DOM 对照结果。
+</footer>
+
+</div>
+</body>
+</html>

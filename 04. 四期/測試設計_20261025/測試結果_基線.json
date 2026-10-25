@@ -1,0 +1,6451 @@
+{
+  "meta": {
+    "title": "標準清潔滅蟲 ERP · 可執行驗收結果",
+    "date": "2026-10-25T12:52:18.899Z",
+    "base": "http://127.0.0.1:3102",
+    "src": "F:\\04 STANDARD CPC SYSTEM\\04. 四期\\系统代码",
+    "runId": "mvntu13f",
+    "node": "v22.22.2"
+  },
+  "summary": {
+    "total": 115,
+    "passed": 107,
+    "failed": 8,
+    "passRate": 93,
+    "byPriority": {
+      "P0": {
+        "total": 58,
+        "pass": 57
+      },
+      "P1": {
+        "total": 47,
+        "pass": 43
+      },
+      "P2": {
+        "total": 10,
+        "pass": 7
+      }
+    },
+    "byModule": {
+      "SYS": {
+        "total": 3,
+        "pass": 3
+      },
+      "AUTH": {
+        "total": 7,
+        "pass": 7
+      },
+      "PERM": {
+        "total": 19,
+        "pass": 17
+      },
+      "CUS": {
+        "total": 6,
+        "pass": 6
+      },
+      "QUO": {
+        "total": 8,
+        "pass": 7
+      },
+      "PO": {
+        "total": 7,
+        "pass": 7
+      },
+      "CON": {
+        "total": 5,
+        "pass": 5
+      },
+      "STK": {
+        "total": 9,
+        "pass": 7
+      },
+      "DN": {
+        "total": 5,
+        "pass": 5
+      },
+      "INV": {
+        "total": 6,
+        "pass": 5
+      },
+      "TXN": {
+        "total": 4,
+        "pass": 4
+      },
+      "LV": {
+        "total": 4,
+        "pass": 4
+      },
+      "SUP": {
+        "total": 3,
+        "pass": 3
+      },
+      "SCH": {
+        "total": 5,
+        "pass": 4
+      },
+      "TRS": {
+        "total": 3,
+        "pass": 3
+      },
+      "EXP": {
+        "total": 2,
+        "pass": 2
+      },
+      "SEC": {
+        "total": 4,
+        "pass": 4
+      },
+      "PERF": {
+        "total": 5,
+        "pass": 5
+      },
+      "UI": {
+        "total": 5,
+        "pass": 5
+      },
+      "DAT": {
+        "total": 5,
+        "pass": 4
+      }
+    }
+  },
+  "results": [
+    {
+      "id": "SYS-01",
+      "module": "SYS",
+      "title": "冷啟動與登入頁",
+      "priority": "P0",
+      "type": "功能",
+      "pass": true,
+      "expected": "200 且含登入表單",
+      "actual": "status=200",
+      "ms": 7,
+      "detail": ""
+    },
+    {
+      "id": "SYS-03",
+      "module": "SYS",
+      "title": "未知路由錯誤頁",
+      "priority": "P1",
+      "type": "異常",
+      "pass": true,
+      "expected": "404 錯誤頁、無堆疊",
+      "actual": "404/404",
+      "ms": 18,
+      "detail": ""
+    },
+    {
+      "id": "SYS-04",
+      "module": "SYS",
+      "title": "測試環境不自動匯入",
+      "priority": "P1",
+      "type": "資料",
+      "pass": true,
+      "expected": "啟動不批量改寫資料",
+      "actual": "34053 → 34053",
+      "ms": 0,
+      "detail": ""
+    },
+    {
+      "id": "AUTH-01",
+      "module": "AUTH",
+      "title": "四角色登入與會話",
+      "priority": "P0",
+      "type": "功能",
+      "pass": true,
+      "expected": "四角色均有 sid 且 /mywork 200",
+      "actual": "OK",
+      "ms": 567,
+      "detail": ""
+    },
+    {
+      "id": "AUTH-02",
+      "module": "AUTH",
+      "title": "未登入訪問受保護頁",
+      "priority": "P0",
+      "type": "權限",
+      "pass": true,
+      "expected": "302 → /login",
+      "actual": "302 /login?from=%2Fcustomers",
+      "ms": 1,
+      "detail": ""
+    },
+    {
+      "id": "AUTH-03",
+      "module": "AUTH",
+      "title": "未登入提交寫操作",
+      "priority": "P0",
+      "type": "安全",
+      "pass": true,
+      "expected": "401 且不落庫",
+      "actual": "401, 1608→1608",
+      "ms": 5,
+      "detail": ""
+    },
+    {
+      "id": "AUTH-04",
+      "module": "AUTH",
+      "title": "CSRF 缺失與錯誤",
+      "priority": "P0",
+      "type": "安全",
+      "pass": true,
+      "expected": "403 / 403、筆數不變",
+      "actual": "403/403, 1608→1608",
+      "ms": 5,
+      "detail": ""
+    },
+    {
+      "id": "AUTH-05",
+      "module": "AUTH",
+      "title": "錯誤密碼鎖定",
+      "priority": "P1",
+      "type": "異常",
+      "pass": true,
+      "expected": "第 6 次 429",
+      "actual": "200,200,200,200,200,429",
+      "ms": 414,
+      "detail": ""
+    },
+    {
+      "id": "AUTH-06",
+      "module": "AUTH",
+      "title": "登出使舊會話失效",
+      "priority": "P0",
+      "type": "功能",
+      "pass": true,
+      "expected": "登出 302、舊 sid 再訪問 302",
+      "actual": "302/302",
+      "ms": 3,
+      "detail": ""
+    },
+    {
+      "id": "AUTH-07",
+      "module": "AUTH",
+      "title": "會話 Cookie 安全旗標",
+      "priority": "P1",
+      "type": "安全",
+      "pass": true,
+      "expected": "HttpOnly + SameSite=Lax + Path=/",
+      "actual": "sid=_fTJd7pac903W75urajs-kd6D0b4_V-7; Path=/; HttpOnly; SameSite=Lax; Max-Age=43200",
+      "ms": 1,
+      "detail": ""
+    },
+    {
+      "id": "PERM-01",
+      "module": "PERM",
+      "title": "菜單可見性 · 前線",
+      "priority": "P0",
+      "type": "權限",
+      "pass": true,
+      "expected": "NAV.roles 完全一致",
+      "actual": "OK",
+      "ms": 0,
+      "detail": "44 項"
+    },
+    {
+      "id": "PERM-01",
+      "module": "PERM",
+      "title": "菜單可見性 · 辦公室",
+      "priority": "P0",
+      "type": "權限",
+      "pass": true,
+      "expected": "NAV.roles 完全一致",
+      "actual": "OK",
+      "ms": 0,
+      "detail": "44 項"
+    },
+    {
+      "id": "PERM-01",
+      "module": "PERM",
+      "title": "菜單可見性 · 會計",
+      "priority": "P0",
+      "type": "權限",
+      "pass": true,
+      "expected": "NAV.roles 完全一致",
+      "actual": "OK",
+      "ms": 0,
+      "detail": "44 項"
+    },
+    {
+      "id": "PERM-01",
+      "module": "PERM",
+      "title": "菜單可見性 · 管理層",
+      "priority": "P0",
+      "type": "權限",
+      "pass": true,
+      "expected": "NAV.roles 完全一致",
+      "actual": "OK",
+      "ms": 0,
+      "detail": "44 項"
+    },
+    {
+      "id": "PERM-02",
+      "module": "PERM",
+      "title": "直鏈越權攔截 · 前線",
+      "priority": "P1",
+      "type": "權限",
+      "pass": true,
+      "expected": "無權頁面必須 403",
+      "actual": "OK",
+      "ms": 0,
+      "detail": "44 頁"
+    },
+    {
+      "id": "PERM-02",
+      "module": "PERM",
+      "title": "直鏈越權攔截 · 辦公室",
+      "priority": "P1",
+      "type": "權限",
+      "pass": true,
+      "expected": "無權頁面必須 403",
+      "actual": "OK",
+      "ms": 0,
+      "detail": "44 頁"
+    },
+    {
+      "id": "PERM-02",
+      "module": "PERM",
+      "title": "直鏈越權攔截 · 會計",
+      "priority": "P1",
+      "type": "權限",
+      "pass": true,
+      "expected": "無權頁面必須 403",
+      "actual": "OK",
+      "ms": 0,
+      "detail": "44 頁"
+    },
+    {
+      "id": "PERM-06",
+      "module": "PERM",
+      "title": "菜單可用性 · 會計",
+      "priority": "P1",
+      "type": "權限",
+      "pass": false,
+      "expected": "菜單可見頁面必須 200",
+      "actual": "/stockcounts=403(應200)",
+      "ms": 0,
+      "detail": ""
+    },
+    {
+      "id": "PERM-02",
+      "module": "PERM",
+      "title": "直鏈越權攔截 · 管理層",
+      "priority": "P1",
+      "type": "權限",
+      "pass": true,
+      "expected": "無權頁面必須 403",
+      "actual": "OK",
+      "ms": 0,
+      "detail": "44 頁"
+    },
+    {
+      "id": "PERM-03",
+      "module": "PERM",
+      "title": "實體列表權限 · 前線",
+      "priority": "P1",
+      "type": "權限",
+      "pass": true,
+      "expected": "viewRoles 決定 200/403",
+      "actual": "OK",
+      "ms": 0,
+      "detail": ""
+    },
+    {
+      "id": "PERM-03",
+      "module": "PERM",
+      "title": "實體表單權限 · 前線",
+      "priority": "P2",
+      "type": "權限",
+      "pass": true,
+      "expected": "editRoles 決定 200/403",
+      "actual": "OK",
+      "ms": 0,
+      "detail": ""
+    },
+    {
+      "id": "PERM-03",
+      "module": "PERM",
+      "title": "實體列表權限 · 辦公室",
+      "priority": "P1",
+      "type": "權限",
+      "pass": true,
+      "expected": "viewRoles 決定 200/403",
+      "actual": "OK",
+      "ms": 0,
+      "detail": ""
+    },
+    {
+      "id": "PERM-03",
+      "module": "PERM",
+      "title": "實體表單權限 · 辦公室",
+      "priority": "P2",
+      "type": "權限",
+      "pass": true,
+      "expected": "editRoles 決定 200/403",
+      "actual": "OK",
+      "ms": 0,
+      "detail": ""
+    },
+    {
+      "id": "PERM-03",
+      "module": "PERM",
+      "title": "實體列表權限 · 會計",
+      "priority": "P1",
+      "type": "權限",
+      "pass": true,
+      "expected": "viewRoles 決定 200/403",
+      "actual": "OK",
+      "ms": 0,
+      "detail": ""
+    },
+    {
+      "id": "PERM-03",
+      "module": "PERM",
+      "title": "實體表單權限 · 會計",
+      "priority": "P2",
+      "type": "權限",
+      "pass": false,
+      "expected": "editRoles 決定 200/403",
+      "actual": "contracts=200/403",
+      "ms": 0,
+      "detail": ""
+    },
+    {
+      "id": "PERM-03",
+      "module": "PERM",
+      "title": "實體列表權限 · 管理層",
+      "priority": "P1",
+      "type": "權限",
+      "pass": true,
+      "expected": "viewRoles 決定 200/403",
+      "actual": "OK",
+      "ms": 0,
+      "detail": ""
+    },
+    {
+      "id": "PERM-03",
+      "module": "PERM",
+      "title": "實體表單權限 · 管理層",
+      "priority": "P2",
+      "type": "權限",
+      "pass": true,
+      "expected": "editRoles 決定 200/403",
+      "actual": "OK",
+      "ms": 0,
+      "detail": ""
+    },
+    {
+      "id": "PERM-04",
+      "module": "PERM",
+      "title": "動作級權限（審批/匯出）",
+      "priority": "P0",
+      "type": "權限",
+      "pass": true,
+      "expected": "front/office 403，management 200",
+      "actual": "403/403/200",
+      "ms": 103,
+      "detail": ""
+    },
+    {
+      "id": "PERM-05",
+      "module": "PERM",
+      "title": "回收桶角色邊界",
+      "priority": "P1",
+      "type": "權限",
+      "pass": true,
+      "expected": "front/acc 403，office/mgmt 200",
+      "actual": "403/403/200/200",
+      "ms": 14,
+      "detail": ""
+    },
+    {
+      "id": "CUS-01",
+      "module": "CUS",
+      "title": "新增客戶必填校驗",
+      "priority": "P0",
+      "type": "異常",
+      "pass": true,
+      "expected": "400 + 必填提示、不落庫",
+      "actual": "400, 1608→1608",
+      "ms": 161,
+      "detail": ""
+    },
+    {
+      "id": "CUS-02",
+      "module": "CUS",
+      "title": "新增客戶成功",
+      "priority": "P0",
+      "type": "功能",
+      "pass": true,
+      "expected": "302 → 詳情、DB 一致",
+      "actual": "302 /view/customers/cus_mvntuqbx_d25737d32791",
+      "ms": 142,
+      "detail": ""
+    },
+    {
+      "id": "CUS-03",
+      "module": "CUS",
+      "title": "客戶搜尋",
+      "priority": "P1",
+      "type": "功能",
+      "pass": true,
+      "expected": "列表命中新客戶",
+      "actual": "status=200",
+      "ms": 28,
+      "detail": ""
+    },
+    {
+      "id": "CUS-04",
+      "module": "CUS",
+      "title": "編輯保留未提交欄位",
+      "priority": "P1",
+      "type": "資料",
+      "pass": true,
+      "expected": "電話更新、名稱不變",
+      "actual": "9999 0000 / QA-mvntu13f-客戶",
+      "ms": 95,
+      "detail": ""
+    },
+    {
+      "id": "CUS-05",
+      "module": "CUS",
+      "title": "客戶詳情聚合",
+      "priority": "P1",
+      "type": "功能",
+      "pass": true,
+      "expected": "200 + KPI/資料",
+      "actual": "status=200",
+      "ms": 165,
+      "detail": ""
+    },
+    {
+      "id": "CUS-06",
+      "module": "CUS",
+      "title": "前線不可看客戶詳情",
+      "priority": "P0",
+      "type": "權限",
+      "pass": true,
+      "expected": "403、不泄露電話",
+      "actual": "status=403",
+      "ms": 2,
+      "detail": ""
+    },
+    {
+      "id": "QUO-01",
+      "module": "QUO",
+      "title": "報價自動編號",
+      "priority": "P0",
+      "type": "功能",
+      "pass": true,
+      "expected": "SQP-YYYY-####",
+      "actual": "SQP-2026-1086",
+      "ms": 162,
+      "detail": ""
+    },
+    {
+      "id": "QUO-02",
+      "module": "QUO",
+      "title": "報價明細與總額",
+      "priority": "P0",
+      "type": "資料",
+      "pass": true,
+      "expected": "小計 190、總額 205",
+      "actual": "190/205",
+      "ms": 0,
+      "detail": ""
+    },
+    {
+      "id": "QUO-03",
+      "module": "QUO",
+      "title": "報價必填與空明細",
+      "priority": "P0",
+      "type": "異常",
+      "pass": true,
+      "expected": "缺客戶 400、空明細 400",
+      "actual": "400/400",
+      "ms": 322,
+      "detail": ""
+    },
+    {
+      "id": "QUO-04",
+      "module": "QUO",
+      "title": "報價階段與成交",
+      "priority": "P1",
+      "type": "功能",
+      "pass": true,
+      "expected": "成交標記 + 非法值 400",
+      "actual": "302/400, accepted=true",
+      "ms": 73,
+      "detail": ""
+    },
+    {
+      "id": "QUO-05",
+      "module": "QUO",
+      "title": "報價轉採購單",
+      "priority": "P1",
+      "type": "功能",
+      "pass": false,
+      "expected": "PO 關聯報價、金額一致、PO 編號非空",
+      "actual": "status=302, po_number=空, po_name=空",
+      "ms": 59,
+      "detail": ""
+    },
+    {
+      "id": "QUO-06",
+      "module": "QUO",
+      "title": "報價轉合約",
+      "priority": "P0",
+      "type": "功能",
+      "pass": true,
+      "expected": "合約關聯、編號沿用、名稱含客戶",
+      "actual": "SQP-2026-1086 / SQP-2026-1086_QA-mvntu13f-客戶_測試地點_滅蟲服務",
+      "ms": 50,
+      "detail": ""
+    },
+    {
+      "id": "QUO-07",
+      "module": "QUO",
+      "title": "重複轉換冪等",
+      "priority": "P1",
+      "type": "異常",
+      "pass": true,
+      "expected": "同一 PO、筆數不變",
+      "actual": "pur_mvntur3u_7ded9bb51942 / 903→903",
+      "ms": 21,
+      "detail": ""
+    },
+    {
+      "id": "QUO-08",
+      "module": "QUO",
+      "title": "報價軟刪除與回收桶",
+      "priority": "P1",
+      "type": "資料",
+      "pass": true,
+      "expected": "deleted=1 + 回收桶可見 + 還原",
+      "actual": "302, deleted=true, restore=302",
+      "ms": 169,
+      "detail": ""
+    },
+    {
+      "id": "PO-01",
+      "module": "PO",
+      "title": "PO 自動編號與名稱",
+      "priority": "P0",
+      "type": "功能",
+      "pass": true,
+      "expected": "編號保存 + 名稱自動含單位",
+      "actual": "PO-QA-mvntu13f / PO-QA-mvntu13f_測試單位_滅蟲",
+      "ms": 89,
+      "detail": ""
+    },
+    {
+      "id": "PO-02",
+      "module": "PO",
+      "title": "PO 必填校驗",
+      "priority": "P0",
+      "type": "異常",
+      "pass": true,
+      "expected": "400",
+      "actual": "400",
+      "ms": 173,
+      "detail": ""
+    },
+    {
+      "id": "PO-03",
+      "module": "PO",
+      "title": "PO 金額含稅",
+      "priority": "P0",
+      "type": "資料",
+      "pass": true,
+      "expected": "600 / 650",
+      "actual": "600/650",
+      "ms": 93,
+      "detail": ""
+    },
+    {
+      "id": "PO-04",
+      "module": "PO",
+      "title": "PO 詳情行操作",
+      "priority": "P1",
+      "type": "功能",
+      "pass": true,
+      "expected": "詳情含送貨/發票/排班入口",
+      "actual": "status=200",
+      "ms": 41,
+      "detail": ""
+    },
+    {
+      "id": "PO-05",
+      "module": "PO",
+      "title": "PO 軟刪除與還原",
+      "priority": "P1",
+      "type": "資料",
+      "pass": true,
+      "expected": "刪除→還原",
+      "actual": "true/false",
+      "ms": 167,
+      "detail": ""
+    },
+    {
+      "id": "PO-06",
+      "module": "PO",
+      "title": "PO 簽署連結",
+      "priority": "P1",
+      "type": "功能",
+      "pass": true,
+      "expected": "待簽署 + 連結可開",
+      "actual": "待簽署 / 200",
+      "ms": 80,
+      "detail": ""
+    },
+    {
+      "id": "PO-07",
+      "module": "PO",
+      "title": "由 PO 新增送貨單預填",
+      "priority": "P1",
+      "type": "功能",
+      "pass": true,
+      "expected": "表單預填客戶/PO",
+      "actual": "status=200",
+      "ms": 205,
+      "detail": ""
+    },
+    {
+      "id": "CON-01",
+      "module": "CON",
+      "title": "合約必填與編號",
+      "priority": "P0",
+      "type": "功能",
+      "pass": true,
+      "expected": "留空 400、填值成功",
+      "actual": "400/302",
+      "ms": 391,
+      "detail": ""
+    },
+    {
+      "id": "CON-02",
+      "module": "CON",
+      "title": "合約名稱自動生成",
+      "priority": "P1",
+      "type": "功能",
+      "pass": true,
+      "expected": "C2-QA-mvntu13f_QA-mvntu13f-客戶_九龍測試地點_滅蟲服務",
+      "actual": "C2-QA-mvntu13f_QA-mvntu13f-客戶_九龍測試地點_滅蟲服務",
+      "ms": 99,
+      "detail": ""
+    },
+    {
+      "id": "CON-03",
+      "module": "CON",
+      "title": "合約 13 欄彈窗",
+      "priority": "P1",
+      "type": "UI",
+      "pass": true,
+      "expected": "彈窗存在且欄位齊全",
+      "actual": "status=200",
+      "ms": 5,
+      "detail": ""
+    },
+    {
+      "id": "CON-04",
+      "module": "CON",
+      "title": "合約詳情與客戶連結",
+      "priority": "P1",
+      "type": "功能",
+      "pass": true,
+      "expected": "詳情 200、客戶名可點",
+      "actual": "200",
+      "ms": 64,
+      "detail": ""
+    },
+    {
+      "id": "CON-05",
+      "module": "CON",
+      "title": "合約軟刪除與還原",
+      "priority": "P1",
+      "type": "資料",
+      "pass": true,
+      "expected": "刪除→還原",
+      "actual": "true/false/302",
+      "ms": 160,
+      "detail": ""
+    },
+    {
+      "id": "STK-01",
+      "module": "STK",
+      "title": "產品新增與必填",
+      "priority": "P0",
+      "type": "功能",
+      "pass": true,
+      "expected": "缺價 400、成功且庫存 10",
+      "actual": "400/302, stock=10",
+      "ms": 244,
+      "detail": ""
+    },
+    {
+      "id": "STK-02",
+      "module": "STK",
+      "title": "入庫調整",
+      "priority": "P0",
+      "type": "資料",
+      "pass": true,
+      "expected": "10 +5 → 15",
+      "actual": "10/5/15, stock=15",
+      "ms": 179,
+      "detail": ""
+    },
+    {
+      "id": "STK-03",
+      "module": "STK",
+      "title": "出庫與負庫存",
+      "priority": "P0",
+      "type": "邊界",
+      "pass": true,
+      "expected": "409、庫存仍 15",
+      "actual": "409, stock=15",
+      "ms": 281,
+      "detail": ""
+    },
+    {
+      "id": "STK-04",
+      "module": "STK",
+      "title": "調整單不可編輯",
+      "priority": "P0",
+      "type": "異常",
+      "pass": true,
+      "expected": "409",
+      "actual": "409",
+      "ms": 141,
+      "detail": ""
+    },
+    {
+      "id": "STK-05",
+      "module": "STK",
+      "title": "盤點完成過賬",
+      "priority": "P0",
+      "type": "資料",
+      "pass": true,
+      "expected": "庫存 12、-3 調整、已過賬",
+      "actual": "302, stock=12, posted=true, adj=-3",
+      "ms": 221,
+      "detail": ""
+    },
+    {
+      "id": "STK-09",
+      "module": "STK",
+      "title": "自動盤點調整單編號",
+      "priority": "P2",
+      "type": "資料",
+      "pass": false,
+      "expected": "ADJ-YYYY-#####",
+      "actual": "空",
+      "ms": 103,
+      "detail": ""
+    },
+    {
+      "id": "STK-06",
+      "module": "STK",
+      "title": "刪除已過賬盤點沖銷",
+      "priority": "P0",
+      "type": "資料",
+      "pass": false,
+      "expected": "庫存回 15、reversed",
+      "actual": "302, stock=0, reversed=true",
+      "ms": 145,
+      "detail": ""
+    },
+    {
+      "id": "STK-07",
+      "module": "STK",
+      "title": "還原盤點重新過賬",
+      "priority": "P0",
+      "type": "資料",
+      "pass": true,
+      "expected": "庫存回 12、reversed=false",
+      "actual": "302, stock=12",
+      "ms": 146,
+      "detail": ""
+    },
+    {
+      "id": "STK-08",
+      "module": "STK",
+      "title": "已過賬盤點不可改",
+      "priority": "P0",
+      "type": "異常",
+      "pass": true,
+      "expected": "409",
+      "actual": "409",
+      "ms": 159,
+      "detail": ""
+    },
+    {
+      "id": "DN-01",
+      "module": "DN",
+      "title": "送貨單自動編號與出庫",
+      "priority": "P0",
+      "type": "資料",
+      "pass": true,
+      "expected": "DNPyymm###、庫存 12→9",
+      "actual": "DNP2610057, stock=9, synced=true",
+      "ms": 230,
+      "detail": ""
+    },
+    {
+      "id": "DN-02",
+      "module": "DN",
+      "title": "送貨出庫調整單",
+      "priority": "P0",
+      "type": "資料",
+      "pass": true,
+      "expected": "1 張 -3 出庫調整",
+      "actual": "1 張 / -3",
+      "ms": 98,
+      "detail": ""
+    },
+    {
+      "id": "DN-03",
+      "module": "DN",
+      "title": "庫存不足攔截",
+      "priority": "P0",
+      "type": "異常",
+      "pass": true,
+      "expected": "409、庫存不變",
+      "actual": "409, 9→9",
+      "ms": 235,
+      "detail": ""
+    },
+    {
+      "id": "DN-04",
+      "module": "DN",
+      "title": "已過賬明細鎖定",
+      "priority": "P0",
+      "type": "異常",
+      "pass": true,
+      "expected": "409",
+      "actual": "409",
+      "ms": 147,
+      "detail": ""
+    },
+    {
+      "id": "DN-05",
+      "module": "DN",
+      "title": "重複過賬不扣庫存",
+      "priority": "P0",
+      "type": "異常",
+      "pass": true,
+      "expected": "儲存成功但不重扣",
+      "actual": "302, 9→9",
+      "ms": 108,
+      "detail": ""
+    },
+    {
+      "id": "INV-01",
+      "module": "INV",
+      "title": "發票金額與編號",
+      "priority": "P0",
+      "type": "資料",
+      "pass": true,
+      "expected": "550/580/580 + INV 編號",
+      "actual": "550/580/580, INV-2026-0002",
+      "ms": 123,
+      "detail": ""
+    },
+    {
+      "id": "INV-02",
+      "module": "INV",
+      "title": "發票必填",
+      "priority": "P0",
+      "type": "異常",
+      "pass": true,
+      "expected": "400",
+      "actual": "400",
+      "ms": 141,
+      "detail": ""
+    },
+    {
+      "id": "INV-03",
+      "module": "INV",
+      "title": "收款核銷",
+      "priority": "P0",
+      "type": "資料",
+      "pass": true,
+      "expected": "300→280→0、2 張收據",
+      "actual": "300/280 (部分收款) → 580/0 (已付款), receipts=2",
+      "ms": 93,
+      "detail": ""
+    },
+    {
+      "id": "INV-07",
+      "module": "INV",
+      "title": "部分收款狀態字典",
+      "priority": "P1",
+      "type": "資料",
+      "pass": false,
+      "expected": "狀態=部分付款（filter 字典值）",
+      "actual": "部分收款",
+      "ms": 146,
+      "detail": ""
+    },
+    {
+      "id": "INV-04",
+      "module": "INV",
+      "title": "超額收款",
+      "priority": "P1",
+      "type": "邊界",
+      "pass": true,
+      "expected": "400 不可超過餘額",
+      "actual": "400",
+      "ms": 3,
+      "detail": ""
+    },
+    {
+      "id": "INV-06",
+      "module": "INV",
+      "title": "收據明細關聯發票",
+      "priority": "P1",
+      "type": "資料",
+      "pass": true,
+      "expected": "明細含發票編號",
+      "actual": "2 張",
+      "ms": 1,
+      "detail": ""
+    },
+    {
+      "id": "TXN-01",
+      "module": "TXN",
+      "title": "借貸不平衡攔截",
+      "priority": "P0",
+      "type": "異常",
+      "pass": true,
+      "expected": "400、不落庫",
+      "actual": "400, 0→0",
+      "ms": 139,
+      "detail": ""
+    },
+    {
+      "id": "TXN-02",
+      "module": "TXN",
+      "title": "平衡分錄入帳",
+      "priority": "P0",
+      "type": "資料",
+      "pass": true,
+      "expected": "100/100",
+      "actual": "100/100",
+      "ms": 91,
+      "detail": ""
+    },
+    {
+      "id": "TXN-03",
+      "module": "TXN",
+      "title": "草稿允許不平衡",
+      "priority": "P1",
+      "type": "邊界",
+      "pass": true,
+      "expected": "草稿可存",
+      "actual": "302",
+      "ms": 90,
+      "detail": ""
+    },
+    {
+      "id": "TXN-04",
+      "module": "TXN",
+      "title": "總帳頁可用性",
+      "priority": "P1",
+      "type": "效能",
+      "pass": true,
+      "expected": "200、< 3s",
+      "actual": "200, 30ms",
+      "ms": 30,
+      "detail": ""
+    },
+    {
+      "id": "LV-01",
+      "module": "LV",
+      "title": "請假天數與狀態",
+      "priority": "P0",
+      "type": "資料",
+      "pass": true,
+      "expected": "3 天、待審批",
+      "actual": "3/待審批",
+      "ms": 94,
+      "detail": ""
+    },
+    {
+      "id": "LV-02",
+      "module": "LV",
+      "title": "前線不可代他人請假",
+      "priority": "P0",
+      "type": "安全",
+      "pass": true,
+      "expected": "姓名被強制為本人",
+      "actual": "盧力峰",
+      "ms": 0,
+      "detail": ""
+    },
+    {
+      "id": "LV-03",
+      "module": "LV",
+      "title": "審批權限與流轉",
+      "priority": "P0",
+      "type": "權限",
+      "pass": true,
+      "expected": "front 403、mgmt 批准",
+      "actual": "403/302, 已批准",
+      "ms": 101,
+      "detail": ""
+    },
+    {
+      "id": "LV-04",
+      "module": "LV",
+      "title": "非法審批狀態",
+      "priority": "P1",
+      "type": "異常",
+      "pass": true,
+      "expected": "400、狀態不變",
+      "actual": "400",
+      "ms": 3,
+      "detail": ""
+    },
+    {
+      "id": "SUP-01",
+      "module": "SUP",
+      "title": "補給建立與員工鎖定",
+      "priority": "P0",
+      "type": "功能",
+      "pass": true,
+      "expected": "302、本人、數量 2",
+      "actual": "302, 盧力峰, 2",
+      "ms": 103,
+      "detail": ""
+    },
+    {
+      "id": "SUP-02",
+      "module": "SUP",
+      "title": "數量必須整數",
+      "priority": "P0",
+      "type": "邊界",
+      "pass": true,
+      "expected": "400 整數提示",
+      "actual": "400",
+      "ms": 144,
+      "detail": ""
+    },
+    {
+      "id": "SUP-03",
+      "module": "SUP",
+      "title": "新增彈窗 __id 為空",
+      "priority": "P0",
+      "type": "UI",
+      "pass": true,
+      "expected": "__id 空、__new_id 有值",
+      "actual": "status=200, __id=",
+      "ms": 149,
+      "detail": ""
+    },
+    {
+      "id": "SCH-01",
+      "module": "SCH",
+      "title": "排班新增與工時",
+      "priority": "P0",
+      "type": "功能",
+      "pass": true,
+      "expected": "2 個工作項保存",
+      "actual": "2 項、total_hours=",
+      "ms": 96,
+      "detail": ""
+    },
+    {
+      "id": "SCH-07",
+      "module": "SCH",
+      "title": "排班總工時計算",
+      "priority": "P2",
+      "type": "資料",
+      "pass": false,
+      "expected": "09:00–11:00 + 13:00–14:30 = 3.5",
+      "actual": "total_hours=空",
+      "ms": 0,
+      "detail": ""
+    },
+    {
+      "id": "SCH-02",
+      "module": "SCH",
+      "title": "排班改期",
+      "priority": "P0",
+      "type": "功能",
+      "pass": true,
+      "expected": "200、日期更新",
+      "actual": "200, 2026-11-11",
+      "ms": 102,
+      "detail": ""
+    },
+    {
+      "id": "SCH-03",
+      "module": "SCH",
+      "title": "排班工作項回寫 PO 日期",
+      "priority": "P1",
+      "type": "資料",
+      "pass": true,
+      "expected": "PO.work_dates 含 2026-11-12",
+      "actual": "[\"2026-11-12\"]",
+      "ms": 102,
+      "detail": ""
+    },
+    {
+      "id": "SCH-06",
+      "module": "SCH",
+      "title": "排班權限",
+      "priority": "P0",
+      "type": "權限",
+      "pass": true,
+      "expected": "皆 403",
+      "actual": "403/403",
+      "ms": 5,
+      "detail": ""
+    },
+    {
+      "id": "TRS-01",
+      "module": "TRS",
+      "title": "回收桶入口與篩選",
+      "priority": "P1",
+      "type": "功能",
+      "pass": true,
+      "expected": "200 + 列表/篩選",
+      "actual": "status=200",
+      "ms": 6,
+      "detail": ""
+    },
+    {
+      "id": "TRS-02",
+      "module": "TRS",
+      "title": "還原記錄",
+      "priority": "P0",
+      "type": "資料",
+      "pass": true,
+      "expected": "還原成功",
+      "actual": "302, deleted=false",
+      "ms": 1195,
+      "detail": ""
+    },
+    {
+      "id": "TRS-03",
+      "module": "TRS",
+      "title": "永久刪除邊界",
+      "priority": "P0",
+      "type": "權限",
+      "pass": true,
+      "expected": "office 可永久刪除（上限內）",
+      "actual": "302, gone=true",
+      "ms": 215,
+      "detail": ""
+    },
+    {
+      "id": "EXP-01",
+      "module": "EXP",
+      "title": "CSV 匯出權限",
+      "priority": "P0",
+      "type": "權限",
+      "pass": true,
+      "expected": "403/403/200 text/csv",
+      "actual": "403/403/200 text/csv; charset=utf-8",
+      "ms": 77,
+      "detail": ""
+    },
+    {
+      "id": "EXP-02",
+      "module": "EXP",
+      "title": "CSV 編碼與 BOM",
+      "priority": "P1",
+      "type": "資料",
+      "pass": true,
+      "expected": "UTF-8 BOM、含標題",
+      "actual": "status=200, bom=true, first=efbbbf, len=240910",
+      "ms": 74,
+      "detail": ""
+    },
+    {
+      "id": "SEC-01",
+      "module": "SEC",
+      "title": "存儲型 XSS 轉義",
+      "priority": "P0",
+      "type": "安全",
+      "pass": true,
+      "expected": "輸出轉義、無原始 script",
+      "actual": "create=302, escaped=true",
+      "ms": 268,
+      "detail": ""
+    },
+    {
+      "id": "SEC-02",
+      "module": "SEC",
+      "title": "越權 IDOR",
+      "priority": "P0",
+      "type": "安全",
+      "pass": true,
+      "expected": "403/403",
+      "actual": "403/403",
+      "ms": 4,
+      "detail": ""
+    },
+    {
+      "id": "SEC-03",
+      "module": "SEC",
+      "title": "上傳路徑穿越",
+      "priority": "P0",
+      "type": "安全",
+      "pass": true,
+      "expected": "200、路徑限制在 uploads 下",
+      "actual": "200 /uploads/Product/pro_mvntusnr_d887392b06a5/product_image/1792932736139_fd5702_evil.png",
+      "ms": 975,
+      "detail": ""
+    },
+    {
+      "id": "SEC-07",
+      "module": "SEC",
+      "title": "登入簽發新會話",
+      "priority": "P1",
+      "type": "安全",
+      "pass": true,
+      "expected": "每次登入新 sid",
+      "actual": "8ibJCtGT vs r4yANlar",
+      "ms": 3,
+      "detail": ""
+    },
+    {
+      "id": "PERF-01",
+      "module": "PERF",
+      "title": "應收台賬首字節",
+      "priority": "P1",
+      "type": "效能",
+      "pass": true,
+      "expected": "200 且 < 3000ms（暖機後）",
+      "actual": "200, 28ms",
+      "ms": 58,
+      "detail": ""
+    },
+    {
+      "id": "PERF-01",
+      "module": "PERF",
+      "title": "總帳首字節",
+      "priority": "P1",
+      "type": "效能",
+      "pass": true,
+      "expected": "200 且 < 3000ms（暖機後）",
+      "actual": "200, 29ms",
+      "ms": 59,
+      "detail": ""
+    },
+    {
+      "id": "PERF-01",
+      "module": "PERF",
+      "title": "庫存頁首字節",
+      "priority": "P1",
+      "type": "效能",
+      "pass": true,
+      "expected": "200 且 < 2000ms（暖機後）",
+      "actual": "200, 98ms",
+      "ms": 197,
+      "detail": ""
+    },
+    {
+      "id": "PERF-01",
+      "module": "PERF",
+      "title": "排班頁首字節",
+      "priority": "P1",
+      "type": "效能",
+      "pass": true,
+      "expected": "200 且 < 3000ms（暖機後）",
+      "actual": "200, 145ms",
+      "ms": 291,
+      "detail": ""
+    },
+    {
+      "id": "PERF-02",
+      "module": "PERF",
+      "title": "列表分頁",
+      "priority": "P1",
+      "type": "效能",
+      "pass": true,
+      "expected": "兩頁 < 1.5s",
+      "actual": "95ms / 94ms",
+      "ms": 189,
+      "detail": ""
+    },
+    {
+      "id": "UI-01",
+      "module": "UI",
+      "title": "側欄分組字級",
+      "priority": "P2",
+      "type": "UI",
+      "pass": true,
+      "expected": "13px / 700",
+      "actual": "命中",
+      "ms": 122,
+      "detail": ""
+    },
+    {
+      "id": "UI-02",
+      "module": "UI",
+      "title": "操作列黏性",
+      "priority": "P2",
+      "type": "UI",
+      "pass": true,
+      "expected": "position:sticky",
+      "actual": "命中",
+      "ms": 26,
+      "detail": ""
+    },
+    {
+      "id": "UI-03",
+      "module": "UI",
+      "title": "金額格式不重複",
+      "priority": "P1",
+      "type": "UI",
+      "pass": true,
+      "expected": "無 HK$ HK$",
+      "actual": "OK",
+      "ms": 92,
+      "detail": ""
+    },
+    {
+      "id": "UI-04",
+      "module": "UI",
+      "title": "日曆空格不被圖示撐高",
+      "priority": "P2",
+      "type": "UI",
+      "pass": true,
+      "expected": "無 .calendar-cell.empty 規則",
+      "actual": "OK",
+      "ms": 135,
+      "detail": ""
+    },
+    {
+      "id": "UI-05",
+      "module": "UI",
+      "title": "頁首不重複",
+      "priority": "P2",
+      "type": "UI",
+      "pass": true,
+      "expected": "每頁 ≤ 1 個 pagehead",
+      "actual": "OK",
+      "ms": 259,
+      "detail": ""
+    },
+    {
+      "id": "DAT-01",
+      "module": "DAT",
+      "title": "所有記錄 JSON 可解析",
+      "priority": "P0",
+      "type": "資料",
+      "pass": true,
+      "expected": "0 筆壞 JSON",
+      "actual": "0 筆",
+      "ms": 314,
+      "detail": "34080 筆"
+    },
+    {
+      "id": "DAT-02",
+      "module": "DAT",
+      "title": "報價合計抽樣一致",
+      "priority": "P1",
+      "type": "資料",
+      "pass": false,
+      "expected": "抽樣 400 筆全部一致",
+      "actual": "1 筆表頭有金額但明細為 0：SQP-2026-0230",
+      "ms": 5,
+      "detail": ""
+    },
+    {
+      "id": "DAT-03",
+      "module": "DAT",
+      "title": "發票餘額一致",
+      "priority": "P0",
+      "type": "資料",
+      "pass": true,
+      "expected": "balance=total−paid",
+      "actual": "OK (207 筆)",
+      "ms": 4,
+      "detail": ""
+    },
+    {
+      "id": "DAT-04",
+      "module": "DAT",
+      "title": "已過賬分錄借貸平衡",
+      "priority": "P0",
+      "type": "資料",
+      "pass": true,
+      "expected": "非草稿全部平衡",
+      "actual": "OK (2 筆)",
+      "ms": 0,
+      "detail": ""
+    },
+    {
+      "id": "DAT-05",
+      "module": "DAT",
+      "title": "軟刪除欄位完整",
+      "priority": "P1",
+      "type": "資料",
+      "pass": true,
+      "expected": "近兩日刪除均有時間/操作人（歷史匯入豁免）",
+      "actual": "OK (1 筆)",
+      "ms": 38,
+      "detail": ""
+    }
+  ],
+  "matrix": {
+    "nav": [
+      {
+        "role": "front",
+        "path": "/",
+        "label": "公告板",
+        "group": "主要功能",
+        "expected": true,
+        "actual": true
+      },
+      {
+        "role": "front",
+        "path": "/mywork",
+        "label": "我的工作",
+        "group": "主要功能",
+        "expected": true,
+        "actual": true
+      },
+      {
+        "role": "front",
+        "path": "/pestcontrolwork",
+        "label": "滅蟲工作",
+        "group": "前線員工",
+        "expected": true,
+        "actual": true
+      },
+      {
+        "role": "front",
+        "path": "/myattendance",
+        "label": "我的出勤",
+        "group": "前線員工",
+        "expected": true,
+        "actual": true
+      },
+      {
+        "role": "front",
+        "path": "/mysupply",
+        "label": "補給記錄",
+        "group": "前線員工",
+        "expected": true,
+        "actual": true
+      },
+      {
+        "role": "front",
+        "path": "/customers",
+        "label": "客戶管理",
+        "group": "市場管理",
+        "expected": false,
+        "actual": false
+      },
+      {
+        "role": "front",
+        "path": "/leads",
+        "label": "線索 Leads",
+        "group": "市場管理",
+        "expected": false,
+        "actual": false
+      },
+      {
+        "role": "front",
+        "path": "/followups",
+        "label": "跟進 FollowUps",
+        "group": "市場管理",
+        "expected": false,
+        "actual": false
+      },
+      {
+        "role": "front",
+        "path": "/quotations",
+        "label": "報價管理",
+        "group": "市場管理",
+        "expected": false,
+        "actual": false
+      },
+      {
+        "role": "front",
+        "path": "/purchaseorders",
+        "label": "採購單管理",
+        "group": "市場管理",
+        "expected": false,
+        "actual": false
+      },
+      {
+        "role": "front",
+        "path": "/deliverynotes",
+        "label": "送貨單管理",
+        "group": "市場管理",
+        "expected": false,
+        "actual": false
+      },
+      {
+        "role": "front",
+        "path": "/products",
+        "label": "產品管理",
+        "group": "市場管理",
+        "expected": false,
+        "actual": false
+      },
+      {
+        "role": "front",
+        "path": "/services",
+        "label": "服務管理",
+        "group": "市場管理",
+        "expected": false,
+        "actual": false
+      },
+      {
+        "role": "front",
+        "path": "/suppliers",
+        "label": "供應商管理",
+        "group": "市場管理",
+        "expected": false,
+        "actual": false
+      },
+      {
+        "role": "front",
+        "path": "/serviceplans",
+        "label": "服務計劃",
+        "group": "營運管理",
+        "expected": true,
+        "actual": true
+      },
+      {
+        "role": "front",
+        "path": "/servicereports",
+        "label": "服務報告",
+        "group": "營運管理",
+        "expected": true,
+        "actual": true
+      },
+      {
+        "role": "front",
+        "path": "/vehicles",
+        "label": "車輛管理",
+        "group": "營運管理",
+        "expected": true,
+        "actual": true
+      },
+      {
+        "role": "front",
+        "path": "/leaves",
+        "label": "請假紀錄",
+        "group": "營運管理",
+        "expected": true,
+        "actual": true
+      },
+      {
+        "role": "front",
+        "path": "/schedules",
+        "label": "排班管理",
+        "group": "營運管理",
+        "expected": false,
+        "actual": false
+      },
+      {
+        "role": "front",
+        "path": "/recurringschedules",
+        "label": "定期服務排程",
+        "group": "營運管理",
+        "expected": false,
+        "actual": false
+      },
+      {
+        "role": "front",
+        "path": "/contracts",
+        "label": "合約列表",
+        "group": "營運管理",
+        "expected": false,
+        "actual": false
+      },
+      {
+        "role": "front",
+        "path": "/monthlyattendance",
+        "label": "月度出勤表",
+        "group": "營運管理",
+        "expected": false,
+        "actual": false
+      },
+      {
+        "role": "front",
+        "path": "/excelschedule",
+        "label": "排班Excel",
+        "group": "營運管理",
+        "expected": false,
+        "actual": false
+      },
+      {
+        "role": "front",
+        "path": "/inventory",
+        "label": "庫存管理",
+        "group": "營運管理",
+        "expected": false,
+        "actual": false
+      },
+      {
+        "role": "front",
+        "path": "/stockcounts",
+        "label": "盤點記錄",
+        "group": "營運管理",
+        "expected": false,
+        "actual": false
+      },
+      {
+        "role": "front",
+        "path": "/invoices",
+        "label": "發票管理",
+        "group": "公司財務",
+        "expected": false,
+        "actual": false
+      },
+      {
+        "role": "front",
+        "path": "/receipts",
+        "label": "收據管理",
+        "group": "公司財務",
+        "expected": false,
+        "actual": false
+      },
+      {
+        "role": "front",
+        "path": "/payments",
+        "label": "付款管理",
+        "group": "公司財務",
+        "expected": false,
+        "actual": false
+      },
+      {
+        "role": "front",
+        "path": "/bills",
+        "label": "帳單管理",
+        "group": "公司財務",
+        "expected": false,
+        "actual": false
+      },
+      {
+        "role": "front",
+        "path": "/accounting",
+        "label": "會計系統",
+        "group": "公司財務",
+        "expected": false,
+        "actual": false
+      },
+      {
+        "role": "front",
+        "path": "/receivables",
+        "label": "應收台賬",
+        "group": "公司財務",
+        "expected": false,
+        "actual": false
+      },
+      {
+        "role": "front",
+        "path": "/generalledger",
+        "label": "總帳",
+        "group": "公司財務",
+        "expected": false,
+        "actual": false
+      },
+      {
+        "role": "front",
+        "path": "/accounts",
+        "label": "科目表",
+        "group": "公司財務",
+        "expected": false,
+        "actual": false
+      },
+      {
+        "role": "front",
+        "path": "/me",
+        "label": "個人設置",
+        "group": "設置",
+        "expected": true,
+        "actual": true
+      },
+      {
+        "role": "front",
+        "path": "/users",
+        "label": "用戶管理",
+        "group": "設置",
+        "expected": false,
+        "actual": false
+      },
+      {
+        "role": "front",
+        "path": "/employees",
+        "label": "員工管理",
+        "group": "設置",
+        "expected": false,
+        "actual": false
+      },
+      {
+        "role": "front",
+        "path": "/workunits",
+        "label": "工作單位管理",
+        "group": "設置",
+        "expected": true,
+        "actual": true
+      },
+      {
+        "role": "front",
+        "path": "/workinstructions",
+        "label": "工作細則庫",
+        "group": "設置",
+        "expected": true,
+        "actual": true
+      },
+      {
+        "role": "front",
+        "path": "/pesticides",
+        "label": "藥物庫",
+        "group": "設置",
+        "expected": true,
+        "actual": true
+      },
+      {
+        "role": "front",
+        "path": "/emailtemplates",
+        "label": "電郵範本",
+        "group": "設置",
+        "expected": false,
+        "actual": false
+      },
+      {
+        "role": "front",
+        "path": "/addresses",
+        "label": "地址庫",
+        "group": "設置",
+        "expected": false,
+        "actual": false
+      },
+      {
+        "role": "front",
+        "path": "/announcements",
+        "label": "公告管理",
+        "group": "設置",
+        "expected": false,
+        "actual": false
+      },
+      {
+        "role": "front",
+        "path": "/trash",
+        "label": "回收桶",
+        "group": "設置",
+        "expected": false,
+        "actual": false
+      },
+      {
+        "role": "front",
+        "path": "/settings",
+        "label": "系統設置",
+        "group": "設置",
+        "expected": false,
+        "actual": false
+      },
+      {
+        "role": "office",
+        "path": "/",
+        "label": "公告板",
+        "group": "主要功能",
+        "expected": true,
+        "actual": true
+      },
+      {
+        "role": "office",
+        "path": "/mywork",
+        "label": "我的工作",
+        "group": "主要功能",
+        "expected": true,
+        "actual": true
+      },
+      {
+        "role": "office",
+        "path": "/pestcontrolwork",
+        "label": "滅蟲工作",
+        "group": "前線員工",
+        "expected": true,
+        "actual": true
+      },
+      {
+        "role": "office",
+        "path": "/myattendance",
+        "label": "我的出勤",
+        "group": "前線員工",
+        "expected": true,
+        "actual": true
+      },
+      {
+        "role": "office",
+        "path": "/mysupply",
+        "label": "補給記錄",
+        "group": "前線員工",
+        "expected": true,
+        "actual": true
+      },
+      {
+        "role": "office",
+        "path": "/customers",
+        "label": "客戶管理",
+        "group": "市場管理",
+        "expected": true,
+        "actual": true
+      },
+      {
+        "role": "office",
+        "path": "/leads",
+        "label": "線索 Leads",
+        "group": "市場管理",
+        "expected": true,
+        "actual": true
+      },
+      {
+        "role": "office",
+        "path": "/followups",
+        "label": "跟進 FollowUps",
+        "group": "市場管理",
+        "expected": true,
+        "actual": true
+      },
+      {
+        "role": "office",
+        "path": "/quotations",
+        "label": "報價管理",
+        "group": "市場管理",
+        "expected": true,
+        "actual": true
+      },
+      {
+        "role": "office",
+        "path": "/purchaseorders",
+        "label": "採購單管理",
+        "group": "市場管理",
+        "expected": true,
+        "actual": true
+      },
+      {
+        "role": "office",
+        "path": "/deliverynotes",
+        "label": "送貨單管理",
+        "group": "市場管理",
+        "expected": true,
+        "actual": true
+      },
+      {
+        "role": "office",
+        "path": "/products",
+        "label": "產品管理",
+        "group": "市場管理",
+        "expected": true,
+        "actual": true
+      },
+      {
+        "role": "office",
+        "path": "/services",
+        "label": "服務管理",
+        "group": "市場管理",
+        "expected": true,
+        "actual": true
+      },
+      {
+        "role": "office",
+        "path": "/suppliers",
+        "label": "供應商管理",
+        "group": "市場管理",
+        "expected": true,
+        "actual": true
+      },
+      {
+        "role": "office",
+        "path": "/serviceplans",
+        "label": "服務計劃",
+        "group": "營運管理",
+        "expected": true,
+        "actual": true
+      },
+      {
+        "role": "office",
+        "path": "/servicereports",
+        "label": "服務報告",
+        "group": "營運管理",
+        "expected": true,
+        "actual": true
+      },
+      {
+        "role": "office",
+        "path": "/vehicles",
+        "label": "車輛管理",
+        "group": "營運管理",
+        "expected": true,
+        "actual": true
+      },
+      {
+        "role": "office",
+        "path": "/leaves",
+        "label": "請假紀錄",
+        "group": "營運管理",
+        "expected": true,
+        "actual": true
+      },
+      {
+        "role": "office",
+        "path": "/schedules",
+        "label": "排班管理",
+        "group": "營運管理",
+        "expected": true,
+        "actual": true
+      },
+      {
+        "role": "office",
+        "path": "/recurringschedules",
+        "label": "定期服務排程",
+        "group": "營運管理",
+        "expected": true,
+        "actual": true
+      },
+      {
+        "role": "office",
+        "path": "/contracts",
+        "label": "合約列表",
+        "group": "營運管理",
+        "expected": true,
+        "actual": true
+      },
+      {
+        "role": "office",
+        "path": "/monthlyattendance",
+        "label": "月度出勤表",
+        "group": "營運管理",
+        "expected": true,
+        "actual": true
+      },
+      {
+        "role": "office",
+        "path": "/excelschedule",
+        "label": "排班Excel",
+        "group": "營運管理",
+        "expected": true,
+        "actual": true
+      },
+      {
+        "role": "office",
+        "path": "/inventory",
+        "label": "庫存管理",
+        "group": "營運管理",
+        "expected": true,
+        "actual": true
+      },
+      {
+        "role": "office",
+        "path": "/stockcounts",
+        "label": "盤點記錄",
+        "group": "營運管理",
+        "expected": true,
+        "actual": true
+      },
+      {
+        "role": "office",
+        "path": "/invoices",
+        "label": "發票管理",
+        "group": "公司財務",
+        "expected": false,
+        "actual": false
+      },
+      {
+        "role": "office",
+        "path": "/receipts",
+        "label": "收據管理",
+        "group": "公司財務",
+        "expected": false,
+        "actual": false
+      },
+      {
+        "role": "office",
+        "path": "/payments",
+        "label": "付款管理",
+        "group": "公司財務",
+        "expected": false,
+        "actual": false
+      },
+      {
+        "role": "office",
+        "path": "/bills",
+        "label": "帳單管理",
+        "group": "公司財務",
+        "expected": false,
+        "actual": false
+      },
+      {
+        "role": "office",
+        "path": "/accounting",
+        "label": "會計系統",
+        "group": "公司財務",
+        "expected": false,
+        "actual": false
+      },
+      {
+        "role": "office",
+        "path": "/receivables",
+        "label": "應收台賬",
+        "group": "公司財務",
+        "expected": false,
+        "actual": false
+      },
+      {
+        "role": "office",
+        "path": "/generalledger",
+        "label": "總帳",
+        "group": "公司財務",
+        "expected": false,
+        "actual": false
+      },
+      {
+        "role": "office",
+        "path": "/accounts",
+        "label": "科目表",
+        "group": "公司財務",
+        "expected": false,
+        "actual": false
+      },
+      {
+        "role": "office",
+        "path": "/me",
+        "label": "個人設置",
+        "group": "設置",
+        "expected": true,
+        "actual": true
+      },
+      {
+        "role": "office",
+        "path": "/users",
+        "label": "用戶管理",
+        "group": "設置",
+        "expected": false,
+        "actual": false
+      },
+      {
+        "role": "office",
+        "path": "/employees",
+        "label": "員工管理",
+        "group": "設置",
+        "expected": false,
+        "actual": false
+      },
+      {
+        "role": "office",
+        "path": "/workunits",
+        "label": "工作單位管理",
+        "group": "設置",
+        "expected": true,
+        "actual": true
+      },
+      {
+        "role": "office",
+        "path": "/workinstructions",
+        "label": "工作細則庫",
+        "group": "設置",
+        "expected": true,
+        "actual": true
+      },
+      {
+        "role": "office",
+        "path": "/pesticides",
+        "label": "藥物庫",
+        "group": "設置",
+        "expected": true,
+        "actual": true
+      },
+      {
+        "role": "office",
+        "path": "/emailtemplates",
+        "label": "電郵範本",
+        "group": "設置",
+        "expected": false,
+        "actual": false
+      },
+      {
+        "role": "office",
+        "path": "/addresses",
+        "label": "地址庫",
+        "group": "設置",
+        "expected": true,
+        "actual": true
+      },
+      {
+        "role": "office",
+        "path": "/announcements",
+        "label": "公告管理",
+        "group": "設置",
+        "expected": false,
+        "actual": false
+      },
+      {
+        "role": "office",
+        "path": "/trash",
+        "label": "回收桶",
+        "group": "設置",
+        "expected": true,
+        "actual": true
+      },
+      {
+        "role": "office",
+        "path": "/settings",
+        "label": "系統設置",
+        "group": "設置",
+        "expected": false,
+        "actual": false
+      },
+      {
+        "role": "accounting",
+        "path": "/",
+        "label": "公告板",
+        "group": "主要功能",
+        "expected": true,
+        "actual": true
+      },
+      {
+        "role": "accounting",
+        "path": "/mywork",
+        "label": "我的工作",
+        "group": "主要功能",
+        "expected": true,
+        "actual": true
+      },
+      {
+        "role": "accounting",
+        "path": "/pestcontrolwork",
+        "label": "滅蟲工作",
+        "group": "前線員工",
+        "expected": true,
+        "actual": true
+      },
+      {
+        "role": "accounting",
+        "path": "/myattendance",
+        "label": "我的出勤",
+        "group": "前線員工",
+        "expected": true,
+        "actual": true
+      },
+      {
+        "role": "accounting",
+        "path": "/mysupply",
+        "label": "補給記錄",
+        "group": "前線員工",
+        "expected": true,
+        "actual": true
+      },
+      {
+        "role": "accounting",
+        "path": "/customers",
+        "label": "客戶管理",
+        "group": "市場管理",
+        "expected": true,
+        "actual": true
+      },
+      {
+        "role": "accounting",
+        "path": "/leads",
+        "label": "線索 Leads",
+        "group": "市場管理",
+        "expected": true,
+        "actual": true
+      },
+      {
+        "role": "accounting",
+        "path": "/followups",
+        "label": "跟進 FollowUps",
+        "group": "市場管理",
+        "expected": true,
+        "actual": true
+      },
+      {
+        "role": "accounting",
+        "path": "/quotations",
+        "label": "報價管理",
+        "group": "市場管理",
+        "expected": true,
+        "actual": true
+      },
+      {
+        "role": "accounting",
+        "path": "/purchaseorders",
+        "label": "採購單管理",
+        "group": "市場管理",
+        "expected": true,
+        "actual": true
+      },
+      {
+        "role": "accounting",
+        "path": "/deliverynotes",
+        "label": "送貨單管理",
+        "group": "市場管理",
+        "expected": true,
+        "actual": true
+      },
+      {
+        "role": "accounting",
+        "path": "/products",
+        "label": "產品管理",
+        "group": "市場管理",
+        "expected": true,
+        "actual": true
+      },
+      {
+        "role": "accounting",
+        "path": "/services",
+        "label": "服務管理",
+        "group": "市場管理",
+        "expected": true,
+        "actual": true
+      },
+      {
+        "role": "accounting",
+        "path": "/suppliers",
+        "label": "供應商管理",
+        "group": "市場管理",
+        "expected": true,
+        "actual": true
+      },
+      {
+        "role": "accounting",
+        "path": "/serviceplans",
+        "label": "服務計劃",
+        "group": "營運管理",
+        "expected": true,
+        "actual": true
+      },
+      {
+        "role": "accounting",
+        "path": "/servicereports",
+        "label": "服務報告",
+        "group": "營運管理",
+        "expected": true,
+        "actual": true
+      },
+      {
+        "role": "accounting",
+        "path": "/vehicles",
+        "label": "車輛管理",
+        "group": "營運管理",
+        "expected": true,
+        "actual": true
+      },
+      {
+        "role": "accounting",
+        "path": "/leaves",
+        "label": "請假紀錄",
+        "group": "營運管理",
+        "expected": true,
+        "actual": true
+      },
+      {
+        "role": "accounting",
+        "path": "/schedules",
+        "label": "排班管理",
+        "group": "營運管理",
+        "expected": true,
+        "actual": true
+      },
+      {
+        "role": "accounting",
+        "path": "/recurringschedules",
+        "label": "定期服務排程",
+        "group": "營運管理",
+        "expected": true,
+        "actual": true
+      },
+      {
+        "role": "accounting",
+        "path": "/contracts",
+        "label": "合約列表",
+        "group": "營運管理",
+        "expected": true,
+        "actual": true
+      },
+      {
+        "role": "accounting",
+        "path": "/monthlyattendance",
+        "label": "月度出勤表",
+        "group": "營運管理",
+        "expected": true,
+        "actual": true
+      },
+      {
+        "role": "accounting",
+        "path": "/excelschedule",
+        "label": "排班Excel",
+        "group": "營運管理",
+        "expected": true,
+        "actual": true
+      },
+      {
+        "role": "accounting",
+        "path": "/inventory",
+        "label": "庫存管理",
+        "group": "營運管理",
+        "expected": true,
+        "actual": true
+      },
+      {
+        "role": "accounting",
+        "path": "/stockcounts",
+        "label": "盤點記錄",
+        "group": "營運管理",
+        "expected": true,
+        "actual": true
+      },
+      {
+        "role": "accounting",
+        "path": "/invoices",
+        "label": "發票管理",
+        "group": "公司財務",
+        "expected": true,
+        "actual": true
+      },
+      {
+        "role": "accounting",
+        "path": "/receipts",
+        "label": "收據管理",
+        "group": "公司財務",
+        "expected": true,
+        "actual": true
+      },
+      {
+        "role": "accounting",
+        "path": "/payments",
+        "label": "付款管理",
+        "group": "公司財務",
+        "expected": true,
+        "actual": true
+      },
+      {
+        "role": "accounting",
+        "path": "/bills",
+        "label": "帳單管理",
+        "group": "公司財務",
+        "expected": true,
+        "actual": true
+      },
+      {
+        "role": "accounting",
+        "path": "/accounting",
+        "label": "會計系統",
+        "group": "公司財務",
+        "expected": true,
+        "actual": true
+      },
+      {
+        "role": "accounting",
+        "path": "/receivables",
+        "label": "應收台賬",
+        "group": "公司財務",
+        "expected": true,
+        "actual": true
+      },
+      {
+        "role": "accounting",
+        "path": "/generalledger",
+        "label": "總帳",
+        "group": "公司財務",
+        "expected": true,
+        "actual": true
+      },
+      {
+        "role": "accounting",
+        "path": "/accounts",
+        "label": "科目表",
+        "group": "公司財務",
+        "expected": true,
+        "actual": true
+      },
+      {
+        "role": "accounting",
+        "path": "/me",
+        "label": "個人設置",
+        "group": "設置",
+        "expected": true,
+        "actual": true
+      },
+      {
+        "role": "accounting",
+        "path": "/users",
+        "label": "用戶管理",
+        "group": "設置",
+        "expected": false,
+        "actual": false
+      },
+      {
+        "role": "accounting",
+        "path": "/employees",
+        "label": "員工管理",
+        "group": "設置",
+        "expected": true,
+        "actual": true
+      },
+      {
+        "role": "accounting",
+        "path": "/workunits",
+        "label": "工作單位管理",
+        "group": "設置",
+        "expected": true,
+        "actual": true
+      },
+      {
+        "role": "accounting",
+        "path": "/workinstructions",
+        "label": "工作細則庫",
+        "group": "設置",
+        "expected": true,
+        "actual": true
+      },
+      {
+        "role": "accounting",
+        "path": "/pesticides",
+        "label": "藥物庫",
+        "group": "設置",
+        "expected": true,
+        "actual": true
+      },
+      {
+        "role": "accounting",
+        "path": "/emailtemplates",
+        "label": "電郵範本",
+        "group": "設置",
+        "expected": false,
+        "actual": false
+      },
+      {
+        "role": "accounting",
+        "path": "/addresses",
+        "label": "地址庫",
+        "group": "設置",
+        "expected": true,
+        "actual": true
+      },
+      {
+        "role": "accounting",
+        "path": "/announcements",
+        "label": "公告管理",
+        "group": "設置",
+        "expected": false,
+        "actual": false
+      },
+      {
+        "role": "accounting",
+        "path": "/trash",
+        "label": "回收桶",
+        "group": "設置",
+        "expected": false,
+        "actual": false
+      },
+      {
+        "role": "accounting",
+        "path": "/settings",
+        "label": "系統設置",
+        "group": "設置",
+        "expected": false,
+        "actual": false
+      },
+      {
+        "role": "management",
+        "path": "/",
+        "label": "公告板",
+        "group": "主要功能",
+        "expected": true,
+        "actual": true
+      },
+      {
+        "role": "management",
+        "path": "/mywork",
+        "label": "我的工作",
+        "group": "主要功能",
+        "expected": true,
+        "actual": true
+      },
+      {
+        "role": "management",
+        "path": "/pestcontrolwork",
+        "label": "滅蟲工作",
+        "group": "前線員工",
+        "expected": true,
+        "actual": true
+      },
+      {
+        "role": "management",
+        "path": "/myattendance",
+        "label": "我的出勤",
+        "group": "前線員工",
+        "expected": true,
+        "actual": true
+      },
+      {
+        "role": "management",
+        "path": "/mysupply",
+        "label": "補給記錄",
+        "group": "前線員工",
+        "expected": true,
+        "actual": true
+      },
+      {
+        "role": "management",
+        "path": "/customers",
+        "label": "客戶管理",
+        "group": "市場管理",
+        "expected": true,
+        "actual": true
+      },
+      {
+        "role": "management",
+        "path": "/leads",
+        "label": "線索 Leads",
+        "group": "市場管理",
+        "expected": true,
+        "actual": true
+      },
+      {
+        "role": "management",
+        "path": "/followups",
+        "label": "跟進 FollowUps",
+        "group": "市場管理",
+        "expected": true,
+        "actual": true
+      },
+      {
+        "role": "management",
+        "path": "/quotations",
+        "label": "報價管理",
+        "group": "市場管理",
+        "expected": true,
+        "actual": true
+      },
+      {
+        "role": "management",
+        "path": "/purchaseorders",
+        "label": "採購單管理",
+        "group": "市場管理",
+        "expected": true,
+        "actual": true
+      },
+      {
+        "role": "management",
+        "path": "/deliverynotes",
+        "label": "送貨單管理",
+        "group": "市場管理",
+        "expected": true,
+        "actual": true
+      },
+      {
+        "role": "management",
+        "path": "/products",
+        "label": "產品管理",
+        "group": "市場管理",
+        "expected": true,
+        "actual": true
+      },
+      {
+        "role": "management",
+        "path": "/services",
+        "label": "服務管理",
+        "group": "市場管理",
+        "expected": true,
+        "actual": true
+      },
+      {
+        "role": "management",
+        "path": "/suppliers",
+        "label": "供應商管理",
+        "group": "市場管理",
+        "expected": true,
+        "actual": true
+      },
+      {
+        "role": "management",
+        "path": "/serviceplans",
+        "label": "服務計劃",
+        "group": "營運管理",
+        "expected": true,
+        "actual": true
+      },
+      {
+        "role": "management",
+        "path": "/servicereports",
+        "label": "服務報告",
+        "group": "營運管理",
+        "expected": true,
+        "actual": true
+      },
+      {
+        "role": "management",
+        "path": "/vehicles",
+        "label": "車輛管理",
+        "group": "營運管理",
+        "expected": true,
+        "actual": true
+      },
+      {
+        "role": "management",
+        "path": "/leaves",
+        "label": "請假紀錄",
+        "group": "營運管理",
+        "expected": true,
+        "actual": true
+      },
+      {
+        "role": "management",
+        "path": "/schedules",
+        "label": "排班管理",
+        "group": "營運管理",
+        "expected": true,
+        "actual": true
+      },
+      {
+        "role": "management",
+        "path": "/recurringschedules",
+        "label": "定期服務排程",
+        "group": "營運管理",
+        "expected": true,
+        "actual": true
+      },
+      {
+        "role": "management",
+        "path": "/contracts",
+        "label": "合約列表",
+        "group": "營運管理",
+        "expected": true,
+        "actual": true
+      },
+      {
+        "role": "management",
+        "path": "/monthlyattendance",
+        "label": "月度出勤表",
+        "group": "營運管理",
+        "expected": true,
+        "actual": true
+      },
+      {
+        "role": "management",
+        "path": "/excelschedule",
+        "label": "排班Excel",
+        "group": "營運管理",
+        "expected": true,
+        "actual": true
+      },
+      {
+        "role": "management",
+        "path": "/inventory",
+        "label": "庫存管理",
+        "group": "營運管理",
+        "expected": true,
+        "actual": true
+      },
+      {
+        "role": "management",
+        "path": "/stockcounts",
+        "label": "盤點記錄",
+        "group": "營運管理",
+        "expected": true,
+        "actual": true
+      },
+      {
+        "role": "management",
+        "path": "/invoices",
+        "label": "發票管理",
+        "group": "公司財務",
+        "expected": true,
+        "actual": true
+      },
+      {
+        "role": "management",
+        "path": "/receipts",
+        "label": "收據管理",
+        "group": "公司財務",
+        "expected": true,
+        "actual": true
+      },
+      {
+        "role": "management",
+        "path": "/payments",
+        "label": "付款管理",
+        "group": "公司財務",
+        "expected": true,
+        "actual": true
+      },
+      {
+        "role": "management",
+        "path": "/bills",
+        "label": "帳單管理",
+        "group": "公司財務",
+        "expected": true,
+        "actual": true
+      },
+      {
+        "role": "management",
+        "path": "/accounting",
+        "label": "會計系統",
+        "group": "公司財務",
+        "expected": true,
+        "actual": true
+      },
+      {
+        "role": "management",
+        "path": "/receivables",
+        "label": "應收台賬",
+        "group": "公司財務",
+        "expected": true,
+        "actual": true
+      },
+      {
+        "role": "management",
+        "path": "/generalledger",
+        "label": "總帳",
+        "group": "公司財務",
+        "expected": true,
+        "actual": true
+      },
+      {
+        "role": "management",
+        "path": "/accounts",
+        "label": "科目表",
+        "group": "公司財務",
+        "expected": true,
+        "actual": true
+      },
+      {
+        "role": "management",
+        "path": "/me",
+        "label": "個人設置",
+        "group": "設置",
+        "expected": true,
+        "actual": true
+      },
+      {
+        "role": "management",
+        "path": "/users",
+        "label": "用戶管理",
+        "group": "設置",
+        "expected": true,
+        "actual": true
+      },
+      {
+        "role": "management",
+        "path": "/employees",
+        "label": "員工管理",
+        "group": "設置",
+        "expected": true,
+        "actual": true
+      },
+      {
+        "role": "management",
+        "path": "/workunits",
+        "label": "工作單位管理",
+        "group": "設置",
+        "expected": true,
+        "actual": true
+      },
+      {
+        "role": "management",
+        "path": "/workinstructions",
+        "label": "工作細則庫",
+        "group": "設置",
+        "expected": true,
+        "actual": true
+      },
+      {
+        "role": "management",
+        "path": "/pesticides",
+        "label": "藥物庫",
+        "group": "設置",
+        "expected": true,
+        "actual": true
+      },
+      {
+        "role": "management",
+        "path": "/emailtemplates",
+        "label": "電郵範本",
+        "group": "設置",
+        "expected": true,
+        "actual": true
+      },
+      {
+        "role": "management",
+        "path": "/addresses",
+        "label": "地址庫",
+        "group": "設置",
+        "expected": true,
+        "actual": true
+      },
+      {
+        "role": "management",
+        "path": "/announcements",
+        "label": "公告管理",
+        "group": "設置",
+        "expected": true,
+        "actual": true
+      },
+      {
+        "role": "management",
+        "path": "/trash",
+        "label": "回收桶",
+        "group": "設置",
+        "expected": true,
+        "actual": true
+      },
+      {
+        "role": "management",
+        "path": "/settings",
+        "label": "系統設置",
+        "group": "設置",
+        "expected": true,
+        "actual": true
+      }
+    ],
+    "access": [
+      {
+        "role": "front",
+        "path": "/",
+        "label": "公告板",
+        "allowed": true,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "front",
+        "path": "/mywork",
+        "label": "我的工作",
+        "allowed": true,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "front",
+        "path": "/pestcontrolwork",
+        "label": "滅蟲工作",
+        "allowed": true,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "front",
+        "path": "/myattendance",
+        "label": "我的出勤",
+        "allowed": true,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "front",
+        "path": "/mysupply",
+        "label": "補給記錄",
+        "allowed": true,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "front",
+        "path": "/customers",
+        "label": "客戶管理",
+        "allowed": false,
+        "status": 403,
+        "pass": true
+      },
+      {
+        "role": "front",
+        "path": "/leads",
+        "label": "線索 Leads",
+        "allowed": false,
+        "status": 403,
+        "pass": true
+      },
+      {
+        "role": "front",
+        "path": "/followups",
+        "label": "跟進 FollowUps",
+        "allowed": false,
+        "status": 403,
+        "pass": true
+      },
+      {
+        "role": "front",
+        "path": "/quotations",
+        "label": "報價管理",
+        "allowed": false,
+        "status": 403,
+        "pass": true
+      },
+      {
+        "role": "front",
+        "path": "/purchaseorders",
+        "label": "採購單管理",
+        "allowed": false,
+        "status": 403,
+        "pass": true
+      },
+      {
+        "role": "front",
+        "path": "/deliverynotes",
+        "label": "送貨單管理",
+        "allowed": false,
+        "status": 403,
+        "pass": true
+      },
+      {
+        "role": "front",
+        "path": "/products",
+        "label": "產品管理",
+        "allowed": false,
+        "status": 403,
+        "pass": true
+      },
+      {
+        "role": "front",
+        "path": "/services",
+        "label": "服務管理",
+        "allowed": false,
+        "status": 403,
+        "pass": true
+      },
+      {
+        "role": "front",
+        "path": "/suppliers",
+        "label": "供應商管理",
+        "allowed": false,
+        "status": 403,
+        "pass": true
+      },
+      {
+        "role": "front",
+        "path": "/serviceplans",
+        "label": "服務計劃",
+        "allowed": true,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "front",
+        "path": "/servicereports",
+        "label": "服務報告",
+        "allowed": true,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "front",
+        "path": "/vehicles",
+        "label": "車輛管理",
+        "allowed": true,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "front",
+        "path": "/leaves",
+        "label": "請假紀錄",
+        "allowed": true,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "front",
+        "path": "/schedules",
+        "label": "排班管理",
+        "allowed": false,
+        "status": 403,
+        "pass": true
+      },
+      {
+        "role": "front",
+        "path": "/recurringschedules",
+        "label": "定期服務排程",
+        "allowed": false,
+        "status": 403,
+        "pass": true
+      },
+      {
+        "role": "front",
+        "path": "/contracts",
+        "label": "合約列表",
+        "allowed": false,
+        "status": 403,
+        "pass": true
+      },
+      {
+        "role": "front",
+        "path": "/monthlyattendance",
+        "label": "月度出勤表",
+        "allowed": false,
+        "status": 403,
+        "pass": true
+      },
+      {
+        "role": "front",
+        "path": "/excelschedule",
+        "label": "排班Excel",
+        "allowed": false,
+        "status": 403,
+        "pass": true
+      },
+      {
+        "role": "front",
+        "path": "/inventory",
+        "label": "庫存管理",
+        "allowed": false,
+        "status": 403,
+        "pass": true
+      },
+      {
+        "role": "front",
+        "path": "/stockcounts",
+        "label": "盤點記錄",
+        "allowed": false,
+        "status": 403,
+        "pass": true
+      },
+      {
+        "role": "front",
+        "path": "/invoices",
+        "label": "發票管理",
+        "allowed": false,
+        "status": 403,
+        "pass": true
+      },
+      {
+        "role": "front",
+        "path": "/receipts",
+        "label": "收據管理",
+        "allowed": false,
+        "status": 403,
+        "pass": true
+      },
+      {
+        "role": "front",
+        "path": "/payments",
+        "label": "付款管理",
+        "allowed": false,
+        "status": 403,
+        "pass": true
+      },
+      {
+        "role": "front",
+        "path": "/bills",
+        "label": "帳單管理",
+        "allowed": false,
+        "status": 403,
+        "pass": true
+      },
+      {
+        "role": "front",
+        "path": "/accounting",
+        "label": "會計系統",
+        "allowed": false,
+        "status": 403,
+        "pass": true
+      },
+      {
+        "role": "front",
+        "path": "/receivables",
+        "label": "應收台賬",
+        "allowed": false,
+        "status": 403,
+        "pass": true
+      },
+      {
+        "role": "front",
+        "path": "/generalledger",
+        "label": "總帳",
+        "allowed": false,
+        "status": 403,
+        "pass": true
+      },
+      {
+        "role": "front",
+        "path": "/accounts",
+        "label": "科目表",
+        "allowed": false,
+        "status": 403,
+        "pass": true
+      },
+      {
+        "role": "front",
+        "path": "/me",
+        "label": "個人設置",
+        "allowed": true,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "front",
+        "path": "/users",
+        "label": "用戶管理",
+        "allowed": false,
+        "status": 403,
+        "pass": true
+      },
+      {
+        "role": "front",
+        "path": "/employees",
+        "label": "員工管理",
+        "allowed": false,
+        "status": 403,
+        "pass": true
+      },
+      {
+        "role": "front",
+        "path": "/workunits",
+        "label": "工作單位管理",
+        "allowed": true,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "front",
+        "path": "/workinstructions",
+        "label": "工作細則庫",
+        "allowed": true,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "front",
+        "path": "/pesticides",
+        "label": "藥物庫",
+        "allowed": true,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "front",
+        "path": "/emailtemplates",
+        "label": "電郵範本",
+        "allowed": false,
+        "status": 403,
+        "pass": true
+      },
+      {
+        "role": "front",
+        "path": "/addresses",
+        "label": "地址庫",
+        "allowed": false,
+        "status": 403,
+        "pass": true
+      },
+      {
+        "role": "front",
+        "path": "/announcements",
+        "label": "公告管理",
+        "allowed": false,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "front",
+        "path": "/trash",
+        "label": "回收桶",
+        "allowed": false,
+        "status": 403,
+        "pass": true
+      },
+      {
+        "role": "front",
+        "path": "/settings",
+        "label": "系統設置",
+        "allowed": false,
+        "status": 403,
+        "pass": true
+      },
+      {
+        "role": "office",
+        "path": "/",
+        "label": "公告板",
+        "allowed": true,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "office",
+        "path": "/mywork",
+        "label": "我的工作",
+        "allowed": true,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "office",
+        "path": "/pestcontrolwork",
+        "label": "滅蟲工作",
+        "allowed": true,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "office",
+        "path": "/myattendance",
+        "label": "我的出勤",
+        "allowed": true,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "office",
+        "path": "/mysupply",
+        "label": "補給記錄",
+        "allowed": true,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "office",
+        "path": "/customers",
+        "label": "客戶管理",
+        "allowed": true,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "office",
+        "path": "/leads",
+        "label": "線索 Leads",
+        "allowed": true,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "office",
+        "path": "/followups",
+        "label": "跟進 FollowUps",
+        "allowed": true,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "office",
+        "path": "/quotations",
+        "label": "報價管理",
+        "allowed": true,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "office",
+        "path": "/purchaseorders",
+        "label": "採購單管理",
+        "allowed": true,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "office",
+        "path": "/deliverynotes",
+        "label": "送貨單管理",
+        "allowed": true,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "office",
+        "path": "/products",
+        "label": "產品管理",
+        "allowed": true,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "office",
+        "path": "/services",
+        "label": "服務管理",
+        "allowed": true,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "office",
+        "path": "/suppliers",
+        "label": "供應商管理",
+        "allowed": true,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "office",
+        "path": "/serviceplans",
+        "label": "服務計劃",
+        "allowed": true,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "office",
+        "path": "/servicereports",
+        "label": "服務報告",
+        "allowed": true,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "office",
+        "path": "/vehicles",
+        "label": "車輛管理",
+        "allowed": true,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "office",
+        "path": "/leaves",
+        "label": "請假紀錄",
+        "allowed": true,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "office",
+        "path": "/schedules",
+        "label": "排班管理",
+        "allowed": true,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "office",
+        "path": "/recurringschedules",
+        "label": "定期服務排程",
+        "allowed": true,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "office",
+        "path": "/contracts",
+        "label": "合約列表",
+        "allowed": true,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "office",
+        "path": "/monthlyattendance",
+        "label": "月度出勤表",
+        "allowed": true,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "office",
+        "path": "/excelschedule",
+        "label": "排班Excel",
+        "allowed": true,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "office",
+        "path": "/inventory",
+        "label": "庫存管理",
+        "allowed": true,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "office",
+        "path": "/stockcounts",
+        "label": "盤點記錄",
+        "allowed": true,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "office",
+        "path": "/invoices",
+        "label": "發票管理",
+        "allowed": false,
+        "status": 403,
+        "pass": true
+      },
+      {
+        "role": "office",
+        "path": "/receipts",
+        "label": "收據管理",
+        "allowed": false,
+        "status": 403,
+        "pass": true
+      },
+      {
+        "role": "office",
+        "path": "/payments",
+        "label": "付款管理",
+        "allowed": false,
+        "status": 403,
+        "pass": true
+      },
+      {
+        "role": "office",
+        "path": "/bills",
+        "label": "帳單管理",
+        "allowed": false,
+        "status": 403,
+        "pass": true
+      },
+      {
+        "role": "office",
+        "path": "/accounting",
+        "label": "會計系統",
+        "allowed": false,
+        "status": 403,
+        "pass": true
+      },
+      {
+        "role": "office",
+        "path": "/receivables",
+        "label": "應收台賬",
+        "allowed": false,
+        "status": 403,
+        "pass": true
+      },
+      {
+        "role": "office",
+        "path": "/generalledger",
+        "label": "總帳",
+        "allowed": false,
+        "status": 403,
+        "pass": true
+      },
+      {
+        "role": "office",
+        "path": "/accounts",
+        "label": "科目表",
+        "allowed": false,
+        "status": 403,
+        "pass": true
+      },
+      {
+        "role": "office",
+        "path": "/me",
+        "label": "個人設置",
+        "allowed": true,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "office",
+        "path": "/users",
+        "label": "用戶管理",
+        "allowed": false,
+        "status": 403,
+        "pass": true
+      },
+      {
+        "role": "office",
+        "path": "/employees",
+        "label": "員工管理",
+        "allowed": false,
+        "status": 403,
+        "pass": true
+      },
+      {
+        "role": "office",
+        "path": "/workunits",
+        "label": "工作單位管理",
+        "allowed": true,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "office",
+        "path": "/workinstructions",
+        "label": "工作細則庫",
+        "allowed": true,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "office",
+        "path": "/pesticides",
+        "label": "藥物庫",
+        "allowed": true,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "office",
+        "path": "/emailtemplates",
+        "label": "電郵範本",
+        "allowed": false,
+        "status": 403,
+        "pass": true
+      },
+      {
+        "role": "office",
+        "path": "/addresses",
+        "label": "地址庫",
+        "allowed": true,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "office",
+        "path": "/announcements",
+        "label": "公告管理",
+        "allowed": false,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "office",
+        "path": "/trash",
+        "label": "回收桶",
+        "allowed": true,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "office",
+        "path": "/settings",
+        "label": "系統設置",
+        "allowed": false,
+        "status": 403,
+        "pass": true
+      },
+      {
+        "role": "accounting",
+        "path": "/",
+        "label": "公告板",
+        "allowed": true,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "accounting",
+        "path": "/mywork",
+        "label": "我的工作",
+        "allowed": true,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "accounting",
+        "path": "/pestcontrolwork",
+        "label": "滅蟲工作",
+        "allowed": true,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "accounting",
+        "path": "/myattendance",
+        "label": "我的出勤",
+        "allowed": true,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "accounting",
+        "path": "/mysupply",
+        "label": "補給記錄",
+        "allowed": true,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "accounting",
+        "path": "/customers",
+        "label": "客戶管理",
+        "allowed": true,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "accounting",
+        "path": "/leads",
+        "label": "線索 Leads",
+        "allowed": true,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "accounting",
+        "path": "/followups",
+        "label": "跟進 FollowUps",
+        "allowed": true,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "accounting",
+        "path": "/quotations",
+        "label": "報價管理",
+        "allowed": true,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "accounting",
+        "path": "/purchaseorders",
+        "label": "採購單管理",
+        "allowed": true,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "accounting",
+        "path": "/deliverynotes",
+        "label": "送貨單管理",
+        "allowed": true,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "accounting",
+        "path": "/products",
+        "label": "產品管理",
+        "allowed": true,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "accounting",
+        "path": "/services",
+        "label": "服務管理",
+        "allowed": true,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "accounting",
+        "path": "/suppliers",
+        "label": "供應商管理",
+        "allowed": true,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "accounting",
+        "path": "/serviceplans",
+        "label": "服務計劃",
+        "allowed": true,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "accounting",
+        "path": "/servicereports",
+        "label": "服務報告",
+        "allowed": true,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "accounting",
+        "path": "/vehicles",
+        "label": "車輛管理",
+        "allowed": true,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "accounting",
+        "path": "/leaves",
+        "label": "請假紀錄",
+        "allowed": true,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "accounting",
+        "path": "/schedules",
+        "label": "排班管理",
+        "allowed": true,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "accounting",
+        "path": "/recurringschedules",
+        "label": "定期服務排程",
+        "allowed": true,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "accounting",
+        "path": "/contracts",
+        "label": "合約列表",
+        "allowed": true,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "accounting",
+        "path": "/monthlyattendance",
+        "label": "月度出勤表",
+        "allowed": true,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "accounting",
+        "path": "/excelschedule",
+        "label": "排班Excel",
+        "allowed": true,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "accounting",
+        "path": "/inventory",
+        "label": "庫存管理",
+        "allowed": true,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "accounting",
+        "path": "/stockcounts",
+        "label": "盤點記錄",
+        "allowed": true,
+        "status": 403,
+        "pass": false
+      },
+      {
+        "role": "accounting",
+        "path": "/invoices",
+        "label": "發票管理",
+        "allowed": true,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "accounting",
+        "path": "/receipts",
+        "label": "收據管理",
+        "allowed": true,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "accounting",
+        "path": "/payments",
+        "label": "付款管理",
+        "allowed": true,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "accounting",
+        "path": "/bills",
+        "label": "帳單管理",
+        "allowed": true,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "accounting",
+        "path": "/accounting",
+        "label": "會計系統",
+        "allowed": true,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "accounting",
+        "path": "/receivables",
+        "label": "應收台賬",
+        "allowed": true,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "accounting",
+        "path": "/generalledger",
+        "label": "總帳",
+        "allowed": true,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "accounting",
+        "path": "/accounts",
+        "label": "科目表",
+        "allowed": true,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "accounting",
+        "path": "/me",
+        "label": "個人設置",
+        "allowed": true,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "accounting",
+        "path": "/users",
+        "label": "用戶管理",
+        "allowed": false,
+        "status": 403,
+        "pass": true
+      },
+      {
+        "role": "accounting",
+        "path": "/employees",
+        "label": "員工管理",
+        "allowed": true,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "accounting",
+        "path": "/workunits",
+        "label": "工作單位管理",
+        "allowed": true,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "accounting",
+        "path": "/workinstructions",
+        "label": "工作細則庫",
+        "allowed": true,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "accounting",
+        "path": "/pesticides",
+        "label": "藥物庫",
+        "allowed": true,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "accounting",
+        "path": "/emailtemplates",
+        "label": "電郵範本",
+        "allowed": false,
+        "status": 403,
+        "pass": true
+      },
+      {
+        "role": "accounting",
+        "path": "/addresses",
+        "label": "地址庫",
+        "allowed": true,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "accounting",
+        "path": "/announcements",
+        "label": "公告管理",
+        "allowed": false,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "accounting",
+        "path": "/trash",
+        "label": "回收桶",
+        "allowed": false,
+        "status": 403,
+        "pass": true
+      },
+      {
+        "role": "accounting",
+        "path": "/settings",
+        "label": "系統設置",
+        "allowed": false,
+        "status": 403,
+        "pass": true
+      },
+      {
+        "role": "management",
+        "path": "/",
+        "label": "公告板",
+        "allowed": true,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "management",
+        "path": "/mywork",
+        "label": "我的工作",
+        "allowed": true,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "management",
+        "path": "/pestcontrolwork",
+        "label": "滅蟲工作",
+        "allowed": true,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "management",
+        "path": "/myattendance",
+        "label": "我的出勤",
+        "allowed": true,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "management",
+        "path": "/mysupply",
+        "label": "補給記錄",
+        "allowed": true,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "management",
+        "path": "/customers",
+        "label": "客戶管理",
+        "allowed": true,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "management",
+        "path": "/leads",
+        "label": "線索 Leads",
+        "allowed": true,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "management",
+        "path": "/followups",
+        "label": "跟進 FollowUps",
+        "allowed": true,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "management",
+        "path": "/quotations",
+        "label": "報價管理",
+        "allowed": true,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "management",
+        "path": "/purchaseorders",
+        "label": "採購單管理",
+        "allowed": true,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "management",
+        "path": "/deliverynotes",
+        "label": "送貨單管理",
+        "allowed": true,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "management",
+        "path": "/products",
+        "label": "產品管理",
+        "allowed": true,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "management",
+        "path": "/services",
+        "label": "服務管理",
+        "allowed": true,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "management",
+        "path": "/suppliers",
+        "label": "供應商管理",
+        "allowed": true,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "management",
+        "path": "/serviceplans",
+        "label": "服務計劃",
+        "allowed": true,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "management",
+        "path": "/servicereports",
+        "label": "服務報告",
+        "allowed": true,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "management",
+        "path": "/vehicles",
+        "label": "車輛管理",
+        "allowed": true,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "management",
+        "path": "/leaves",
+        "label": "請假紀錄",
+        "allowed": true,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "management",
+        "path": "/schedules",
+        "label": "排班管理",
+        "allowed": true,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "management",
+        "path": "/recurringschedules",
+        "label": "定期服務排程",
+        "allowed": true,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "management",
+        "path": "/contracts",
+        "label": "合約列表",
+        "allowed": true,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "management",
+        "path": "/monthlyattendance",
+        "label": "月度出勤表",
+        "allowed": true,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "management",
+        "path": "/excelschedule",
+        "label": "排班Excel",
+        "allowed": true,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "management",
+        "path": "/inventory",
+        "label": "庫存管理",
+        "allowed": true,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "management",
+        "path": "/stockcounts",
+        "label": "盤點記錄",
+        "allowed": true,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "management",
+        "path": "/invoices",
+        "label": "發票管理",
+        "allowed": true,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "management",
+        "path": "/receipts",
+        "label": "收據管理",
+        "allowed": true,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "management",
+        "path": "/payments",
+        "label": "付款管理",
+        "allowed": true,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "management",
+        "path": "/bills",
+        "label": "帳單管理",
+        "allowed": true,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "management",
+        "path": "/accounting",
+        "label": "會計系統",
+        "allowed": true,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "management",
+        "path": "/receivables",
+        "label": "應收台賬",
+        "allowed": true,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "management",
+        "path": "/generalledger",
+        "label": "總帳",
+        "allowed": true,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "management",
+        "path": "/accounts",
+        "label": "科目表",
+        "allowed": true,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "management",
+        "path": "/me",
+        "label": "個人設置",
+        "allowed": true,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "management",
+        "path": "/users",
+        "label": "用戶管理",
+        "allowed": true,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "management",
+        "path": "/employees",
+        "label": "員工管理",
+        "allowed": true,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "management",
+        "path": "/workunits",
+        "label": "工作單位管理",
+        "allowed": true,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "management",
+        "path": "/workinstructions",
+        "label": "工作細則庫",
+        "allowed": true,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "management",
+        "path": "/pesticides",
+        "label": "藥物庫",
+        "allowed": true,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "management",
+        "path": "/emailtemplates",
+        "label": "電郵範本",
+        "allowed": true,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "management",
+        "path": "/addresses",
+        "label": "地址庫",
+        "allowed": true,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "management",
+        "path": "/announcements",
+        "label": "公告管理",
+        "allowed": true,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "management",
+        "path": "/trash",
+        "label": "回收桶",
+        "allowed": true,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "management",
+        "path": "/settings",
+        "label": "系統設置",
+        "allowed": true,
+        "status": 200,
+        "pass": true
+      }
+    ],
+    "list": [
+      {
+        "role": "front",
+        "key": "customers",
+        "path": "/customers",
+        "expected": 403,
+        "status": 403,
+        "pass": true
+      },
+      {
+        "role": "front",
+        "key": "quotations",
+        "path": "/quotations",
+        "expected": 403,
+        "status": 403,
+        "pass": true
+      },
+      {
+        "role": "front",
+        "key": "contracts",
+        "path": "/contracts",
+        "expected": 403,
+        "status": 403,
+        "pass": true
+      },
+      {
+        "role": "front",
+        "key": "invoices",
+        "path": "/invoices",
+        "expected": 403,
+        "status": 403,
+        "pass": true
+      },
+      {
+        "role": "front",
+        "key": "receipts",
+        "path": "/receipts",
+        "expected": 403,
+        "status": 403,
+        "pass": true
+      },
+      {
+        "role": "front",
+        "key": "bills",
+        "path": "/bills",
+        "expected": 403,
+        "status": 403,
+        "pass": true
+      },
+      {
+        "role": "front",
+        "key": "payments",
+        "path": "/payments",
+        "expected": 403,
+        "status": 403,
+        "pass": true
+      },
+      {
+        "role": "front",
+        "key": "purchase_orders",
+        "path": "/purchaseorders",
+        "expected": 403,
+        "status": 403,
+        "pass": true
+      },
+      {
+        "role": "front",
+        "key": "delivery_notes",
+        "path": "/deliverynotes",
+        "expected": 403,
+        "status": 403,
+        "pass": true
+      },
+      {
+        "role": "front",
+        "key": "products",
+        "path": "/products",
+        "expected": 403,
+        "status": 403,
+        "pass": true
+      },
+      {
+        "role": "front",
+        "key": "services",
+        "path": "/services",
+        "expected": 403,
+        "status": 403,
+        "pass": true
+      },
+      {
+        "role": "front",
+        "key": "suppliers",
+        "path": "/suppliers",
+        "expected": 403,
+        "status": 403,
+        "pass": true
+      },
+      {
+        "role": "front",
+        "key": "stock_counts",
+        "path": "/stockcounts",
+        "expected": 403,
+        "status": 403,
+        "pass": true
+      },
+      {
+        "role": "front",
+        "key": "employees",
+        "path": "/employees",
+        "expected": 403,
+        "status": 403,
+        "pass": true
+      },
+      {
+        "role": "front",
+        "key": "leave_records",
+        "path": "/leaves",
+        "expected": 200,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "front",
+        "key": "schedules",
+        "path": "/schedules",
+        "expected": 403,
+        "status": 403,
+        "pass": true
+      },
+      {
+        "role": "front",
+        "key": "recurring_schedules",
+        "path": "/recurringschedules",
+        "expected": 403,
+        "status": 403,
+        "pass": true
+      },
+      {
+        "role": "front",
+        "key": "work_records",
+        "path": "/servicereports",
+        "expected": 200,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "front",
+        "key": "work_units",
+        "path": "/workunits",
+        "expected": 200,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "front",
+        "key": "service_plan_logs",
+        "path": "/serviceplanlogs",
+        "expected": 200,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "front",
+        "key": "supply_records",
+        "path": "/mysupply",
+        "expected": 200,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "front",
+        "key": "work_instructions",
+        "path": "/workinstructions",
+        "expected": 200,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "front",
+        "key": "vehicles",
+        "path": "/vehicles",
+        "expected": 200,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "front",
+        "key": "pesticides",
+        "path": "/pesticides",
+        "expected": 200,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "front",
+        "key": "leads",
+        "path": "/leads",
+        "expected": 403,
+        "status": 403,
+        "pass": true
+      },
+      {
+        "role": "front",
+        "key": "follow_ups",
+        "path": "/followups",
+        "expected": 403,
+        "status": 403,
+        "pass": true
+      },
+      {
+        "role": "front",
+        "key": "announcements",
+        "path": "/announcements",
+        "expected": 200,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "front",
+        "key": "email_templates",
+        "path": "/emailtemplates",
+        "expected": 403,
+        "status": 403,
+        "pass": true
+      },
+      {
+        "role": "front",
+        "key": "addresses",
+        "path": "/addresses",
+        "expected": 403,
+        "status": 403,
+        "pass": true
+      },
+      {
+        "role": "front",
+        "key": "accounts",
+        "path": "/accounts",
+        "expected": 403,
+        "status": 403,
+        "pass": true
+      },
+      {
+        "role": "front",
+        "key": "notifications",
+        "path": "/notifications",
+        "expected": 403,
+        "status": 403,
+        "pass": true
+      },
+      {
+        "role": "office",
+        "key": "customers",
+        "path": "/customers",
+        "expected": 200,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "office",
+        "key": "quotations",
+        "path": "/quotations",
+        "expected": 200,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "office",
+        "key": "contracts",
+        "path": "/contracts",
+        "expected": 200,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "office",
+        "key": "invoices",
+        "path": "/invoices",
+        "expected": 403,
+        "status": 403,
+        "pass": true
+      },
+      {
+        "role": "office",
+        "key": "receipts",
+        "path": "/receipts",
+        "expected": 403,
+        "status": 403,
+        "pass": true
+      },
+      {
+        "role": "office",
+        "key": "bills",
+        "path": "/bills",
+        "expected": 403,
+        "status": 403,
+        "pass": true
+      },
+      {
+        "role": "office",
+        "key": "payments",
+        "path": "/payments",
+        "expected": 403,
+        "status": 403,
+        "pass": true
+      },
+      {
+        "role": "office",
+        "key": "purchase_orders",
+        "path": "/purchaseorders",
+        "expected": 200,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "office",
+        "key": "delivery_notes",
+        "path": "/deliverynotes",
+        "expected": 200,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "office",
+        "key": "products",
+        "path": "/products",
+        "expected": 200,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "office",
+        "key": "services",
+        "path": "/services",
+        "expected": 200,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "office",
+        "key": "suppliers",
+        "path": "/suppliers",
+        "expected": 200,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "office",
+        "key": "stock_counts",
+        "path": "/stockcounts",
+        "expected": 200,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "office",
+        "key": "employees",
+        "path": "/employees",
+        "expected": 403,
+        "status": 403,
+        "pass": true
+      },
+      {
+        "role": "office",
+        "key": "leave_records",
+        "path": "/leaves",
+        "expected": 200,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "office",
+        "key": "schedules",
+        "path": "/schedules",
+        "expected": 200,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "office",
+        "key": "recurring_schedules",
+        "path": "/recurringschedules",
+        "expected": 200,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "office",
+        "key": "work_records",
+        "path": "/servicereports",
+        "expected": 200,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "office",
+        "key": "work_units",
+        "path": "/workunits",
+        "expected": 200,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "office",
+        "key": "service_plan_logs",
+        "path": "/serviceplanlogs",
+        "expected": 200,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "office",
+        "key": "supply_records",
+        "path": "/mysupply",
+        "expected": 200,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "office",
+        "key": "work_instructions",
+        "path": "/workinstructions",
+        "expected": 200,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "office",
+        "key": "vehicles",
+        "path": "/vehicles",
+        "expected": 200,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "office",
+        "key": "pesticides",
+        "path": "/pesticides",
+        "expected": 200,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "office",
+        "key": "leads",
+        "path": "/leads",
+        "expected": 200,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "office",
+        "key": "follow_ups",
+        "path": "/followups",
+        "expected": 200,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "office",
+        "key": "announcements",
+        "path": "/announcements",
+        "expected": 200,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "office",
+        "key": "email_templates",
+        "path": "/emailtemplates",
+        "expected": 403,
+        "status": 403,
+        "pass": true
+      },
+      {
+        "role": "office",
+        "key": "addresses",
+        "path": "/addresses",
+        "expected": 200,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "office",
+        "key": "accounts",
+        "path": "/accounts",
+        "expected": 403,
+        "status": 403,
+        "pass": true
+      },
+      {
+        "role": "office",
+        "key": "notifications",
+        "path": "/notifications",
+        "expected": 403,
+        "status": 403,
+        "pass": true
+      },
+      {
+        "role": "accounting",
+        "key": "customers",
+        "path": "/customers",
+        "expected": 200,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "accounting",
+        "key": "quotations",
+        "path": "/quotations",
+        "expected": 200,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "accounting",
+        "key": "contracts",
+        "path": "/contracts",
+        "expected": 200,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "accounting",
+        "key": "invoices",
+        "path": "/invoices",
+        "expected": 200,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "accounting",
+        "key": "receipts",
+        "path": "/receipts",
+        "expected": 200,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "accounting",
+        "key": "bills",
+        "path": "/bills",
+        "expected": 200,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "accounting",
+        "key": "payments",
+        "path": "/payments",
+        "expected": 200,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "accounting",
+        "key": "purchase_orders",
+        "path": "/purchaseorders",
+        "expected": 200,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "accounting",
+        "key": "delivery_notes",
+        "path": "/deliverynotes",
+        "expected": 200,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "accounting",
+        "key": "products",
+        "path": "/products",
+        "expected": 200,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "accounting",
+        "key": "services",
+        "path": "/services",
+        "expected": 200,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "accounting",
+        "key": "suppliers",
+        "path": "/suppliers",
+        "expected": 200,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "accounting",
+        "key": "stock_counts",
+        "path": "/stockcounts",
+        "expected": 403,
+        "status": 403,
+        "pass": true
+      },
+      {
+        "role": "accounting",
+        "key": "employees",
+        "path": "/employees",
+        "expected": 200,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "accounting",
+        "key": "leave_records",
+        "path": "/leaves",
+        "expected": 200,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "accounting",
+        "key": "schedules",
+        "path": "/schedules",
+        "expected": 200,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "accounting",
+        "key": "recurring_schedules",
+        "path": "/recurringschedules",
+        "expected": 200,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "accounting",
+        "key": "work_records",
+        "path": "/servicereports",
+        "expected": 200,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "accounting",
+        "key": "work_units",
+        "path": "/workunits",
+        "expected": 200,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "accounting",
+        "key": "service_plan_logs",
+        "path": "/serviceplanlogs",
+        "expected": 200,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "accounting",
+        "key": "supply_records",
+        "path": "/mysupply",
+        "expected": 200,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "accounting",
+        "key": "work_instructions",
+        "path": "/workinstructions",
+        "expected": 200,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "accounting",
+        "key": "vehicles",
+        "path": "/vehicles",
+        "expected": 200,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "accounting",
+        "key": "pesticides",
+        "path": "/pesticides",
+        "expected": 200,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "accounting",
+        "key": "leads",
+        "path": "/leads",
+        "expected": 200,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "accounting",
+        "key": "follow_ups",
+        "path": "/followups",
+        "expected": 200,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "accounting",
+        "key": "announcements",
+        "path": "/announcements",
+        "expected": 200,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "accounting",
+        "key": "email_templates",
+        "path": "/emailtemplates",
+        "expected": 403,
+        "status": 403,
+        "pass": true
+      },
+      {
+        "role": "accounting",
+        "key": "addresses",
+        "path": "/addresses",
+        "expected": 200,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "accounting",
+        "key": "accounts",
+        "path": "/accounts",
+        "expected": 200,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "accounting",
+        "key": "notifications",
+        "path": "/notifications",
+        "expected": 403,
+        "status": 403,
+        "pass": true
+      },
+      {
+        "role": "management",
+        "key": "customers",
+        "path": "/customers",
+        "expected": 200,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "management",
+        "key": "quotations",
+        "path": "/quotations",
+        "expected": 200,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "management",
+        "key": "contracts",
+        "path": "/contracts",
+        "expected": 200,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "management",
+        "key": "invoices",
+        "path": "/invoices",
+        "expected": 200,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "management",
+        "key": "receipts",
+        "path": "/receipts",
+        "expected": 200,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "management",
+        "key": "bills",
+        "path": "/bills",
+        "expected": 200,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "management",
+        "key": "payments",
+        "path": "/payments",
+        "expected": 200,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "management",
+        "key": "purchase_orders",
+        "path": "/purchaseorders",
+        "expected": 200,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "management",
+        "key": "delivery_notes",
+        "path": "/deliverynotes",
+        "expected": 200,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "management",
+        "key": "products",
+        "path": "/products",
+        "expected": 200,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "management",
+        "key": "services",
+        "path": "/services",
+        "expected": 200,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "management",
+        "key": "suppliers",
+        "path": "/suppliers",
+        "expected": 200,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "management",
+        "key": "stock_counts",
+        "path": "/stockcounts",
+        "expected": 200,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "management",
+        "key": "employees",
+        "path": "/employees",
+        "expected": 200,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "management",
+        "key": "leave_records",
+        "path": "/leaves",
+        "expected": 200,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "management",
+        "key": "schedules",
+        "path": "/schedules",
+        "expected": 200,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "management",
+        "key": "recurring_schedules",
+        "path": "/recurringschedules",
+        "expected": 200,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "management",
+        "key": "work_records",
+        "path": "/servicereports",
+        "expected": 200,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "management",
+        "key": "work_units",
+        "path": "/workunits",
+        "expected": 200,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "management",
+        "key": "service_plan_logs",
+        "path": "/serviceplanlogs",
+        "expected": 200,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "management",
+        "key": "supply_records",
+        "path": "/mysupply",
+        "expected": 200,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "management",
+        "key": "work_instructions",
+        "path": "/workinstructions",
+        "expected": 200,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "management",
+        "key": "vehicles",
+        "path": "/vehicles",
+        "expected": 200,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "management",
+        "key": "pesticides",
+        "path": "/pesticides",
+        "expected": 200,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "management",
+        "key": "leads",
+        "path": "/leads",
+        "expected": 200,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "management",
+        "key": "follow_ups",
+        "path": "/followups",
+        "expected": 200,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "management",
+        "key": "announcements",
+        "path": "/announcements",
+        "expected": 200,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "management",
+        "key": "email_templates",
+        "path": "/emailtemplates",
+        "expected": 200,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "management",
+        "key": "addresses",
+        "path": "/addresses",
+        "expected": 200,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "management",
+        "key": "accounts",
+        "path": "/accounts",
+        "expected": 200,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "management",
+        "key": "notifications",
+        "path": "/notifications",
+        "expected": 200,
+        "status": 200,
+        "pass": true
+      }
+    ],
+    "form": [
+      {
+        "role": "front",
+        "key": "customers",
+        "expected": 403,
+        "status": 403,
+        "pass": true
+      },
+      {
+        "role": "front",
+        "key": "quotations",
+        "expected": 403,
+        "status": 403,
+        "pass": true
+      },
+      {
+        "role": "front",
+        "key": "contracts",
+        "expected": 403,
+        "status": 403,
+        "pass": true
+      },
+      {
+        "role": "front",
+        "key": "invoices",
+        "expected": 403,
+        "status": 403,
+        "pass": true
+      },
+      {
+        "role": "front",
+        "key": "receipts",
+        "expected": 403,
+        "status": 403,
+        "pass": true
+      },
+      {
+        "role": "front",
+        "key": "bills",
+        "expected": 403,
+        "status": 403,
+        "pass": true
+      },
+      {
+        "role": "front",
+        "key": "payments",
+        "expected": 403,
+        "status": 403,
+        "pass": true
+      },
+      {
+        "role": "front",
+        "key": "transactions",
+        "expected": 403,
+        "status": 403,
+        "pass": true
+      },
+      {
+        "role": "front",
+        "key": "purchase_orders",
+        "expected": 403,
+        "status": 403,
+        "pass": true
+      },
+      {
+        "role": "front",
+        "key": "delivery_notes",
+        "expected": 403,
+        "status": 403,
+        "pass": true
+      },
+      {
+        "role": "front",
+        "key": "products",
+        "expected": 403,
+        "status": 403,
+        "pass": true
+      },
+      {
+        "role": "front",
+        "key": "services",
+        "expected": 403,
+        "status": 403,
+        "pass": true
+      },
+      {
+        "role": "front",
+        "key": "suppliers",
+        "expected": 403,
+        "status": 403,
+        "pass": true
+      },
+      {
+        "role": "front",
+        "key": "stock_adjustments",
+        "expected": 403,
+        "status": 403,
+        "pass": true
+      },
+      {
+        "role": "front",
+        "key": "stock_counts",
+        "expected": 403,
+        "status": 403,
+        "pass": true
+      },
+      {
+        "role": "front",
+        "key": "employees",
+        "expected": 403,
+        "status": 403,
+        "pass": true
+      },
+      {
+        "role": "front",
+        "key": "attendances",
+        "expected": 403,
+        "status": 403,
+        "pass": true
+      },
+      {
+        "role": "front",
+        "key": "check_ins",
+        "expected": 403,
+        "status": 403,
+        "pass": true
+      },
+      {
+        "role": "front",
+        "key": "leave_records",
+        "expected": 200,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "front",
+        "key": "schedules",
+        "expected": 403,
+        "status": 403,
+        "pass": true
+      },
+      {
+        "role": "front",
+        "key": "recurring_schedules",
+        "expected": 403,
+        "status": 403,
+        "pass": true
+      },
+      {
+        "role": "front",
+        "key": "work_records",
+        "expected": 403,
+        "status": 403,
+        "pass": true
+      },
+      {
+        "role": "front",
+        "key": "work_units",
+        "expected": 403,
+        "status": 403,
+        "pass": true
+      },
+      {
+        "role": "front",
+        "key": "service_plan_logs",
+        "expected": 403,
+        "status": 403,
+        "pass": true
+      },
+      {
+        "role": "front",
+        "key": "service_plan_dates",
+        "expected": 403,
+        "status": 403,
+        "pass": true
+      },
+      {
+        "role": "front",
+        "key": "supply_records",
+        "expected": 200,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "front",
+        "key": "work_instructions",
+        "expected": 403,
+        "status": 403,
+        "pass": true
+      },
+      {
+        "role": "front",
+        "key": "vehicles",
+        "expected": 403,
+        "status": 403,
+        "pass": true
+      },
+      {
+        "role": "front",
+        "key": "vehicle_expenses",
+        "expected": 200,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "front",
+        "key": "pesticides",
+        "expected": 403,
+        "status": 403,
+        "pass": true
+      },
+      {
+        "role": "front",
+        "key": "leads",
+        "expected": 403,
+        "status": 403,
+        "pass": true
+      },
+      {
+        "role": "front",
+        "key": "follow_ups",
+        "expected": 403,
+        "status": 403,
+        "pass": true
+      },
+      {
+        "role": "front",
+        "key": "announcements",
+        "expected": 403,
+        "status": 403,
+        "pass": true
+      },
+      {
+        "role": "front",
+        "key": "email_templates",
+        "expected": 403,
+        "status": 403,
+        "pass": true
+      },
+      {
+        "role": "front",
+        "key": "addresses",
+        "expected": 403,
+        "status": 403,
+        "pass": true
+      },
+      {
+        "role": "front",
+        "key": "accounts",
+        "expected": 403,
+        "status": 403,
+        "pass": true
+      },
+      {
+        "role": "front",
+        "key": "notifications",
+        "expected": 403,
+        "status": 403,
+        "pass": true
+      },
+      {
+        "role": "front",
+        "key": "company_settings",
+        "expected": 403,
+        "status": 403,
+        "pass": true
+      },
+      {
+        "role": "office",
+        "key": "customers",
+        "expected": 200,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "office",
+        "key": "quotations",
+        "expected": 200,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "office",
+        "key": "contracts",
+        "expected": 200,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "office",
+        "key": "invoices",
+        "expected": 403,
+        "status": 403,
+        "pass": true
+      },
+      {
+        "role": "office",
+        "key": "receipts",
+        "expected": 403,
+        "status": 403,
+        "pass": true
+      },
+      {
+        "role": "office",
+        "key": "bills",
+        "expected": 403,
+        "status": 403,
+        "pass": true
+      },
+      {
+        "role": "office",
+        "key": "payments",
+        "expected": 403,
+        "status": 403,
+        "pass": true
+      },
+      {
+        "role": "office",
+        "key": "transactions",
+        "expected": 403,
+        "status": 403,
+        "pass": true
+      },
+      {
+        "role": "office",
+        "key": "purchase_orders",
+        "expected": 200,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "office",
+        "key": "delivery_notes",
+        "expected": 200,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "office",
+        "key": "products",
+        "expected": 200,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "office",
+        "key": "services",
+        "expected": 200,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "office",
+        "key": "suppliers",
+        "expected": 200,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "office",
+        "key": "stock_adjustments",
+        "expected": 200,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "office",
+        "key": "stock_counts",
+        "expected": 200,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "office",
+        "key": "employees",
+        "expected": 403,
+        "status": 403,
+        "pass": true
+      },
+      {
+        "role": "office",
+        "key": "attendances",
+        "expected": 200,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "office",
+        "key": "check_ins",
+        "expected": 200,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "office",
+        "key": "leave_records",
+        "expected": 200,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "office",
+        "key": "schedules",
+        "expected": 200,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "office",
+        "key": "recurring_schedules",
+        "expected": 200,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "office",
+        "key": "work_records",
+        "expected": 200,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "office",
+        "key": "work_units",
+        "expected": 403,
+        "status": 403,
+        "pass": true
+      },
+      {
+        "role": "office",
+        "key": "service_plan_logs",
+        "expected": 200,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "office",
+        "key": "service_plan_dates",
+        "expected": 200,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "office",
+        "key": "supply_records",
+        "expected": 200,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "office",
+        "key": "work_instructions",
+        "expected": 403,
+        "status": 403,
+        "pass": true
+      },
+      {
+        "role": "office",
+        "key": "vehicles",
+        "expected": 200,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "office",
+        "key": "vehicle_expenses",
+        "expected": 200,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "office",
+        "key": "pesticides",
+        "expected": 403,
+        "status": 403,
+        "pass": true
+      },
+      {
+        "role": "office",
+        "key": "leads",
+        "expected": 200,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "office",
+        "key": "follow_ups",
+        "expected": 200,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "office",
+        "key": "announcements",
+        "expected": 403,
+        "status": 403,
+        "pass": true
+      },
+      {
+        "role": "office",
+        "key": "email_templates",
+        "expected": 403,
+        "status": 403,
+        "pass": true
+      },
+      {
+        "role": "office",
+        "key": "addresses",
+        "expected": 200,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "office",
+        "key": "accounts",
+        "expected": 403,
+        "status": 403,
+        "pass": true
+      },
+      {
+        "role": "office",
+        "key": "notifications",
+        "expected": 403,
+        "status": 403,
+        "pass": true
+      },
+      {
+        "role": "office",
+        "key": "company_settings",
+        "expected": 403,
+        "status": 403,
+        "pass": true
+      },
+      {
+        "role": "accounting",
+        "key": "customers",
+        "expected": 403,
+        "status": 403,
+        "pass": true
+      },
+      {
+        "role": "accounting",
+        "key": "quotations",
+        "expected": 403,
+        "status": 403,
+        "pass": true
+      },
+      {
+        "role": "accounting",
+        "key": "contracts",
+        "expected": 403,
+        "status": 200,
+        "pass": false
+      },
+      {
+        "role": "accounting",
+        "key": "invoices",
+        "expected": 200,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "accounting",
+        "key": "receipts",
+        "expected": 200,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "accounting",
+        "key": "bills",
+        "expected": 200,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "accounting",
+        "key": "payments",
+        "expected": 200,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "accounting",
+        "key": "transactions",
+        "expected": 200,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "accounting",
+        "key": "purchase_orders",
+        "expected": 403,
+        "status": 403,
+        "pass": true
+      },
+      {
+        "role": "accounting",
+        "key": "delivery_notes",
+        "expected": 403,
+        "status": 403,
+        "pass": true
+      },
+      {
+        "role": "accounting",
+        "key": "products",
+        "expected": 403,
+        "status": 403,
+        "pass": true
+      },
+      {
+        "role": "accounting",
+        "key": "services",
+        "expected": 403,
+        "status": 403,
+        "pass": true
+      },
+      {
+        "role": "accounting",
+        "key": "suppliers",
+        "expected": 403,
+        "status": 403,
+        "pass": true
+      },
+      {
+        "role": "accounting",
+        "key": "stock_adjustments",
+        "expected": 403,
+        "status": 403,
+        "pass": true
+      },
+      {
+        "role": "accounting",
+        "key": "stock_counts",
+        "expected": 403,
+        "status": 403,
+        "pass": true
+      },
+      {
+        "role": "accounting",
+        "key": "employees",
+        "expected": 403,
+        "status": 403,
+        "pass": true
+      },
+      {
+        "role": "accounting",
+        "key": "attendances",
+        "expected": 403,
+        "status": 403,
+        "pass": true
+      },
+      {
+        "role": "accounting",
+        "key": "check_ins",
+        "expected": 403,
+        "status": 403,
+        "pass": true
+      },
+      {
+        "role": "accounting",
+        "key": "leave_records",
+        "expected": 200,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "accounting",
+        "key": "schedules",
+        "expected": 403,
+        "status": 403,
+        "pass": true
+      },
+      {
+        "role": "accounting",
+        "key": "recurring_schedules",
+        "expected": 403,
+        "status": 403,
+        "pass": true
+      },
+      {
+        "role": "accounting",
+        "key": "work_records",
+        "expected": 403,
+        "status": 403,
+        "pass": true
+      },
+      {
+        "role": "accounting",
+        "key": "work_units",
+        "expected": 403,
+        "status": 403,
+        "pass": true
+      },
+      {
+        "role": "accounting",
+        "key": "service_plan_logs",
+        "expected": 403,
+        "status": 403,
+        "pass": true
+      },
+      {
+        "role": "accounting",
+        "key": "service_plan_dates",
+        "expected": 403,
+        "status": 403,
+        "pass": true
+      },
+      {
+        "role": "accounting",
+        "key": "supply_records",
+        "expected": 200,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "accounting",
+        "key": "work_instructions",
+        "expected": 403,
+        "status": 403,
+        "pass": true
+      },
+      {
+        "role": "accounting",
+        "key": "vehicles",
+        "expected": 403,
+        "status": 403,
+        "pass": true
+      },
+      {
+        "role": "accounting",
+        "key": "vehicle_expenses",
+        "expected": 200,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "accounting",
+        "key": "pesticides",
+        "expected": 403,
+        "status": 403,
+        "pass": true
+      },
+      {
+        "role": "accounting",
+        "key": "leads",
+        "expected": 403,
+        "status": 403,
+        "pass": true
+      },
+      {
+        "role": "accounting",
+        "key": "follow_ups",
+        "expected": 403,
+        "status": 403,
+        "pass": true
+      },
+      {
+        "role": "accounting",
+        "key": "announcements",
+        "expected": 403,
+        "status": 403,
+        "pass": true
+      },
+      {
+        "role": "accounting",
+        "key": "email_templates",
+        "expected": 403,
+        "status": 403,
+        "pass": true
+      },
+      {
+        "role": "accounting",
+        "key": "addresses",
+        "expected": 403,
+        "status": 403,
+        "pass": true
+      },
+      {
+        "role": "accounting",
+        "key": "accounts",
+        "expected": 200,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "accounting",
+        "key": "notifications",
+        "expected": 403,
+        "status": 403,
+        "pass": true
+      },
+      {
+        "role": "accounting",
+        "key": "company_settings",
+        "expected": 403,
+        "status": 403,
+        "pass": true
+      },
+      {
+        "role": "management",
+        "key": "customers",
+        "expected": 200,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "management",
+        "key": "quotations",
+        "expected": 200,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "management",
+        "key": "contracts",
+        "expected": 200,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "management",
+        "key": "invoices",
+        "expected": 200,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "management",
+        "key": "receipts",
+        "expected": 200,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "management",
+        "key": "bills",
+        "expected": 200,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "management",
+        "key": "payments",
+        "expected": 200,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "management",
+        "key": "transactions",
+        "expected": 200,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "management",
+        "key": "purchase_orders",
+        "expected": 200,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "management",
+        "key": "delivery_notes",
+        "expected": 200,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "management",
+        "key": "products",
+        "expected": 200,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "management",
+        "key": "services",
+        "expected": 200,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "management",
+        "key": "suppliers",
+        "expected": 200,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "management",
+        "key": "stock_adjustments",
+        "expected": 200,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "management",
+        "key": "stock_counts",
+        "expected": 200,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "management",
+        "key": "employees",
+        "expected": 200,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "management",
+        "key": "attendances",
+        "expected": 200,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "management",
+        "key": "check_ins",
+        "expected": 200,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "management",
+        "key": "leave_records",
+        "expected": 200,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "management",
+        "key": "schedules",
+        "expected": 200,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "management",
+        "key": "recurring_schedules",
+        "expected": 200,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "management",
+        "key": "work_records",
+        "expected": 200,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "management",
+        "key": "work_units",
+        "expected": 200,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "management",
+        "key": "service_plan_logs",
+        "expected": 200,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "management",
+        "key": "service_plan_dates",
+        "expected": 200,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "management",
+        "key": "supply_records",
+        "expected": 200,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "management",
+        "key": "work_instructions",
+        "expected": 200,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "management",
+        "key": "vehicles",
+        "expected": 200,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "management",
+        "key": "vehicle_expenses",
+        "expected": 200,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "management",
+        "key": "pesticides",
+        "expected": 200,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "management",
+        "key": "leads",
+        "expected": 200,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "management",
+        "key": "follow_ups",
+        "expected": 200,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "management",
+        "key": "announcements",
+        "expected": 200,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "management",
+        "key": "email_templates",
+        "expected": 200,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "management",
+        "key": "addresses",
+        "expected": 200,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "management",
+        "key": "accounts",
+        "expected": 200,
+        "status": 200,
+        "pass": true
+      },
+      {
+        "role": "management",
+        "key": "notifications",
+        "expected": 403,
+        "status": 403,
+        "pass": true
+      },
+      {
+        "role": "management",
+        "key": "company_settings",
+        "expected": 200,
+        "status": 200,
+        "pass": true
+      }
+    ]
+  },
+  "evidence": {
+    "quotation": {
+      "document_date": "",
+      "quotation_type": "服務",
+      "document_language": "",
+      "quotation_number": "SQP-2026-1086",
+      "quotation_name": "SQP-2026-1086_測試單位_滅蟲服務",
+      "quotation_link": "",
+      "tender_number": "",
+      "tender_documents": [],
+      "assigned_admin": "",
+      "assigned_admin_name": "",
+      "customer_source": "",
+      "lead_id": "",
+      "customer_id": "cus_mvntuqbx_d25737d32791",
+      "customer_name": "QA-mvntu13f-客戶",
+      "customer_type": "標準",
+      "main_customer": "",
+      "customer_code": "",
+      "contact_person": "",
+      "customer_tel": "9999 0000",
+      "customer_fax": "",
+      "customer_email": "",
+      "service_address": "香港測試地址 1 號",
+      "delivery_address": "",
+      "work_unit_id": "",
+      "work_unit_name": "測試單位",
+      "work_content": "滅蟲服務",
+      "service_location": "測試地點",
+      "service_scope": "",
+      "work_instructions": {},
+      "pesticides": [],
+      "work_date": "",
+      "items": [
+        {
+          "item_name": "服務費",
+          "quantity": 2,
+          "unit_price": 100,
+          "discount": 10,
+          "unit": "次",
+          "total": 190
+        }
+      ],
+      "subtotal": 190,
+      "freight_charges": 20,
+      "discount": 5,
+      "total_amount": 205,
+      "payment_terms": "",
+      "validity": "",
+      "delivery_terms": "",
+      "remarks": {},
+      "show_service_item_quantity_unit": false,
+      "show_service_item_total": false,
+      "show_ipm_description": false,
+      "show_item_description": false,
+      "submission_method": "",
+      "submission_methods": {},
+      "deadline_date": "",
+      "deadline_time": "",
+      "stage": "",
+      "delivery_date": "",
+      "delivery_channel": "",
+      "delivery_person": "",
+      "notes": "",
+      "accepted": false,
+      "accepted_date": "",
+      "pdf_url": "",
+      "id": "quo_mvntuqny_a26e06616969",
+      "created_date": "2026-10-25T12:52:07.730Z",
+      "updated_date": "2026-10-25T12:52:07.730Z",
+      "created_by": "office@demo.hk",
+      "created_by_id": "u-office",
+      "__deleted": false
+    }
+  }
+}

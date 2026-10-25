@@ -16,7 +16,8 @@
 //   3. 帶不存在的 __id、但沒有 __expected_updated（舊頁面快取）→ 仍須成功建立，不得 404
 //   4. 真的在編輯已不存在的記錄（帶 __expected_updated）→ 必須回錯誤頁並顯示訊息，且不寫入
 //   5. 數量類欄位（quantity / qty / stock_quantity / quantity_change）不得有小數
-//   6. 跑完自動清除本測試建立的記錄
+//   6. 補給彈窗不顯示員工 ID；下拉在清單內捲動不得自動關閉
+//   7. 跑完自動清除本測試建立的記錄
 
 import fs from 'node:fs';
 import { DatabaseSync } from 'node:sqlite';
@@ -203,6 +204,22 @@ for (const [label, path] of [['補給記錄', '/mysupply?new=1'], ['請假紀錄
   });
   check('商品庫存小數被擋下', r.status === 400 && r.flash.includes('整數'), `HTTP ${r.status} ${r.flash}`);
   check('商品未寫入', countOf('Product') === before);
+}
+
+// ── 5d. 彈窗欄位與下拉行為（2026-10-25 晚間回報）──────
+{
+  const cookie = await login('front');
+  const { html } = await getHtml(cookie, '/mysupply?new=1');
+
+  // 彈窗不該再顯示「員工 ID」，但要保留隱藏欄位讓資料完整
+  const dlg = /<dialog[^>]*id="recDlg"[\s\S]*?<\/dialog>/.exec(html)?.[0] || '';
+  const labels = [...dlg.matchAll(/<label[^>]*>([\s\S]*?)<\/label>/g)].map((m) => m[1].replace(/<[^>]+>/g, '').trim());
+  check('補給彈窗不再顯示員工 ID', !labels.some((t) => t.includes('員工 ID')), labels.join(' / '));
+  check('員工 ID 仍以隱藏欄位提交', /type="hidden" name="employee_id"/.test(dlg));
+
+  // 下拉在清單內捲動時不得自動關閉（原本用 capture 監聽 window scroll 直接 close）
+  check('下拉捲動不再全域關閉', /menu\.contains\(t\)/.test(html), '檢查 picker 的 scroll 處理是否區分來源');
+  check('下拉不再用 scroll→close 的舊寫法', !/addEventListener\('scroll',\s*close,\s*true\)/.test(html));
 }
 
 // ── 6. 清理 ────────────────────────────────────────

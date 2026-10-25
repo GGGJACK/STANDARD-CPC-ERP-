@@ -118,7 +118,7 @@
   <p>以原系統（standardcpc.base44.app）的視覺語言與原始碼為基線，對復刻系統做一次完整的介面重構：重建設計令牌、側欄與頁首骨架、表格與表單組件，並修掉審查中發現的三個真實渲染缺陷。業務規則與權限一律未動（僅修正新增表單的提交欄位與錯誤處理）。</p>
   <div class="meta">
     <span>2026-10-25</span>
-    <span>改動 7 檔 · +571 / −100 行</span>
+    <span>改動 7 檔 · +587 / −103 行</span>
     <span>驗收 73/73 · 55/55 · 176/176</span>
     <span>無資料庫遷移</span>
   </div>
@@ -127,7 +127,7 @@
 <h2 id="s0"><span class="num">0</span>摘要</h2>
 <div class="kpis">
   <div class="kpi"><b>7</b><span>改動檔案</span></div>
-  <div class="kpi"><b>+571 / −100</b><span>新增 / 刪除行</span></div>
+  <div class="kpi"><b>+587 / −103</b><span>新增 / 刪除行</span></div>
   <div class="kpi"><b>73/73</b><span>前線驗收</span></div>
   <div class="kpi"><b>55/55</b><span>營運回歸</span></div>
   <div class="kpi"><b>176</b><span>四角色頁面冒煙</span></div>
@@ -454,12 +454,12 @@ className: "bg-slate-50"                          <span class="c">// 表頭底�
 <table>
   <thead><tr><th>檔案</th><th>行數</th><th>增 / 刪</th><th>改動內容</th></tr></thead>
   <tbody>
-    <tr><td class="nw"><code>lib/ui.mjs</code></td><td>649 → 1092</td><td>+507 / −88</td><td>設計令牌、側欄骨架、頁首拆分、圖示庫、按鈕與表格渲染、KPI、登入頁、明細選擇器回填</td></tr>
+    <tr><td class="nw"><code>lib/ui.mjs</code></td><td>649 → 1105</td><td>+521 / −89</td><td>設計令牌、側欄骨架、頁首拆分、圖示庫、按鈕與表格渲染、KPI、登入頁、明細選擇器回填</td></tr>
     <tr><td class="nw"><code>lib/pages.mjs</code></td><td>727 → 727</td><td>+5 / −5</td><td>日曆空格類名 <code>empty</code> → <code>is-empty</code>（4 處）；應收台賬 KPI 改走 <code>kpis()</code></td></tr>
     <tr><td class="nw"><code>lib/core.mjs</code></td><td>552 → 554</td><td>+3 / −1</td><td>新增補給／請假彈窗的 <code>__id</code> 改為空值（存檔 404 的根因）</td></tr>
     <tr><td class="nw"><code>lib/actions.mjs</code></td><td>772 → 814</td><td>+44 / −3</td><td><code>saveEntity</code> 對「不存在的 __id」加防禦式回退</td></tr>
     <tr><td class="nw"><code>lib/utils.mjs</code></td><td>274 → 280</td><td>+6 / −0</td><td>新增 <code>isIntegerField()</code>：數量類欄位的整數判定</td></tr>
-    <tr><td class="nw"><code>lib/config.mjs</code></td><td>817 → 817</td><td>+1 / −1</td><td>補給記錄的「產品／工具」欄改以明細表渲染</td></tr>
+    <tr><td class="nw"><code>lib/config.mjs</code></td><td>817 → 817</td><td>+3 / −3</td><td>補給記錄的「產品／工具」欄改以明細表渲染</td></tr>
     <tr><td class="nw"><code>server.mjs</code></td><td>838 → 841</td><td>+5 / −2</td><td>庫存頁重複幣種；錯誤重繪時清除失效的 <code>__id</code></td></tr>
   </tbody>
 </table>
@@ -638,6 +638,56 @@ export const isIntegerField = (field) =&gt; field?.integer === true
 </table>
 <p>另外實測：<b>庫存 204.5 的舊商品原樣重存仍可成功</b>（302），證明放行規則生效。瀏覽器端實測輸入 <code>2.5</code> 顯示為 <code>2</code>、輸入 <code>-3</code> 顯示為 <code>3</code>、輸入 <code>12</code> 正常。</p>
 <p>既有三套回歸全過：前線 73/73、營運 55/55、補給請假與數量 25/25、四角色 176 頁冒煙 0 問題。</p>
+
+
+<h3>9.8 彈窗微調：移除員工 ID、修好「一滑就關」的下拉</h3>
+
+<div class="callout">
+  <b>回報（兩條一起）</b>
+  ① 新增補給記錄彈窗裡的「員工 ID」沒有人看，拿掉。<br>
+  ② 新增產品／工具時，下拉清單一滑動就自動關閉，根本選不到後面的項目。
+</div>
+
+<h4>② 為什麼一滑就關</h4>
+<p>選擇器的下拉是 <code>position:fixed</code> 的浮層，為了避免輸入框被捲走時浮層還留在原地，原本寫了這一行：</p>
+<pre>window.addEventListener('scroll', close, true);   <span class="c">// 第三個參數 true = 捕獲階段</span></pre>
+<p><b>捕獲階段會在事件到達目標之前就先觸發</b>，所以連「在清單裡面自己捲」也會被 window 收到。而清單有 50 筆、高 1,694px、可視高度只有 418px——一滑就觸發 <code>close()</code>，表現出來就是「手指一動，下拉消失」。</p>
+<p>實測重現：<code>menu.scrollTop = 120</code> → <code>hidden = true</code>。</p>
+
+<h4>改法：分三種情況處理，而不是一律關</h4>
+<pre>window.addEventListener('scroll', function (e) {
+  if (menu.hidden) return;
+  var t = e.target;
+  if (t &amp;&amp; t !== document &amp;&amp; (t === menu || menu.contains(t))) return;  <span class="c">// ① 清單自己捲 → 不關</span>
+  if (!input.isConnected) { close(); return; }
+  var r = input.getBoundingClientRect();
+  if (r.bottom &lt; 0 || r.top &gt; window.innerHeight) { close(); return; }  <span class="c">// ③ 錨點離開視窗 → 關</span>
+  place();                                                               <span class="c">// ② 頁面/彈窗捲動 → 跟著錨點重算位置</span>
+}, true);</pre>
+<p>順帶解決另一半：以前在彈窗裡往下捲去找下面的欄位時，只要下拉開著也會被關掉；現在它會跟著輸入框移動。</p>
+
+<h4>① 員工 ID 改成隱藏欄位</h4>
+<p>不是直接刪掉，而是 <code>hidden: true</code>——畫面上不渲染，但仍以隱藏 input 提交。<code>formGrid()</code> 會把它輸出成 <code>&lt;input type="hidden"&gt;</code>，員工選擇器的 <code>pkApplyFill()</code> 也還是找得到 <code>[name="employee_id"]</code> 並回填，所以「辦公室替某位員工登記」時關聯不會丟。</p>
+<p>請假紀錄用的是同一個彈窗、同一個沒人看的欄位，一併收起來了。</p>
+<p>順手調了兩張表單的欄位順序——原本「員工 ID」正好填滿右欄，拿掉後會出現空格：</p>
+<ul>
+  <li><b>補給</b>：日期 ｜ 補給位置（第一列）→ 員工姓名（整列）。</li>
+  <li><b>請假</b>：請假天數 ｜ 狀態（原本兩個各佔一列、右邊留空）→ 請假原因（整列）→ 備註（整列）。</li>
+</ul>
+
+<h4>驗證</h4>
+<table>
+  <thead><tr><th>檢查</th><th>結果</th></tr></thead>
+  <tbody>
+    <tr><td>彈窗可見欄位：日期 / 員工姓名 / 補給位置 / 產品列表 / 工具列表 / 備註（無員工 ID）</td><td><span class="pill g">通過</span></td></tr>
+    <tr><td><code>employee_id</code> 仍以隱藏欄位提交</td><td><span class="pill g">通過</span></td></tr>
+    <tr><td>產品下拉 50 筆，清單內捲到 <code>scrollTop=120</code> 仍保持開啟</td><td><span class="pill g">通過</span></td></tr>
+    <tr><td>工具下拉 10 筆，捲動仍保持開啟</td><td><span class="pill g">通過</span></td></tr>
+    <tr><td>捲動彈窗本體時下拉不關閉</td><td><span class="pill g">通過</span></td></tr>
+    <tr><td>選中「驅殺至尊」→ 明細寫入 <code>product_name</code> 與 <code>product_id</code>，選單才關閉</td><td><span class="pill g">通過</span></td></tr>
+  </tbody>
+</table>
+<p>回歸腳本擴到 <b>29 項</b>（新增 4 項守住這兩個問題），全數通過；前線 73/73、營運 55/55、四角色 176 頁冒煙 0 問題。</p>
 
 <div class="footer">
   標準清潔滅蟲 · 管理系統復刻 · 四期第四次修改（UI 系統性改造）<br>

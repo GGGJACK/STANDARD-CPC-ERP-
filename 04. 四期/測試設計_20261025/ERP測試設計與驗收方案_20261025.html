@@ -1,0 +1,1883 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>標準清潔滅蟲 ERP · 測試設計與驗收方案</title>
+<style>
+:root{--brand:#0f766e;--brand-2:#0b5f58;--brand-50:#ecfdf5;--ink:#0f172a;--ink-2:#334155;--muted:#64748b;--line:#e4e9f0;--bg:#f6f8fb;--card:#fff;--bad:#b42318;--bad-50:#fef3f2;--ok:#067647;--warn:#b54708;--warn-50:#fffaeb;--r:12px;--r-sm:8px;--mono:ui-monospace,SFMono-Regular,Consolas,"Liberation Mono",monospace}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.7 "Microsoft YaHei","PingFang TC","Noto Sans CJK SC",system-ui,sans-serif}
+a{color:var(--brand);text-decoration:none}
+.layout{display:grid;grid-template-columns:256px minmax(0,1fr);gap:0;max-width:1500px;margin:0 auto}
+aside{position:sticky;top:0;height:100vh;overflow:auto;padding:26px 18px 40px 24px;border-right:1px solid var(--line);background:#fff}
+aside .brand{display:flex;gap:10px;align-items:center;margin-bottom:6px}
+aside .logo{width:40px;height:40px;border-radius:11px;background:linear-gradient(135deg,#2563eb,#0d9488);color:#fff;display:grid;place-items:center;font-weight:700;font-size:15px}
+aside b{display:block;font-size:14px;line-height:1.3}
+aside .ver{color:var(--muted);font-size:11px}
+nav{margin-top:22px;font-size:12.5px}
+nav a{display:block;padding:6px 10px;border-radius:7px;color:var(--ink-2)}
+nav a:hover{background:var(--brand-50);color:var(--brand-2)}
+nav .grp{margin:14px 0 4px;padding:0 10px;font-size:11px;letter-spacing:.08em;color:var(--muted);font-weight:700}
+main{padding:38px 44px 90px;min-width:0}
+h1{font-size:29px;line-height:1.3;margin:0 0 8px;letter-spacing:-.01em}
+h2{font-size:20px;margin:46px 0 14px;padding-top:20px;border-top:1px solid var(--line)}
+h3{font-size:15px;margin:0}
+h4{font-size:13.5px;margin:20px 0 8px}
+.sub{color:var(--muted);font-size:13px}
+.lead{font-size:15px;color:var(--ink-2);max-width:980px}
+.meta{display:flex;flex-wrap:wrap;gap:8px;margin:18px 0 0}
+.chip{background:#fff;border:1px solid var(--line);border-radius:999px;padding:5px 11px;font-size:12px;color:var(--ink-2)}
+.cards{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin:22px 0}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:16px 16px 14px}
+.card .k{font-size:11.5px;color:var(--muted);letter-spacing:.02em}
+.card .v{font-size:27px;font-weight:700;line-height:1.25;margin-top:3px}
+.card .n{font-size:11.5px;color:var(--muted)}
+.card.ok .v{color:var(--ok)}.card.bad .v{color:var(--bad)}
+.verdict{background:#fff;border:1px solid var(--line);border-left:4px solid var(--bad);border-radius:10px;padding:16px 18px;margin:18px 0}
+.verdict b{color:var(--bad)}
+.note{background:var(--warn-50);border:1px solid #fedf89;border-radius:10px;padding:12px 14px;color:#7a2e0e;font-size:13px;margin:14px 0}
+.good{background:var(--brand-50);border:1px solid #b7e4d8;border-radius:10px;padding:12px 14px;color:#0b4f47;font-size:13px;margin:14px 0}
+table{width:100%;border-collapse:collapse;background:#fff;border:1px solid var(--line);border-radius:10px;overflow:hidden;font-size:12.5px}
+th,td{padding:9px 10px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+th{background:#f8fafc;color:#334155;font-weight:600;white-space:nowrap;position:sticky;top:0;z-index:1}
+tr:last-child td{border-bottom:0}
+tbody tr:hover{background:#fbfdff}
+.mono{font-family:var(--mono);font-size:11.5px;white-space:nowrap}
+.nowrap{white-space:nowrap}
+.muted{color:var(--muted)}
+.small{font-size:11.5px;line-height:1.55}
+.ok{color:var(--ok);font-weight:600}.no{color:var(--bad);font-weight:600}
+.pill{display:inline-block;padding:1px 7px;border-radius:999px;font-size:11px;font-weight:700;border:1px solid transparent}
+.p-p0{background:var(--bad-50);color:var(--bad);border-color:#fecdca}
+.p-p1{background:var(--warn-50);color:var(--warn);border-color:#fedf89}
+.p-p2{background:#eef2f7;color:#475569;border-color:#dbe3ec}
+.tag{display:inline-block;padding:1px 6px;border-radius:5px;background:#f1f5f9;color:#475569;font-size:11px}
+.st-pass{color:var(--ok);font-weight:700;font-size:11.5px;white-space:nowrap}
+.st-fail{color:var(--bad);font-weight:700;font-size:11.5px;white-space:nowrap}
+.sev{color:var(--bad);font-family:var(--mono)}
+.steps{margin:3px 0 0;padding-left:16px;color:var(--ink-2)}.steps li{margin:1px 0}
+.pre{color:var(--muted);font-size:11.5px}
+.module{margin:28px 0 34px;scroll-margin-top:20px}
+.mhead{display:flex;justify-content:space-between;gap:16px;align-items:flex-end;border-bottom:2px solid var(--line);padding-bottom:8px;margin-bottom:8px}
+.mhead>div:first-child{display:flex;align-items:center;gap:10px}
+.mcode{font-family:var(--mono);font-size:11px;background:var(--brand-50);color:var(--brand-2);padding:3px 7px;border-radius:6px;font-weight:700}
+.mmeta{display:flex;gap:14px;font-size:11.5px;color:var(--muted);white-space:nowrap}
+.mmeta b{color:var(--ink-2)}
+.risk-x{color:var(--bad)}.risk-h{color:var(--warn)}.risk-m{color:var(--ink-2)}
+.goal{font-size:12px;color:var(--muted);margin:6px 0 10px}
+.tablewrap{overflow:auto;border-radius:10px}
+.cases{min-width:1000px;table-layout:fixed}
+.cases td{font-size:12px;line-height:1.55}
+.cases td:nth-child(5){min-width:0}
+.scroll{overflow:auto;max-height:640px;border-radius:10px}
+.matrix td,.matrix th{text-align:center;white-space:nowrap}
+.matrix td:first-child,.matrix th:first-child,.matrix td:nth-child(2),.matrix th:nth-child(2){text-align:left}
+.cellbad{background:#fff1f3}
+.legend{font-size:11.5px;color:var(--muted);margin:8px 2px 0}
+.bar{height:6px;background:#eef2f7;border-radius:999px;overflow:hidden;margin:2px 0 3px;min-width:80px}
+.bar i{display:block;height:100%;background:linear-gradient(90deg,#0d9488,#2563eb)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.panel{background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px 18px}
+.panel h4{margin-top:0}
+ul.tight{margin:6px 0 0;padding-left:18px}ul.tight li{margin:3px 0}
+pre{background:#0f172a;color:#e2e8f0;padding:14px 16px;border-radius:10px;overflow:auto;font:12px/1.7 var(--mono);margin:10px 0}
+code{font-family:var(--mono);font-size:11.5px;background:#f1f5f9;padding:1px 5px;border-radius:4px}
+pre code{background:none;padding:0;font-size:inherit}
+.chain{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin:8px 0 16px}
+.chain .node{background:#fff;border:1px solid var(--line);border-radius:8px;padding:5px 9px;font-size:12px}
+.chain .arr{color:var(--muted);font-size:12px}
+.state{display:flex;flex-wrap:wrap;gap:6px;align-items:center;font-size:12px;margin:6px 0 14px}
+.state .s{border:1px solid var(--line);background:#fff;border-radius:999px;padding:3px 10px}
+.state .s.bad{color:var(--bad);border-color:#fecdca;background:var(--bad-50)}
+.toc-note{font-size:11px;color:var(--muted);margin-top:18px;padding-top:12px;border-top:1px solid var(--line)}
+footer{margin-top:60px;padding-top:18px;border-top:1px solid var(--line);color:var(--muted);font-size:11.5px}
+@media (max-width:1080px){.layout{grid-template-columns:1fr}aside{position:relative;height:auto;border-right:0;border-bottom:1px solid var(--line)}nav{columns:2}main{padding:26px 20px 70px}.cards{grid-template-columns:1fr 1fr}.grid2{grid-template-columns:1fr}}
+@media print{.cases{min-width:0;table-layout:auto;font-size:8.5pt}body{background:#fff}aside{display:none}.layout{display:block}main{padding:0;max-width:none}h2{page-break-after:avoid}.module{page-break-inside:auto}tr{page-break-inside:avoid}.tablewrap,.scroll{overflow:visible;max-height:none}pre{white-space:pre-wrap}}
+</style>
+</head>
+<body>
+<div class="layout">
+<aside>
+  <div class="brand"><div class="logo">CPC</div><div><b>測試設計與驗收</b><span class="ver">v1.0 · 2026-10-25</span></div></div>
+  <nav>
+    <div class="grp">總覽</div>
+    <a href="#s0">0 · 結論摘要</a>
+    <a href="#s1">1 · 對象與範圍</a>
+    <a href="#s2">2 · 驗收依據</a>
+    <a href="#s3">3 · 設計方法</a>
+    <a href="#s4">4 · 分層與自動化</a>
+    <div class="grp">執行</div>
+    <a href="#s5">5 · 環境與數據</a>
+    <a href="#s6">6 · 判定與缺陷</a>
+    <a href="#s7">7 · 詳細用例</a>
+    <a href="#m-SYS" style="padding-left:20px">SYS · 啟動、部署與健康檢查</a><a href="#m-AUTH" style="padding-left:20px">AUTH · 認證、會話與 CSRF</a><a href="#m-PERM" style="padding-left:20px">PERM · 角色與權限矩陣</a><a href="#m-CUS" style="padding-left:20px">CUS · 客戶管理</a><a href="#m-LEA" style="padding-left:20px">LEA · 線索與跟進</a><a href="#m-QUO" style="padding-left:20px">QUO · 報價管理</a><a href="#m-PO" style="padding-left:20px">PO · 採購單管理</a><a href="#m-CON" style="padding-left:20px">CON · 合約與服務安排</a><a href="#m-DN" style="padding-left:20px">DN · 送貨單與出庫</a><a href="#m-INV" style="padding-left:20px">INV · 發票管理</a><a href="#m-RCP" style="padding-left:20px">RCP · 收據管理</a><a href="#m-BIL" style="padding-left:20px">BIL · 帳單管理</a><a href="#m-PAY" style="padding-left:20px">PAY · 付款記錄</a><a href="#m-TXN" style="padding-left:20px">TXN · 總帳與會計</a><a href="#m-STK" style="padding-left:20px">STK · 庫存、調整與盤點</a><a href="#m-SCH" style="padding-left:20px">SCH · 排班與定期排程</a><a href="#m-SPL" style="padding-left:20px">SPL · 服務計劃與紀錄日</a><a href="#m-SR" style="padding-left:20px">SR · 服務報告與簽署</a><a href="#m-ATT" style="padding-left:20px">ATT · 出勤、打卡與月度表</a><a href="#m-LV" style="padding-left:20px">LV · 請假管理</a><a href="#m-SUP" style="padding-left:20px">SUP · 補給記錄</a><a href="#m-VEH" style="padding-left:20px">VEH · 車輛與費用</a><a href="#m-MDM" style="padding-left:20px">MDM · 主數據（產品/服務/供應商/藥物/單位/細則/地址）</a><a href="#m-USR" style="padding-left:20px">USR · 用戶、員工與系統設置</a><a href="#m-TRS" style="padding-left:20px">TRS · 回收桶</a><a href="#m-EXP" style="padding-left:20px">EXP · 匯入、匯出與列印</a><a href="#m-DAT" style="padding-left:20px">DAT · 資料完整性與遷移品質</a><a href="#m-SEC" style="padding-left:20px">SEC · 安全專項</a><a href="#m-PERF" style="padding-left:20px">PERF · 效能與容量</a><a href="#m-UI" style="padding-left:20px">UI · 介面與相容性</a>
+    <div class="grp">驗證</div>
+    <a href="#s8">8 · 權限矩陣</a>
+    <a href="#s9">9 · 業務鏈</a>
+    <a href="#s10">10 · 執行計劃</a>
+    <a href="#s11">11 · 基線結果</a>
+    <a href="#s12">12 · 風險與待辦</a>
+    <a href="#s13">附錄 · 工具用法</a>
+  </nav>
+  <div class="toc-note">用 Windows 11 · Node 22.22.2 · SQLite (node:sqlite) · 生產 :3000 / 隔離 :3101-3102</div>
+</aside>
+<main>
+  <h1>標準清潔滅蟲 ERP · 測試設計與驗收方案</h1>
+  <p class="lead">把「每一項怎麼測、憑什麼判定達標」落成一張可執行的清單：38 個實體、4 個角色、5 條主業務鏈，逐項給出前置條件、操作步驟、預期結果與判定標準，並用同一份用例驅動自動化驗收。</p>
+  <div class="meta">
+    <span class="chip">系統：標準清潔滅蟲管理系統（本地 Node.js + SQLite 復刻版）</span>
+    <span class="chip">範圍：38 個實體、4 個角色、5 大業務域、62 條路由、34,053 條既有記錄</span>
+    <span class="chip">基線：107/115 通過</span>
+    <span class="chip">用例：161 項（自動化 99）</span>
+  </div>
+
+  <h2 id="s0">0 · 結論摘要</h2>
+  <div class="cards">
+    <div class="card"><div class="k">基線檢查項</div><div class="v">115</div><div class="n">其中自動化斷言 115 條</div></div>
+    <div class="card ok"><div class="k">通過率</div><div class="v">93%</div><div class="n">107 通過 / 8 失敗</div></div>
+    <div class="card bad"><div class="k">P0 阻斷項</div><div class="v">57/58</div><div class="n">准入要求 100%</div></div>
+    <div class="card bad"><div class="k">待修缺陷</div><div class="v">8</div><div class="n">1 個 S1、3 個 S2、4 個 S3</div></div>
+  </div>
+  <div class="verdict">
+    <b>准入結論：暫不放行。</b> 本輪 115 項檢查中 8 項未通過，其中 P0 僅 1 項：刪除「已過賬盤點」會把庫存從 12 直接沖成 0（S1）。 這不是介面問題，而是庫存資料會被寫壞；必須先修復並回歸，纔可進入正式環境。其餘 7 項為 S2/S3（PO 編號缺失、菜單死連結、狀態字典不一致、排班工時未計算、歷史報價金額風險等），可排期修復但不阻斷試運行。
+  </div>
+  <div class="good"><b>可直接使用的部分：</b>角色隔離、CSRF、XSS 轉義、上傳路徑、送貨扣庫、收款核銷、借貸平衡、軟刪除與還原、CSV 權限、四個重頁效能（均 &lt; 3s）本輪全部通過。</div>
+
+  <h2 id="s1">1 · 測試對象與範圍</h2>
+  <p>對象是本地復刻的標準清潔滅蟲管理系統：Node.js 單體服務 + SQLite（<code>records</code> 單表 + JSON），四角色（前線 / 辦公室 / 會計 / 管理層），38 個業務實體、6 組導航、5 大業務域。測試以「角色 × 實體 × 操作」為覆蓋骨架，再疊加 5 條跨模組業務鏈。</p>
+  <h4>1.1 模組與用例分佈</h4>
+  <table><thead><tr><th>模組</th><th>名稱</th><th>用例</th><th>自動化</th><th>基線</th><th>風險</th></tr></thead><tbody>
+  <tr><td class="mono">SYS</td><td>啟動、部署與健康檢查</td><td>5</td><td>3</td><td><div class="bar"><i style="width:100%"></i></div><span class="small">3/3 · 100%</span></td><td>高</td></tr><tr><td class="mono">AUTH</td><td>認證、會話與 CSRF</td><td>8</td><td>7</td><td><div class="bar"><i style="width:100%"></i></div><span class="small">7/7 · 100%</span></td><td>極高</td></tr><tr><td class="mono">PERM</td><td>角色與權限矩陣</td><td>6</td><td>6</td><td><div class="bar"><i style="width:89.5%"></i></div><span class="small">17/19 · 89.5%</span></td><td>極高</td></tr><tr><td class="mono">CUS</td><td>客戶管理</td><td>6</td><td>6</td><td><div class="bar"><i style="width:100%"></i></div><span class="small">6/6 · 100%</span></td><td>高</td></tr><tr><td class="mono">LEA</td><td>線索與跟進</td><td>3</td><td>0</td><td><span class="muted">手工</span></td><td>中</td></tr><tr><td class="mono">QUO</td><td>報價管理</td><td>9</td><td>8</td><td><div class="bar"><i style="width:87.5%"></i></div><span class="small">7/8 · 87.5%</span></td><td>極高</td></tr><tr><td class="mono">PO</td><td>採購單管理</td><td>7</td><td>7</td><td><div class="bar"><i style="width:100%"></i></div><span class="small">7/7 · 100%</span></td><td>高</td></tr><tr><td class="mono">CON</td><td>合約與服務安排</td><td>6</td><td>5</td><td><div class="bar"><i style="width:100%"></i></div><span class="small">5/5 · 100%</span></td><td>高</td></tr><tr><td class="mono">DN</td><td>送貨單與出庫</td><td>5</td><td>5</td><td><div class="bar"><i style="width:100%"></i></div><span class="small">5/5 · 100%</span></td><td>極高</td></tr><tr><td class="mono">INV</td><td>發票管理</td><td>7</td><td>6</td><td><div class="bar"><i style="width:83.3%"></i></div><span class="small">5/6 · 83.3%</span></td><td>極高</td></tr><tr><td class="mono">RCP</td><td>收據管理</td><td>3</td><td>0</td><td><span class="muted">手工</span></td><td>中</td></tr><tr><td class="mono">BIL</td><td>帳單管理</td><td>3</td><td>0</td><td><span class="muted">手工</span></td><td>中</td></tr><tr><td class="mono">PAY</td><td>付款記錄</td><td>2</td><td>0</td><td><span class="muted">手工</span></td><td>中</td></tr><tr><td class="mono">TXN</td><td>總帳與會計</td><td>5</td><td>4</td><td><div class="bar"><i style="width:100%"></i></div><span class="small">4/4 · 100%</span></td><td>極高</td></tr><tr><td class="mono">STK</td><td>庫存、調整與盤點</td><td>9</td><td>9</td><td><div class="bar"><i style="width:77.8%"></i></div><span class="small">7/9 · 77.8%</span></td><td>極高</td></tr><tr><td class="mono">SCH</td><td>排班與定期排程</td><td>7</td><td>5</td><td><div class="bar"><i style="width:80%"></i></div><span class="small">4/5 · 80%</span></td><td>高</td></tr><tr><td class="mono">SPL</td><td>服務計劃與紀錄日</td><td>4</td><td>0</td><td><span class="muted">手工</span></td><td>中</td></tr><tr><td class="mono">SR</td><td>服務報告與簽署</td><td>5</td><td>0</td><td><span class="muted">手工</span></td><td>高</td></tr><tr><td class="mono">ATT</td><td>出勤、打卡與月度表</td><td>5</td><td>0</td><td><span class="muted">手工</span></td><td>中</td></tr><tr><td class="mono">LV</td><td>請假管理</td><td>4</td><td>4</td><td><div class="bar"><i style="width:100%"></i></div><span class="small">4/4 · 100%</span></td><td>中</td></tr><tr><td class="mono">SUP</td><td>補給記錄</td><td>4</td><td>3</td><td><div class="bar"><i style="width:100%"></i></div><span class="small">3/3 · 100%</span></td><td>中</td></tr><tr><td class="mono">VEH</td><td>車輛與費用</td><td>4</td><td>0</td><td><span class="muted">手工</span></td><td>中</td></tr><tr><td class="mono">MDM</td><td>主數據（產品/服務/供應商/藥物/單位/細則/地址）</td><td>5</td><td>0</td><td><span class="muted">手工</span></td><td>中</td></tr><tr><td class="mono">USR</td><td>用戶、員工與系統設置</td><td>4</td><td>0</td><td><span class="muted">手工</span></td><td>高</td></tr><tr><td class="mono">TRS</td><td>回收桶</td><td>6</td><td>3</td><td><div class="bar"><i style="width:100%"></i></div><span class="small">3/3 · 100%</span></td><td>高</td></tr><tr><td class="mono">EXP</td><td>匯入、匯出與列印</td><td>5</td><td>2</td><td><div class="bar"><i style="width:100%"></i></div><span class="small">2/2 · 100%</span></td><td>中</td></tr><tr><td class="mono">DAT</td><td>資料完整性與遷移品質</td><td>5</td><td>5</td><td><div class="bar"><i style="width:80%"></i></div><span class="small">4/5 · 80%</span></td><td>高</td></tr><tr><td class="mono">SEC</td><td>安全專項</td><td>8</td><td>4</td><td><div class="bar"><i style="width:100%"></i></div><span class="small">4/4 · 100%</span></td><td>極高</td></tr><tr><td class="mono">PERF</td><td>效能與容量</td><td>5</td><td>2</td><td><div class="bar"><i style="width:100%"></i></div><span class="small">5/5 · 100%</span></td><td>高</td></tr><tr><td class="mono">UI</td><td>介面與相容性</td><td>6</td><td>5</td><td><div class="bar"><i style="width:100%"></i></div><span class="small">5/5 · 100%</span></td><td>中</td></tr>
+  </tbody></table>
+  <h4>1.2 資料規模（決定效能與邊界取樣）</h4>
+  <table><thead><tr><th>表 / 實體</th><th>筆數</th><th>對測試的意義</th></tr></thead><tbody>
+    <tr><td>records（全部業務記錄）</td><td>34,053</td><td>全表 JSON 掃描、遷移完整性</td></tr>
+    <tr><td>Schedule 排班</td><td>13,116</td><td>/schedules 日曆與月視圖效能</td></tr>
+    <tr><td>StockAdjustment 庫存調整</td><td>9,566</td><td>庫存追溯、盤點沖銷鏈</td></tr>
+    <tr><td>Quotation 報價</td><td>1,826</td><td>列表分頁、合計抽樣、轉換鏈</td></tr>
+    <tr><td>Customer 客戶</td><td>1,608</td><td>搜尋、配額、詳情 KPI</td></tr>
+    <tr><td>PurchaseOrder / DeliveryNote</td><td>902 / 1,026</td><td>PO→DN→庫存</td></tr>
+    <tr><td>Invoice / Receipt / StockCount</td><td>205 / 57 / 47</td><td>財務核銷、盤點可逆</td></tr>
+  </tbody></table>
+  <h4>1.3 不在本輪範圍</h4>
+  <ul class="tight">
+    <li>原系統 base44 雲端帳號、郵件/WhatsApp 實際發送、第三方支付與銀行對賬。</li>
+    <li>真實打印機驅動、條碼槍、GPS 打卡硬體；本輪只驗證頁面與 PDF/CSV 產出。</li>
+    <li>跨瀏覽器矩陣（Chrome/Edge 為主）、行動端真機；列為下一輪 UI 專項。</li>
+  </ul>
+
+  <h2 id="s2">2 · 驗收依據（需求從哪裡來）</h2>
+  <p>驗收不能只憑「看起來能用」。本方案的判定依據固定為四類，並要求每條用例至少掛一類：</p>
+  <table><thead><tr><th style="width:70px">編號</th><th>需求 / 約束</th><th>來源</th><th>對應用例</th></tr></thead><tbody>
+  <tr><td class="mono">R-01</td><td><b>四角色權限與菜單</b></td><td>NAV + assertEntity/assertRole</td><td class="mono">PERM-01、PERM-02、PERM-03、PERM-04、PERM-05</td></tr><tr><td class="mono">R-02</td><td><b>報價→PO→合約→發票→收據主鏈</b></td><td>convertQuotation / collectReceipt</td><td class="mono">QUO-05、QUO-06、INV-03、QUO-07</td></tr><tr><td class="mono">R-03</td><td><b>金額計算與編號</b></td><td>recalculate / defaultNumber</td><td class="mono">QUO-01、QUO-02、PO-01、PO-03、INV-01、DN-01</td></tr><tr><td class="mono">R-04</td><td><b>庫存與盤點可逆</b></td><td>saveStockAdjustment / saveStockCount / reverseStockCount</td><td class="mono">STK-02、STK-05、STK-06、STK-07、TRS-05</td></tr><tr><td class="mono">R-05</td><td><b>軟刪除與回收桶</b></td><td>store.softDelete / trashPage</td><td class="mono">QUO-08、PO-05、CON-05、TRS-01、TRS-02、TRS-03</td></tr><tr><td class="mono">R-06</td><td><b>前線唯讀與自助</b></td><td>WORK_READ / ownsRecord</td><td class="mono">SR-02、ATT-05、LV-02、SUP-01</td></tr><tr><td class="mono">R-07</td><td><b>數量整數化</b></td><td>assertIntegerQuantities</td><td class="mono">SUP-02、STK-01、DN-02</td></tr><tr><td class="mono">R-08</td><td><b>匯出僅管理層</b></td><td>server /export/*</td><td class="mono">EXP-01、EXP-02、EXP-03</td></tr><tr><td class="mono">R-09</td><td><b>送貨即時扣庫存且不可重複</b></td><td>saveDeliveryNote</td><td class="mono">DN-02、DN-03、DN-04、DN-05</td></tr><tr><td class="mono">R-10</td><td><b>CSRF/會話/上傳安全</b></td><td>bodyWithCsrf / saveUpload</td><td class="mono">AUTH-03、AUTH-04、SEC-01、SEC-03、SEC-07</td></tr><tr><td class="mono">R-11</td><td><b>UI 設計令牌與不變量</b></td><td>lib/ui.mjs 註釋與 CSS</td><td class="mono">UI-01、UI-02、UI-03、UI-05</td></tr><tr><td class="mono">R-12</td><td><b>大數據量可用性</b></td><td>實測 378/522 行頁面</td><td class="mono">TXN-04、PERF-01、PERF-02</td></tr>
+  </tbody></table>
+  <div class="note"><b>基線原則：</b>原系統行為（源碼 + 截圖 + 34 張原系統截圖）優先於「我認為應該怎樣」；四輪改造的 9×4 條決策為第二依據；代碼中的不變量（如 navgrp 13px/700、__id 必須空、HK$ 只出現一次）為第三依據。三者衝突時，記錄為「設計缺口」而不是直接改測試。</div>
+
+  <h2 id="s3">3 · 設計方法</h2>
+  <div class="panel" style="margin-bottom:16px"><h4>3.0 從零設計這套測試的五步</h4>
+  <ol class="tight">
+    <li><b>先定基線，不先寫用例：</b>把「原系統行為、四輪改造決策、代碼不變量」整理成可引用的需求編號（本文件 R-01～R-12）。沒有基線的斷言，最後都會變成爭論。</li>
+    <li><b>先測權限，再測功能：</b>4 角色 × 38 實體 × 6 層（菜單/直鏈/列表/表單/動作/回收桶）先跑一遍。權限錯了，後面的功能測試資料都不可信。</li>
+    <li><b>畫主鏈與狀態機：</b>報價→PO→合約→發票→收據、PO→DN→庫存、盤點→沖銷，總共 5 條；每條邊至少一條用例，非法邊也要測。</li>
+    <li><b>每條用例寫死判定：</b>HTTP 狀態 + DB 欄位 + 副作用 + 冪等，四層都要有；只看「頁面提示成功」不算過。</li>
+    <li><b>固化與閉環：</b>把可重複的 115 項做成腳本，用例清單導出 CSV 當進度表，失敗項開缺陷單，修完追加永久用例，不刪舊例。</li>
+  </ol></div>
+  <div class="grid2">
+    <div class="panel"><h4>3.1 優先級（決定準入）</h4><table><thead><tr><th>級別</th><th>含義</th><th>准入</th></tr></thead><tbody><tr><td><span class="pill p-p0">P0</span> 阻斷</td><td>核心業務不可用、資料錯誤、越權、金額/庫存失真；必須 100% 通過纔可交付。</td><td>100%</td></tr><tr><td><span class="pill p-p1">P1</span> 重要</td><td>主要功能缺陷或有明確繞過方式；通過率 ≥ 98%，且不得有未關閉項。</td><td>≥98%</td></tr><tr><td><span class="pill p-p2">P2</span> 一般</td><td>體驗、文案、次要欄位、極端邊界；通過率 ≥ 95%，可排期修復。</td><td>≥95%</td></tr></tbody></table></div>
+    <div class="panel"><h4>3.2 測試類型</h4><table><thead><tr><th>類型</th><th>用途</th></tr></thead><tbody><tr><td><span class="tag">功能</span></td><td>正向流程、CRUD、狀態流轉</td></tr><tr><td><span class="tag">邊界</span></td><td>空值、0、負數、小數、超長、最大/最小日期</td></tr><tr><td><span class="tag">異常</span></td><td>必填缺失、非法枚舉、重複提交、庫存不足、借貸不平</td></tr><tr><td><span class="tag">權限</span></td><td>角色可見性、直鏈訪問、表單/動作/匯出/回收桶</td></tr><tr><td><span class="tag">資料</span></td><td>寫入後 DB 斷言、計算一致性、軟刪除與沖銷</td></tr><tr><td><span class="tag">安全</span></td><td>CSRF、XSS、越權 IDOR、上傳路徑、會話</td></tr><tr><td><span class="tag">效能</span></td><td>首字節、整頁耗時、資料量下的穩定性</td></tr><tr><td><span class="tag">UI</span></td><td>版面、彈窗、選擇器、列印、響應式</td></tr></tbody></table></div>
+  </div>
+  <h4>3.3 七種設計技術（本系統的具體用法）</h4>
+  <table><thead><tr><th style="width:120px">技術</th><th>怎麼用</th><th>本系統例子</th></tr></thead><tbody>
+    <tr><td>等價類</td><td>把輸入切成有效/無效類，每類至少一例</td><td>數量：整數 2（有效）、2.5（小數無效）、-1（負數無效）、空（缺省）</td></tr>
+    <tr><td>邊界值</td><td>取 0、1、最大、剛好不足</td><td>庫存 5 出庫 3（成功）/ 出庫 10（409）；請假同一天/跨月</td></tr>
+    <tr><td>判定表</td><td>多條件組合，逐條列出動作</td><td>角色 × 實體 × 查看/新增/匯出/回收桶；4×38×4 種組合收斂為權限矩陣</td></tr>
+    <tr><td>狀態遷移</td><td>枚舉狀態與合法邊</td><td>報價：已報價→跟進中→已收PO→已成交；發票：草稿→已發出→部分付款→已付款/已作廢；盤點：進行中→已完成→（刪除）沖銷→還原</td></tr>
+    <tr><td>正交組合</td><td>用少量組合覆蓋多因子</td><td>報價類型（服務/產品）× 語言（中/英）× 有無明細折扣 × 是否轉換</td></tr>
+    <tr><td>錯誤推測</td><td>依歷史缺陷清單反推</td><td>彈窗 __id 被預填導致 404、picker 捲動即關閉、amount 欄位被拉成整條、HK$ 重複</td></tr>
+    <tr><td>資料不變量</td><td>不靠畫面，直接對 DB 斷言</td><td>報價 subtotal=Σ(數量×單價−折扣)、發票 balance=total−paid、分錄借貸相等、deleted=1 必有 deleted_at</td></tr>
+  </tbody></table>
+
+  <h2 id="s4">4 · 分層與自動化邊界</h2>
+  <table><thead><tr><th style="width:60px">層</th><th>測什麼</th><th>手段</th><th>頻率</th><th>本輪</th></tr></thead><tbody>
+    <tr><td><b>L0</b></td><td>啟動、DB 連通、路由 404、環境變數</td><td>啟動腳本 + HTTP 探測</td><td>每次提交</td><td>3 項自動</td></tr>
+    <tr><td><b>L1</b></td><td>純函數：編號、金額、整數、時區、沖銷</td><td>Node 直接 import lib（無需起服務）</td><td>每次提交</td><td>由 L2 覆蓋</td></tr>
+    <tr><td><b>L2</b></td><td>HTTP 契約：CRUD、必填、權限、CSRF、軟刪除</td><td>fetch + Cookie/Session + SQLite 斷言</td><td>每日 / 合併前</td><td>92 項自動</td></tr>
+    <tr><td><b>L3</b></td><td>跨模組業務鏈：報價→PO→合約→發票→收據；PO→DN→庫存；盤點→沖銷</td><td>端到端 API 編排 + DB 對賬</td><td>每輪改動</td><td>20 項自動</td></tr>
+    <tr><td><b>L4</b></td><td>UI 互動：彈窗、picker、分頁、列印、1366 寬</td><td>Playwright/CDP 截圖與 DOM 斷言</td><td>每週 / 發版前</td><td>手工 + 少量 DOM/CSS 斷言</td></tr>
+    <tr><td><b>L5</b></td><td>非功能：效能、併發、安全、相容性</td><td>計時、併發 fetch、XSS/IDOR/上傳探測</td><td>發版前</td><td>9 項自動 + 手工清單</td></tr>
+  </tbody></table>
+  <p class="small muted">自動化只覆蓋「可斷言、可重複、可隔離」的部分。畫面美感、列印斷頁、選擇器手感仍需人工；但它們的判定標準必須寫死在用例裡，不能以「看起來可以」收尾。</p>
+
+  <h2 id="s5">5 · 環境與測試數據</h2>
+  <h4>5.1 隔離原則（硬性）</h4>
+  <ul class="tight">
+    <li><b>絕不在 :3000 正式庫上跑寫入測試。</b>測試只允許在 :3101/:3102 的副本跑，DB 路徑必須在 <code>_run_*</code> 下。</li>
+    <li>用 <code>VACUUM INTO</code> 做一致性快照（自動包含 WAL 已提交資料）；不要直接複製 db+wal，生產正在寫入時會得到半舊快照。</li>
+    <li>每次執行用唯一 <code>runId</code> 前綴（如 <code>QA-mvnt…</code>），所有測試資料可反查、可清理，不與正式資料撞名。</li>
+    <li>測試帳號只用 <code>/demo?as=</code> 的四個示範用戶；<code>CPC_DEMO=1</code>、<code>CPC_AUTO_IMPORT=0</code>。</li>
+  </ul>
+  <pre><code># 1) 一致性快照（自動；等價於 sqlite3 .backup）
+node -e "const{DatabaseSync}=require('node:sqlite');const d=new DatabaseSync('data.db',{readOnly:true});d.exec("VACUUM INTO '_run_xxxx/data.db'")"
+# 若快照失敗，纔回退複製 data.db + data.db-wal
+
+# 2) 起隔離服務
+set PORT=3102
+set DB_PATH=...\_run_xxxx\data.db
+set CPC_UPLOAD_DIR=...\_run_xxxx\uploads
+set CPC_DEMO=1
+set CPC_AUTO_IMPORT=0
+node server.mjs
+
+# 3) 跑驗收（自動完成複製、啟動、清理）
+node run-tests.mjs --port 3102 --keep</code></pre>
+  <h4>5.2 數據準備</h4>
+  <table><thead><tr><th>資料</th><th>準備方式</th><th>用途</th></tr></thead><tbody>
+    <tr><td>既有 34k 記錄</td><td>直接複製正式庫</td><td>列表分頁、搜尋、效能、歷史資料風險</td></tr>
+    <tr><td>本輪新建資料</td><td><code>QA-&lt;runId&gt;</code> 前綴 + 當日日期</td><td>可精確斷言、可最後統一清理</td></tr>
+    <tr><td>邊界資料</td><td>0 庫存、負調整、2.5 數量、空明細、超長名稱</td><td>異常與邊界用例</td></tr>
+    <tr><td>不可用資料</td><td>正式庫、客戶真實附件、正式上傳目錄</td><td>禁止寫入</td></tr>
+  </tbody></table>
+  <div class="note"><b>本機限制：</b>F: 盤不支援回收站，Node 的 <code>fs.rmSync</code> 會被安全墊攔截，因此腳本不刪 <code>_run_*</code>，跑完請手動清理（或在支援回收站的磁碟上跑）。</div>
+
+  <h2 id="s6">6 · 判定規則與缺陷管理</h2>
+  <h4>6.1 一條用例算「通過」的條件</h4>
+  <table><thead><tr><th>層面</th><th>必須同時滿足</th></tr></thead><tbody>
+    <tr><td>HTTP</td><td>狀態碼符合預期（成功 302/200，校驗 400，越權 403，不存在 404，衝突 409）</td></tr>
+    <tr><td>資料</td><td>DB 欄位值與計算結果符合預期（不是隻看頁面提示）</td></tr>
+    <tr><td>副作用</td><td>該變的變了（庫存/餘額/狀態），不該變的沒變（其他欄位、其他實體、筆數）</td></tr>
+    <tr><td>可重複</td><td>同一用例連跑 3 次結果一致；重複提交不產生第二筆（冪等）</td></tr>
+    <tr><td>證據</td><td>失敗必須附：請求、狀態碼、回應片段、DB 查詢結果、runId；口頭描述不算</td></tr>
+  </tbody></table>
+  <h4>6.2 缺陷等級</h4>
+  <table><thead><tr><th style="width:60px">等級</th><th>定義</th><th>例子（本輪）</th><th>處理</th></tr></thead><tbody>
+    <tr><td><b class="sev">S1</b></td><td>資料損壞、金額/庫存錯誤、越權可寫、核心鏈中斷</td><td>刪除已過賬盤點把庫存沖成 0</td><td>立即修，修完重跑全套</td></tr>
+    <tr><td><b class="sev">S2</b></td><td>主要功能缺失或有明確繞過；關鍵欄位空白</td><td>報價轉 PO 無編號；歷史報價編輯歸零風險；菜單死連結</td><td>本輪必修</td></tr>
+    <tr><td><b class="sev">S3</b></td><td>次要功能/文案/字典不一致，有替代路徑</td><td>部分收款 vs 部分付款；表單可開不可存；自動調整單無編號</td><td>排期修</td></tr>
+    <tr><td><b class="sev">S4</b></td><td>體驗、樣式、極端邊界</td><td>排班工時未顯示；列印細節</td><td>可延後</td></tr>
+  </tbody></table>
+  <h4>6.3 缺陷單模板（直接複製）</h4>
+  <pre><code>[標題] 刪除已過賬盤點後庫存被沖成 0（S1）
+[環境] :3102 副本 / runId=QA-xxxx / management
+[前置] 產品庫存 15；盤點 actual=12 完成過賬（生成 -3）
+[步驟] 1. POST /delete/stock_counts/&lt;id&gt;  2. 讀 products.stock_quantity
+[預期] 庫存回到 15，生成 +3 沖銷，stock_reversed=true
+[實際] 庫存 0；生成 -12 沖銷；count.items 缺 system_quantity/difference
+[證據] ADJ before12/change-12/after0；count.items=[{product_id,actual_quantity:12}]
+[影響] 任何「盤點後刪除」都會清空該商品庫存，且還原後看似正常，難以察覺
+[建議] saved.items 同步寫入 difference 快照；補回歸</code></pre>
+
+  <h2 id="s7">7 · 詳細用例（逐項）</h2>
+  <p class="small muted">共 161 條；P0 64、P1 82、P2 15；已自動化 99 條，其餘為手工/半自動。每條都給出「怎麼做」與「憑什麼算過」。</p>
+  <section class="module" id="m-SYS">
+    <div class="mhead">
+      <div><span class="mcode">SYS</span><h3>啟動、部署與健康檢查</h3></div>
+      <div class="mmeta"><span>用例 <b>5</b></span><span>自動化 <b>3/5</b></span><span>風險 <b class="risk-h">高</b></span></div>
+    </div>
+    <p class="goal"><b>目標：</b>服務可啟動、資料庫可讀、錯誤頁可控　<b>自動化覆蓋：</b>啟動/登入頁/404/靜態資源/DB 連通</p>
+    <div class="tablewrap"><table class="cases"><colgroup><col style="width:70px"><col style="width:156px"><col style="width:50px"><col style="width:52px"><col style="width:310px"><col style="width:300px"><col style="width:70px"></colgroup><thead><tr><th>ID</th><th>測試項</th><th>級別</th><th>方法</th><th>前置與步驟</th><th>預期結果 / 判定標準</th><th>狀態</th></tr></thead><tbody><tr>
+    <td class="mono">SYS-01</td>
+    <td><b>冷啟動與埠監聽</b></td>
+    <td><span class="pill p-p0">P0</span></td>
+    <td><span class="tag">功能</span></td>
+    <td><div class="pre">乾淨副本 DB、未佔用埠</div><ol class="steps"><li>以 PORT/DB_PATH/CPC_UPLOAD_DIR 啟動 server.mjs</li><li>請求 /login</li></ol></td>
+    <td>進程不退出；/login 回 200 且含登入表單；日誌印出實際 DB 路徑</td>
+    <td class="nowrap"><span class="st-pass">PASS 1/1</span></td>
+  </tr><tr>
+    <td class="mono">SYS-02</td>
+    <td><b>資料庫缺失/損壞的失敗姿態</b></td>
+    <td><span class="pill p-p1">P1</span></td>
+    <td><span class="tag">異常</span></td>
+    <td><div class="pre">指向不存在的 DB 路徑</div><ol class="steps"><li>啟動服務</li><li>觀察退出碼與日誌</li></ol></td>
+    <td>快速失敗並印出可讀錯誤，不得靜默建立空庫覆蓋正式資料</td>
+    <td class="nowrap"><span class="muted">手工</span></td>
+  </tr><tr>
+    <td class="mono">SYS-03</td>
+    <td><b>未知路由與錯誤頁</b></td>
+    <td><span class="pill p-p1">P1</span></td>
+    <td><span class="tag">異常</span></td>
+    <td><div class="pre">已登入</div><ol class="steps"><li>GET /no-such-page</li><li>GET /view/customers/not-exist</li></ol></td>
+    <td>404 錯誤頁含導航與返回；不得拋堆疊或空白頁</td>
+    <td class="nowrap"><span class="st-pass">PASS 1/1</span></td>
+  </tr><tr>
+    <td class="mono">SYS-04</td>
+    <td><b>啟動自動匯入開關</b></td>
+    <td><span class="pill p-p1">P1</span></td>
+    <td><span class="tag">資料</span></td>
+    <td><div class="pre">副本 DB、CPC_AUTO_IMPORT=0</div><ol class="steps"><li>啟動後統計 records 總數</li><li>對照啟動前</li></ol></td>
+    <td>筆數不變；正式庫不會被測試資料污染</td>
+    <td class="nowrap"><span class="st-pass">PASS 1/1</span></td>
+  </tr><tr>
+    <td class="mono">SYS-05</td>
+    <td><b>時區與 HK 日期</b></td>
+    <td><span class="pill p-p1">P1</span></td>
+    <td><span class="tag">邊界</span></td>
+    <td><div class="pre">系統時區非 HK</div><ol class="steps"><li>新增一筆記錄</li><li>檢查 created_date 與編號年份</li></ol></td>
+    <td>日期/年份按 Asia/Hong_Kong 計算，23:30 與 00:30 不跨錯日</td>
+    <td class="nowrap"><span class="muted">手工</span></td>
+  </tr></tbody></table></div>
+  </section><section class="module" id="m-AUTH">
+    <div class="mhead">
+      <div><span class="mcode">AUTH</span><h3>認證、會話與 CSRF</h3></div>
+      <div class="mmeta"><span>用例 <b>8</b></span><span>自動化 <b>7/8</b></span><span>風險 <b class="risk-x">極高</b></span></div>
+    </div>
+    <p class="goal"><b>目標：</b>只有合法身份能進入，會話與表單令牌不可繞過　<b>自動化覆蓋：</b>四角色登入、登出、無會話、缺 CSRF、錯誤密碼、鎖定、Cookie 旗標</p>
+    <div class="tablewrap"><table class="cases"><colgroup><col style="width:70px"><col style="width:156px"><col style="width:50px"><col style="width:52px"><col style="width:310px"><col style="width:300px"><col style="width:70px"></colgroup><thead><tr><th>ID</th><th>測試項</th><th>級別</th><th>方法</th><th>前置與步驟</th><th>預期結果 / 判定標準</th><th>狀態</th></tr></thead><tbody><tr>
+    <td class="mono">AUTH-01</td>
+    <td><b>四角色快捷登入</b></td>
+    <td><span class="pill p-p0">P0</span></td>
+    <td><span class="tag">功能</span></td>
+    <td><div class="pre">demo_mode=1</div><ol class="steps"><li>GET /demo?as=front|office|accounting|management</li><li>跟隨 302</li></ol></td>
+    <td>各自進入 / 或 /mywork；側欄身份與角色一致</td>
+    <td class="nowrap"><span class="st-pass">PASS 1/1</span></td>
+  </tr><tr>
+    <td class="mono">AUTH-02</td>
+    <td><b>未登入訪問受保護頁</b></td>
+    <td><span class="pill p-p0">P0</span></td>
+    <td><span class="tag">權限</span></td>
+    <td><div class="pre">無 Cookie</div><ol class="steps"><li>GET /customers</li><li>GET /receivables</li></ol></td>
+    <td>302 → /login?from=...；不得回 200 或資料片段</td>
+    <td class="nowrap"><span class="st-pass">PASS 1/1</span></td>
+  </tr><tr>
+    <td class="mono">AUTH-03</td>
+    <td><b>未登入提交寫操作</b></td>
+    <td><span class="pill p-p0">P0</span></td>
+    <td><span class="tag">安全</span></td>
+    <td><div class="pre">無 Cookie</div><ol class="steps"><li>POST /save/customers</li></ol></td>
+    <td>401（登入已失效），不得寫入任何記錄</td>
+    <td class="nowrap"><span class="st-pass">PASS 1/1</span></td>
+  </tr><tr>
+    <td class="mono">AUTH-04</td>
+    <td><b>CSRF 令牌缺失/錯誤</b></td>
+    <td><span class="pill p-p0">P0</span></td>
+    <td><span class="tag">安全</span></td>
+    <td><div class="pre">已登入</div><ol class="steps"><li>POST /save/customers 不帶 __csrf</li><li>再帶錯誤 __csrf</li></ol></td>
+    <td>兩次均 403；DB 筆數不變</td>
+    <td class="nowrap"><span class="st-pass">PASS 1/1</span></td>
+  </tr><tr>
+    <td class="mono">AUTH-05</td>
+    <td><b>錯誤密碼與鎖定</b></td>
+    <td><span class="pill p-p1">P1</span></td>
+    <td><span class="tag">異常</span></td>
+    <td><div class="pre">已知帳號、demo 關閉</div><ol class="steps"><li>連續 5 次錯誤密碼</li><li>第 6 次再試</li></ol></td>
+    <td>前 5 次回登入頁錯誤提示；第 6 次 429 並提示 15 分鐘後再試</td>
+    <td class="nowrap"><span class="st-pass">PASS 1/1</span></td>
+  </tr><tr>
+    <td class="mono">AUTH-06</td>
+    <td><b>登出使會話失效</b></td>
+    <td><span class="pill p-p0">P0</span></td>
+    <td><span class="tag">功能</span></td>
+    <td><div class="pre">已登入</div><ol class="steps"><li>GET /logout</li><li>用舊 sid 再 GET /mywork</li></ol></td>
+    <td>302 → /login；舊 sid 不可再用</td>
+    <td class="nowrap"><span class="st-pass">PASS 1/1</span></td>
+  </tr><tr>
+    <td class="mono">AUTH-07</td>
+    <td><b>Cookie 安全旗標</b></td>
+    <td><span class="pill p-p1">P1</span></td>
+    <td><span class="tag">安全</span></td>
+    <td><div class="pre">登入回應</div><ol class="steps"><li>檢查 Set-Cookie</li></ol></td>
+    <td>sid 含 HttpOnly、SameSite=Lax、Path=/、有 Max-Age；不得缺 HttpOnly</td>
+    <td class="nowrap"><span class="st-pass">PASS 1/1</span></td>
+  </tr><tr>
+    <td class="mono">AUTH-08</td>
+    <td><b>公開簽署連結邊界</b></td>
+    <td><span class="pill p-p1">P1</span></td>
+    <td><span class="tag">安全</span></td>
+    <td><div class="pre">取得 /sign-certificate?token=</div><ol class="steps"><li>無 token 訪問</li><li>用已簽署 token 再提交</li></ol></td>
+    <td>無 token 需登入；已簽署回 409；不得改到其他記錄</td>
+    <td class="nowrap"><span class="muted">手工</span></td>
+  </tr></tbody></table></div>
+  </section><section class="module" id="m-PERM">
+    <div class="mhead">
+      <div><span class="mcode">PERM</span><h3>角色與權限矩陣</h3></div>
+      <div class="mmeta"><span>用例 <b>6</b></span><span>自動化 <b>6/6</b></span><span>風險 <b class="risk-x">極高</b></span></div>
+    </div>
+    <p class="goal"><b>目標：</b>菜單、直鏈、表單、動作、匯出、回收桶六層一致　<b>自動化覆蓋：</b>NAV 可見性、44 頁 × 4 角色直鏈、38 實體 × 4 角色列表/表單、匯出與回收桶</p>
+    <div class="tablewrap"><table class="cases"><colgroup><col style="width:70px"><col style="width:156px"><col style="width:50px"><col style="width:52px"><col style="width:310px"><col style="width:300px"><col style="width:70px"></colgroup><thead><tr><th>ID</th><th>測試項</th><th>級別</th><th>方法</th><th>前置與步驟</th><th>預期結果 / 判定標準</th><th>狀態</th></tr></thead><tbody><tr>
+    <td class="mono">PERM-01</td>
+    <td><b>側欄菜單按角色渲染</b></td>
+    <td><span class="pill p-p0">P0</span></td>
+    <td><span class="tag">權限</span></td>
+    <td><div class="pre">四角色會話</div><ol class="steps"><li>抓取 aside 導航</li><li>對照 NAV.roles</li></ol></td>
+    <td>有權限的項必須出現；無權限的項不得出現（含設定/財務/回收桶）</td>
+    <td class="nowrap"><span class="st-pass">PASS 4/4</span></td>
+  </tr><tr>
+    <td class="mono">PERM-02</td>
+    <td><b>直鏈訪問越權攔截</b></td>
+    <td><span class="pill p-p0">P0</span></td>
+    <td><span class="tag">權限</span></td>
+    <td><div class="pre">front 會話</div><ol class="steps"><li>GET /customers、/invoices、/users、/trash、/settings</li></ol></td>
+    <td>全部 403「無權限」頁；不得回 200 或空殼頁</td>
+    <td class="nowrap"><span class="st-pass">PASS 4/4</span></td>
+  </tr><tr>
+    <td class="mono">PERM-03</td>
+    <td><b>實體列表與表單權限</b></td>
+    <td><span class="pill p-p0">P0</span></td>
+    <td><span class="tag">權限</span></td>
+    <td><div class="pre">四角色</div><ol class="steps"><li>對 38 實體逐一 GET listPath</li><li>逐一 GET /new/&lt;key&gt;</li></ol></td>
+    <td>列表：viewRoles 內 200，否則 403；表單：editRoles 內 200，否則 403</td>
+    <td class="nowrap"><span class="st-fail">FAIL 1/8</span></td>
+  </tr><tr>
+    <td class="mono">PERM-04</td>
+    <td><b>動作級權限（審批/轉換/匯出）</b></td>
+    <td><span class="pill p-p0">P0</span></td>
+    <td><span class="tag">權限</span></td>
+    <td><div class="pre">front + office</div><ol class="steps"><li>front POST /leaves/:id/decide</li><li>office GET /export/contracts.csv</li></ol></td>
+    <td>front 403；office 403；只有 management 可匯出</td>
+    <td class="nowrap"><span class="st-pass">PASS 1/1</span></td>
+  </tr><tr>
+    <td class="mono">PERM-05</td>
+    <td><b>回收桶角色邊界</b></td>
+    <td><span class="pill p-p1">P1</span></td>
+    <td><span class="tag">權限</span></td>
+    <td><div class="pre">office / accounting / front</div><ol class="steps"><li>GET /trash</li><li>POST /trash/purge</li></ol></td>
+    <td>office、management 可進；accounting、front 403；永久刪除僅 office/management</td>
+    <td class="nowrap"><span class="st-pass">PASS 1/1</span></td>
+  </tr><tr>
+    <td class="mono">PERM-06</td>
+    <td><b>菜單與路由可用性一致</b></td>
+    <td><span class="pill p-p1">P1</span></td>
+    <td><span class="tag">權限</span></td>
+    <td><div class="pre">四角色</div><ol class="steps"><li>遍歷側欄每一項</li><li>比對該角色實際 HTTP 狀態</li></ol></td>
+    <td>菜單可見的頁面必須 200；不得出現看得到卻 403 的死連結</td>
+    <td class="nowrap"><span class="st-fail">FAIL 1/1</span></td>
+  </tr></tbody></table></div>
+  </section><section class="module" id="m-CUS">
+    <div class="mhead">
+      <div><span class="mcode">CUS</span><h3>客戶管理</h3></div>
+      <div class="mmeta"><span>用例 <b>6</b></span><span>自動化 <b>6/6</b></span><span>風險 <b class="risk-h">高</b></span></div>
+    </div>
+    <p class="goal"><b>目標：</b>客戶主檔正確、可搜尋、有關聯保護　<b>自動化覆蓋：</b>新增必填、建立、編輯、搜尋、詳情、前線越權</p>
+    <div class="tablewrap"><table class="cases"><colgroup><col style="width:70px"><col style="width:156px"><col style="width:50px"><col style="width:52px"><col style="width:310px"><col style="width:300px"><col style="width:70px"></colgroup><thead><tr><th>ID</th><th>測試項</th><th>級別</th><th>方法</th><th>前置與步驟</th><th>預期結果 / 判定標準</th><th>狀態</th></tr></thead><tbody><tr>
+    <td class="mono">CUS-01</td>
+    <td><b>新增客戶必填校驗</b></td>
+    <td><span class="pill p-p0">P0</span></td>
+    <td><span class="tag">異常</span></td>
+    <td><div class="pre">office</div><ol class="steps"><li>提交 customer_name 空字串</li><li>其餘欄位正常</li></ol></td>
+    <td>400 + 「請填寫必填欄位：客戶名稱」；records 無新增</td>
+    <td class="nowrap"><span class="st-pass">PASS 1/1</span></td>
+  </tr><tr>
+    <td class="mono">CUS-02</td>
+    <td><b>新增客戶成功與落庫</b></td>
+    <td><span class="pill p-p0">P0</span></td>
+    <td><span class="tag">功能</span></td>
+    <td><div class="pre">office</div><ol class="steps"><li>填名稱/類型/電話/地址提交</li></ol></td>
+    <td>302 → /view/customers/&lt;id&gt;；DB 欄位一致；列表可搜到</td>
+    <td class="nowrap"><span class="st-pass">PASS 1/1</span></td>
+  </tr><tr>
+    <td class="mono">CUS-03</td>
+    <td><b>客戶名稱模糊搜尋</b></td>
+    <td><span class="pill p-p1">P1</span></td>
+    <td><span class="tag">功能</span></td>
+    <td><div class="pre">已有客戶</div><ol class="steps"><li>/customers?q=關鍵字</li><li>再搜不存在的字串</li></ol></td>
+    <td>命中行含關鍵字；不存在時顯示空狀態而非報錯</td>
+    <td class="nowrap"><span class="st-pass">PASS 1/1</span></td>
+  </tr><tr>
+    <td class="mono">CUS-04</td>
+    <td><b>編輯保留未提交欄位</b></td>
+    <td><span class="pill p-p1">P1</span></td>
+    <td><span class="tag">資料</span></td>
+    <td><div class="pre">已存在客戶</div><ol class="steps"><li>只改電話提交</li><li>讀 DB</li></ol></td>
+    <td>電話更新；名稱/地址/類型不變；updated_date 遞增</td>
+    <td class="nowrap"><span class="st-pass">PASS 1/1</span></td>
+  </tr><tr>
+    <td class="mono">CUS-05</td>
+    <td><b>客戶詳情聚合</b></td>
+    <td><span class="pill p-p1">P1</span></td>
+    <td><span class="tag">功能</span></td>
+    <td><div class="pre">有報價/合約的客戶</div><ol class="steps"><li>GET /view/customers/&lt;id&gt;</li></ol></td>
+    <td>3 個 KPI + 聯絡人卡 + 6 頁簽載入；金額遮罩依角色</td>
+    <td class="nowrap"><span class="st-pass">PASS 1/1</span></td>
+  </tr><tr>
+    <td class="mono">CUS-06</td>
+    <td><b>前線直鏈客戶詳情</b></td>
+    <td><span class="pill p-p0">P0</span></td>
+    <td><span class="tag">權限</span></td>
+    <td><div class="pre">front</div><ol class="steps"><li>GET /view/customers/&lt;id&gt;</li></ol></td>
+    <td>403；不得泄露名稱/電話/地址</td>
+    <td class="nowrap"><span class="st-pass">PASS 1/1</span></td>
+  </tr></tbody></table></div>
+  </section><section class="module" id="m-LEA">
+    <div class="mhead">
+      <div><span class="mcode">LEA</span><h3>線索與跟進</h3></div>
+      <div class="mmeta"><span>用例 <b>3</b></span><span>自動化 <b>0/3</b></span><span>風險 <b class="risk-m">中</b></span></div>
+    </div>
+    <p class="goal"><b>目標：</b>Lead 到報價前不漏、不重　<b>自動化覆蓋：</b>新增必填、編號、列表、跟進關聯</p>
+    <div class="tablewrap"><table class="cases"><colgroup><col style="width:70px"><col style="width:156px"><col style="width:50px"><col style="width:52px"><col style="width:310px"><col style="width:300px"><col style="width:70px"></colgroup><thead><tr><th>ID</th><th>測試項</th><th>級別</th><th>方法</th><th>前置與步驟</th><th>預期結果 / 判定標準</th><th>狀態</th></tr></thead><tbody><tr>
+    <td class="mono">LEA-01</td>
+    <td><b>Lead 自動編號與必填</b></td>
+    <td><span class="pill p-p1">P1</span></td>
+    <td><span class="tag">功能</span></td>
+    <td><div class="pre">office</div><ol class="steps"><li>lead_number 留空、填名稱/類型提交</li></ol></td>
+    <td>生成 LEAD-YYYY-####；缺名稱或類型回 400</td>
+    <td class="nowrap"><span class="muted">手工</span></td>
+  </tr><tr>
+    <td class="mono">LEA-02</td>
+    <td><b>Lead 狀態流轉</b></td>
+    <td><span class="pill p-p2">P2</span></td>
+    <td><span class="tag">功能</span></td>
+    <td><div class="pre">已有 Lead</div><ol class="steps"><li>改為跟進中 → 已報價 → 成交</li><li>再改為失敗</li></ol></td>
+    <td>狀態保存正確；converted_to_quotation 不被誤改</td>
+    <td class="nowrap"><span class="muted">手工</span></td>
+  </tr><tr>
+    <td class="mono">LEA-03</td>
+    <td><b>跟進記錄關聯報價</b></td>
+    <td><span class="pill p-p1">P1</span></td>
+    <td><span class="tag">資料</span></td>
+    <td><div class="pre">有報價單</div><ol class="steps"><li>新增 follow_up 綁 quotation_id</li><li>查看報價詳情</li></ol></td>
+    <td>跟進記錄可查；報價詳情顯示跟進歷史；刪報價後跟進不崩</td>
+    <td class="nowrap"><span class="muted">手工</span></td>
+  </tr></tbody></table></div>
+  </section><section class="module" id="m-QUO">
+    <div class="mhead">
+      <div><span class="mcode">QUO</span><h3>報價管理</h3></div>
+      <div class="mmeta"><span>用例 <b>9</b></span><span>自動化 <b>8/9</b></span><span>風險 <b class="risk-x">極高</b></span></div>
+    </div>
+    <p class="goal"><b>目標：</b>金額、編號、階段、轉換四件事必須對　<b>自動化覆蓋：</b>編號、明細小計/總額、必填、階段、轉 PO/合同、軟刪除</p>
+    <div class="tablewrap"><table class="cases"><colgroup><col style="width:70px"><col style="width:156px"><col style="width:50px"><col style="width:52px"><col style="width:310px"><col style="width:300px"><col style="width:70px"></colgroup><thead><tr><th>ID</th><th>測試項</th><th>級別</th><th>方法</th><th>前置與步驟</th><th>預期結果 / 判定標準</th><th>狀態</th></tr></thead><tbody><tr>
+    <td class="mono">QUO-01</td>
+    <td><b>報價自動編號</b></td>
+    <td><span class="pill p-p0">P0</span></td>
+    <td><span class="tag">功能</span></td>
+    <td><div class="pre">office</div><ol class="steps"><li>quotation_number 留空，類型=服務提交</li><li>再看產品類型</li></ol></td>
+    <td>服務 SQP-YYYY-####；產品 SQM-YYYY-####；序號不跳號不重號</td>
+    <td class="nowrap"><span class="st-pass">PASS 1/1</span></td>
+  </tr><tr>
+    <td class="mono">QUO-02</td>
+    <td><b>明細小計與總額</b></td>
+    <td><span class="pill p-p0">P0</span></td>
+    <td><span class="tag">資料</span></td>
+    <td><div class="pre">office</div><ol class="steps"><li>2×100 折扣 10；運費 20；整單折扣 5</li><li>讀 DB</li></ol></td>
+    <td>行小計 190；subtotal 190；total=190+20-5=205；前端顯示同值</td>
+    <td class="nowrap"><span class="st-pass">PASS 1/1</span></td>
+  </tr><tr>
+    <td class="mono">QUO-03</td>
+    <td><b>必填與空明細</b></td>
+    <td><span class="pill p-p0">P0</span></td>
+    <td><span class="tag">異常</span></td>
+    <td><div class="pre">office</div><ol class="steps"><li>缺 customer_name</li><li>缺 items</li><li>items=[]</li></ol></td>
+    <td>均 400 並指出欄位；不得產生半成品記錄</td>
+    <td class="nowrap"><span class="st-pass">PASS 1/1</span></td>
+  </tr><tr>
+    <td class="mono">QUO-04</td>
+    <td><b>報價階段與成交標記</b></td>
+    <td><span class="pill p-p1">P1</span></td>
+    <td><span class="tag">功能</span></td>
+    <td><div class="pre">已有報價</div><ol class="steps"><li>POST /quotations/:id/stage stage=已成交</li><li>再提交非法 stage</li></ol></td>
+    <td>已成交時 accepted=true、accepted_date 有值；非法值 400</td>
+    <td class="nowrap"><span class="st-pass">PASS 1/1</span></td>
+  </tr><tr>
+    <td class="mono">QUO-05</td>
+    <td><b>報價轉採購單</b></td>
+    <td><span class="pill p-p1">P1</span></td>
+    <td><span class="tag">功能</span></td>
+    <td><div class="pre">報價含 2 行明細</div><ol class="steps"><li>POST /quotations/:id/to-po</li><li>讀 PO 與報價</li></ol></td>
+    <td>302 → PO 詳情；quotation_id/customer/total 一致；PO 編號與名稱為非空（PO-YYYY-####）</td>
+    <td class="nowrap"><span class="st-fail">FAIL 1/1</span></td>
+  </tr><tr>
+    <td class="mono">QUO-06</td>
+    <td><b>報價轉合約</b></td>
+    <td><span class="pill p-p0">P0</span></td>
+    <td><span class="tag">功能</span></td>
+    <td><div class="pre">報價含客戶/地點/內容</div><ol class="steps"><li>POST /to-contract</li><li>讀合約</li></ol></td>
+    <td>contract.quotation_id 對上；contract_number=報價編號；contract_name 自動組合</td>
+    <td class="nowrap"><span class="st-pass">PASS 1/1</span></td>
+  </tr><tr>
+    <td class="mono">QUO-07</td>
+    <td><b>重複轉換冪等</b></td>
+    <td><span class="pill p-p1">P1</span></td>
+    <td><span class="tag">異常</span></td>
+    <td><div class="pre">已轉過 PO</div><ol class="steps"><li>再次 POST /to-po</li><li>統計 PO 筆數</li></ol></td>
+    <td>返回既有 PO；不新增第二張</td>
+    <td class="nowrap"><span class="st-pass">PASS 1/1</span></td>
+  </tr><tr>
+    <td class="mono">QUO-08</td>
+    <td><b>報價軟刪除與回收桶</b></td>
+    <td><span class="pill p-p1">P1</span></td>
+    <td><span class="tag">資料</span></td>
+    <td><div class="pre">office、有報價</div><ol class="steps"><li>POST /delete/quotations/:id</li><li>GET /trash?module=quotations</li></ol></td>
+    <td>deleted=1、deleted_at/by 有值；回收桶可見；列表預設不顯示</td>
+    <td class="nowrap"><span class="st-pass">PASS 1/1</span></td>
+  </tr><tr>
+    <td class="mono">QUO-09</td>
+    <td><b>報價詳情與列印</b></td>
+    <td><span class="pill p-p1">P1</span></td>
+    <td><span class="tag">UI</span></td>
+    <td><div class="pre">有明細報價</div><ol class="steps"><li>GET /view/quotations/:id</li><li>GET /print/quotations/:id</li></ol></td>
+    <td>明細、合計、條款完整；列印頁不帶導航；金額格式 HK$ x,xxx.00</td>
+    <td class="nowrap"><span class="muted">手工</span></td>
+  </tr></tbody></table></div>
+  </section><section class="module" id="m-PO">
+    <div class="mhead">
+      <div><span class="mcode">PO</span><h3>採購單管理</h3></div>
+      <div class="mmeta"><span>用例 <b>7</b></span><span>自動化 <b>7/7</b></span><span>風險 <b class="risk-h">高</b></span></div>
+    </div>
+    <p class="goal"><b>目標：</b>PO 可排班、可轉單、可簽署　<b>自動化覆蓋：</b>編號/名稱、必填、金額、詳情、軟刪除</p>
+    <div class="tablewrap"><table class="cases"><colgroup><col style="width:70px"><col style="width:156px"><col style="width:50px"><col style="width:52px"><col style="width:310px"><col style="width:300px"><col style="width:70px"></colgroup><thead><tr><th>ID</th><th>測試項</th><th>級別</th><th>方法</th><th>前置與步驟</th><th>預期結果 / 判定標準</th><th>狀態</th></tr></thead><tbody><tr>
+    <td class="mono">PO-01</td>
+    <td><b>PO 自動編號與名稱</b></td>
+    <td><span class="pill p-p0">P0</span></td>
+    <td><span class="tag">功能</span></td>
+    <td><div class="pre">office</div><ol class="steps"><li>po_number 留空、填客戶/內容提交</li></ol></td>
+    <td>PO-YYYY-####；po_name=編號_工作單位_內容（空值自動省略）</td>
+    <td class="nowrap"><span class="st-pass">PASS 1/1</span></td>
+  </tr><tr>
+    <td class="mono">PO-02</td>
+    <td><b>PO 必填校驗</b></td>
+    <td><span class="pill p-p0">P0</span></td>
+    <td><span class="tag">異常</span></td>
+    <td><div class="pre">office</div><ol class="steps"><li>缺 po_number</li><li>缺 customer_name</li></ol></td>
+    <td>皆 400；提示對應欄位</td>
+    <td class="nowrap"><span class="st-pass">PASS 1/1</span></td>
+  </tr><tr>
+    <td class="mono">PO-03</td>
+    <td><b>PO 金額含稅</b></td>
+    <td><span class="pill p-p0">P0</span></td>
+    <td><span class="tag">資料</span></td>
+    <td><div class="pre">office</div><ol class="steps"><li>明細 2×300，稅額 50 提交</li></ol></td>
+    <td>subtotal 600、total 650；DB 與頁面一致</td>
+    <td class="nowrap"><span class="st-pass">PASS 1/1</span></td>
+  </tr><tr>
+    <td class="mono">PO-04</td>
+    <td><b>PO 詳情與行操作</b></td>
+    <td><span class="pill p-p1">P1</span></td>
+    <td><span class="tag">功能</span></td>
+    <td><div class="pre">有 PO</div><ol class="steps"><li>GET /view/purchase_orders/:id</li></ol></td>
+    <td>工程滿意紙/由 PO 新增送貨單/轉為發票/前往排班/簽署連結按鈕齊全；連結帶正確 poId</td>
+    <td class="nowrap"><span class="st-pass">PASS 1/1</span></td>
+  </tr><tr>
+    <td class="mono">PO-05</td>
+    <td><b>PO 軟刪除與還原</b></td>
+    <td><span class="pill p-p1">P1</span></td>
+    <td><span class="tag">資料</span></td>
+    <td><div class="pre">office</div><ol class="steps"><li>刪除 → 回收桶 → 還原</li></ol></td>
+    <td>deleted 1→0；列表恢復；關聯報價不受影響</td>
+    <td class="nowrap"><span class="st-pass">PASS 1/1</span></td>
+  </tr><tr>
+    <td class="mono">PO-06</td>
+    <td><b>PO 簽署連結</b></td>
+    <td><span class="pill p-p1">P1</span></td>
+    <td><span class="tag">功能</span></td>
+    <td><div class="pre">有 PO</div><ol class="steps"><li>POST /purchase_orders/:id/share</li><li>開 signing_link</li></ol></td>
+    <td>signing_status=待簽署；連結可開；簽名後 signed_date/status 更新且不可重簽</td>
+    <td class="nowrap"><span class="st-pass">PASS 1/1</span></td>
+  </tr><tr>
+    <td class="mono">PO-07</td>
+    <td><b>由 PO 新增送貨單預填</b></td>
+    <td><span class="pill p-p1">P1</span></td>
+    <td><span class="tag">功能</span></td>
+    <td><div class="pre">產品類 PO</div><ol class="steps"><li>GET /new/delivery_notes?poId=:id</li></ol></td>
+    <td>表單預填客戶/PO 號/明細；儲存後 DN 帶 po_number；服務類 PO 不應引導此操作</td>
+    <td class="nowrap"><span class="st-pass">PASS 1/1</span></td>
+  </tr></tbody></table></div>
+  </section><section class="module" id="m-CON">
+    <div class="mhead">
+      <div><span class="mcode">CON</span><h3>合約與服務安排</h3></div>
+      <div class="mmeta"><span>用例 <b>6</b></span><span>自動化 <b>5/6</b></span><span>風險 <b class="risk-h">高</b></span></div>
+    </div>
+    <p class="goal"><b>目標：</b>一約一計劃、名稱規則、關聯不斷鏈　<b>自動化覆蓋：</b>必填、編號規則、名稱、軟刪除、轉合約</p>
+    <div class="tablewrap"><table class="cases"><colgroup><col style="width:70px"><col style="width:156px"><col style="width:50px"><col style="width:52px"><col style="width:310px"><col style="width:300px"><col style="width:70px"></colgroup><thead><tr><th>ID</th><th>測試項</th><th>級別</th><th>方法</th><th>前置與步驟</th><th>預期結果 / 判定標準</th><th>狀態</th></tr></thead><tbody><tr>
+    <td class="mono">CON-01</td>
+    <td><b>合約新增必填與編號</b></td>
+    <td><span class="pill p-p0">P0</span></td>
+    <td><span class="tag">功能</span></td>
+    <td><div class="pre">office</div><ol class="steps"><li>contract_number 留空提交</li><li>再填 C-TEST-001 提交</li></ol></td>
+    <td>留空回 400（required 先於自動編號，屬已知設計缺口）；填值 302</td>
+    <td class="nowrap"><span class="st-pass">PASS 1/1</span></td>
+  </tr><tr>
+    <td class="mono">CON-02</td>
+    <td><b>合約名稱自動生成</b></td>
+    <td><span class="pill p-p1">P1</span></td>
+    <td><span class="tag">功能</span></td>
+    <td><div class="pre">office</div><ol class="steps"><li>名稱留空，填客戶/地點/內容提交</li></ol></td>
+    <td>contract_name=編號_客戶_地點_內容；空段自動省略</td>
+    <td class="nowrap"><span class="st-pass">PASS 1/1</span></td>
+  </tr><tr>
+    <td class="mono">CON-03</td>
+    <td><b>合約 13 欄彈窗</b></td>
+    <td><span class="pill p-p1">P1</span></td>
+    <td><span class="tag">UI</span></td>
+    <td><div class="pre">office</div><ol class="steps"><li>GET /contracts 開新增彈窗</li></ol></td>
+    <td>13 欄齊全；客戶/工作單位選擇器可回填；合約文件可上傳</td>
+    <td class="nowrap"><span class="st-pass">PASS 1/1</span></td>
+  </tr><tr>
+    <td class="mono">CON-04</td>
+    <td><b>合約詳情與連結</b></td>
+    <td><span class="pill p-p1">P1</span></td>
+    <td><span class="tag">功能</span></td>
+    <td><div class="pre">有合約</div><ol class="steps"><li>從列表點合約編號/客戶名</li></ol></td>
+    <td>合約編號→詳情；客戶名→客戶詳情；不得 404</td>
+    <td class="nowrap"><span class="st-pass">PASS 1/1</span></td>
+  </tr><tr>
+    <td class="mono">CON-05</td>
+    <td><b>合約軟刪除與還原</b></td>
+    <td><span class="pill p-p1">P1</span></td>
+    <td><span class="tag">資料</span></td>
+    <td><div class="pre">office</div><ol class="steps"><li>刪除 → 回收桶可見 → 還原</li></ol></td>
+    <td>deleted 1→0；服務計劃關聯仍可開</td>
+    <td class="nowrap"><span class="st-pass">PASS 1/1</span></td>
+  </tr><tr>
+    <td class="mono">CON-06</td>
+    <td><b>服務計劃一約一計劃</b></td>
+    <td><span class="pill p-p1">P1</span></td>
+    <td><span class="tag">資料</span></td>
+    <td><div class="pre">有合約</div><ol class="steps"><li>從合約列表新增服務計劃</li><li>再次對同合約新增</li></ol></td>
+    <td>同合約僅一份計劃；名稱/日期同步；不得重複建</td>
+    <td class="nowrap"><span class="muted">手工</span></td>
+  </tr></tbody></table></div>
+  </section><section class="module" id="m-DN">
+    <div class="mhead">
+      <div><span class="mcode">DN</span><h3>送貨單與出庫</h3></div>
+      <div class="mmeta"><span>用例 <b>5</b></span><span>自動化 <b>5/5</b></span><span>風險 <b class="risk-x">極高</b></span></div>
+    </div>
+    <p class="goal"><b>目標：</b>送達即扣庫存、不可重複扣、不可改明細　<b>自動化覆蓋：</b>自動編號、送達扣庫、重複扣攔截、明細鎖定</p>
+    <div class="tablewrap"><table class="cases"><colgroup><col style="width:70px"><col style="width:156px"><col style="width:50px"><col style="width:52px"><col style="width:310px"><col style="width:300px"><col style="width:70px"></colgroup><thead><tr><th>ID</th><th>測試項</th><th>級別</th><th>方法</th><th>前置與步驟</th><th>預期結果 / 判定標準</th><th>狀態</th></tr></thead><tbody><tr>
+    <td class="mono">DN-01</td>
+    <td><b>送貨單自動編號</b></td>
+    <td><span class="pill p-p0">P0</span></td>
+    <td><span class="tag">功能</span></td>
+    <td><div class="pre">office</div><ol class="steps"><li>dn_number 留空提交</li></ol></td>
+    <td>DNP + yyMM + 3 位序號；同月連續不重號</td>
+    <td class="nowrap"><span class="st-pass">PASS 1/1</span></td>
+  </tr><tr>
+    <td class="mono">DN-02</td>
+    <td><b>送達扣庫存</b></td>
+    <td><span class="pill p-p0">P0</span></td>
+    <td><span class="tag">資料</span></td>
+    <td><div class="pre">產品庫存 10、DN 明細 qty 3</div><ol class="steps"><li>建立 DN 狀態=已送達</li><li>讀產品與調整單</li></ol></td>
+    <td>庫存 7；生成 -3 的「送貨出庫」調整；stock_synced=true</td>
+    <td class="nowrap"><span class="st-pass">PASS 1/1</span></td>
+  </tr><tr>
+    <td class="mono">DN-03</td>
+    <td><b>庫存不足攔截</b></td>
+    <td><span class="pill p-p0">P0</span></td>
+    <td><span class="tag">異常</span></td>
+    <td><div class="pre">庫存 2、qty 5</div><ol class="steps"><li>提交狀態=已送達</li></ol></td>
+    <td>409 庫存不足；DN 不落庫或保持草稿；庫存不變</td>
+    <td class="nowrap"><span class="st-pass">PASS 1/1</span></td>
+  </tr><tr>
+    <td class="mono">DN-04</td>
+    <td><b>已過賬明細鎖定</b></td>
+    <td><span class="pill p-p0">P0</span></td>
+    <td><span class="tag">異常</span></td>
+    <td><div class="pre">已同步 DN</div><ol class="steps"><li>修改 items 後再提交</li></ol></td>
+    <td>409「已過賬送貨單不可修改貨品明細」；庫存不變</td>
+    <td class="nowrap"><span class="st-pass">PASS 1/1</span></td>
+  </tr><tr>
+    <td class="mono">DN-05</td>
+    <td><b>重複過賬攔截</b></td>
+    <td><span class="pill p-p0">P0</span></td>
+    <td><span class="tag">異常</span></td>
+    <td><div class="pre">同一 DN</div><ol class="steps"><li>再次儲存為已送達</li><li>或補錄歷史</li></ol></td>
+    <td>不重複扣庫存；已有 source_delivery_id 時拒絕</td>
+    <td class="nowrap"><span class="st-pass">PASS 1/1</span></td>
+  </tr></tbody></table></div>
+  </section><section class="module" id="m-INV">
+    <div class="mhead">
+      <div><span class="mcode">INV</span><h3>發票管理</h3></div>
+      <div class="mmeta"><span>用例 <b>7</b></span><span>自動化 <b>6/7</b></span><span>風險 <b class="risk-x">極高</b></span></div>
+    </div>
+    <p class="goal"><b>目標：</b>金額、狀態、收款聯動正確　<b>自動化覆蓋：</b>編號、金額/餘額、必填、收款核銷</p>
+    <div class="tablewrap"><table class="cases"><colgroup><col style="width:70px"><col style="width:156px"><col style="width:50px"><col style="width:52px"><col style="width:310px"><col style="width:300px"><col style="width:70px"></colgroup><thead><tr><th>ID</th><th>測試項</th><th>級別</th><th>方法</th><th>前置與步驟</th><th>預期結果 / 判定標準</th><th>狀態</th></tr></thead><tbody><tr>
+    <td class="mono">INV-01</td>
+    <td><b>發票新增與金額</b></td>
+    <td><span class="pill p-p0">P0</span></td>
+    <td><span class="tag">資料</span></td>
+    <td><div class="pre">accounting</div><ol class="steps"><li>明細 3×200 折扣 50、運費 30 提交</li></ol></td>
+    <td>subtotal 550、total 580、balance_due 580；編號 INV-YYYY-####</td>
+    <td class="nowrap"><span class="st-pass">PASS 1/1</span></td>
+  </tr><tr>
+    <td class="mono">INV-02</td>
+    <td><b>發票必填</b></td>
+    <td><span class="pill p-p0">P0</span></td>
+    <td><span class="tag">異常</span></td>
+    <td><div class="pre">accounting</div><ol class="steps"><li>缺 customer_name</li><li>缺 items</li></ol></td>
+    <td>400；不得寫入</td>
+    <td class="nowrap"><span class="st-pass">PASS 1/1</span></td>
+  </tr><tr>
+    <td class="mono">INV-03</td>
+    <td><b>收款核銷</b></td>
+    <td><span class="pill p-p0">P0</span></td>
+    <td><span class="tag">資料</span></td>
+    <td><div class="pre">發票 580、未付</div><ol class="steps"><li>POST /invoices/:id/receipt 收 300</li><li>再收 280</li></ol></td>
+    <td>第一次 paid 300、狀態部分付款、餘額 280；第二次 paid 580、已付款、餘額 0；生成 2 張收據</td>
+    <td class="nowrap"><span class="st-pass">PASS 1/1</span></td>
+  </tr><tr>
+    <td class="mono">INV-04</td>
+    <td><b>超額收款</b></td>
+    <td><span class="pill p-p1">P1</span></td>
+    <td><span class="tag">邊界</span></td>
+    <td><div class="pre">發票餘額 100</div><ol class="steps"><li>收款 150</li></ol></td>
+    <td>拒絕或明確提示（不得默默把餘額做成負數）</td>
+    <td class="nowrap"><span class="st-pass">PASS 1/1</span></td>
+  </tr><tr>
+    <td class="mono">INV-05</td>
+    <td><b>發票作廢與關聯</b></td>
+    <td><span class="pill p-p1">P1</span></td>
+    <td><span class="tag">功能</span></td>
+    <td><div class="pre">已收款發票</div><ol class="steps"><li>改狀態=已作廢</li></ol></td>
+    <td>狀態保存；應收臺賬不再計入；關聯收據保留可追溯</td>
+    <td class="nowrap"><span class="muted">手工</span></td>
+  </tr><tr>
+    <td class="mono">INV-06</td>
+    <td><b>發票轉收據明細</b></td>
+    <td><span class="pill p-p1">P1</span></td>
+    <td><span class="tag">資料</span></td>
+    <td><div class="pre">收款成功</div><ol class="steps"><li>查看收據詳情</li></ol></td>
+    <td>收據 items 含發票編號/說明/小計；總額等於本次收款</td>
+    <td class="nowrap"><span class="st-pass">PASS 1/1</span></td>
+  </tr><tr>
+    <td class="mono">INV-07</td>
+    <td><b>收款後狀態字典一致</b></td>
+    <td><span class="pill p-p1">P1</span></td>
+    <td><span class="tag">資料</span></td>
+    <td><div class="pre">發票部分收款</div><ol class="steps"><li>收款 40/100</li><li>查看狀態與篩選器</li></ol></td>
+    <td>狀態必須是「部分付款」（與下拉/篩選字典一致），不得出現字典外的「部分收款」</td>
+    <td class="nowrap"><span class="st-fail">FAIL 1/1</span></td>
+  </tr></tbody></table></div>
+  </section><section class="module" id="m-RCP">
+    <div class="mhead">
+      <div><span class="mcode">RCP</span><h3>收據管理</h3></div>
+      <div class="mmeta"><span>用例 <b>3</b></span><span>自動化 <b>0/3</b></span><span>風險 <b class="risk-m">中</b></span></div>
+    </div>
+    <p class="goal"><b>目標：</b>編號、金額、關聯發票一致　<b>自動化覆蓋：</b>自動編號、必填、列表</p>
+    <div class="tablewrap"><table class="cases"><colgroup><col style="width:70px"><col style="width:156px"><col style="width:50px"><col style="width:52px"><col style="width:310px"><col style="width:300px"><col style="width:70px"></colgroup><thead><tr><th>ID</th><th>測試項</th><th>級別</th><th>方法</th><th>前置與步驟</th><th>預期結果 / 判定標準</th><th>狀態</th></tr></thead><tbody><tr>
+    <td class="mono">RCP-01</td>
+    <td><b>收據自動編號</b></td>
+    <td><span class="pill p-p1">P1</span></td>
+    <td><span class="tag">功能</span></td>
+    <td><div class="pre">accounting</div><ol class="steps"><li>receipt_number 留空手動新增</li></ol></td>
+    <td>R + yy + 4 位序號；不與發票號混淆</td>
+    <td class="nowrap"><span class="muted">手工</span></td>
+  </tr><tr>
+    <td class="mono">RCP-02</td>
+    <td><b>收據必填</b></td>
+    <td><span class="pill p-p1">P1</span></td>
+    <td><span class="tag">異常</span></td>
+    <td><div class="pre">accounting</div><ol class="steps"><li>缺號碼/客戶提交</li></ol></td>
+    <td>400 並指出欄位</td>
+    <td class="nowrap"><span class="muted">手工</span></td>
+  </tr><tr>
+    <td class="mono">RCP-03</td>
+    <td><b>收據列印</b></td>
+    <td><span class="pill p-p2">P2</span></td>
+    <td><span class="tag">UI</span></td>
+    <td><div class="pre">有收據</div><ol class="steps"><li>GET /print/receipts/:id</li></ol></td>
+    <td>公司抬頭/印章/金額/付款方式完整；分頁不截斷</td>
+    <td class="nowrap"><span class="muted">手工</span></td>
+  </tr></tbody></table></div>
+  </section><section class="module" id="m-BIL">
+    <div class="mhead">
+      <div><span class="mcode">BIL</span><h3>帳單管理</h3></div>
+      <div class="mmeta"><span>用例 <b>3</b></span><span>自動化 <b>0/3</b></span><span>風險 <b class="risk-m">中</b></span></div>
+    </div>
+    <p class="goal"><b>目標：</b>供應商帳單與付款餘額正確　<b>自動化覆蓋：</b>金額、必填、餘額</p>
+    <div class="tablewrap"><table class="cases"><colgroup><col style="width:70px"><col style="width:156px"><col style="width:50px"><col style="width:52px"><col style="width:310px"><col style="width:300px"><col style="width:70px"></colgroup><thead><tr><th>ID</th><th>測試項</th><th>級別</th><th>方法</th><th>前置與步驟</th><th>預期結果 / 判定標準</th><th>狀態</th></tr></thead><tbody><tr>
+    <td class="mono">BIL-01</td>
+    <td><b>帳單金額與餘額</b></td>
+    <td><span class="pill p-p1">P1</span></td>
+    <td><span class="tag">資料</span></td>
+    <td><div class="pre">accounting</div><ol class="steps"><li>明細 2×100、稅 20、已付 50 提交</li></ol></td>
+    <td>subtotal 200、total 220、balance 170</td>
+    <td class="nowrap"><span class="muted">手工</span></td>
+  </tr><tr>
+    <td class="mono">BIL-02</td>
+    <td><b>帳單必填</b></td>
+    <td><span class="pill p-p1">P1</span></td>
+    <td><span class="tag">異常</span></td>
+    <td><div class="pre">accounting</div><ol class="steps"><li>缺 vendor_name / items</li></ol></td>
+    <td>400</td>
+    <td class="nowrap"><span class="muted">手工</span></td>
+  </tr><tr>
+    <td class="mono">BIL-03</td>
+    <td><b>帳單付款狀態</b></td>
+    <td><span class="pill p-p1">P1</span></td>
+    <td><span class="tag">功能</span></td>
+    <td><div class="pre">帳單餘額 0</div><ol class="steps"><li>改狀態=已付款</li></ol></td>
+    <td>狀態保存；列表 pill 顏色正確；不得影響發票</td>
+    <td class="nowrap"><span class="muted">手工</span></td>
+  </tr></tbody></table></div>
+  </section><section class="module" id="m-PAY">
+    <div class="mhead">
+      <div><span class="mcode">PAY</span><h3>付款記錄</h3></div>
+      <div class="mmeta"><span>用例 <b>2</b></span><span>自動化 <b>0/2</b></span><span>風險 <b class="risk-m">中</b></span></div>
+    </div>
+    <p class="goal"><b>目標：</b>收付款流水可追溯　<b>自動化覆蓋：</b>必填、列表</p>
+    <div class="tablewrap"><table class="cases"><colgroup><col style="width:70px"><col style="width:156px"><col style="width:50px"><col style="width:52px"><col style="width:310px"><col style="width:300px"><col style="width:70px"></colgroup><thead><tr><th>ID</th><th>測試項</th><th>級別</th><th>方法</th><th>前置與步驟</th><th>預期結果 / 判定標準</th><th>狀態</th></tr></thead><tbody><tr>
+    <td class="mono">PAY-01</td>
+    <td><b>付款新增與必填</b></td>
+    <td><span class="pill p-p1">P1</span></td>
+    <td><span class="tag">功能</span></td>
+    <td><div class="pre">accounting</div><ol class="steps"><li>填類型/方式/金額提交</li><li>再缺金額提交</li></ol></td>
+    <td>成功 302；缺金額 400</td>
+    <td class="nowrap"><span class="muted">手工</span></td>
+  </tr><tr>
+    <td class="mono">PAY-02</td>
+    <td><b>付款篩選</b></td>
+    <td><span class="pill p-p2">P2</span></td>
+    <td><span class="tag">功能</span></td>
+    <td><div class="pre">有收款與付款記錄</div><ol class="steps"><li>/payments?payment_type=收款</li></ol></td>
+    <td>只顯示收款；筆數與 DB 一致</td>
+    <td class="nowrap"><span class="muted">手工</span></td>
+  </tr></tbody></table></div>
+  </section><section class="module" id="m-TXN">
+    <div class="mhead">
+      <div><span class="mcode">TXN</span><h3>總帳與會計</h3></div>
+      <div class="mmeta"><span>用例 <b>5</b></span><span>自動化 <b>4/5</b></span><span>風險 <b class="risk-x">極高</b></span></div>
+    </div>
+    <p class="goal"><b>目標：</b>借貸平衡、過賬狀態、報表口徑　<b>自動化覆蓋：</b>不平衡攔截、平衡入帳、總帳頁、應收頁</p>
+    <div class="tablewrap"><table class="cases"><colgroup><col style="width:70px"><col style="width:156px"><col style="width:50px"><col style="width:52px"><col style="width:310px"><col style="width:300px"><col style="width:70px"></colgroup><thead><tr><th>ID</th><th>測試項</th><th>級別</th><th>方法</th><th>前置與步驟</th><th>預期結果 / 判定標準</th><th>狀態</th></tr></thead><tbody><tr>
+    <td class="mono">TXN-01</td>
+    <td><b>借貸不平衡攔截</b></td>
+    <td><span class="pill p-p0">P0</span></td>
+    <td><span class="tag">異常</span></td>
+    <td><div class="pre">accounting</div><ol class="steps"><li>分錄借 100/貸 50，狀態=已過賬</li></ol></td>
+    <td>400「憑證借貸不平衡」；不落庫</td>
+    <td class="nowrap"><span class="st-pass">PASS 1/1</span></td>
+  </tr><tr>
+    <td class="mono">TXN-02</td>
+    <td><b>平衡分錄入帳</b></td>
+    <td><span class="pill p-p0">P0</span></td>
+    <td><span class="tag">資料</span></td>
+    <td><div class="pre">accounting</div><ol class="steps"><li>借 100/貸 100 提交</li></ol></td>
+    <td>total_debit=total_credit=100；總帳可見</td>
+    <td class="nowrap"><span class="st-pass">PASS 1/1</span></td>
+  </tr><tr>
+    <td class="mono">TXN-03</td>
+    <td><b>草稿允許不平衡</b></td>
+    <td><span class="pill p-p1">P1</span></td>
+    <td><span class="tag">邊界</span></td>
+    <td><div class="pre">accounting</div><ol class="steps"><li>狀態=草稿，借 100/貸 50</li></ol></td>
+    <td>允許暫存；狀態改已過賬時必須攔截</td>
+    <td class="nowrap"><span class="st-pass">PASS 1/1</span></td>
+  </tr><tr>
+    <td class="mono">TXN-04</td>
+    <td><b>總帳分頁與合計</b></td>
+    <td><span class="pill p-p1">P1</span></td>
+    <td><span class="tag">效能</span></td>
+    <td><div class="pre">522 行資料</div><ol class="steps"><li>GET /generalledger</li><li>翻到最後一頁</li></ol></td>
+    <td>總筆數/合計與 DB 一致；分頁不重不漏；回應 &lt; 3s</td>
+    <td class="nowrap"><span class="st-pass">PASS 1/1</span></td>
+  </tr><tr>
+    <td class="mono">TXN-05</td>
+    <td><b>應收臺賬口徑</b></td>
+    <td><span class="pill p-p0">P0</span></td>
+    <td><span class="tag">資料</span></td>
+    <td><div class="pre">有未付/部分付/已付發票</div><ol class="steps"><li>GET /receivables</li><li>對照 DB 餘額</li></ol></td>
+    <td>只列未結案；合計=Σ balance_due；已作廢不計</td>
+    <td class="nowrap"><span class="muted">手工</span></td>
+  </tr></tbody></table></div>
+  </section><section class="module" id="m-STK">
+    <div class="mhead">
+      <div><span class="mcode">STK</span><h3>庫存、調整與盤點</h3></div>
+      <div class="mmeta"><span>用例 <b>9</b></span><span>自動化 <b>9/9</b></span><span>風險 <b class="risk-x">極高</b></span></div>
+    </div>
+    <p class="goal"><b>目標：</b>每一次數量變動都可追溯且可逆　<b>自動化覆蓋：</b>調整入/出庫、負庫存、盤點過賬、刪除沖銷、還原重過賬、編輯鎖定</p>
+    <div class="tablewrap"><table class="cases"><colgroup><col style="width:70px"><col style="width:156px"><col style="width:50px"><col style="width:52px"><col style="width:310px"><col style="width:300px"><col style="width:70px"></colgroup><thead><tr><th>ID</th><th>測試項</th><th>級別</th><th>方法</th><th>前置與步驟</th><th>預期結果 / 判定標準</th><th>狀態</th></tr></thead><tbody><tr>
+    <td class="mono">STK-01</td>
+    <td><b>產品新增與必填</b></td>
+    <td><span class="pill p-p0">P0</span></td>
+    <td><span class="tag">功能</span></td>
+    <td><div class="pre">office</div><ol class="steps"><li>填名稱/零售價/庫存 10</li><li>再缺零售價</li></ol></td>
+    <td>成功；缺價 400；庫存與價格正確</td>
+    <td class="nowrap"><span class="st-pass">PASS 1/1</span></td>
+  </tr><tr>
+    <td class="mono">STK-02</td>
+    <td><b>入庫調整</b></td>
+    <td><span class="pill p-p0">P0</span></td>
+    <td><span class="tag">資料</span></td>
+    <td><div class="pre">產品庫存 10</div><ol class="steps"><li>新增調整 類型=入庫 數量 5</li></ol></td>
+    <td>庫存 15；調整單 before 10/change +5/after 15；stock_posted=true</td>
+    <td class="nowrap"><span class="st-pass">PASS 1/1</span></td>
+  </tr><tr>
+    <td class="mono">STK-03</td>
+    <td><b>出庫與負庫存</b></td>
+    <td><span class="pill p-p0">P0</span></td>
+    <td><span class="tag">邊界</span></td>
+    <td><div class="pre">庫存 5</div><ol class="steps"><li>出庫 3</li><li>再出庫 10</li></ol></td>
+    <td>第一次庫存 2；第二次 409 庫存不足；不得出現負數</td>
+    <td class="nowrap"><span class="st-pass">PASS 1/1</span></td>
+  </tr><tr>
+    <td class="mono">STK-04</td>
+    <td><b>調整單不可編輯</b></td>
+    <td><span class="pill p-p0">P0</span></td>
+    <td><span class="tag">異常</span></td>
+    <td><div class="pre">已有調整單</div><ol class="steps"><li>對既有 id 再提交修改</li></ol></td>
+    <td>409「請新增反向調整」；原單與庫存不變</td>
+    <td class="nowrap"><span class="st-pass">PASS 1/1</span></td>
+  </tr><tr>
+    <td class="mono">STK-05</td>
+    <td><b>盤點完成過賬</b></td>
+    <td><span class="pill p-p0">P0</span></td>
+    <td><span class="tag">資料</span></td>
+    <td><div class="pre">產品庫存 15</div><ol class="steps"><li>新增盤點 actual=12 狀態=已完成</li></ol></td>
+    <td>庫存 12；生成 -3 盤點調整；盤點 items 寫入 system_quantity/difference</td>
+    <td class="nowrap"><span class="st-pass">PASS 1/1</span></td>
+  </tr><tr>
+    <td class="mono">STK-06</td>
+    <td><b>刪除已過賬盤點沖銷</b></td>
+    <td><span class="pill p-p0">P0</span></td>
+    <td><span class="tag">資料</span></td>
+    <td><div class="pre">已過賬盤點（-3）</div><ol class="steps"><li>POST /delete/stock_counts/:id</li></ol></td>
+    <td>庫存回到 15；生成 +3 沖銷調整；stock_reversed=true；記錄進回收桶</td>
+    <td class="nowrap"><span class="st-fail">FAIL 1/1</span></td>
+  </tr><tr>
+    <td class="mono">STK-07</td>
+    <td><b>還原盤點重新過賬</b></td>
+    <td><span class="pill p-p0">P0</span></td>
+    <td><span class="tag">資料</span></td>
+    <td><div class="pre">已沖銷盤點</div><ol class="steps"><li>POST /trash/restore</li></ol></td>
+    <td>庫存再回到 12；生成 -3 調整；stock_reversed=false</td>
+    <td class="nowrap"><span class="st-pass">PASS 1/1</span></td>
+  </tr><tr>
+    <td class="mono">STK-08</td>
+    <td><b>已過賬盤點不可改</b></td>
+    <td><span class="pill p-p0">P0</span></td>
+    <td><span class="tag">異常</span></td>
+    <td><div class="pre">已過賬盤點</div><ol class="steps"><li>改 items 或狀態再提交</li></ol></td>
+    <td>409；庫存不變</td>
+    <td class="nowrap"><span class="st-pass">PASS 1/1</span></td>
+  </tr><tr>
+    <td class="mono">STK-09</td>
+    <td><b>自動調整單編號</b></td>
+    <td><span class="pill p-p2">P2</span></td>
+    <td><span class="tag">資料</span></td>
+    <td><div class="pre">盤點/送貨自動生成調整</div><ol class="steps"><li>查看 adjustment_number</li></ol></td>
+    <td>符合 ADJ-YYYY-#####；列表不得空白</td>
+    <td class="nowrap"><span class="st-fail">FAIL 1/1</span></td>
+  </tr></tbody></table></div>
+  </section><section class="module" id="m-SCH">
+    <div class="mhead">
+      <div><span class="mcode">SCH</span><h3>排班與定期排程</h3></div>
+      <div class="mmeta"><span>用例 <b>7</b></span><span>自動化 <b>5/7</b></span><span>風險 <b class="risk-h">高</b></span></div>
+    </div>
+    <p class="goal"><b>目標：</b>排班可改期、工作項關聯 PO、定期不重複　<b>自動化覆蓋：</b>新增、改期、工作項關聯、權限</p>
+    <div class="tablewrap"><table class="cases"><colgroup><col style="width:70px"><col style="width:156px"><col style="width:50px"><col style="width:52px"><col style="width:310px"><col style="width:300px"><col style="width:70px"></colgroup><thead><tr><th>ID</th><th>測試項</th><th>級別</th><th>方法</th><th>前置與步驟</th><th>預期結果 / 判定標準</th><th>狀態</th></tr></thead><tbody><tr>
+    <td class="mono">SCH-01</td>
+    <td><b>排班新增與總工時</b></td>
+    <td><span class="pill p-p0">P0</span></td>
+    <td><span class="tag">功能</span></td>
+    <td><div class="pre">office</div><ol class="steps"><li>選日期、加 2 個工作項（含開始/結束時間）提交</li></ol></td>
+    <td>302 回 /schedules?saved=日期；total_hours 等於工時合計；日曆對應日有卡片</td>
+    <td class="nowrap"><span class="st-pass">PASS 1/1</span></td>
+  </tr><tr>
+    <td class="mono">SCH-02</td>
+    <td><b>拖拽改期</b></td>
+    <td><span class="pill p-p0">P0</span></td>
+    <td><span class="tag">功能</span></td>
+    <td><div class="pre">有排班</div><ol class="steps"><li>POST /schedules/:id/move date=+1</li></ol></td>
+    <td>JSON ok；schedule_date 更新；原日消失、新日出現</td>
+    <td class="nowrap"><span class="st-pass">PASS 1/1</span></td>
+  </tr><tr>
+    <td class="mono">SCH-03</td>
+    <td><b>工作項關聯 PO 回寫日期</b></td>
+    <td><span class="pill p-p1">P1</span></td>
+    <td><span class="tag">資料</span></td>
+    <td><div class="pre">有 PO</div><ol class="steps"><li>排班工作項填 po_id 儲存</li><li>讀 PO</li></ol></td>
+    <td>PO.work_dates 追加該日期，去重排序</td>
+    <td class="nowrap"><span class="st-pass">PASS 1/1</span></td>
+  </tr><tr>
+    <td class="mono">SCH-04</td>
+    <td><b>同合同同日重複排程</b></td>
+    <td><span class="pill p-p1">P1</span></td>
+    <td><span class="tag">異常</span></td>
+    <td><div class="pre">已有定期排程生成的排班</div><ol class="steps"><li>同日再生成同 recurring_schedule</li></ol></td>
+    <td>409 不可重複生成；不產生第二筆</td>
+    <td class="nowrap"><span class="muted">手工</span></td>
+  </tr><tr>
+    <td class="mono">SCH-05</td>
+    <td><b>定期排程產生排班</b></td>
+    <td><span class="pill p-p1">P1</span></td>
+    <td><span class="tag">功能</span></td>
+    <td><div class="pre">啟用中的定期排程</div><ol class="steps"><li>POST /recurring_schedules/:id/generate</li></ol></td>
+    <td>按頻率生成；next_schedule_date 前移；不重複</td>
+    <td class="nowrap"><span class="muted">手工</span></td>
+  </tr><tr>
+    <td class="mono">SCH-07</td>
+    <td><b>排班總工時計算</b></td>
+    <td><span class="pill p-p2">P2</span></td>
+    <td><span class="tag">資料</span></td>
+    <td><div class="pre">工作項含起止時間</div><ol class="steps"><li>新增 09:00–11:00 與 13:00–14:30 兩項</li><li>讀 total_hours</li></ol></td>
+    <td>total_hours=3.5；列表/詳情同值</td>
+    <td class="nowrap"><span class="st-fail">FAIL 1/1</span></td>
+  </tr><tr>
+    <td class="mono">SCH-06</td>
+    <td><b>排班權限</b></td>
+    <td><span class="pill p-p0">P0</span></td>
+    <td><span class="tag">權限</span></td>
+    <td><div class="pre">front</div><ol class="steps"><li>GET /schedules</li><li>POST /save/schedules</li></ol></td>
+    <td>皆 403</td>
+    <td class="nowrap"><span class="st-pass">PASS 1/1</span></td>
+  </tr></tbody></table></div>
+  </section><section class="module" id="m-SPL">
+    <div class="mhead">
+      <div><span class="mcode">SPL</span><h3>服務計劃與紀錄日</h3></div>
+      <div class="mmeta"><span>用例 <b>4</b></span><span>自動化 <b>0/4</b></span><span>風險 <b class="risk-m">中</b></span></div>
+    </div>
+    <p class="goal"><b>目標：</b>合約→計劃→紀錄日→報告鏈路完整　<b>自動化覆蓋：</b>計劃頁、紀錄日詳情、權限</p>
+    <div class="tablewrap"><table class="cases"><colgroup><col style="width:70px"><col style="width:156px"><col style="width:50px"><col style="width:52px"><col style="width:310px"><col style="width:300px"><col style="width:70px"></colgroup><thead><tr><th>ID</th><th>測試項</th><th>級別</th><th>方法</th><th>前置與步驟</th><th>預期結果 / 判定標準</th><th>狀態</th></tr></thead><tbody><tr>
+    <td class="mono">SPL-01</td>
+    <td><b>服務計劃列表與篩選</b></td>
+    <td><span class="pill p-p1">P1</span></td>
+    <td><span class="tag">功能</span></td>
+    <td><div class="pre">有合約計劃</div><ol class="steps"><li>GET /serviceplans</li><li>按狀態/客戶篩選</li></ol></td>
+    <td>只列計劃；筆數與 DB 一致；空狀態正常</td>
+    <td class="nowrap"><span class="muted">手工</span></td>
+  </tr><tr>
+    <td class="mono">SPL-02</td>
+    <td><b>紀錄日詳情</b></td>
+    <td><span class="pill p-p1">P1</span></td>
+    <td><span class="tag">功能</span></td>
+    <td><div class="pre">有 service_plan_dates</div><ol class="steps"><li>GET /serviceplans/:id</li></ol></td>
+    <td>日期、合約、客戶、負責員工、報告內容正確；不得被 /serviceplans/:id 路由喫掉</td>
+    <td class="nowrap"><span class="muted">手工</span></td>
+  </tr><tr>
+    <td class="mono">SPL-03</td>
+    <td><b>紀錄點四格照片</b></td>
+    <td><span class="pill p-p1">P1</span></td>
+    <td><span class="tag">功能</span></td>
+    <td><div class="pre">有紀錄日</div><ol class="steps"><li>新增/編輯 quadrants 四格</li><li>上傳照片</li></ol></td>
+    <td>四格保存、圖片可開、公開分享頁可見</td>
+    <td class="nowrap"><span class="muted">手工</span></td>
+  </tr><tr>
+    <td class="mono">SPL-04</td>
+    <td><b>公開報告分享</b></td>
+    <td><span class="pill p-p1">P1</span></td>
+    <td><span class="tag">安全</span></td>
+    <td><div class="pre">有 shared_token</div><ol class="steps"><li>GET /PublicReportView?token=...</li><li>改 token 一字</li></ol></td>
+    <td>正確 token 200；錯誤 token 404；不得枚舉其他報告</td>
+    <td class="nowrap"><span class="muted">手工</span></td>
+  </tr></tbody></table></div>
+  </section><section class="module" id="m-SR">
+    <div class="mhead">
+      <div><span class="mcode">SR</span><h3>服務報告與簽署</h3></div>
+      <div class="mmeta"><span>用例 <b>5</b></span><span>自動化 <b>0/5</b></span><span>風險 <b class="risk-h">高</b></span></div>
+    </div>
+    <p class="goal"><b>目標：</b>前線可讀、辦公室可編、客戶可簽　<b>自動化覆蓋：</b>建立必填、列表、分享、簽署邊界</p>
+    <div class="tablewrap"><table class="cases"><colgroup><col style="width:70px"><col style="width:156px"><col style="width:50px"><col style="width:52px"><col style="width:310px"><col style="width:300px"><col style="width:70px"></colgroup><thead><tr><th>ID</th><th>測試項</th><th>級別</th><th>方法</th><th>前置與步驟</th><th>預期結果 / 判定標準</th><th>狀態</th></tr></thead><tbody><tr>
+    <td class="mono">SR-01</td>
+    <td><b>報告建立必填</b></td>
+    <td><span class="pill p-p0">P0</span></td>
+    <td><span class="tag">異常</span></td>
+    <td><div class="pre">office</div><ol class="steps"><li>缺 report_title 提交</li></ol></td>
+    <td>400；不落庫</td>
+    <td class="nowrap"><span class="muted">手工</span></td>
+  </tr><tr>
+    <td class="mono">SR-02</td>
+    <td><b>前線唯讀可見</b></td>
+    <td><span class="pill p-p0">P0</span></td>
+    <td><span class="tag">權限</span></td>
+    <td><div class="pre">front</div><ol class="steps"><li>GET /servicereports</li><li>GET /view/work_records/:id</li></ol></td>
+    <td>200 可讀；不出現編輯/刪除按鈕；POST 保存 403</td>
+    <td class="nowrap"><span class="muted">手工</span></td>
+  </tr><tr>
+    <td class="mono">SR-03</td>
+    <td><b>報告分享連結</b></td>
+    <td><span class="pill p-p1">P1</span></td>
+    <td><span class="tag">功能</span></td>
+    <td><div class="pre">有報告</div><ol class="steps"><li>POST /work_records/:id/share</li></ol></td>
+    <td>shared_token 生成；公開頁可讀；金額遮罩</td>
+    <td class="nowrap"><span class="muted">手工</span></td>
+  </tr><tr>
+    <td class="mono">SR-04</td>
+    <td><b>客戶簽名</b></td>
+    <td><span class="pill p-p1">P1</span></td>
+    <td><span class="tag">功能</span></td>
+    <td><div class="pre">有簽署 token</div><ol class="steps"><li>提交簽名人+PNG dataURL</li></ol></td>
+    <td>signed_by/date/status 更新；再次提交 409；簽名圖可讀</td>
+    <td class="nowrap"><span class="muted">手工</span></td>
+  </tr><tr>
+    <td class="mono">SR-05</td>
+    <td><b>非法簽名數據</b></td>
+    <td><span class="pill p-p1">P1</span></td>
+    <td><span class="tag">安全</span></td>
+    <td><div class="pre">簽署頁</div><ol class="steps"><li>提交非 data:image/png 或超大內容</li></ol></td>
+    <td>400 提示；不寫入；不得存任意 HTML/SVG</td>
+    <td class="nowrap"><span class="muted">手工</span></td>
+  </tr></tbody></table></div>
+  </section><section class="module" id="m-ATT">
+    <div class="mhead">
+      <div><span class="mcode">ATT</span><h3>出勤、打卡與月度表</h3></div>
+      <div class="mmeta"><span>用例 <b>5</b></span><span>自動化 <b>0/5</b></span><span>風險 <b class="risk-m">中</b></span></div>
+    </div>
+    <p class="goal"><b>目標：</b>打卡→出勤→月度匯總一致　<b>自動化覆蓋：</b>打卡、月度頁、權限</p>
+    <div class="tablewrap"><table class="cases"><colgroup><col style="width:70px"><col style="width:156px"><col style="width:50px"><col style="width:52px"><col style="width:310px"><col style="width:300px"><col style="width:70px"></colgroup><thead><tr><th>ID</th><th>測試項</th><th>級別</th><th>方法</th><th>前置與步驟</th><th>預期結果 / 判定標準</th><th>狀態</th></tr></thead><tbody><tr>
+    <td class="mono">ATT-01</td>
+    <td><b>上班/下班打卡</b></td>
+    <td><span class="pill p-p1">P1</span></td>
+    <td><span class="tag">功能</span></td>
+    <td><div class="pre">front</div><ol class="steps"><li>POST /checkin 上班</li><li>同日再下班</li></ol></td>
+    <td>生成/更新當日記錄；total_hours 正確；重複上班不新增第二筆</td>
+    <td class="nowrap"><span class="muted">手工</span></td>
+  </tr><tr>
+    <td class="mono">ATT-02</td>
+    <td><b>打卡時間窗</b></td>
+    <td><span class="pill p-p1">P1</span></td>
+    <td><span class="tag">邊界</span></td>
+    <td><div class="pre">window_enforced=1</div><ol class="steps"><li>在 08:30 前與 18:00 後打卡</li></ol></td>
+    <td>依設定允許或提示；提示語明確；不得寫入錯誤日期</td>
+    <td class="nowrap"><span class="muted">手工</span></td>
+  </tr><tr>
+    <td class="mono">ATT-03</td>
+    <td><b>月度出勤匯總</b></td>
+    <td><span class="pill p-p1">P1</span></td>
+    <td><span class="tag">資料</span></td>
+    <td><div class="pre">當月有出勤/請假</div><ol class="steps"><li>GET /monthlyattendance?month=YYYY-MM</li><li>對照 DB</li></ol></td>
+    <td>每人每日一格；工時合計與 attendance 一致；請假顯示假別</td>
+    <td class="nowrap"><span class="muted">手工</span></td>
+  </tr><tr>
+    <td class="mono">ATT-04</td>
+    <td><b>Excel 排班/出勤匯出</b></td>
+    <td><span class="pill p-p2">P2</span></td>
+    <td><span class="tag">功能</span></td>
+    <td><div class="pre">office</div><ol class="steps"><li>GET /excelschedule</li><li>下載</li></ol></td>
+    <td>檔案可開；欄位與頁面一致；中文不亂碼</td>
+    <td class="nowrap"><span class="muted">手工</span></td>
+  </tr><tr>
+    <td class="mono">ATT-05</td>
+    <td><b>前線僅見自己</b></td>
+    <td><span class="pill p-p0">P0</span></td>
+    <td><span class="tag">權限</span></td>
+    <td><div class="pre">front</div><ol class="steps"><li>GET /myattendance</li><li>GET /attendance</li></ol></td>
+    <td>我的出勤 200 且只含本人；月度表 403</td>
+    <td class="nowrap"><span class="muted">手工</span></td>
+  </tr></tbody></table></div>
+  </section><section class="module" id="m-LV">
+    <div class="mhead">
+      <div><span class="mcode">LV</span><h3>請假管理</h3></div>
+      <div class="mmeta"><span>用例 <b>4</b></span><span>自動化 <b>4/4</b></span><span>風險 <b class="risk-m">中</b></span></div>
+    </div>
+    <p class="goal"><b>目標：</b>前線申請、管理層審批、天數正確　<b>自動化覆蓋：</b>天數計算、狀態強制、越權審批、批准</p>
+    <div class="tablewrap"><table class="cases"><colgroup><col style="width:70px"><col style="width:156px"><col style="width:50px"><col style="width:52px"><col style="width:310px"><col style="width:300px"><col style="width:70px"></colgroup><thead><tr><th>ID</th><th>測試項</th><th>級別</th><th>方法</th><th>前置與步驟</th><th>預期結果 / 判定標準</th><th>狀態</th></tr></thead><tbody><tr>
+    <td class="mono">LV-01</td>
+    <td><b>請假天數與狀態</b></td>
+    <td><span class="pill p-p0">P0</span></td>
+    <td><span class="tag">資料</span></td>
+    <td><div class="pre">front</div><ol class="steps"><li>start=2026-11-02 end=2026-11-04 提交</li></ol></td>
+    <td>total_days=3；status 強制為待審批（即使提交已批准）</td>
+    <td class="nowrap"><span class="st-pass">PASS 1/1</span></td>
+  </tr><tr>
+    <td class="mono">LV-02</td>
+    <td><b>前線不可代他人請假</b></td>
+    <td><span class="pill p-p0">P0</span></td>
+    <td><span class="tag">安全</span></td>
+    <td><div class="pre">front</div><ol class="steps"><li>表單填他人姓名提交</li></ol></td>
+    <td>employee_name 被強制改為本人；employee_id 為本人</td>
+    <td class="nowrap"><span class="st-pass">PASS 1/1</span></td>
+  </tr><tr>
+    <td class="mono">LV-03</td>
+    <td><b>審批權限與流轉</b></td>
+    <td><span class="pill p-p0">P0</span></td>
+    <td><span class="tag">權限</span></td>
+    <td><div class="pre">front / management</div><ol class="steps"><li>front POST /leaves/:id/decide</li><li>management 批准</li></ol></td>
+    <td>front 403；management 200 且 status=已批准、decided_by/at 有值</td>
+    <td class="nowrap"><span class="st-pass">PASS 1/1</span></td>
+  </tr><tr>
+    <td class="mono">LV-04</td>
+    <td><b>非法審批狀態</b></td>
+    <td><span class="pill p-p1">P1</span></td>
+    <td><span class="tag">異常</span></td>
+    <td><div class="pre">management</div><ol class="steps"><li>status=亂填</li></ol></td>
+    <td>400；原狀態不變</td>
+    <td class="nowrap"><span class="st-pass">PASS 1/1</span></td>
+  </tr></tbody></table></div>
+  </section><section class="module" id="m-SUP">
+    <div class="mhead">
+      <div><span class="mcode">SUP</span><h3>補給記錄</h3></div>
+      <div class="mmeta"><span>用例 <b>4</b></span><span>自動化 <b>3/4</b></span><span>風險 <b class="risk-m">中</b></span></div>
+    </div>
+    <p class="goal"><b>目標：</b>前線補給可存、數量整數、可追溯　<b>自動化覆蓋：</b>建立、整數攔截、列表、__id 空值</p>
+    <div class="tablewrap"><table class="cases"><colgroup><col style="width:70px"><col style="width:156px"><col style="width:50px"><col style="width:52px"><col style="width:310px"><col style="width:300px"><col style="width:70px"></colgroup><thead><tr><th>ID</th><th>測試項</th><th>級別</th><th>方法</th><th>前置與步驟</th><th>預期結果 / 判定標準</th><th>狀態</th></tr></thead><tbody><tr>
+    <td class="mono">SUP-01</td>
+    <td><b>補給建立（產品明細）</b></td>
+    <td><span class="pill p-p0">P0</span></td>
+    <td><span class="tag">功能</span></td>
+    <td><div class="pre">front</div><ol class="steps"><li>選產品、數量 2、位置=個人 提交</li></ol></td>
+    <td>302；列表出現；products 明細含 product_id/unit/quantity</td>
+    <td class="nowrap"><span class="st-pass">PASS 1/1</span></td>
+  </tr><tr>
+    <td class="mono">SUP-02</td>
+    <td><b>數量必須整數</b></td>
+    <td><span class="pill p-p0">P0</span></td>
+    <td><span class="tag">邊界</span></td>
+    <td><div class="pre">front</div><ol class="steps"><li>數量填 2.5 提交</li></ol></td>
+    <td>400「必須為整數，不可有小數」；不落庫</td>
+    <td class="nowrap"><span class="st-pass">PASS 1/1</span></td>
+  </tr><tr>
+    <td class="mono">SUP-03</td>
+    <td><b>新增彈窗 __id 為空</b></td>
+    <td><span class="pill p-p0">P0</span></td>
+    <td><span class="tag">UI</span></td>
+    <td><div class="pre">front</div><ol class="steps"><li>GET /mysupply?new=1</li><li>檢查 recDlg 的 __id</li></ol></td>
+    <td>__id value=&quot;&quot;；__new_id 有值；提交後不是 404</td>
+    <td class="nowrap"><span class="st-pass">PASS 1/1</span></td>
+  </tr><tr>
+    <td class="mono">SUP-04</td>
+    <td><b>員工欄位隱藏但提交</b></td>
+    <td><span class="pill p-p1">P1</span></td>
+    <td><span class="tag">UI</span></td>
+    <td><div class="pre">front</div><ol class="steps"><li>檢查彈窗</li><li>提交後讀 DB</li></ol></td>
+    <td>畫面不顯示員工 ID；hidden input 存在；DB employee_id 為本人</td>
+    <td class="nowrap"><span class="muted">手工</span></td>
+  </tr></tbody></table></div>
+  </section><section class="module" id="m-VEH">
+    <div class="mhead">
+      <div><span class="mcode">VEH</span><h3>車輛與費用</h3></div>
+      <div class="mmeta"><span>用例 <b>4</b></span><span>自動化 <b>0/4</b></span><span>風險 <b class="risk-m">中</b></span></div>
+    </div>
+    <p class="goal"><b>目標：</b>車輛檔案、費用錄入、易通行去重　<b>自動化覆蓋：</b>車輛新增、費用必填、列表、權限</p>
+    <div class="tablewrap"><table class="cases"><colgroup><col style="width:70px"><col style="width:156px"><col style="width:50px"><col style="width:52px"><col style="width:310px"><col style="width:300px"><col style="width:70px"></colgroup><thead><tr><th>ID</th><th>測試項</th><th>級別</th><th>方法</th><th>前置與步驟</th><th>預期結果 / 判定標準</th><th>狀態</th></tr></thead><tbody><tr>
+    <td class="mono">VEH-01</td>
+    <td><b>車輛檔案與到期提醒</b></td>
+    <td><span class="pill p-p1">P1</span></td>
+    <td><span class="tag">功能</span></td>
+    <td><div class="pre">office</div><ol class="steps"><li>新增車牌/牌照/保險到期日</li></ol></td>
+    <td>列表 pill 與到期狀態正確；重複車牌提示</td>
+    <td class="nowrap"><span class="muted">手工</span></td>
+  </tr><tr>
+    <td class="mono">VEH-02</td>
+    <td><b>車輛費用新增</b></td>
+    <td><span class="pill p-p1">P1</span></td>
+    <td><span class="tag">功能</span></td>
+    <td><div class="pre">front</div><ol class="steps"><li>填車牌/類型/日期/金額提交</li></ol></td>
+    <td>前線可新增；金額/地點保存；不可編輯既有（403）</td>
+    <td class="nowrap"><span class="muted">手工</span></td>
+  </tr><tr>
+    <td class="mono">VEH-03</td>
+    <td><b>費用必填</b></td>
+    <td><span class="pill p-p1">P1</span></td>
+    <td><span class="tag">異常</span></td>
+    <td><div class="pre">office</div><ol class="steps"><li>缺金額/車牌</li></ol></td>
+    <td>400</td>
+    <td class="nowrap"><span class="muted">手工</span></td>
+  </tr><tr>
+    <td class="mono">VEH-04</td>
+    <td><b>易通行匯入去重</b></td>
+    <td><span class="pill p-p1">P1</span></td>
+    <td><span class="tag">資料</span></td>
+    <td><div class="pre">office</div><ol class="steps"><li>貼 2 筆相同參考編號</li><li>再匯入一次</li></ol></td>
+    <td>首次新增 1 跳過 1；二次全部跳過；不得重複計費</td>
+    <td class="nowrap"><span class="muted">手工</span></td>
+  </tr></tbody></table></div>
+  </section><section class="module" id="m-MDM">
+    <div class="mhead">
+      <div><span class="mcode">MDM</span><h3>主數據（產品/服務/供應商/藥物/單位/細則/地址）</h3></div>
+      <div class="mmeta"><span>用例 <b>5</b></span><span>自動化 <b>0/5</b></span><span>風險 <b class="risk-m">中</b></span></div>
+    </div>
+    <p class="goal"><b>目標：</b>主數據可維護、被引用不崩　<b>自動化覆蓋：</b>新增必填、列表、權限</p>
+    <div class="tablewrap"><table class="cases"><colgroup><col style="width:70px"><col style="width:156px"><col style="width:50px"><col style="width:52px"><col style="width:310px"><col style="width:300px"><col style="width:70px"></colgroup><thead><tr><th>ID</th><th>測試項</th><th>級別</th><th>方法</th><th>前置與步驟</th><th>預期結果 / 判定標準</th><th>狀態</th></tr></thead><tbody><tr>
+    <td class="mono">MDM-01</td>
+    <td><b>產品新增與價格</b></td>
+    <td><span class="pill p-p1">P1</span></td>
+    <td><span class="tag">功能</span></td>
+    <td><div class="pre">office</div><ol class="steps"><li>名稱/零售價/庫存/供應商提交</li></ol></td>
+    <td>成功；價格分級保存；庫存為整數</td>
+    <td class="nowrap"><span class="muted">手工</span></td>
+  </tr><tr>
+    <td class="mono">MDM-02</td>
+    <td><b>服務/供應商必填</b></td>
+    <td><span class="pill p-p1">P1</span></td>
+    <td><span class="tag">異常</span></td>
+    <td><div class="pre">office</div><ol class="steps"><li>服務缺名稱/價格</li><li>供應商缺名稱</li></ol></td>
+    <td>各 400 並指出欄位</td>
+    <td class="nowrap"><span class="muted">手工</span></td>
+  </tr><tr>
+    <td class="mono">MDM-03</td>
+    <td><b>工作細則與藥物權限</b></td>
+    <td><span class="pill p-p0">P0</span></td>
+    <td><span class="tag">權限</span></td>
+    <td><div class="pre">front</div><ol class="steps"><li>GET /workinstructions /pesticides</li><li>POST 保存</li></ol></td>
+    <td>可讀 200；保存 403（僅 management）</td>
+    <td class="nowrap"><span class="muted">手工</span></td>
+  </tr><tr>
+    <td class="mono">MDM-04</td>
+    <td><b>被引用主數據刪除</b></td>
+    <td><span class="pill p-p1">P1</span></td>
+    <td><span class="tag">資料</span></td>
+    <td><div class="pre">產品已被報價/送貨引用</div><ol class="steps"><li>嘗試刪除產品</li><li>查看歷史單據</li></ol></td>
+    <td>有引用時阻止或軟刪除；歷史單據仍顯示名稱，不變 undefined</td>
+    <td class="nowrap"><span class="muted">手工</span></td>
+  </tr><tr>
+    <td class="mono">MDM-05</td>
+    <td><b>地址庫與選擇器</b></td>
+    <td><span class="pill p-p2">P2</span></td>
+    <td><span class="tag">UI</span></td>
+    <td><div class="pre">office</div><ol class="steps"><li>新增地址</li><li>在客戶表單用地址選擇器</li></ol></td>
+    <td>可選中並回填完整地址；搜尋 50 筆內不卡</td>
+    <td class="nowrap"><span class="muted">手工</span></td>
+  </tr></tbody></table></div>
+  </section><section class="module" id="m-USR">
+    <div class="mhead">
+      <div><span class="mcode">USR</span><h3>用戶、員工與系統設置</h3></div>
+      <div class="mmeta"><span>用例 <b>4</b></span><span>自動化 <b>0/4</b></span><span>風險 <b class="risk-h">高</b></span></div>
+    </div>
+    <p class="goal"><b>目標：</b>帳號安全、員工綁定、設置生效　<b>自動化覆蓋：</b>用戶列表權限、設置頁權限、員工必填</p>
+    <div class="tablewrap"><table class="cases"><colgroup><col style="width:70px"><col style="width:156px"><col style="width:50px"><col style="width:52px"><col style="width:310px"><col style="width:300px"><col style="width:70px"></colgroup><thead><tr><th>ID</th><th>測試項</th><th>級別</th><th>方法</th><th>前置與步驟</th><th>預期結果 / 判定標準</th><th>狀態</th></tr></thead><tbody><tr>
+    <td class="mono">USR-01</td>
+    <td><b>用戶管理僅管理層</b></td>
+    <td><span class="pill p-p0">P0</span></td>
+    <td><span class="tag">權限</span></td>
+    <td><div class="pre">office/accounting</div><ol class="steps"><li>GET /users</li><li>POST /users/save</li></ol></td>
+    <td>皆 403</td>
+    <td class="nowrap"><span class="muted">手工</span></td>
+  </tr><tr>
+    <td class="mono">USR-02</td>
+    <td><b>員工新增必填</b></td>
+    <td><span class="pill p-p1">P1</span></td>
+    <td><span class="tag">異常</span></td>
+    <td><div class="pre">management</div><ol class="steps"><li>缺姓名/類型</li></ol></td>
+    <td>400</td>
+    <td class="nowrap"><span class="muted">手工</span></td>
+  </tr><tr>
+    <td class="mono">USR-03</td>
+    <td><b>運行參數生效</b></td>
+    <td><span class="pill p-p1">P1</span></td>
+    <td><span class="tag">功能</span></td>
+    <td><div class="pre">management</div><ol class="steps"><li>改 quota_limit=3、work_start=09:00 保存</li><li>再開新會話驗證</li></ol></td>
+    <td>設置落庫；配額/時間窗按新值生效；不影響既有資料</td>
+    <td class="nowrap"><span class="muted">手工</span></td>
+  </tr><tr>
+    <td class="mono">USR-04</td>
+    <td><b>個人資料與密碼</b></td>
+    <td><span class="pill p-p1">P1</span></td>
+    <td><span class="tag">功能</span></td>
+    <td><div class="pre">任一角色</div><ol class="steps"><li>改姓名/頭像</li><li>改密碼後重登</li></ol></td>
+    <td>資料更新；舊密碼失效、新密碼可登入；錯誤舊密碼拒絕</td>
+    <td class="nowrap"><span class="muted">手工</span></td>
+  </tr></tbody></table></div>
+  </section><section class="module" id="m-TRS">
+    <div class="mhead">
+      <div><span class="mcode">TRS</span><h3>回收桶</h3></div>
+      <div class="mmeta"><span>用例 <b>6</b></span><span>自動化 <b>3/6</b></span><span>風險 <b class="risk-h">高</b></span></div>
+    </div>
+    <p class="goal"><b>目標：</b>刪除可逆、永久刪除受限、盤點可沖銷　<b>自動化覆蓋：</b>入口權限、列表、還原、永久刪除、稽覈</p>
+    <div class="tablewrap"><table class="cases"><colgroup><col style="width:70px"><col style="width:156px"><col style="width:50px"><col style="width:52px"><col style="width:310px"><col style="width:300px"><col style="width:70px"></colgroup><thead><tr><th>ID</th><th>測試項</th><th>級別</th><th>方法</th><th>前置與步驟</th><th>預期結果 / 判定標準</th><th>狀態</th></tr></thead><tbody><tr>
+    <td class="mono">TRS-01</td>
+    <td><b>回收桶入口與篩選</b></td>
+    <td><span class="pill p-p1">P1</span></td>
+    <td><span class="tag">功能</span></td>
+    <td><div class="pre">office</div><ol class="steps"><li>GET /trash</li><li>按模組/關鍵字篩選</li></ol></td>
+    <td>只列已刪記錄；顯示刪除時間/人；篩選正確</td>
+    <td class="nowrap"><span class="st-pass">PASS 1/1</span></td>
+  </tr><tr>
+    <td class="mono">TRS-02</td>
+    <td><b>還原記錄</b></td>
+    <td><span class="pill p-p0">P0</span></td>
+    <td><span class="tag">資料</span></td>
+    <td><div class="pre">有已刪報價</div><ol class="steps"><li>POST /trash/restore</li></ol></td>
+    <td>deleted=0；列表恢復；關聯仍在</td>
+    <td class="nowrap"><span class="st-pass">PASS 1/1</span></td>
+  </tr><tr>
+    <td class="mono">TRS-03</td>
+    <td><b>永久刪除邊界</b></td>
+    <td><span class="pill p-p0">P0</span></td>
+    <td><span class="tag">權限</span></td>
+    <td><div class="pre">office/management</div><ol class="steps"><li>office 勾選 → 永久刪除</li><li>management 同操作</li></ol></td>
+    <td>office 每日上限 10 條；超出推送管理層；management 不受限</td>
+    <td class="nowrap"><span class="st-pass">PASS 1/1</span></td>
+  </tr><tr>
+    <td class="mono">TRS-04</td>
+    <td><b>永久刪除不可逆</b></td>
+    <td><span class="pill p-p1">P1</span></td>
+    <td><span class="tag">資料</span></td>
+    <td><div class="pre">已永久刪除</div><ol class="steps"><li>再次 restore</li><li>查 DB</li></ol></td>
+    <td>404 或明確失敗；DB 無此記錄</td>
+    <td class="nowrap"><span class="muted">手工</span></td>
+  </tr><tr>
+    <td class="mono">TRS-05</td>
+    <td><b>盤點刪除自動沖銷</b></td>
+    <td><span class="pill p-p0">P0</span></td>
+    <td><span class="tag">資料</span></td>
+    <td><div class="pre">已過賬盤點</div><ol class="steps"><li>永久刪除</li></ol></td>
+    <td>先沖銷再刪；庫存回到盤點前；留下沖銷調整單可追溯</td>
+    <td class="nowrap"><span class="muted">手工</span></td>
+  </tr><tr>
+    <td class="mono">TRS-06</td>
+    <td><b>刪除操作稽覈</b></td>
+    <td><span class="pill p-p1">P1</span></td>
+    <td><span class="tag">安全</span></td>
+    <td><div class="pre">任一刪除</div><ol class="steps"><li>查 audit_log</li></ol></td>
+    <td>記錄操作者/實體/ID/時間/動作；不得缺 shown 欄位</td>
+    <td class="nowrap"><span class="muted">手工</span></td>
+  </tr></tbody></table></div>
+  </section><section class="module" id="m-EXP">
+    <div class="mhead">
+      <div><span class="mcode">EXP</span><h3>匯入、匯出與列印</h3></div>
+      <div class="mmeta"><span>用例 <b>5</b></span><span>自動化 <b>2/5</b></span><span>風險 <b class="risk-m">中</b></span></div>
+    </div>
+    <p class="goal"><b>目標：</b>資料出入不變形、權限正確、檔案可開　<b>自動化覆蓋：</b>CSV 權限、內容類型、BOM、列印頁</p>
+    <div class="tablewrap"><table class="cases"><colgroup><col style="width:70px"><col style="width:156px"><col style="width:50px"><col style="width:52px"><col style="width:310px"><col style="width:300px"><col style="width:70px"></colgroup><thead><tr><th>ID</th><th>測試項</th><th>級別</th><th>方法</th><th>前置與步驟</th><th>預期結果 / 判定標準</th><th>狀態</th></tr></thead><tbody><tr>
+    <td class="mono">EXP-01</td>
+    <td><b>CSV 匯出權限</b></td>
+    <td><span class="pill p-p0">P0</span></td>
+    <td><span class="tag">權限</span></td>
+    <td><div class="pre">office/accounting/front</div><ol class="steps"><li>GET /export/customers.csv</li></ol></td>
+    <td>全部 403；只有 management 200</td>
+    <td class="nowrap"><span class="st-pass">PASS 1/1</span></td>
+  </tr><tr>
+    <td class="mono">EXP-02</td>
+    <td><b>CSV 內容與編碼</b></td>
+    <td><span class="pill p-p1">P1</span></td>
+    <td><span class="tag">資料</span></td>
+    <td><div class="pre">management</div><ol class="steps"><li>下載客戶 CSV</li><li>以 Excel 開啟</li></ol></td>
+    <td>text/csv; charset=utf-8；有 BOM；中文不亂碼；欄位與列表一致</td>
+    <td class="nowrap"><span class="st-pass">PASS 1/1</span></td>
+  </tr><tr>
+    <td class="mono">EXP-03</td>
+    <td><b>CSV 注入防護</b></td>
+    <td><span class="pill p-p1">P1</span></td>
+    <td><span class="tag">安全</span></td>
+    <td><div class="pre">客戶名以 = 開頭</div><ol class="steps"><li>匯出並打開</li></ol></td>
+    <td>以 =&quot;...&quot; 或前置單引號轉義，不在 Excel 執行公式</td>
+    <td class="nowrap"><span class="muted">手工</span></td>
+  </tr><tr>
+    <td class="mono">EXP-04</td>
+    <td><b>匯入校驗與回滾</b></td>
+    <td><span class="pill p-p1">P1</span></td>
+    <td><span class="tag">異常</span></td>
+    <td><div class="pre">office</div><ol class="steps"><li>上傳缺必填/型別錯誤 CSV</li></ol></td>
+    <td>逐行報錯；整批不錯位；成功筆數與失敗筆數清楚</td>
+    <td class="nowrap"><span class="muted">手工</span></td>
+  </tr><tr>
+    <td class="mono">EXP-05</td>
+    <td><b>列印版面</b></td>
+    <td><span class="pill p-p2">P2</span></td>
+    <td><span class="tag">UI</span></td>
+    <td><div class="pre">有單據</div><ol class="steps"><li>列印報價/發票/排班</li></ol></td>
+    <td>A4 不截斷；頁首頁尾正確；金額/日期格式一致</td>
+    <td class="nowrap"><span class="muted">手工</span></td>
+  </tr></tbody></table></div>
+  </section><section class="module" id="m-DAT">
+    <div class="mhead">
+      <div><span class="mcode">DAT</span><h3>資料完整性與遷移品質</h3></div>
+      <div class="mmeta"><span>用例 <b>5</b></span><span>自動化 <b>5/5</b></span><span>風險 <b class="risk-h">高</b></span></div>
+    </div>
+    <p class="goal"><b>目標：</b>歷史資料可讀、可算、可改而不失真　<b>自動化覆蓋：</b>JSON 可解析、報價合計、發票餘額、分錄平衡、軟刪除欄位</p>
+    <div class="tablewrap"><table class="cases"><colgroup><col style="width:70px"><col style="width:156px"><col style="width:50px"><col style="width:52px"><col style="width:310px"><col style="width:300px"><col style="width:70px"></colgroup><thead><tr><th>ID</th><th>測試項</th><th>級別</th><th>方法</th><th>前置與步驟</th><th>預期結果 / 判定標準</th><th>狀態</th></tr></thead><tbody><tr>
+    <td class="mono">DAT-01</td>
+    <td><b>全部記錄 JSON 可解析</b></td>
+    <td><span class="pill p-p0">P0</span></td>
+    <td><span class="tag">資料</span></td>
+    <td><div class="pre">副本 DB</div><ol class="steps"><li>掃描 records 全表</li><li>逐筆 JSON.parse</li></ol></td>
+    <td>0 筆壞 JSON；若有，定位 entity/id 並阻斷上線</td>
+    <td class="nowrap"><span class="st-pass">PASS 1/1</span></td>
+  </tr><tr>
+    <td class="mono">DAT-02</td>
+    <td><b>報價合計與明細一致</b></td>
+    <td><span class="pill p-p1">P1</span></td>
+    <td><span class="tag">資料</span></td>
+    <td><div class="pre">1,826 張報價</div><ol class="steps"><li>抽樣 400 張重算</li><li>比對 subtotal/total_amount</li></ol></td>
+    <td>差額 ≤ 0.02；歷史「表頭有金額、明細 0 價」需單獨列出並評估編輯風險</td>
+    <td class="nowrap"><span class="st-fail">FAIL 1/1</span></td>
+  </tr><tr>
+    <td class="mono">DAT-03</td>
+    <td><b>發票餘額一致</b></td>
+    <td><span class="pill p-p0">P0</span></td>
+    <td><span class="tag">資料</span></td>
+    <td><div class="pre">全部發票</div><ol class="steps"><li>重算 total−paid</li><li>比對 balance_due</li></ol></td>
+    <td>全部一致；已作廢按規則處理</td>
+    <td class="nowrap"><span class="st-pass">PASS 1/1</span></td>
+  </tr><tr>
+    <td class="mono">DAT-04</td>
+    <td><b>已過賬分錄借貸平衡</b></td>
+    <td><span class="pill p-p0">P0</span></td>
+    <td><span class="tag">資料</span></td>
+    <td><div class="pre">全部交易</div><ol class="steps"><li>篩 status≠草稿</li><li>比對借貸總額</li></ol></td>
+    <td>差額 ≤ 0.01；不平衡不得存在</td>
+    <td class="nowrap"><span class="st-pass">PASS 1/1</span></td>
+  </tr><tr>
+    <td class="mono">DAT-05</td>
+    <td><b>軟刪除欄位完整</b></td>
+    <td><span class="pill p-p1">P1</span></td>
+    <td><span class="tag">資料</span></td>
+    <td><div class="pre">deleted=1 記錄</div><ol class="steps"><li>檢查 deleted_at/deleted_by</li><li>區分歷史匯入與近兩日操作</li></ol></td>
+    <td>新刪除必須有時間與操作人；歷史遺留單獨列帳</td>
+    <td class="nowrap"><span class="st-pass">PASS 1/1</span></td>
+  </tr></tbody></table></div>
+  </section><section class="module" id="m-SEC">
+    <div class="mhead">
+      <div><span class="mcode">SEC</span><h3>安全專項</h3></div>
+      <div class="mmeta"><span>用例 <b>8</b></span><span>自動化 <b>4/8</b></span><span>風險 <b class="risk-x">極高</b></span></div>
+    </div>
+    <p class="goal"><b>目標：</b>無越權、無注入、無泄露　<b>自動化覆蓋：</b>XSS 轉義、IDOR、CSRF、Cookie、上傳路徑、錯誤頁泄露</p>
+    <div class="tablewrap"><table class="cases"><colgroup><col style="width:70px"><col style="width:156px"><col style="width:50px"><col style="width:52px"><col style="width:310px"><col style="width:300px"><col style="width:70px"></colgroup><thead><tr><th>ID</th><th>測試項</th><th>級別</th><th>方法</th><th>前置與步驟</th><th>預期結果 / 判定標準</th><th>狀態</th></tr></thead><tbody><tr>
+    <td class="mono">SEC-01</td>
+    <td><b>存儲型 XSS</b></td>
+    <td><span class="pill p-p0">P0</span></td>
+    <td><span class="tag">安全</span></td>
+    <td><div class="pre">office</div><ol class="steps"><li>客戶名填 &lt;script&gt;alert(1)&lt;/script&gt;</li><li>列表/詳情/列印查看</li></ol></td>
+    <td>全部輸出轉義為 &amp;lt;script&amp;gt;；無彈窗；列印同樣轉義</td>
+    <td class="nowrap"><span class="st-pass">PASS 1/1</span></td>
+  </tr><tr>
+    <td class="mono">SEC-02</td>
+    <td><b>越權 IDOR</b></td>
+    <td><span class="pill p-p0">P0</span></td>
+    <td><span class="tag">安全</span></td>
+    <td><div class="pre">front</div><ol class="steps"><li>遍歷 /view/invoices/:id、/view/contracts/:id</li></ol></td>
+    <td>403；不得因知道 ID 而讀到金額/合約</td>
+    <td class="nowrap"><span class="st-pass">PASS 1/1</span></td>
+  </tr><tr>
+    <td class="mono">SEC-03</td>
+    <td><b>上傳路徑穿越</b></td>
+    <td><span class="pill p-p0">P0</span></td>
+    <td><span class="tag">安全</span></td>
+    <td><div class="pre">office</div><ol class="steps"><li>上傳檔名 ../../evil.png</li><li>檢查目標目錄</li></ol></td>
+    <td>檔名洗淨；寫入僅限 uploads/&lt;entity&gt;/&lt;id&gt;；不得逃逸</td>
+    <td class="nowrap"><span class="st-pass">PASS 1/1</span></td>
+  </tr><tr>
+    <td class="mono">SEC-04</td>
+    <td><b>上傳型別與大小</b></td>
+    <td><span class="pill p-p1">P1</span></td>
+    <td><span class="tag">安全</span></td>
+    <td><div class="pre">office</div><ol class="steps"><li>上傳 .exe / 超大檔</li></ol></td>
+    <td>拒絕或隔離；不作為可執行內容提供；錯誤提示明確</td>
+    <td class="nowrap"><span class="muted">手工</span></td>
+  </tr><tr>
+    <td class="mono">SEC-05</td>
+    <td><b>錯誤頁不泄露</b></td>
+    <td><span class="pill p-p1">P1</span></td>
+    <td><span class="tag">安全</span></td>
+    <td><div class="pre">任意</div><ol class="steps"><li>觸發 500（如壞參數）</li></ol></td>
+    <td>只顯示通用訊息；不含堆疊、SQL、絕對路徑</td>
+    <td class="nowrap"><span class="muted">手工</span></td>
+  </tr><tr>
+    <td class="mono">SEC-06</td>
+    <td><b>登入枚舉</b></td>
+    <td><span class="pill p-p1">P1</span></td>
+    <td><span class="tag">安全</span></td>
+    <td><div class="pre">登入頁</div><ol class="steps"><li>不存在帳號 vs 存在帳號錯密碼</li></ol></td>
+    <td>提示一致；回應時間無明顯差異</td>
+    <td class="nowrap"><span class="muted">手工</span></td>
+  </tr><tr>
+    <td class="mono">SEC-07</td>
+    <td><b>會話固定/併發</b></td>
+    <td><span class="pill p-p1">P1</span></td>
+    <td><span class="tag">安全</span></td>
+    <td><div class="pre">登入前後</div><ol class="steps"><li>記錄登入前 sid</li><li>登入後比較；同帳號兩地登入</li></ol></td>
+    <td>登入後簽發新 sid；舊 sid 失效；併發策略明確</td>
+    <td class="nowrap"><span class="st-pass">PASS 1/1</span></td>
+  </tr><tr>
+    <td class="mono">SEC-08</td>
+    <td><b>敏感欄位遮罩</b></td>
+    <td><span class="pill p-p1">P1</span></td>
+    <td><span class="tag">安全</span></td>
+    <td><div class="pre">front</div><ol class="steps"><li>查看車輛費用/庫存總值/客戶金額</li></ol></td>
+    <td>無金額權限者看到 •••••；不得在 HTML 註釋/JSON 中泄露原值</td>
+    <td class="nowrap"><span class="muted">手工</span></td>
+  </tr></tbody></table></div>
+  </section><section class="module" id="m-PERF">
+    <div class="mhead">
+      <div><span class="mcode">PERF</span><h3>效能與容量</h3></div>
+      <div class="mmeta"><span>用例 <b>5</b></span><span>自動化 <b>2/5</b></span><span>風險 <b class="risk-h">高</b></span></div>
+    </div>
+    <p class="goal"><b>目標：</b>大數據量下頁面可用　<b>自動化覆蓋：</b>四個重頁 TTFB、列表頁耗時</p>
+    <div class="tablewrap"><table class="cases"><colgroup><col style="width:70px"><col style="width:156px"><col style="width:50px"><col style="width:52px"><col style="width:310px"><col style="width:300px"><col style="width:70px"></colgroup><thead><tr><th>ID</th><th>測試項</th><th>級別</th><th>方法</th><th>前置與步驟</th><th>預期結果 / 判定標準</th><th>狀態</th></tr></thead><tbody><tr>
+    <td class="mono">PERF-01</td>
+    <td><b>重頁首字節</b></td>
+    <td><span class="pill p-p1">P1</span></td>
+    <td><span class="tag">效能</span></td>
+    <td><div class="pre">34k records</div><ol class="steps"><li>GET /receivables /generalledger /inventory /schedules</li><li>各測 3 次取中位</li></ol></td>
+    <td>P95 &lt; 3s；無 500；記憶體無持續增長</td>
+    <td class="nowrap"><span class="st-pass">PASS 4/4</span></td>
+  </tr><tr>
+    <td class="mono">PERF-02</td>
+    <td><b>列表分頁</b></td>
+    <td><span class="pill p-p1">P1</span></td>
+    <td><span class="tag">效能</span></td>
+    <td><div class="pre">3,000+ 報價</div><ol class="steps"><li>/quotations 首頁/末頁/每頁 50</li></ol></td>
+    <td>單頁 ≤ 50 行；翻頁 &lt; 1.5s；總數正確</td>
+    <td class="nowrap"><span class="st-pass">PASS 1/1</span></td>
+  </tr><tr>
+    <td class="mono">PERF-03</td>
+    <td><b>搜尋響應</b></td>
+    <td><span class="pill p-p2">P2</span></td>
+    <td><span class="tag">效能</span></td>
+    <td><div class="pre">1,600 客戶</div><ol class="steps"><li>關鍵字搜尋 5 次</li></ol></td>
+    <td>每次 &lt; 1s；結果穩定</td>
+    <td class="nowrap"><span class="muted">手工</span></td>
+  </tr><tr>
+    <td class="mono">PERF-04</td>
+    <td><b>併發讀取</b></td>
+    <td><span class="pill p-p2">P2</span></td>
+    <td><span class="tag">效能</span></td>
+    <td><div class="pre">10 個併發</div><ol class="steps"><li>同時 GET 5 個重頁</li></ol></td>
+    <td>全部 200；無 SQLITE_BUSY；P95 &lt; 5s</td>
+    <td class="nowrap"><span class="muted">手工</span></td>
+  </tr><tr>
+    <td class="mono">PERF-05</td>
+    <td><b>寫入鎖等待</b></td>
+    <td><span class="pill p-p2">P2</span></td>
+    <td><span class="tag">效能</span></td>
+    <td><div class="pre">兩個會話同時保存</div><ol class="steps"><li>併發新增排班/報價</li></ol></td>
+    <td>皆成功或明確重試；不得丟資料/500</td>
+    <td class="nowrap"><span class="muted">手工</span></td>
+  </tr></tbody></table></div>
+  </section><section class="module" id="m-UI">
+    <div class="mhead">
+      <div><span class="mcode">UI</span><h3>介面與相容性</h3></div>
+      <div class="mmeta"><span>用例 <b>6</b></span><span>自動化 <b>5/6</b></span><span>風險 <b class="risk-m">中</b></span></div>
+    </div>
+    <p class="goal"><b>目標：</b>版面不漂移、彈窗可用、列印可讀　<b>自動化覆蓋：</b>設計令牌、__id、HK$ 重複、pagehead、act-col</p>
+    <div class="tablewrap"><table class="cases"><colgroup><col style="width:70px"><col style="width:156px"><col style="width:50px"><col style="width:52px"><col style="width:310px"><col style="width:300px"><col style="width:70px"></colgroup><thead><tr><th>ID</th><th>測試項</th><th>級別</th><th>方法</th><th>前置與步驟</th><th>預期結果 / 判定標準</th><th>狀態</th></tr></thead><tbody><tr>
+    <td class="mono">UI-01</td>
+    <td><b>側欄分組字級</b></td>
+    <td><span class="pill p-p2">P2</span></td>
+    <td><span class="tag">UI</span></td>
+    <td><div class="pre">任一頁</div><ol class="steps"><li>檢查 .navgrp&gt;summary 樣式</li></ol></td>
+    <td>font-size 13px、font-weight 700；與次欄目同字號</td>
+    <td class="nowrap"><span class="st-pass">PASS 1/1</span></td>
+  </tr><tr>
+    <td class="mono">UI-02</td>
+    <td><b>表格操作列黏性</b></td>
+    <td><span class="pill p-p2">P2</span></td>
+    <td><span class="tag">UI</span></td>
+    <td><div class="pre">寬表格</div><ol class="steps"><li>橫向捲動列表</li></ol></td>
+    <td>操作列固定右緣；不遮擋內容；表頭同步</td>
+    <td class="nowrap"><span class="st-pass">PASS 1/1</span></td>
+  </tr><tr>
+    <td class="mono">UI-03</td>
+    <td><b>金額格式</b></td>
+    <td><span class="pill p-p1">P1</span></td>
+    <td><span class="tag">UI</span></td>
+    <td><div class="pre">有金額頁</div><ol class="steps"><li>檢查 KPI/表格/詳情</li></ol></td>
+    <td>只出現一次 HK$；千分位；空值為 —；不得 HK$ HK$</td>
+    <td class="nowrap"><span class="st-pass">PASS 1/1</span></td>
+  </tr><tr>
+    <td class="mono">UI-04</td>
+    <td><b>空狀態與日曆</b></td>
+    <td><span class="pill p-p2">P2</span></td>
+    <td><span class="tag">UI</span></td>
+    <td><div class="pre">無資料月份</div><ol class="steps"><li>打開 /schedules 空月</li></ol></td>
+    <td>日曆格不被 empty 圖示撐高；顯示「暫無資料」</td>
+    <td class="nowrap"><span class="st-pass">PASS 1/1</span></td>
+  </tr><tr>
+    <td class="mono">UI-05</td>
+    <td><b>彈窗與選擇器</b></td>
+    <td><span class="pill p-p1">P1</span></td>
+    <td><span class="tag">UI</span></td>
+    <td><div class="pre">新增合約/補給</div><ol class="steps"><li>開彈窗</li><li>搜尋並選客戶/產品</li></ol></td>
+    <td>彈窗不裁切下拉；選中回填名稱與 ID；捲動清單不自動關閉</td>
+    <td class="nowrap"><span class="st-pass">PASS 1/1</span></td>
+  </tr><tr>
+    <td class="mono">UI-06</td>
+    <td><b>1366×768 與列印</b></td>
+    <td><span class="pill p-p2">P2</span></td>
+    <td><span class="tag">UI</span></td>
+    <td><div class="pre">1366 寬</div><ol class="steps"><li>檢查 12 欄表格/側欄/頁首</li><li>Ctrl+P 預覽</li></ol></td>
+    <td>無水平溢出（表格內滾動）；列印隱藏導航與按鈕</td>
+    <td class="nowrap"><span class="muted">手工</span></td>
+  </tr></tbody></table></div>
+  </section>
+
+  <h2 id="s8">8 · 權限矩陣（38 實體 × 4 角色）</h2>
+  <p>權限不是「菜單看得到」就算過。按六層拆：菜單可見性、直鏈訪問、列表、表單、動作（審批/轉換/匯出）、回收桶。下表是實測狀態碼，可直接看出哪一格與設定不一致。</p>
+  <h4>8.1 實體列表 / 表單</h4>
+  <div class="scroll"><table class="matrix"><thead><tr><th>實體 key</th><th>路徑</th><th>前線</th><th>辦公室</th><th>會計</th><th>管理層</th></tr></thead><tbody><tr><td class="mono">customers</td><td class="mono">/customers</td><td class=""><span class="no">403</span> / <span class="no">403</span></td><td class=""><span class="ok">200</span> / <span class="ok">200</span></td><td class=""><span class="ok">200</span> / <span class="no">403</span></td><td class=""><span class="ok">200</span> / <span class="ok">200</span></td></tr><tr><td class="mono">quotations</td><td class="mono">/quotations</td><td class=""><span class="no">403</span> / <span class="no">403</span></td><td class=""><span class="ok">200</span> / <span class="ok">200</span></td><td class=""><span class="ok">200</span> / <span class="no">403</span></td><td class=""><span class="ok">200</span> / <span class="ok">200</span></td></tr><tr><td class="mono">contracts</td><td class="mono">/contracts</td><td class=""><span class="no">403</span> / <span class="no">403</span></td><td class=""><span class="ok">200</span> / <span class="ok">200</span></td><td class="cellbad"><span class="ok">200</span> / <span class="ok">200</span></td><td class=""><span class="ok">200</span> / <span class="ok">200</span></td></tr><tr><td class="mono">invoices</td><td class="mono">/invoices</td><td class=""><span class="no">403</span> / <span class="no">403</span></td><td class=""><span class="no">403</span> / <span class="no">403</span></td><td class=""><span class="ok">200</span> / <span class="ok">200</span></td><td class=""><span class="ok">200</span> / <span class="ok">200</span></td></tr><tr><td class="mono">receipts</td><td class="mono">/receipts</td><td class=""><span class="no">403</span> / <span class="no">403</span></td><td class=""><span class="no">403</span> / <span class="no">403</span></td><td class=""><span class="ok">200</span> / <span class="ok">200</span></td><td class=""><span class="ok">200</span> / <span class="ok">200</span></td></tr><tr><td class="mono">bills</td><td class="mono">/bills</td><td class=""><span class="no">403</span> / <span class="no">403</span></td><td class=""><span class="no">403</span> / <span class="no">403</span></td><td class=""><span class="ok">200</span> / <span class="ok">200</span></td><td class=""><span class="ok">200</span> / <span class="ok">200</span></td></tr><tr><td class="mono">payments</td><td class="mono">/payments</td><td class=""><span class="no">403</span> / <span class="no">403</span></td><td class=""><span class="no">403</span> / <span class="no">403</span></td><td class=""><span class="ok">200</span> / <span class="ok">200</span></td><td class=""><span class="ok">200</span> / <span class="ok">200</span></td></tr><tr><td class="mono">purchase_orders</td><td class="mono">/purchaseorders</td><td class=""><span class="no">403</span> / <span class="no">403</span></td><td class=""><span class="ok">200</span> / <span class="ok">200</span></td><td class=""><span class="ok">200</span> / <span class="no">403</span></td><td class=""><span class="ok">200</span> / <span class="ok">200</span></td></tr><tr><td class="mono">delivery_notes</td><td class="mono">/deliverynotes</td><td class=""><span class="no">403</span> / <span class="no">403</span></td><td class=""><span class="ok">200</span> / <span class="ok">200</span></td><td class=""><span class="ok">200</span> / <span class="no">403</span></td><td class=""><span class="ok">200</span> / <span class="ok">200</span></td></tr><tr><td class="mono">products</td><td class="mono">/products</td><td class=""><span class="no">403</span> / <span class="no">403</span></td><td class=""><span class="ok">200</span> / <span class="ok">200</span></td><td class=""><span class="ok">200</span> / <span class="no">403</span></td><td class=""><span class="ok">200</span> / <span class="ok">200</span></td></tr><tr><td class="mono">services</td><td class="mono">/services</td><td class=""><span class="no">403</span> / <span class="no">403</span></td><td class=""><span class="ok">200</span> / <span class="ok">200</span></td><td class=""><span class="ok">200</span> / <span class="no">403</span></td><td class=""><span class="ok">200</span> / <span class="ok">200</span></td></tr><tr><td class="mono">suppliers</td><td class="mono">/suppliers</td><td class=""><span class="no">403</span> / <span class="no">403</span></td><td class=""><span class="ok">200</span> / <span class="ok">200</span></td><td class=""><span class="ok">200</span> / <span class="no">403</span></td><td class=""><span class="ok">200</span> / <span class="ok">200</span></td></tr><tr><td class="mono">stock_counts</td><td class="mono">/stockcounts</td><td class=""><span class="no">403</span> / <span class="no">403</span></td><td class=""><span class="ok">200</span> / <span class="ok">200</span></td><td class=""><span class="no">403</span> / <span class="no">403</span></td><td class=""><span class="ok">200</span> / <span class="ok">200</span></td></tr><tr><td class="mono">employees</td><td class="mono">/employees</td><td class=""><span class="no">403</span> / <span class="no">403</span></td><td class=""><span class="no">403</span> / <span class="no">403</span></td><td class=""><span class="ok">200</span> / <span class="no">403</span></td><td class=""><span class="ok">200</span> / <span class="ok">200</span></td></tr><tr><td class="mono">leave_records</td><td class="mono">/leaves</td><td class=""><span class="ok">200</span> / <span class="ok">200</span></td><td class=""><span class="ok">200</span> / <span class="ok">200</span></td><td class=""><span class="ok">200</span> / <span class="ok">200</span></td><td class=""><span class="ok">200</span> / <span class="ok">200</span></td></tr><tr><td class="mono">schedules</td><td class="mono">/schedules</td><td class=""><span class="no">403</span> / <span class="no">403</span></td><td class=""><span class="ok">200</span> / <span class="ok">200</span></td><td class=""><span class="ok">200</span> / <span class="no">403</span></td><td class=""><span class="ok">200</span> / <span class="ok">200</span></td></tr><tr><td class="mono">recurring_schedules</td><td class="mono">/recurringschedules</td><td class=""><span class="no">403</span> / <span class="no">403</span></td><td class=""><span class="ok">200</span> / <span class="ok">200</span></td><td class=""><span class="ok">200</span> / <span class="no">403</span></td><td class=""><span class="ok">200</span> / <span class="ok">200</span></td></tr><tr><td class="mono">work_records</td><td class="mono">/servicereports</td><td class=""><span class="ok">200</span> / <span class="no">403</span></td><td class=""><span class="ok">200</span> / <span class="ok">200</span></td><td class=""><span class="ok">200</span> / <span class="no">403</span></td><td class=""><span class="ok">200</span> / <span class="ok">200</span></td></tr><tr><td class="mono">work_units</td><td class="mono">/workunits</td><td class=""><span class="ok">200</span> / <span class="no">403</span></td><td class=""><span class="ok">200</span> / <span class="no">403</span></td><td class=""><span class="ok">200</span> / <span class="no">403</span></td><td class=""><span class="ok">200</span> / <span class="ok">200</span></td></tr><tr><td class="mono">service_plan_logs</td><td class="mono">/serviceplanlogs</td><td class=""><span class="ok">200</span> / <span class="no">403</span></td><td class=""><span class="ok">200</span> / <span class="ok">200</span></td><td class=""><span class="ok">200</span> / <span class="no">403</span></td><td class=""><span class="ok">200</span> / <span class="ok">200</span></td></tr><tr><td class="mono">supply_records</td><td class="mono">/mysupply</td><td class=""><span class="ok">200</span> / <span class="ok">200</span></td><td class=""><span class="ok">200</span> / <span class="ok">200</span></td><td class=""><span class="ok">200</span> / <span class="ok">200</span></td><td class=""><span class="ok">200</span> / <span class="ok">200</span></td></tr><tr><td class="mono">work_instructions</td><td class="mono">/workinstructions</td><td class=""><span class="ok">200</span> / <span class="no">403</span></td><td class=""><span class="ok">200</span> / <span class="no">403</span></td><td class=""><span class="ok">200</span> / <span class="no">403</span></td><td class=""><span class="ok">200</span> / <span class="ok">200</span></td></tr><tr><td class="mono">vehicles</td><td class="mono">/vehicles</td><td class=""><span class="ok">200</span> / <span class="no">403</span></td><td class=""><span class="ok">200</span> / <span class="ok">200</span></td><td class=""><span class="ok">200</span> / <span class="no">403</span></td><td class=""><span class="ok">200</span> / <span class="ok">200</span></td></tr><tr><td class="mono">pesticides</td><td class="mono">/pesticides</td><td class=""><span class="ok">200</span> / <span class="no">403</span></td><td class=""><span class="ok">200</span> / <span class="no">403</span></td><td class=""><span class="ok">200</span> / <span class="no">403</span></td><td class=""><span class="ok">200</span> / <span class="ok">200</span></td></tr><tr><td class="mono">leads</td><td class="mono">/leads</td><td class=""><span class="no">403</span> / <span class="no">403</span></td><td class=""><span class="ok">200</span> / <span class="ok">200</span></td><td class=""><span class="ok">200</span> / <span class="no">403</span></td><td class=""><span class="ok">200</span> / <span class="ok">200</span></td></tr><tr><td class="mono">follow_ups</td><td class="mono">/followups</td><td class=""><span class="no">403</span> / <span class="no">403</span></td><td class=""><span class="ok">200</span> / <span class="ok">200</span></td><td class=""><span class="ok">200</span> / <span class="no">403</span></td><td class=""><span class="ok">200</span> / <span class="ok">200</span></td></tr><tr><td class="mono">announcements</td><td class="mono">/announcements</td><td class=""><span class="ok">200</span> / <span class="no">403</span></td><td class=""><span class="ok">200</span> / <span class="no">403</span></td><td class=""><span class="ok">200</span> / <span class="no">403</span></td><td class=""><span class="ok">200</span> / <span class="ok">200</span></td></tr><tr><td class="mono">email_templates</td><td class="mono">/emailtemplates</td><td class=""><span class="no">403</span> / <span class="no">403</span></td><td class=""><span class="no">403</span> / <span class="no">403</span></td><td class=""><span class="no">403</span> / <span class="no">403</span></td><td class=""><span class="ok">200</span> / <span class="ok">200</span></td></tr><tr><td class="mono">addresses</td><td class="mono">/addresses</td><td class=""><span class="no">403</span> / <span class="no">403</span></td><td class=""><span class="ok">200</span> / <span class="ok">200</span></td><td class=""><span class="ok">200</span> / <span class="no">403</span></td><td class=""><span class="ok">200</span> / <span class="ok">200</span></td></tr><tr><td class="mono">accounts</td><td class="mono">/accounts</td><td class=""><span class="no">403</span> / <span class="no">403</span></td><td class=""><span class="no">403</span> / <span class="no">403</span></td><td class=""><span class="ok">200</span> / <span class="ok">200</span></td><td class=""><span class="ok">200</span> / <span class="ok">200</span></td></tr><tr><td class="mono">notifications</td><td class="mono">/notifications</td><td class=""><span class="no">403</span> / <span class="no">403</span></td><td class=""><span class="no">403</span> / <span class="no">403</span></td><td class=""><span class="no">403</span> / <span class="no">403</span></td><td class=""><span class="ok">200</span> / <span class="no">403</span></td></tr></tbody></table></div>
+  <p class="legend"><span class="ok">200</span> = 可進入（查看 / 新增表單）；<span class="no">403</span> = 被拒；<span class="cellbad">底色</span> = 與設定不一致，需判定。格式：<b>列表 / 表單</b>。</p>
+  <h4>8.2 菜單可見性</h4>
+  <div class="scroll"><table class="matrix"><thead><tr><th>菜單</th><th>前線</th><th>辦公室</th><th>會計</th><th>管理層</th></tr></thead><tbody><tr><td><span class="mono">/</span> 公告板</td><td class="ok">顯示</td><td class="ok">顯示</td><td class="ok">顯示</td><td class="ok">顯示</td></tr><tr><td><span class="mono">/mywork</span> 我的工作</td><td class="ok">顯示</td><td class="ok">顯示</td><td class="ok">顯示</td><td class="ok">顯示</td></tr><tr><td><span class="mono">/pestcontrolwork</span> 滅蟲工作</td><td class="ok">顯示</td><td class="ok">顯示</td><td class="ok">顯示</td><td class="ok">顯示</td></tr><tr><td><span class="mono">/myattendance</span> 我的出勤</td><td class="ok">顯示</td><td class="ok">顯示</td><td class="ok">顯示</td><td class="ok">顯示</td></tr><tr><td><span class="mono">/mysupply</span> 補給記錄</td><td class="ok">顯示</td><td class="ok">顯示</td><td class="ok">顯示</td><td class="ok">顯示</td></tr><tr><td><span class="mono">/customers</span> 客戶管理</td><td class="muted">隱藏</td><td class="ok">顯示</td><td class="ok">顯示</td><td class="ok">顯示</td></tr><tr><td><span class="mono">/leads</span> 線索 Leads</td><td class="muted">隱藏</td><td class="ok">顯示</td><td class="ok">顯示</td><td class="ok">顯示</td></tr><tr><td><span class="mono">/followups</span> 跟進 FollowUps</td><td class="muted">隱藏</td><td class="ok">顯示</td><td class="ok">顯示</td><td class="ok">顯示</td></tr><tr><td><span class="mono">/quotations</span> 報價管理</td><td class="muted">隱藏</td><td class="ok">顯示</td><td class="ok">顯示</td><td class="ok">顯示</td></tr><tr><td><span class="mono">/purchaseorders</span> 採購單管理</td><td class="muted">隱藏</td><td class="ok">顯示</td><td class="ok">顯示</td><td class="ok">顯示</td></tr><tr><td><span class="mono">/deliverynotes</span> 送貨單管理</td><td class="muted">隱藏</td><td class="ok">顯示</td><td class="ok">顯示</td><td class="ok">顯示</td></tr><tr><td><span class="mono">/products</span> 產品管理</td><td class="muted">隱藏</td><td class="ok">顯示</td><td class="ok">顯示</td><td class="ok">顯示</td></tr><tr><td><span class="mono">/services</span> 服務管理</td><td class="muted">隱藏</td><td class="ok">顯示</td><td class="ok">顯示</td><td class="ok">顯示</td></tr><tr><td><span class="mono">/suppliers</span> 供應商管理</td><td class="muted">隱藏</td><td class="ok">顯示</td><td class="ok">顯示</td><td class="ok">顯示</td></tr><tr><td><span class="mono">/serviceplans</span> 服務計劃</td><td class="ok">顯示</td><td class="ok">顯示</td><td class="ok">顯示</td><td class="ok">顯示</td></tr><tr><td><span class="mono">/servicereports</span> 服務報告</td><td class="ok">顯示</td><td class="ok">顯示</td><td class="ok">顯示</td><td class="ok">顯示</td></tr><tr><td><span class="mono">/vehicles</span> 車輛管理</td><td class="ok">顯示</td><td class="ok">顯示</td><td class="ok">顯示</td><td class="ok">顯示</td></tr><tr><td><span class="mono">/leaves</span> 請假紀錄</td><td class="ok">顯示</td><td class="ok">顯示</td><td class="ok">顯示</td><td class="ok">顯示</td></tr><tr><td><span class="mono">/schedules</span> 排班管理</td><td class="muted">隱藏</td><td class="ok">顯示</td><td class="ok">顯示</td><td class="ok">顯示</td></tr><tr><td><span class="mono">/recurringschedules</span> 定期服務排程</td><td class="muted">隱藏</td><td class="ok">顯示</td><td class="ok">顯示</td><td class="ok">顯示</td></tr><tr><td><span class="mono">/contracts</span> 合約列表</td><td class="muted">隱藏</td><td class="ok">顯示</td><td class="ok">顯示</td><td class="ok">顯示</td></tr><tr><td><span class="mono">/monthlyattendance</span> 月度出勤表</td><td class="muted">隱藏</td><td class="ok">顯示</td><td class="ok">顯示</td><td class="ok">顯示</td></tr><tr><td><span class="mono">/excelschedule</span> 排班Excel</td><td class="muted">隱藏</td><td class="ok">顯示</td><td class="ok">顯示</td><td class="ok">顯示</td></tr><tr><td><span class="mono">/inventory</span> 庫存管理</td><td class="muted">隱藏</td><td class="ok">顯示</td><td class="ok">顯示</td><td class="ok">顯示</td></tr><tr><td><span class="mono">/stockcounts</span> 盤點記錄</td><td class="muted">隱藏</td><td class="ok">顯示</td><td class="ok">顯示</td><td class="ok">顯示</td></tr><tr><td><span class="mono">/invoices</span> 發票管理</td><td class="muted">隱藏</td><td class="muted">隱藏</td><td class="ok">顯示</td><td class="ok">顯示</td></tr><tr><td><span class="mono">/receipts</span> 收據管理</td><td class="muted">隱藏</td><td class="muted">隱藏</td><td class="ok">顯示</td><td class="ok">顯示</td></tr><tr><td><span class="mono">/payments</span> 付款管理</td><td class="muted">隱藏</td><td class="muted">隱藏</td><td class="ok">顯示</td><td class="ok">顯示</td></tr><tr><td><span class="mono">/bills</span> 帳單管理</td><td class="muted">隱藏</td><td class="muted">隱藏</td><td class="ok">顯示</td><td class="ok">顯示</td></tr><tr><td><span class="mono">/accounting</span> 會計系統</td><td class="muted">隱藏</td><td class="muted">隱藏</td><td class="ok">顯示</td><td class="ok">顯示</td></tr><tr><td><span class="mono">/receivables</span> 應收台賬</td><td class="muted">隱藏</td><td class="muted">隱藏</td><td class="ok">顯示</td><td class="ok">顯示</td></tr><tr><td><span class="mono">/generalledger</span> 總帳</td><td class="muted">隱藏</td><td class="muted">隱藏</td><td class="ok">顯示</td><td class="ok">顯示</td></tr><tr><td><span class="mono">/accounts</span> 科目表</td><td class="muted">隱藏</td><td class="muted">隱藏</td><td class="ok">顯示</td><td class="ok">顯示</td></tr><tr><td><span class="mono">/me</span> 個人設置</td><td class="ok">顯示</td><td class="ok">顯示</td><td class="ok">顯示</td><td class="ok">顯示</td></tr><tr><td><span class="mono">/users</span> 用戶管理</td><td class="muted">隱藏</td><td class="muted">隱藏</td><td class="muted">隱藏</td><td class="ok">顯示</td></tr><tr><td><span class="mono">/employees</span> 員工管理</td><td class="muted">隱藏</td><td class="muted">隱藏</td><td class="ok">顯示</td><td class="ok">顯示</td></tr><tr><td><span class="mono">/workunits</span> 工作單位管理</td><td class="ok">顯示</td><td class="ok">顯示</td><td class="ok">顯示</td><td class="ok">顯示</td></tr><tr><td><span class="mono">/workinstructions</span> 工作細則庫</td><td class="ok">顯示</td><td class="ok">顯示</td><td class="ok">顯示</td><td class="ok">顯示</td></tr><tr><td><span class="mono">/pesticides</span> 藥物庫</td><td class="ok">顯示</td><td class="ok">顯示</td><td class="ok">顯示</td><td class="ok">顯示</td></tr><tr><td><span class="mono">/emailtemplates</span> 電郵範本</td><td class="muted">隱藏</td><td class="muted">隱藏</td><td class="muted">隱藏</td><td class="ok">顯示</td></tr><tr><td><span class="mono">/addresses</span> 地址庫</td><td class="muted">隱藏</td><td class="ok">顯示</td><td class="ok">顯示</td><td class="ok">顯示</td></tr><tr><td><span class="mono">/announcements</span> 公告管理</td><td class="muted">隱藏</td><td class="muted">隱藏</td><td class="muted">隱藏</td><td class="ok">顯示</td></tr><tr><td><span class="mono">/trash</span> 回收桶</td><td class="muted">隱藏</td><td class="ok">顯示</td><td class="muted">隱藏</td><td class="ok">顯示</td></tr><tr><td><span class="mono">/settings</span> 系統設置</td><td class="muted">隱藏</td><td class="muted">隱藏</td><td class="muted">隱藏</td><td class="ok">顯示</td></tr></tbody></table></div>
+  <div class="note"><b>本輪發現：</b>會計角色側欄有「盤點記錄」，但 /stockcounts 回 403（NAV 用 BACK_OFFICE，實體用 OFFICE_ADMIN）；會計可打開 /new/contracts 表單，但提交被 403 攔截。前者是死連結，後者是「填完才被拒」。</div>
+
+  <h2 id="s9">9 · 業務鏈與狀態機</h2>
+  <h4>C1 · 銷售主鏈</h4><div class="chain"><span class="node">線索 Lead</span><span class="arr">→</span><span class="node">報價 Quotation</span><span class="arr">→</span><span class="node">採購單 PO</span><span class="arr">→</span><span class="node">合約 Contract</span><span class="arr">→</span><span class="node">排班 Schedule</span><span class="arr">→</span><span class="node">服務報告 WorkRecord</span><span class="arr">→</span><span class="node">發票 Invoice</span><span class="arr">→</span><span class="node">收據 Receipt</span></div><p class="small muted">驗收要點：每一步外鍵與金額可反查；任一步刪除不破壞上下游</p><h4>C2 · 產品交付鏈</h4><div class="chain"><span class="node">報價（產品）</span><span class="arr">→</span><span class="node">PO</span><span class="arr">→</span><span class="node">送貨單 DN</span><span class="arr">→</span><span class="node">庫存扣減</span><span class="arr">→</span><span class="node">發票</span></div><p class="small muted">驗收要點：送達才扣庫存；重複送達不重扣；明細鎖定</p><h4>C3 · 庫存盤點鏈</h4><div class="chain"><span class="node">產品</span><span class="arr">→</span><span class="node">庫存調整</span><span class="arr">→</span><span class="node">盤點單</span><span class="arr">→</span><span class="node">自動調整</span><span class="arr">→</span><span class="node">回收桶</span></div><p class="small muted">驗收要點：完成過賬、刪除沖銷、還原重過賬，三步數量閉環</p><h4>C4 · 前線作業鏈</h4><div class="chain"><span class="node">我的工作</span><span class="arr">→</span><span class="node">打卡</span><span class="arr">→</span><span class="node">補給</span><span class="arr">→</span><span class="node">請假</span><span class="arr">→</span><span class="node">服務報告（唯讀）</span></div><p class="small muted">驗收要點：只能為本人建檔；不能審批；不能看金額</p><h4>C5 · 財務結算鏈</h4><div class="chain"><span class="node">發票</span><span class="arr">→</span><span class="node">收款</span><span class="arr">→</span><span class="node">收據</span><span class="arr">→</span><span class="node">應收臺賬</span><span class="arr">→</span><span class="node">總帳</span></div><p class="small muted">驗收要點：餘額=總額−已付；借貸平衡；作廢不計入應收</p>
+  <h4>9.1 關鍵狀態遷移</h4>
+  <div class="state"><b>報價：</b><span class="s">已報價</span>→<span class="s">跟進中</span>→<span class="s">已收PO</span>→<span class="s">已成交</span><span class="s bad">已取消/失敗</span></div>
+  <div class="state"><b>發票：</b><span class="s">草稿</span>→<span class="s">已發出</span>→<span class="s">部分付款</span>→<span class="s">已付款</span><span class="s bad">逾期/已作廢</span></div>
+  <div class="state"><b>盤點：</b><span class="s">進行中</span>→<span class="s">已完成（過賬）</span>→<span class="s">刪除（沖銷）</span>→<span class="s">還原（重過賬）</span><span class="s bad">永久刪除</span></div>
+  <p class="small muted">每個箭頭至少一條用例；非法箭頭（如草稿直接已付款、未過賬直接沖銷）必須被拒絕或有明確提示。</p>
+
+  <h2 id="s10">10 · 執行計劃（怎麼排、多久跑一次）</h2>
+  <table><thead><tr><th style="width:110px">層級</th><th>內容</th><th>耗時</th><th>時機</th><th>通過標準</th></tr></thead><tbody>
+    <tr><td><b>冒煙</b></td><td>四角色登入 + 44 頁直鏈 + 5 條主鏈各 1 筆</td><td>約 8 分鐘</td><td>每次部署 / 每日早上</td><td>P0 100%，無 500</td></tr>
+    <tr><td><b>回歸</b></td><td>本方案 115 項自動 + 權限矩陣</td><td>約 35 分鐘</td><td>每次合併 / 每週</td><td>P0 100%，P1 ≥98%</td></tr>
+    <tr><td><b>發版</b></td><td>回歸 + 手工 UI/列印/1366 寬 + 效能 + 安全清單</td><td>約 90 分鐘</td><td>上線前</td><td>無 S1/S2；P2 有記錄與排期</td></tr>
+  </tbody></table>
+  <h4>10.1 角色分工</h4>
+  <ul class="tight">
+    <li><b>QA：</b>維護用例與自動化、判定缺陷等級、出具基線報告；不改產品代碼。</li>
+    <li><b>開發：</b>按缺陷單修復，附最小重現與自測；修完通知 QA 重跑，不自行改測試期望。</li>
+    <li><b>業務/辦公室：</b>確認「原系統就是這樣」的行為（如合約編號沿用報價號），避免把設計當缺陷。</li>
+  </ul>
+  <h4>10.2 回歸門檻（寫進發布清單）</h4>
+  <ul class="tight">
+    <li>P0 全綠；P1 ≥98%；S1/S2 為 0；連續兩次回歸結果一致。</li>
+    <li>任何「為了讓測試變綠」而放寬斷言，必須在報告中標註理由並經業務確認。</li>
+    <li>測試資料不清理不得進入下一輪（避免污染基準）。</li>
+  </ul>
+
+  <h2 id="s11">11 · 基線結果（本輪實測）</h2>
+  <p class="small muted">執行時間：2026-10-25T12:52:18.899Z · 隔離服務 http://127.0.0.1:3102 · runId mvntu13f · Node v22.22.2</p>
+  
+  <div class="cards">
+    <div class="card"><div class="k">檢查項</div><div class="v">115</div><div class="n">自動斷言</div></div>
+    <div class="card ok"><div class="k">通過</div><div class="v">107</div><div class="n">93%</div></div>
+    <div class="card bad"><div class="k">失敗</div><div class="v">8</div><div class="n">見下表</div></div>
+    <div class="card bad"><div class="k">P0</div><div class="v">57/58</div><div class="n">准入線 100%</div></div>
+  </div>
+  <h4>11.1 按模組</h4>
+  <table><thead><tr><th>模組</th><th>檢查</th><th>通過</th><th>失敗</th><th>通過率</th></tr></thead><tbody>
+  <tr><td class="mono">SYS</td><td>3</td><td>3</td><td class="">0</td><td>100%</td></tr><tr><td class="mono">AUTH</td><td>7</td><td>7</td><td class="">0</td><td>100%</td></tr><tr><td class="mono">PERM</td><td>19</td><td>17</td><td class="no">2</td><td>89.5%</td></tr><tr><td class="mono">CUS</td><td>6</td><td>6</td><td class="">0</td><td>100%</td></tr><tr><td class="mono">QUO</td><td>8</td><td>7</td><td class="no">1</td><td>87.5%</td></tr><tr><td class="mono">PO</td><td>7</td><td>7</td><td class="">0</td><td>100%</td></tr><tr><td class="mono">CON</td><td>5</td><td>5</td><td class="">0</td><td>100%</td></tr><tr><td class="mono">STK</td><td>9</td><td>7</td><td class="no">2</td><td>77.8%</td></tr><tr><td class="mono">DN</td><td>5</td><td>5</td><td class="">0</td><td>100%</td></tr><tr><td class="mono">INV</td><td>6</td><td>5</td><td class="no">1</td><td>83.3%</td></tr><tr><td class="mono">TXN</td><td>4</td><td>4</td><td class="">0</td><td>100%</td></tr><tr><td class="mono">LV</td><td>4</td><td>4</td><td class="">0</td><td>100%</td></tr><tr><td class="mono">SUP</td><td>3</td><td>3</td><td class="">0</td><td>100%</td></tr><tr><td class="mono">SCH</td><td>5</td><td>4</td><td class="no">1</td><td>80%</td></tr><tr><td class="mono">TRS</td><td>3</td><td>3</td><td class="">0</td><td>100%</td></tr><tr><td class="mono">EXP</td><td>2</td><td>2</td><td class="">0</td><td>100%</td></tr><tr><td class="mono">SEC</td><td>4</td><td>4</td><td class="">0</td><td>100%</td></tr><tr><td class="mono">PERF</td><td>5</td><td>5</td><td class="">0</td><td>100%</td></tr><tr><td class="mono">UI</td><td>5</td><td>5</td><td class="">0</td><td>100%</td></tr><tr><td class="mono">DAT</td><td>5</td><td>4</td><td class="no">1</td><td>80%</td></tr>
+  </tbody></table>
+  <h4>11.2 待修缺陷（按等級）</h4>
+  <table class="fail"><thead><tr><th style="width:70px">ID</th><th style="width:44px">級別</th><th style="width:180px">現象</th><th>根因（已定位到代碼路徑）</th><th style="width:250px">修復建議</th></tr></thead><tbody><tr><td class="mono">PERM-06</td><td><b class="sev">S2</b></td><td><b>菜單可用性 · 會計</b><div class="small muted">/stockcounts=403(應200)</div></td><td>NAV 對 /stockcounts 使用 BACK_OFFICE（含 accounting），但實體 stock_counts 的 viewRoles 是 OFFICE_ADMIN（不含 accounting），菜單可見、頁面 403。<div class="small muted">證據：accounting 側欄有「盤點記錄」，點進去 403。</div></td><td>兩處角色來源合一：NAV 改喫 ENTITIES[key].viewRoles，或把 stock_counts 開放給 accounting；加菜單—路由一致性檢查。</td></tr><tr><td class="mono">PERM-03</td><td><b class="sev">S3</b></td><td><b>實體表單權限 · 會計</b><div class="small muted">contracts=200/403</div></td><td>GET /new/&lt;entity&gt; 只校驗查看權限，會計可打開合約新增表單，但提交時 editRoles 攔截。<div class="small muted">證據：accounting /new/contracts = 200，POST /save/contracts = 403。</div></td><td>entityForm 入口改 assertEntity(user, cfg, true)，與 POST 保持一致；避免填完才被拒。</td></tr><tr><td class="mono">QUO-05</td><td><b class="sev">S2</b></td><td><b>報價轉採購單</b><div class="small muted">status=302, po_number=空, po_name=空</div></td><td>convertQuotation 建立的 PO 物件沒有 po_number 鍵；defaultNumber 用 Object.hasOwn 判斷，直接跳過編號生成，po_name 也因缺編號而空白。<div class="small muted">證據：PO 詳情可開，但列表 PO 名稱、編號欄空白；required 欄位被轉換路徑繞過。</div></td><td>在 PO 物件先放 po_number: &quot;&quot;（或顯式呼叫編號生成），再 recalculate；補「轉換後 PO 編號/名稱為非空」回歸。</td></tr><tr><td class="mono">STK-09</td><td><b class="sev">S3</b></td><td><b>自動盤點調整單編號</b><div class="small muted">空</div></td><td>盤點/送貨自動生成的調整單物件沒有 adjustment_number 鍵，defaultNumber 因 hasOwn 判斷跳過。<div class="small muted">證據：自動調整單 adjustment_number 空白，列表無編號可追溯。</div></td><td>生成調整單時先補 adjustment_number: &quot;&quot;，或在 store.save 前統一補鍵。</td></tr><tr><td class="mono">STK-06</td><td><b class="sev">S1</b></td><td><b>刪除已過賬盤點沖銷</b><div class="small muted">302, stock=0, reversed=true</div></td><td>盤點過賬時，明細的 system_quantity / difference 只寫進記憶體 data.items，沒有寫進落庫後的 saved.items；刪除沖銷時 item.difference 缺失，回退為 actual − 0（12 − 0），把庫存從 12 直接沖成 0。<div class="small muted">證據：ADJ 記錄：before 12 → change −12 → after 0；再次還原 +12 → 12，掩蓋了第一次的錯誤。</div></td><td>在 saveStockCount 裡對 saved.items 同步寫入 system_quantity/difference，或 reverseStockCount 改讀盤點單上保存的 difference 快照；補一條「刪除已過賬盤點後庫存 = 盤點前」的回歸用例。</td></tr><tr><td class="mono">INV-07</td><td><b class="sev">S3</b></td><td><b>部分收款狀態字典</b><div class="small muted">部分收款</div></td><td>collectReceipt 寫入狀態字面量「部分收款」，但發票狀態字典/篩選器是「部分付款」。<div class="small muted">證據：40/100 收款後 status=部分收款，列表 pill 與篩選器都認不出。</div></td><td>改為「部分付款」；把狀態值收斂為常量，避免多處硬編碼。</td></tr><tr><td class="mono">SCH-07</td><td><b class="sev">S3</b></td><td><b>排班總工時計算</b><div class="small muted">total_hours=空</div></td><td>排班 total_hours 只在定期排程生成時按 estimated_hours 匯總；手動排班的工作項有起止時間，但前後端都沒有計算。<div class="small muted">證據：09:00–11:00 + 13:00–14:30，total_hours 為空。</div></td><td>saveSchedule 內按 start_time/end_time 差值匯總（跨日另計），前端同步顯示。</td></tr><tr><td class="mono">DAT-02</td><td><b class="sev">S2</b></td><td><b>報價合計抽樣一致</b><div class="small muted">1 筆表頭有金額但明細為 0：SQP-2026-0230</div></td><td>歷史匯入的 22 張報價只有表頭金額（如 9,000），明細單價/小計為 0 或缺失；新邏輯以明細重算，打開再保存會把金額歸零。<div class="small muted">證據：SQP-2026-0230：subtotal 0、total 9,000、items 單價 0；全庫 22/1,826 同類。</div></td><td>匯入層補明細或保留「表頭金額優先」旗標；對 22 張做一次性核對，修復前禁止直接編輯。</td></tr></tbody></table>
+  
+
+  <h2 id="s12">12 · 風險、已知缺口與下一步</h2>
+  <h4>12.1 需要業務確認的「疑似設計」</h4>
+  <table><thead><tr><th>現象</th><th>為什麼可能不是缺陷</th><th>建議</th></tr></thead><tbody>
+    <tr><td>合約編號沿用報價編號（SQP-…）</td><td>報價成交後直接成為合約號，符合部分清潔行業習慣</td><td>由業務確認；若確認，寫入需求基線，測試不再斷言 C- 前綴</td></tr>
+    <tr><td>PO / 合約 / 收據編號欄位 required，留空被拒</td><td>編號可能由客戶或人工提供，自動編號只是預留能力</td><td>確認是否需要自動；若需要，required 與 defaultNumber 的順序要調整</td></tr>
+    <tr><td>公告頁全員可直鏈讀取，但菜單只給管理層</td><td>公告本質是全員可讀，管理頁只是管理入口</td><td>在權限矩陣標註「可讀」；若要嚴格，改菜單或改路由</td></tr>
+    <tr><td>送貨單刪除後不反向沖銷庫存</td><td>可能要求人工盤點修正，避免自動回滾造成二次錯誤</td><td>補需求說明；若需沖銷，按盤點模式加 stock_reversed</td></tr>
+  </tbody></table>
+  <h4>12.2 尚未自動化的高價值手工項</h4>
+  <ul class="tight">
+    <li>列印版面（報價/發票/收據/排班/工程滿意紙）A4 斷頁與中文換行。</li>
+    <li>Picker 手感：50 筆清單捲動、彈窗內裁切、選中回填 ID/單位。</li>
+    <li>1366×768 十二欄表格、操作列黏性、水平溢出。</li>
+    <li>併發寫入（兩個會話同時保存排班/報價）與 SQLITE_BUSY 重試。</li>
+    <li>辦公室每日 10 條回收桶上限與管理層通知（需構造 11 條）。</li>
+    <li>公開分享連結的枚舉與過期策略（token 強度、重放）。</li>
+  </ul>
+  <h4>12.3 建議修復順序（按投入產出）</h4>
+  <table><thead><tr><th style="width:60px">順序</th><th>項</th><th>為什麼先做</th><th>預估</th></tr></thead><tbody>
+    <tr><td>1</td><td>STK-06 盤點沖銷清零</td><td>唯一 S1，直接寫壞庫存，且還原後掩蓋問題</td><td>0.5 天 + 回歸</td></tr>
+    <tr><td>2</td><td>QUO-05 PO 編號/名稱空白</td><td>轉換主鏈第一站，列表無編號無法對賬</td><td>0.5 天</td></tr>
+    <tr><td>3</td><td>DAT-02 22 張歷史報價</td><td>一旦有人打開保存就丟金額，屬於靜默資料損失</td><td>1 天（含核對）</td></tr>
+    <tr><td>4</td><td>PERM-06 菜單死連結、PERM-03 表單越權</td><td>權限一致性，影響會計日常使用與審計印象</td><td>0.5 天</td></tr>
+    <tr><td>5</td><td>INV-07 / STK-09 / SCH-07</td><td>字典、編號、工時，都是可排期的 S3</td><td>1 天</td></tr>
+  </tbody></table>
+  <div class="note"><b>不要做的事：</b>不要為了讓 115 項全綠而刪掉 STK-06 的斷言、把 PO 編號改成「可為空」、或把「部分收款」加進字典。這三件事都會把真實缺陷偽裝成需求。</div>
+
+  <h2 id="s13">附錄 · 工具用法與交付物</h2>
+  <h4>A. 一鍵跑驗收</h4>
+  <pre><code>cd "F:\04 STANDARD CPC SYSTEM\04. 四期\測試設計_20261025"
+node run-tests.mjs --port 3102 --keep
+
+# 只跑某一模組（可選，需自行加 filter）
+# 產出：
+#   測試結果_基線.json   機器可讀，含 matrix 與 evidence
+#   測試結果_基線.html   人可讀，按模組/優先級匯總
+#   _run_&lt;runId&gt;/        隔離副本與 server.log</code></pre>
+  <h4>B. 檔案說明</h4>
+  <table><thead><tr><th>檔案</th><th>用途</th></tr></thead><tbody>
+    <tr><td class="mono">ERP測試設計與驗收方案_20261025.html</td><td>本文件：方法、用例、矩陣、判定、基線</td></tr>
+    <tr><td class="mono">plan.mjs</td><td>用例唯一資料源（模組、用例、需求追蹤、業務鏈）</td></tr>
+    <tr><td class="mono">run-tests.mjs</td><td>零依賴驗收器：複製 DB、起服務、跑 115 項、出報告</td></tr>
+    <tr><td class="mono">build-plan.mjs</td><td>由 plan + 結果生成這份 HTML</td></tr>
+    <tr><td class="mono">測試結果_基線.json / .html</td><td>本輪證據與匯總</td></tr>
+  </tbody></table>
+  <h4>C. 下一輪建議（按順序）</h4>
+  <ol class="tight">
+    <li>修 STK-06，重跑 115 項，確認 P0 100%。</li>
+    <li>補 UI 自動化：Playwright 覆蓋新增彈窗 __id、picker 捲動、列印 PDF 首頁。</li>
+    <li>把「權限矩陣」接入每次合併：任何 role 變更都應讓矩陣 diff 可見。</li>
+    <li>建立缺陷回歸庫：每個 S1/S2 修復後追加一條永久用例，不刪舊例。</li>
+  </ol>
+  <footer>標準清潔滅蟲 ERP · 測試設計與驗收方案 · v1.0 · 產生於 2026-10-25 12:55:58 · 基線資料來自 :3102 隔離副本</footer>
+</main>
+</div>
+<script>addEventListener('load',()=>{if(location.hash){const el=document.querySelector(location.hash);if(el)el.scrollIntoView({block:'start',behavior:'instant'});}});</script>
+</body>
+</html>

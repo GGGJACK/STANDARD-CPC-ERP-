@@ -569,7 +569,20 @@ function pkMount(root){
     if(e.key==='Enter'&&!menu.hidden&&active>=0){e.preventDefault();choose(items[active]);}
   });
   input.addEventListener('blur',function(){setTimeout(close,170);});
-  window.addEventListener('scroll',close,true);
+  // 捲動時不要一律關閉下拉：
+  //   1. 在下拉清單裡自己捲（50 筆就超過 420px 高）→ 本來就會冒泡到 window，
+  //      以前用 capture 監聽直接 close()，所以「一滑就關」。
+  //   2. 捲動彈窗/頁面時錨點還在畫面上 → 重新定位就好，不必關。
+  //   3. 只有輸入框被捲出視窗才關。
+  window.addEventListener('scroll',function(e){
+    if(menu.hidden) return;
+    var t=e.target;
+    if(t&&t!==document&&(t===menu||menu.contains(t))) return;
+    if(!input.isConnected){close();return;}
+    var r=input.getBoundingClientRect();
+    if(r.bottom<0||r.top>window.innerHeight){close();return;}
+    place();
+  },true);
   window.addEventListener('resize',close);
   menu.addEventListener('mousedown',function(e){e.preventDefault();});
   menu.addEventListener('click',function(e){var b=e.target.closest('.pk-item');if(b)choose(items[Number(b.dataset.i)]);});

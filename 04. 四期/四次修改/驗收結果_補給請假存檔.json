@@ -1,8 +1,8 @@
 {
-  "at": "2026-10-25T07:57:11.321Z",
+  "at": "2026-10-25T11:18:42.305Z",
   "base": "http://127.0.0.1:3101",
-  "total": 25,
-  "pass": 25,
+  "total": 29,
+  "pass": 29,
   "fail": 0,
   "results": [
     {
@@ -53,7 +53,7 @@
     {
       "name": "補給記錄真的寫入",
       "pass": true,
-      "detail": "id=sup_mvnjbdoc_707079922cee"
+      "detail": "id=sup_mvnqij6b_76c633e72c36"
     },
     {
       "name": "前線建立請假記錄成功",
@@ -63,7 +63,7 @@
     {
       "name": "請假記錄真的寫入",
       "pass": true,
-      "detail": "id=lea_mvnjbesz_151879b9ee2d"
+      "detail": "id=lea_mvnqijfr_bf415871c64e"
     },
     {
       "name": "壞 __id + 無 updated_date 視為新增",
@@ -73,7 +73,7 @@
     {
       "name": "壞 __id 仍寫入且沿用該 ID",
       "pass": true,
-      "detail": "sup_UITEST-mvnjbd7a_ghost"
+      "detail": "sup_UITEST-mvnqiig6_ghost"
     },
     {
       "name": "編輯已不存在的記錄被擋下",
@@ -122,6 +122,26 @@
     },
     {
       "name": "商品未寫入",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "補給彈窗不再顯示員工 ID",
+      "pass": true,
+      "detail": "日期 * / 補給位置 * / 員工姓名 / 產品列表 / 工具列表 / 備註"
+    },
+    {
+      "name": "員工 ID 仍以隱藏欄位提交",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "下拉捲動不再全域關閉",
+      "pass": true,
+      "detail": "檢查 picker 的 scroll 處理是否區分來源"
+    },
+    {
+      "name": "下拉不再用 scroll→close 的舊寫法",
       "pass": true,
       "detail": ""
     },
