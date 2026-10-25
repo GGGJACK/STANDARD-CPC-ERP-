@@ -129,19 +129,19 @@ footer{margin-top:60px;padding-top:18px;border-top:1px solid var(--line);color:v
   <div class="meta">
     <span class="chip">系統：標準清潔滅蟲管理系統（本地 Node.js + SQLite 復刻版）</span>
     <span class="chip">範圍：38 個實體、4 個角色、5 大業務域、62 條路由、34,053 條既有記錄</span>
-    <span class="chip">基線：107/115 通過</span>
-    <span class="chip">用例：161 項（自動化 99）</span>
+    <span class="chip">基線：112/118 通過</span>
+    <span class="chip">用例：164 項（自動化 102）</span>
   </div>
 
   <h2 id="s0">0 · 結論摘要</h2>
   <div class="cards">
-    <div class="card"><div class="k">基線檢查項</div><div class="v">115</div><div class="n">其中自動化斷言 115 條</div></div>
-    <div class="card ok"><div class="k">通過率</div><div class="v">93%</div><div class="n">107 通過 / 8 失敗</div></div>
-    <div class="card bad"><div class="k">P0 阻斷項</div><div class="v">57/58</div><div class="n">准入要求 100%</div></div>
-    <div class="card bad"><div class="k">待修缺陷</div><div class="v">8</div><div class="n">1 個 S1、3 個 S2、4 個 S3</div></div>
+    <div class="card"><div class="k">基線檢查項</div><div class="v">118</div><div class="n">其中自動化斷言 118 條</div></div>
+    <div class="card ok"><div class="k">通過率</div><div class="v">94.9%</div><div class="n">112 通過 / 6 失敗</div></div>
+    <div class="card ok"><div class="k">P0 阻斷項</div><div class="v">61/61</div><div class="n">准入要求 100%</div></div>
+    <div class="card bad"><div class="k">待修缺陷</div><div class="v">6</div><div class="n">1 個 S1、3 個 S2、4 個 S3</div></div>
   </div>
   <div class="verdict">
-    <b>准入結論：暫不放行。</b> 本輪 115 項檢查中 8 項未通過，其中 P0 僅 1 項：刪除「已過賬盤點」會把庫存從 12 直接沖成 0（S1）。 這不是介面問題，而是庫存資料會被寫壞；必須先修復並回歸，纔可進入正式環境。其餘 7 項為 S2/S3（PO 編號缺失、菜單死連結、狀態字典不一致、排班工時未計算、歷史報價金額風險等），可排期修復但不阻斷試運行。
+    <b>准入結論：暫不放行。</b> 本輪 118 項檢查中 6 項未通過，其中 P0 僅 1 項：刪除「已過賬盤點」會把庫存從 12 直接沖成 0（S1）。 這不是介面問題，而是庫存資料會被寫壞；必須先修復並回歸，纔可進入正式環境。其餘 7 項為 S2/S3（PO 編號缺失、菜單死連結、狀態字典不一致、排班工時未計算、歷史報價金額風險等），可排期修復但不阻斷試運行。
   </div>
   <div class="good"><b>可直接使用的部分：</b>角色隔離、CSRF、XSS 轉義、上傳路徑、送貨扣庫、收款核銷、借貸平衡、軟刪除與還原、CSV 權限、四個重頁效能（均 &lt; 3s）本輪全部通過。</div>
 
@@ -149,7 +149,7 @@ footer{margin-top:60px;padding-top:18px;border-top:1px solid var(--line);color:v
   <p>對象是本地復刻的標準清潔滅蟲管理系統：Node.js 單體服務 + SQLite（<code>records</code> 單表 + JSON），四角色（前線 / 辦公室 / 會計 / 管理層），38 個業務實體、6 組導航、5 大業務域。測試以「角色 × 實體 × 操作」為覆蓋骨架，再疊加 5 條跨模組業務鏈。</p>
   <h4>1.1 模組與用例分佈</h4>
   <table><thead><tr><th>模組</th><th>名稱</th><th>用例</th><th>自動化</th><th>基線</th><th>風險</th></tr></thead><tbody>
-  <tr><td class="mono">SYS</td><td>啟動、部署與健康檢查</td><td>5</td><td>3</td><td><div class="bar"><i style="width:100%"></i></div><span class="small">3/3 · 100%</span></td><td>高</td></tr><tr><td class="mono">AUTH</td><td>認證、會話與 CSRF</td><td>8</td><td>7</td><td><div class="bar"><i style="width:100%"></i></div><span class="small">7/7 · 100%</span></td><td>極高</td></tr><tr><td class="mono">PERM</td><td>角色與權限矩陣</td><td>6</td><td>6</td><td><div class="bar"><i style="width:89.5%"></i></div><span class="small">17/19 · 89.5%</span></td><td>極高</td></tr><tr><td class="mono">CUS</td><td>客戶管理</td><td>6</td><td>6</td><td><div class="bar"><i style="width:100%"></i></div><span class="small">6/6 · 100%</span></td><td>高</td></tr><tr><td class="mono">LEA</td><td>線索與跟進</td><td>3</td><td>0</td><td><span class="muted">手工</span></td><td>中</td></tr><tr><td class="mono">QUO</td><td>報價管理</td><td>9</td><td>8</td><td><div class="bar"><i style="width:87.5%"></i></div><span class="small">7/8 · 87.5%</span></td><td>極高</td></tr><tr><td class="mono">PO</td><td>採購單管理</td><td>7</td><td>7</td><td><div class="bar"><i style="width:100%"></i></div><span class="small">7/7 · 100%</span></td><td>高</td></tr><tr><td class="mono">CON</td><td>合約與服務安排</td><td>6</td><td>5</td><td><div class="bar"><i style="width:100%"></i></div><span class="small">5/5 · 100%</span></td><td>高</td></tr><tr><td class="mono">DN</td><td>送貨單與出庫</td><td>5</td><td>5</td><td><div class="bar"><i style="width:100%"></i></div><span class="small">5/5 · 100%</span></td><td>極高</td></tr><tr><td class="mono">INV</td><td>發票管理</td><td>7</td><td>6</td><td><div class="bar"><i style="width:83.3%"></i></div><span class="small">5/6 · 83.3%</span></td><td>極高</td></tr><tr><td class="mono">RCP</td><td>收據管理</td><td>3</td><td>0</td><td><span class="muted">手工</span></td><td>中</td></tr><tr><td class="mono">BIL</td><td>帳單管理</td><td>3</td><td>0</td><td><span class="muted">手工</span></td><td>中</td></tr><tr><td class="mono">PAY</td><td>付款記錄</td><td>2</td><td>0</td><td><span class="muted">手工</span></td><td>中</td></tr><tr><td class="mono">TXN</td><td>總帳與會計</td><td>5</td><td>4</td><td><div class="bar"><i style="width:100%"></i></div><span class="small">4/4 · 100%</span></td><td>極高</td></tr><tr><td class="mono">STK</td><td>庫存、調整與盤點</td><td>9</td><td>9</td><td><div class="bar"><i style="width:77.8%"></i></div><span class="small">7/9 · 77.8%</span></td><td>極高</td></tr><tr><td class="mono">SCH</td><td>排班與定期排程</td><td>7</td><td>5</td><td><div class="bar"><i style="width:80%"></i></div><span class="small">4/5 · 80%</span></td><td>高</td></tr><tr><td class="mono">SPL</td><td>服務計劃與紀錄日</td><td>4</td><td>0</td><td><span class="muted">手工</span></td><td>中</td></tr><tr><td class="mono">SR</td><td>服務報告與簽署</td><td>5</td><td>0</td><td><span class="muted">手工</span></td><td>高</td></tr><tr><td class="mono">ATT</td><td>出勤、打卡與月度表</td><td>5</td><td>0</td><td><span class="muted">手工</span></td><td>中</td></tr><tr><td class="mono">LV</td><td>請假管理</td><td>4</td><td>4</td><td><div class="bar"><i style="width:100%"></i></div><span class="small">4/4 · 100%</span></td><td>中</td></tr><tr><td class="mono">SUP</td><td>補給記錄</td><td>4</td><td>3</td><td><div class="bar"><i style="width:100%"></i></div><span class="small">3/3 · 100%</span></td><td>中</td></tr><tr><td class="mono">VEH</td><td>車輛與費用</td><td>4</td><td>0</td><td><span class="muted">手工</span></td><td>中</td></tr><tr><td class="mono">MDM</td><td>主數據（產品/服務/供應商/藥物/單位/細則/地址）</td><td>5</td><td>0</td><td><span class="muted">手工</span></td><td>中</td></tr><tr><td class="mono">USR</td><td>用戶、員工與系統設置</td><td>4</td><td>0</td><td><span class="muted">手工</span></td><td>高</td></tr><tr><td class="mono">TRS</td><td>回收桶</td><td>6</td><td>3</td><td><div class="bar"><i style="width:100%"></i></div><span class="small">3/3 · 100%</span></td><td>高</td></tr><tr><td class="mono">EXP</td><td>匯入、匯出與列印</td><td>5</td><td>2</td><td><div class="bar"><i style="width:100%"></i></div><span class="small">2/2 · 100%</span></td><td>中</td></tr><tr><td class="mono">DAT</td><td>資料完整性與遷移品質</td><td>5</td><td>5</td><td><div class="bar"><i style="width:80%"></i></div><span class="small">4/5 · 80%</span></td><td>高</td></tr><tr><td class="mono">SEC</td><td>安全專項</td><td>8</td><td>4</td><td><div class="bar"><i style="width:100%"></i></div><span class="small">4/4 · 100%</span></td><td>極高</td></tr><tr><td class="mono">PERF</td><td>效能與容量</td><td>5</td><td>2</td><td><div class="bar"><i style="width:100%"></i></div><span class="small">5/5 · 100%</span></td><td>高</td></tr><tr><td class="mono">UI</td><td>介面與相容性</td><td>6</td><td>5</td><td><div class="bar"><i style="width:100%"></i></div><span class="small">5/5 · 100%</span></td><td>中</td></tr>
+  <tr><td class="mono">SYS</td><td>啟動、部署與健康檢查</td><td>5</td><td>3</td><td><div class="bar"><i style="width:100%"></i></div><span class="small">3/3 · 100%</span></td><td>高</td></tr><tr><td class="mono">AUTH</td><td>認證、會話與 CSRF</td><td>8</td><td>7</td><td><div class="bar"><i style="width:100%"></i></div><span class="small">7/7 · 100%</span></td><td>極高</td></tr><tr><td class="mono">PERM</td><td>角色與權限矩陣</td><td>8</td><td>8</td><td><div class="bar"><i style="width:90.5%"></i></div><span class="small">19/21 · 90.5%</span></td><td>極高</td></tr><tr><td class="mono">CUS</td><td>客戶管理</td><td>6</td><td>6</td><td><div class="bar"><i style="width:100%"></i></div><span class="small">6/6 · 100%</span></td><td>高</td></tr><tr><td class="mono">LEA</td><td>線索與跟進</td><td>3</td><td>0</td><td><span class="muted">手工</span></td><td>中</td></tr><tr><td class="mono">QUO</td><td>報價管理</td><td>9</td><td>8</td><td><div class="bar"><i style="width:87.5%"></i></div><span class="small">7/8 · 87.5%</span></td><td>極高</td></tr><tr><td class="mono">PO</td><td>採購單管理</td><td>7</td><td>7</td><td><div class="bar"><i style="width:100%"></i></div><span class="small">7/7 · 100%</span></td><td>高</td></tr><tr><td class="mono">CON</td><td>合約與服務安排</td><td>6</td><td>5</td><td><div class="bar"><i style="width:100%"></i></div><span class="small">5/5 · 100%</span></td><td>高</td></tr><tr><td class="mono">DN</td><td>送貨單與出庫</td><td>5</td><td>5</td><td><div class="bar"><i style="width:100%"></i></div><span class="small">5/5 · 100%</span></td><td>極高</td></tr><tr><td class="mono">INV</td><td>發票管理</td><td>7</td><td>6</td><td><div class="bar"><i style="width:83.3%"></i></div><span class="small">5/6 · 83.3%</span></td><td>極高</td></tr><tr><td class="mono">RCP</td><td>收據管理</td><td>3</td><td>0</td><td><span class="muted">手工</span></td><td>中</td></tr><tr><td class="mono">BIL</td><td>帳單管理</td><td>3</td><td>0</td><td><span class="muted">手工</span></td><td>中</td></tr><tr><td class="mono">PAY</td><td>付款記錄</td><td>2</td><td>0</td><td><span class="muted">手工</span></td><td>中</td></tr><tr><td class="mono">TXN</td><td>總帳與會計</td><td>5</td><td>4</td><td><div class="bar"><i style="width:100%"></i></div><span class="small">4/4 · 100%</span></td><td>極高</td></tr><tr><td class="mono">STK</td><td>庫存、調整與盤點</td><td>9</td><td>9</td><td><div class="bar"><i style="width:100%"></i></div><span class="small">9/9 · 100%</span></td><td>極高</td></tr><tr><td class="mono">SCH</td><td>排班與定期排程</td><td>7</td><td>5</td><td><div class="bar"><i style="width:80%"></i></div><span class="small">4/5 · 80%</span></td><td>高</td></tr><tr><td class="mono">SPL</td><td>服務計劃與紀錄日</td><td>4</td><td>0</td><td><span class="muted">手工</span></td><td>中</td></tr><tr><td class="mono">SR</td><td>服務報告與簽署</td><td>5</td><td>0</td><td><span class="muted">手工</span></td><td>高</td></tr><tr><td class="mono">ATT</td><td>出勤、打卡與月度表</td><td>5</td><td>0</td><td><span class="muted">手工</span></td><td>中</td></tr><tr><td class="mono">LV</td><td>請假管理</td><td>4</td><td>4</td><td><div class="bar"><i style="width:100%"></i></div><span class="small">4/4 · 100%</span></td><td>中</td></tr><tr><td class="mono">SUP</td><td>補給記錄</td><td>4</td><td>3</td><td><div class="bar"><i style="width:100%"></i></div><span class="small">3/3 · 100%</span></td><td>中</td></tr><tr><td class="mono">VEH</td><td>車輛與費用</td><td>4</td><td>0</td><td><span class="muted">手工</span></td><td>中</td></tr><tr><td class="mono">MDM</td><td>主數據（產品/服務/供應商/藥物/單位/細則/地址）</td><td>5</td><td>0</td><td><span class="muted">手工</span></td><td>中</td></tr><tr><td class="mono">USR</td><td>用戶、員工與系統設置</td><td>4</td><td>0</td><td><span class="muted">手工</span></td><td>高</td></tr><tr><td class="mono">TRS</td><td>回收桶</td><td>6</td><td>3</td><td><div class="bar"><i style="width:100%"></i></div><span class="small">3/3 · 100%</span></td><td>高</td></tr><tr><td class="mono">EXP</td><td>匯入、匯出與列印</td><td>5</td><td>2</td><td><div class="bar"><i style="width:100%"></i></div><span class="small">2/2 · 100%</span></td><td>中</td></tr><tr><td class="mono">DAT</td><td>資料完整性與遷移品質</td><td>6</td><td>6</td><td><div class="bar"><i style="width:83.3%"></i></div><span class="small">5/6 · 83.3%</span></td><td>高</td></tr><tr><td class="mono">SEC</td><td>安全專項</td><td>8</td><td>4</td><td><div class="bar"><i style="width:100%"></i></div><span class="small">4/4 · 100%</span></td><td>極高</td></tr><tr><td class="mono">PERF</td><td>效能與容量</td><td>5</td><td>2</td><td><div class="bar"><i style="width:100%"></i></div><span class="small">5/5 · 100%</span></td><td>高</td></tr><tr><td class="mono">UI</td><td>介面與相容性</td><td>6</td><td>5</td><td><div class="bar"><i style="width:100%"></i></div><span class="small">5/5 · 100%</span></td><td>中</td></tr>
   </tbody></table>
   <h4>1.2 資料規模（決定效能與邊界取樣）</h4>
   <table><thead><tr><th>表 / 實體</th><th>筆數</th><th>對測試的意義</th></tr></thead><tbody>
@@ -269,7 +269,7 @@ node run-tests.mjs --port 3102 --keep</code></pre>
 [建議] saved.items 同步寫入 difference 快照；補回歸</code></pre>
 
   <h2 id="s7">7 · 詳細用例（逐項）</h2>
-  <p class="small muted">共 161 條；P0 64、P1 82、P2 15；已自動化 99 條，其餘為手工/半自動。每條都給出「怎麼做」與「憑什麼算過」。</p>
+  <p class="small muted">共 164 條；P0 67、P1 82、P2 15；已自動化 102 條，其餘為手工/半自動。每條都給出「怎麼做」與「憑什麼算過」。</p>
   <section class="module" id="m-SYS">
     <div class="mhead">
       <div><span class="mcode">SYS</span><h3>啟動、部署與健康檢查</h3></div>
@@ -391,7 +391,7 @@ node run-tests.mjs --port 3102 --keep</code></pre>
   </section><section class="module" id="m-PERM">
     <div class="mhead">
       <div><span class="mcode">PERM</span><h3>角色與權限矩陣</h3></div>
-      <div class="mmeta"><span>用例 <b>6</b></span><span>自動化 <b>6/6</b></span><span>風險 <b class="risk-x">極高</b></span></div>
+      <div class="mmeta"><span>用例 <b>8</b></span><span>自動化 <b>8/8</b></span><span>風險 <b class="risk-x">極高</b></span></div>
     </div>
     <p class="goal"><b>目標：</b>菜單、直鏈、表單、動作、匯出、回收桶六層一致　<b>自動化覆蓋：</b>NAV 可見性、44 頁 × 4 角色直鏈、38 實體 × 4 角色列表/表單、匯出與回收桶</p>
     <div class="tablewrap"><table class="cases"><colgroup><col style="width:70px"><col style="width:156px"><col style="width:50px"><col style="width:52px"><col style="width:310px"><col style="width:300px"><col style="width:70px"></colgroup><thead><tr><th>ID</th><th>測試項</th><th>級別</th><th>方法</th><th>前置與步驟</th><th>預期結果 / 判定標準</th><th>狀態</th></tr></thead><tbody><tr>
@@ -442,6 +442,22 @@ node run-tests.mjs --port 3102 --keep</code></pre>
     <td><div class="pre">四角色</div><ol class="steps"><li>遍歷側欄每一項</li><li>比對該角色實際 HTTP 狀態</li></ol></td>
     <td>菜單可見的頁面必須 200；不得出現看得到卻 403 的死連結</td>
     <td class="nowrap"><span class="st-fail">FAIL 1/1</span></td>
+  </tr><tr>
+    <td class="mono">PERM-07</td>
+    <td><b>選擇器不得繞過實體權限</b></td>
+    <td><span class="pill p-p0">P0</span></td>
+    <td><span class="tag">權限</span></td>
+    <td><div class="pre">四角色</div><ol class="steps"><li>front GET /api/pick?source=customers</li><li>front GET /api/pick?source=products</li><li>office／management GET products</li><li>front GET employees</li></ol></td>
+    <td>front→customers/products 403；office 無 cost_price、management 有；front→employees 200（補給請假要用）；每次調用留 pick 審計</td>
+    <td class="nowrap"><span class="st-pass">PASS 1/1</span></td>
+  </tr><tr>
+    <td class="mono">PERM-08</td>
+    <td><b>編輯表單金額掩碼</b></td>
+    <td><span class="pill p-p0">P0</span></td>
+    <td><span class="tag">權限</span></td>
+    <td><div class="pre">office／management + 一張帶金額報價</div><ol class="steps"><li>office GET /edit/quotations/:id</li><li>檢查可見 input 是否帶明文</li><li>檢查是否有 hidden 保值</li></ol></td>
+    <td>可見控件無明文、有 ••••• 佔位符、hidden 保留原值；management 仍見真實金額</td>
+    <td class="nowrap"><span class="st-pass">PASS 1/1</span></td>
   </tr></tbody></table></div>
   </section><section class="module" id="m-CUS">
     <div class="mhead">
@@ -548,8 +564,8 @@ node run-tests.mjs --port 3102 --keep</code></pre>
     <td><b>明細小計與總額</b></td>
     <td><span class="pill p-p0">P0</span></td>
     <td><span class="tag">資料</span></td>
-    <td><div class="pre">office</div><ol class="steps"><li>2×100 折扣 10；運費 20；整單折扣 5</li><li>讀 DB</li></ol></td>
-    <td>行小計 190；subtotal 190；total=190+20-5=205；前端顯示同值</td>
+    <td><div class="pre">office</div><ol class="steps"><li>2×100 折扣 10；運費 20</li><li>讀 DB</li></ol></td>
+    <td>行小計 190；subtotal 190；total=190+20=210；整單折扣已依 T0-5 從表單移除（欄位留 JSON 兼容舊資料）</td>
     <td class="nowrap"><span class="st-pass">PASS 1/1</span></td>
   </tr><tr>
     <td class="mono">QUO-03</td>
@@ -1021,7 +1037,7 @@ node run-tests.mjs --port 3102 --keep</code></pre>
     <td><span class="tag">資料</span></td>
     <td><div class="pre">已過賬盤點（-3）</div><ol class="steps"><li>POST /delete/stock_counts/:id</li></ol></td>
     <td>庫存回到 15；生成 +3 沖銷調整；stock_reversed=true；記錄進回收桶</td>
-    <td class="nowrap"><span class="st-fail">FAIL 1/1</span></td>
+    <td class="nowrap"><span class="st-pass">PASS 1/1</span></td>
   </tr><tr>
     <td class="mono">STK-07</td>
     <td><b>還原盤點重新過賬</b></td>
@@ -1045,7 +1061,7 @@ node run-tests.mjs --port 3102 --keep</code></pre>
     <td><span class="tag">資料</span></td>
     <td><div class="pre">盤點/送貨自動生成調整</div><ol class="steps"><li>查看 adjustment_number</li></ol></td>
     <td>符合 ADJ-YYYY-#####；列表不得空白</td>
-    <td class="nowrap"><span class="st-fail">FAIL 1/1</span></td>
+    <td class="nowrap"><span class="st-pass">PASS 1/1</span></td>
   </tr></tbody></table></div>
   </section><section class="module" id="m-SCH">
     <div class="mhead">
@@ -1551,7 +1567,7 @@ node run-tests.mjs --port 3102 --keep</code></pre>
   </section><section class="module" id="m-DAT">
     <div class="mhead">
       <div><span class="mcode">DAT</span><h3>資料完整性與遷移品質</h3></div>
-      <div class="mmeta"><span>用例 <b>5</b></span><span>自動化 <b>5/5</b></span><span>風險 <b class="risk-h">高</b></span></div>
+      <div class="mmeta"><span>用例 <b>6</b></span><span>自動化 <b>6/6</b></span><span>風險 <b class="risk-h">高</b></span></div>
     </div>
     <p class="goal"><b>目標：</b>歷史資料可讀、可算、可改而不失真　<b>自動化覆蓋：</b>JSON 可解析、報價合計、發票餘額、分錄平衡、軟刪除欄位</p>
     <div class="tablewrap"><table class="cases"><colgroup><col style="width:70px"><col style="width:156px"><col style="width:50px"><col style="width:52px"><col style="width:310px"><col style="width:300px"><col style="width:70px"></colgroup><thead><tr><th>ID</th><th>測試項</th><th>級別</th><th>方法</th><th>前置與步驟</th><th>預期結果 / 判定標準</th><th>狀態</th></tr></thead><tbody><tr>
@@ -1593,6 +1609,14 @@ node run-tests.mjs --port 3102 --keep</code></pre>
     <td><span class="tag">資料</span></td>
     <td><div class="pre">deleted=1 記錄</div><ol class="steps"><li>檢查 deleted_at/deleted_by</li><li>區分歷史匯入與近兩日操作</li></ol></td>
     <td>新刪除必須有時間與操作人；歷史遺留單獨列帳</td>
+    <td class="nowrap"><span class="st-pass">PASS 1/1</span></td>
+  </tr><tr>
+    <td class="mono">DAT-06</td>
+    <td><b>重名關聯不猜（409）</b></td>
+    <td><span class="pill p-p0">P0</span></td>
+    <td><span class="tag">資料</span></td>
+    <td><div class="pre">庫內重名客戶</div><ol class="steps"><li>取一組同名客戶</li><li>以 customer_name 提交、customer_id 留空</li><li>再用不同名客戶提交</li></ol></td>
+    <td>同名多筆 → 409 並提示；不同名不攔截；不得把單據改掛到別人名下</td>
     <td class="nowrap"><span class="st-pass">PASS 1/1</span></td>
   </tr></tbody></table></div>
   </section><section class="module" id="m-SEC">
@@ -1807,20 +1831,20 @@ node run-tests.mjs --port 3102 --keep</code></pre>
   </ul>
 
   <h2 id="s11">11 · 基線結果（本輪實測）</h2>
-  <p class="small muted">執行時間：2026-10-25T12:52:18.899Z · 隔離服務 http://127.0.0.1:3102 · runId mvntu13f · Node v22.22.2</p>
+  <p class="small muted">執行時間：2026-10-25T14:08:06.256Z · 隔離服務 http://127.0.0.1:3108 · runId mvnwj8wa · Node v22.22.2</p>
   
   <div class="cards">
-    <div class="card"><div class="k">檢查項</div><div class="v">115</div><div class="n">自動斷言</div></div>
-    <div class="card ok"><div class="k">通過</div><div class="v">107</div><div class="n">93%</div></div>
-    <div class="card bad"><div class="k">失敗</div><div class="v">8</div><div class="n">見下表</div></div>
-    <div class="card bad"><div class="k">P0</div><div class="v">57/58</div><div class="n">准入線 100%</div></div>
+    <div class="card"><div class="k">檢查項</div><div class="v">118</div><div class="n">自動斷言</div></div>
+    <div class="card ok"><div class="k">通過</div><div class="v">112</div><div class="n">94.9%</div></div>
+    <div class="card bad"><div class="k">失敗</div><div class="v">6</div><div class="n">見下表</div></div>
+    <div class="card ok"><div class="k">P0</div><div class="v">61/61</div><div class="n">准入線 100%</div></div>
   </div>
   <h4>11.1 按模組</h4>
   <table><thead><tr><th>模組</th><th>檢查</th><th>通過</th><th>失敗</th><th>通過率</th></tr></thead><tbody>
-  <tr><td class="mono">SYS</td><td>3</td><td>3</td><td class="">0</td><td>100%</td></tr><tr><td class="mono">AUTH</td><td>7</td><td>7</td><td class="">0</td><td>100%</td></tr><tr><td class="mono">PERM</td><td>19</td><td>17</td><td class="no">2</td><td>89.5%</td></tr><tr><td class="mono">CUS</td><td>6</td><td>6</td><td class="">0</td><td>100%</td></tr><tr><td class="mono">QUO</td><td>8</td><td>7</td><td class="no">1</td><td>87.5%</td></tr><tr><td class="mono">PO</td><td>7</td><td>7</td><td class="">0</td><td>100%</td></tr><tr><td class="mono">CON</td><td>5</td><td>5</td><td class="">0</td><td>100%</td></tr><tr><td class="mono">STK</td><td>9</td><td>7</td><td class="no">2</td><td>77.8%</td></tr><tr><td class="mono">DN</td><td>5</td><td>5</td><td class="">0</td><td>100%</td></tr><tr><td class="mono">INV</td><td>6</td><td>5</td><td class="no">1</td><td>83.3%</td></tr><tr><td class="mono">TXN</td><td>4</td><td>4</td><td class="">0</td><td>100%</td></tr><tr><td class="mono">LV</td><td>4</td><td>4</td><td class="">0</td><td>100%</td></tr><tr><td class="mono">SUP</td><td>3</td><td>3</td><td class="">0</td><td>100%</td></tr><tr><td class="mono">SCH</td><td>5</td><td>4</td><td class="no">1</td><td>80%</td></tr><tr><td class="mono">TRS</td><td>3</td><td>3</td><td class="">0</td><td>100%</td></tr><tr><td class="mono">EXP</td><td>2</td><td>2</td><td class="">0</td><td>100%</td></tr><tr><td class="mono">SEC</td><td>4</td><td>4</td><td class="">0</td><td>100%</td></tr><tr><td class="mono">PERF</td><td>5</td><td>5</td><td class="">0</td><td>100%</td></tr><tr><td class="mono">UI</td><td>5</td><td>5</td><td class="">0</td><td>100%</td></tr><tr><td class="mono">DAT</td><td>5</td><td>4</td><td class="no">1</td><td>80%</td></tr>
+  <tr><td class="mono">SYS</td><td>3</td><td>3</td><td class="">0</td><td>100%</td></tr><tr><td class="mono">AUTH</td><td>7</td><td>7</td><td class="">0</td><td>100%</td></tr><tr><td class="mono">PERM</td><td>21</td><td>19</td><td class="no">2</td><td>90.5%</td></tr><tr><td class="mono">CUS</td><td>6</td><td>6</td><td class="">0</td><td>100%</td></tr><tr><td class="mono">QUO</td><td>8</td><td>7</td><td class="no">1</td><td>87.5%</td></tr><tr><td class="mono">PO</td><td>7</td><td>7</td><td class="">0</td><td>100%</td></tr><tr><td class="mono">CON</td><td>5</td><td>5</td><td class="">0</td><td>100%</td></tr><tr><td class="mono">STK</td><td>9</td><td>9</td><td class="">0</td><td>100%</td></tr><tr><td class="mono">DN</td><td>5</td><td>5</td><td class="">0</td><td>100%</td></tr><tr><td class="mono">INV</td><td>6</td><td>5</td><td class="no">1</td><td>83.3%</td></tr><tr><td class="mono">TXN</td><td>4</td><td>4</td><td class="">0</td><td>100%</td></tr><tr><td class="mono">LV</td><td>4</td><td>4</td><td class="">0</td><td>100%</td></tr><tr><td class="mono">SUP</td><td>3</td><td>3</td><td class="">0</td><td>100%</td></tr><tr><td class="mono">SCH</td><td>5</td><td>4</td><td class="no">1</td><td>80%</td></tr><tr><td class="mono">TRS</td><td>3</td><td>3</td><td class="">0</td><td>100%</td></tr><tr><td class="mono">EXP</td><td>2</td><td>2</td><td class="">0</td><td>100%</td></tr><tr><td class="mono">SEC</td><td>4</td><td>4</td><td class="">0</td><td>100%</td></tr><tr><td class="mono">PERF</td><td>5</td><td>5</td><td class="">0</td><td>100%</td></tr><tr><td class="mono">UI</td><td>5</td><td>5</td><td class="">0</td><td>100%</td></tr><tr><td class="mono">DAT</td><td>6</td><td>5</td><td class="no">1</td><td>83.3%</td></tr>
   </tbody></table>
   <h4>11.2 待修缺陷（按等級）</h4>
-  <table class="fail"><thead><tr><th style="width:70px">ID</th><th style="width:44px">級別</th><th style="width:180px">現象</th><th>根因（已定位到代碼路徑）</th><th style="width:250px">修復建議</th></tr></thead><tbody><tr><td class="mono">PERM-06</td><td><b class="sev">S2</b></td><td><b>菜單可用性 · 會計</b><div class="small muted">/stockcounts=403(應200)</div></td><td>NAV 對 /stockcounts 使用 BACK_OFFICE（含 accounting），但實體 stock_counts 的 viewRoles 是 OFFICE_ADMIN（不含 accounting），菜單可見、頁面 403。<div class="small muted">證據：accounting 側欄有「盤點記錄」，點進去 403。</div></td><td>兩處角色來源合一：NAV 改喫 ENTITIES[key].viewRoles，或把 stock_counts 開放給 accounting；加菜單—路由一致性檢查。</td></tr><tr><td class="mono">PERM-03</td><td><b class="sev">S3</b></td><td><b>實體表單權限 · 會計</b><div class="small muted">contracts=200/403</div></td><td>GET /new/&lt;entity&gt; 只校驗查看權限，會計可打開合約新增表單，但提交時 editRoles 攔截。<div class="small muted">證據：accounting /new/contracts = 200，POST /save/contracts = 403。</div></td><td>entityForm 入口改 assertEntity(user, cfg, true)，與 POST 保持一致；避免填完才被拒。</td></tr><tr><td class="mono">QUO-05</td><td><b class="sev">S2</b></td><td><b>報價轉採購單</b><div class="small muted">status=302, po_number=空, po_name=空</div></td><td>convertQuotation 建立的 PO 物件沒有 po_number 鍵；defaultNumber 用 Object.hasOwn 判斷，直接跳過編號生成，po_name 也因缺編號而空白。<div class="small muted">證據：PO 詳情可開，但列表 PO 名稱、編號欄空白；required 欄位被轉換路徑繞過。</div></td><td>在 PO 物件先放 po_number: &quot;&quot;（或顯式呼叫編號生成），再 recalculate；補「轉換後 PO 編號/名稱為非空」回歸。</td></tr><tr><td class="mono">STK-09</td><td><b class="sev">S3</b></td><td><b>自動盤點調整單編號</b><div class="small muted">空</div></td><td>盤點/送貨自動生成的調整單物件沒有 adjustment_number 鍵，defaultNumber 因 hasOwn 判斷跳過。<div class="small muted">證據：自動調整單 adjustment_number 空白，列表無編號可追溯。</div></td><td>生成調整單時先補 adjustment_number: &quot;&quot;，或在 store.save 前統一補鍵。</td></tr><tr><td class="mono">STK-06</td><td><b class="sev">S1</b></td><td><b>刪除已過賬盤點沖銷</b><div class="small muted">302, stock=0, reversed=true</div></td><td>盤點過賬時，明細的 system_quantity / difference 只寫進記憶體 data.items，沒有寫進落庫後的 saved.items；刪除沖銷時 item.difference 缺失，回退為 actual − 0（12 − 0），把庫存從 12 直接沖成 0。<div class="small muted">證據：ADJ 記錄：before 12 → change −12 → after 0；再次還原 +12 → 12，掩蓋了第一次的錯誤。</div></td><td>在 saveStockCount 裡對 saved.items 同步寫入 system_quantity/difference，或 reverseStockCount 改讀盤點單上保存的 difference 快照；補一條「刪除已過賬盤點後庫存 = 盤點前」的回歸用例。</td></tr><tr><td class="mono">INV-07</td><td><b class="sev">S3</b></td><td><b>部分收款狀態字典</b><div class="small muted">部分收款</div></td><td>collectReceipt 寫入狀態字面量「部分收款」，但發票狀態字典/篩選器是「部分付款」。<div class="small muted">證據：40/100 收款後 status=部分收款，列表 pill 與篩選器都認不出。</div></td><td>改為「部分付款」；把狀態值收斂為常量，避免多處硬編碼。</td></tr><tr><td class="mono">SCH-07</td><td><b class="sev">S3</b></td><td><b>排班總工時計算</b><div class="small muted">total_hours=空</div></td><td>排班 total_hours 只在定期排程生成時按 estimated_hours 匯總；手動排班的工作項有起止時間，但前後端都沒有計算。<div class="small muted">證據：09:00–11:00 + 13:00–14:30，total_hours 為空。</div></td><td>saveSchedule 內按 start_time/end_time 差值匯總（跨日另計），前端同步顯示。</td></tr><tr><td class="mono">DAT-02</td><td><b class="sev">S2</b></td><td><b>報價合計抽樣一致</b><div class="small muted">1 筆表頭有金額但明細為 0：SQP-2026-0230</div></td><td>歷史匯入的 22 張報價只有表頭金額（如 9,000），明細單價/小計為 0 或缺失；新邏輯以明細重算，打開再保存會把金額歸零。<div class="small muted">證據：SQP-2026-0230：subtotal 0、total 9,000、items 單價 0；全庫 22/1,826 同類。</div></td><td>匯入層補明細或保留「表頭金額優先」旗標；對 22 張做一次性核對，修復前禁止直接編輯。</td></tr></tbody></table>
+  <table class="fail"><thead><tr><th style="width:70px">ID</th><th style="width:44px">級別</th><th style="width:180px">現象</th><th>根因（已定位到代碼路徑）</th><th style="width:250px">修復建議</th></tr></thead><tbody><tr><td class="mono">PERM-06</td><td><b class="sev">S2</b></td><td><b>菜單可用性 · 會計</b><div class="small muted">/stockcounts=403(應200)</div></td><td>NAV 對 /stockcounts 使用 BACK_OFFICE（含 accounting），但實體 stock_counts 的 viewRoles 是 OFFICE_ADMIN（不含 accounting），菜單可見、頁面 403。<div class="small muted">證據：accounting 側欄有「盤點記錄」，點進去 403。</div></td><td>兩處角色來源合一：NAV 改喫 ENTITIES[key].viewRoles，或把 stock_counts 開放給 accounting；加菜單—路由一致性檢查。</td></tr><tr><td class="mono">PERM-03</td><td><b class="sev">S3</b></td><td><b>實體表單權限 · 會計</b><div class="small muted">contracts=200/403</div></td><td>GET /new/&lt;entity&gt; 只校驗查看權限，會計可打開合約新增表單，但提交時 editRoles 攔截。<div class="small muted">證據：accounting /new/contracts = 200，POST /save/contracts = 403。</div></td><td>entityForm 入口改 assertEntity(user, cfg, true)，與 POST 保持一致；避免填完才被拒。</td></tr><tr><td class="mono">QUO-05</td><td><b class="sev">S2</b></td><td><b>報價轉採購單</b><div class="small muted">status=302, po_number=空, po_name=空</div></td><td>convertQuotation 建立的 PO 物件沒有 po_number 鍵；defaultNumber 用 Object.hasOwn 判斷，直接跳過編號生成，po_name 也因缺編號而空白。<div class="small muted">證據：PO 詳情可開，但列表 PO 名稱、編號欄空白；required 欄位被轉換路徑繞過。</div></td><td>在 PO 物件先放 po_number: &quot;&quot;（或顯式呼叫編號生成），再 recalculate；補「轉換後 PO 編號/名稱為非空」回歸。</td></tr><tr><td class="mono">INV-07</td><td><b class="sev">S3</b></td><td><b>部分收款狀態字典</b><div class="small muted">部分收款</div></td><td>collectReceipt 寫入狀態字面量「部分收款」，但發票狀態字典/篩選器是「部分付款」。<div class="small muted">證據：40/100 收款後 status=部分收款，列表 pill 與篩選器都認不出。</div></td><td>改為「部分付款」；把狀態值收斂為常量，避免多處硬編碼。</td></tr><tr><td class="mono">SCH-07</td><td><b class="sev">S3</b></td><td><b>排班總工時計算</b><div class="small muted">total_hours=空</div></td><td>排班 total_hours 只在定期排程生成時按 estimated_hours 匯總；手動排班的工作項有起止時間，但前後端都沒有計算。<div class="small muted">證據：09:00–11:00 + 13:00–14:30，total_hours 為空。</div></td><td>saveSchedule 內按 start_time/end_time 差值匯總（跨日另計），前端同步顯示。</td></tr><tr><td class="mono">DAT-02</td><td><b class="sev">S2</b></td><td><b>報價合計抽樣一致</b><div class="small muted">1 筆表頭有金額但明細為 0：SQP-2026-0230</div></td><td>歷史匯入的 22 張報價只有表頭金額（如 9,000），明細單價/小計為 0 或缺失；新邏輯以明細重算，打開再保存會把金額歸零。<div class="small muted">證據：SQP-2026-0230：subtotal 0、total 9,000、items 單價 0；全庫 22/1,826 同類。</div></td><td>匯入層補明細或保留「表頭金額優先」旗標；對 22 張做一次性核對，修復前禁止直接編輯。</td></tr></tbody></table>
   
 
   <h2 id="s12">12 · 風險、已知缺口與下一步</h2>
@@ -1875,7 +1899,7 @@ node run-tests.mjs --port 3102 --keep
     <li>把「權限矩陣」接入每次合併：任何 role 變更都應讓矩陣 diff 可見。</li>
     <li>建立缺陷回歸庫：每個 S1/S2 修復後追加一條永久用例，不刪舊例。</li>
   </ol>
-  <footer>標準清潔滅蟲 ERP · 測試設計與驗收方案 · v1.0 · 產生於 2026-10-25 12:55:58 · 基線資料來自 :3102 隔離副本</footer>
+  <footer>標準清潔滅蟲 ERP · 測試設計與驗收方案 · v1.0 · 產生於 2026-10-25 14:08:22 · 基線資料來自 :3102 隔離副本</footer>
 </main>
 </div>
 <script>addEventListener('load',()=>{if(location.hash){const el=document.querySelector(location.hash);if(el)el.scrollIntoView({block:'start',behavior:'instant'});}});</script>

@@ -86,7 +86,7 @@ footer{margin-top:50px;padding-top:16px;border-top:1px solid var(--line);font-si
 </header>
 
 <div class="card" style="background:var(--blue-soft);border-color:#c7d7fb">
-  <h3 style="margin-top:0">决策记录 · 第 1–2 轮已定</h3>
+  <h3 style="margin-top:0">决策记录 · 九问已全部落定</h3>
   <table style="margin:6px 0 0">
     <thead><tr><th class="nw" style="width:8%">编号</th><th class="nw" style="width:34%">问题</th><th class="nw" style="width:11%">决定</th><th>对路线的影响</th></tr></thead>
     <tbody>
@@ -96,6 +96,9 @@ footer{margin-top:50px;padding-top:16px;border-top:1px solid var(--line);font-si
       <tr><td class="nw">Q4</td><td>报价转发票是否分次</td><td><span class="pill p-b">B 分次</span></td><td>不查重，改为「累计开票 + 未开余额 + 超开拦截」。规格见 §7.4。</td></tr>
       <tr><td class="nw">Q5</td><td>重名客户处理</td><td><span class="pill p-b">A+C</span></td><td>可行，但 C 的唯一键是 <code>customer_code</code> 而非名称，且<b>不合并、不加地点字段</b>。理由见 §7.1–7.3。</td></tr>
       <tr><td class="nw">Q6</td><td>切换方式</td><td><span class="pill p-b">A 停机</span></td><td>周末 2 小时窗口。核心原则：<b>加表不删表</b>，回滚成本≈0。见 §八。</td></tr>
+      <tr><td class="nw">Q7</td><td>发票缺折扣字段</td><td><span class="pill p-b">B 移除表头折扣</span></td><td>原系统 0/1826 使用、发票本无此字段、PDF 不渲染 → 拆掉最省。见 §7.5。<b>我原先建议的 A 是多余的。</b></td></tr>
+      <tr><td class="nw">Q8</td><td>「核心 8 张表」</td><td><span class="pill p-b">按判据重选</span></td><td>原 8 张有 3 处选错；改为 6 必做 + 2 应做，且<b>第一件事不是建表，是给明细行补 <code>product_id</code></b>。见 §8.0。</td></tr>
+      <tr><td class="nw">Q9</td><td>验收脚本</td><td><span class="pill p-b">A</span></td><td>结构断言保留 + 字面 CSS 改截图快照 + 人工确认。任务 <code>T3-2</code>。</td></tr>
     </tbody>
   </table>
 </div>
@@ -107,6 +110,11 @@ footer{margin-top:50px;padding-top:16px;border-top:1px solid var(--line);font-si
   <code>/api/pick?source=products</code></b>，返回里带 <code>cost_price</code>。这不是构造 URL，是常规流程。</p>
   <p style="margin-bottom:0">所以这条不是"理论上有人可能滥用"，而是"成本价每天都会经过前线的浏览器"。好消息是修它确实只要约 25 行，
   符合"最小实现"的要求，不需要建策略层。</p>
+</div>
+
+<div class="card" style="background:var(--brand-soft);border-color:var(--brand-line);margin-top:14px">
+  <b>配套文件：</b><a href="施工顺序表_v1.html" style="color:var(--brand);font-weight:700">施工顺序表 v1</a>
+  —— 把上面九项决策拆成 22 个任务、5 个阶段、4 个里程碑放行点，每项都写了可测量的验收判据与依赖关系。
 </div>
 
 <h2>零 · 一句话结论</h2>
@@ -751,10 +759,79 @@ Bill           total = subtotal + tax            <span class="r">← 没有 frei
   <p><code>convertQuotation()</code> 转发票时复制了 <code>freight_charges</code>，但 <b><code>discount</code> 无处可放，直接丢弃</b>。
   结果：<b>发票金额 = 报价金额 + 折扣额</b>，等于多收客户一笔折扣钱。</p>
   <p style="margin-bottom:0">目前 <b>0 张</b>报价用过表头折扣 / 运费 / 税，所以<b>没有真实错账</b>。但这是个埋着的雷：
-  一旦有人填了折扣，开票就多收，而且没人会发现（因为发票和报价单看起来都"正常"）。→ 这是第 3 轮问题 7。</p>
+  一旦有人填了折扣，开票就多收，而且没人会发现（因为发票和报价单看起来都"正常"）。</p>
+</div>
+
+<div class="callout">
+  <b>查过原系统之后，这条的处理方式变了 —— 我原先建议的「发票加 discount 字段」是错的</b>
+  <table style="margin:8px 0 0">
+    <thead><tr><th class="nw" style="width:26%">问题</th><th class="nw" style="width:24%">原系统</th><th class="nw" style="width:24%">本系统</th><th>结论</th></tr></thead>
+    <tbody>
+      <tr><td class="nw">报价<b>表头</b>折扣</td><td class="nw">有字段，<b>1,826 张里 0 张非空</b></td><td class="nw">有字段，同样 0 使用</td><td>建了没人用的空壳</td></tr>
+      <tr><td class="nw">报价/发票<b>明细</b>折扣</td><td class="nw">有 <code>Disc</code> 键，<b>1,602 行里 0 行有值</b></td><td class="nw">同，且 PDF 有 <code>Disc</code> 列</td><td>PDF 版式需要，<b>保留</b></td></tr>
+      <tr><td class="nw">发票<b>表头</b>折扣</td><td class="nw"><b>根本没有这个字段</b></td><td class="nw">同</td><td>忠实复刻，不是遗漏</td></tr>
+    </tbody>
+  </table>
+  <p style="margin-top:9px;margin-bottom:0"><b>所以正确做法是最省的那条：从报价表单移除「折扣」输入</b>（字段留在 JSON 里，历史全是空值）。
+  PDF 不渲染表头折扣，所以版式<b>零变化</b>；发票也不需要新增字段（原系统就没有）。
+  「转发票丢折扣」这个雷随拆除，不需要改任何打印模板。已列为 <code>T0-5</code>，工作量 0.2 人日。</p>
 </div>
 
 <h2>八 · 停机迁移单（Q6 = A）</h2>
+
+<h3>8.0 先回答「为什么是这 8 张表」—— 我原来的清单有三处选错</h3>
+
+<div class="callout risk">
+  <b>「8」这个数字是我拍的，而且拍错了三处</b>
+  <ol style="margin:8px 0 0">
+    <li><b><code>contracts</code>（12 笔）不该在第一轮</b> —— 它确实有唯一单号，但 12 笔既不会并发重号，也不驱动任何后续流程。留在 JSON 里零风险。</li>
+    <li><b><code>schedules</code>（13,115 笔）不该进来</b> —— 它没有唯一单号、没有被别的实体按 id 引用、不载金额。它的问题只有两个：<b>权限靠姓名匹配</b>、<b>查询要全表扫</b>。
+        这两个分别用 <code>schedule_employees</code>（973 行，已现成）和查询下推就能解决，<b>不需要把整张表关系化</b>。</li>
+    <li><b>漏了 <code>delivery_notes</code>（1,011 笔）</b> —— 它是库存过账的源头。最要命的是它的明细行只有
+        <code>qty, code_no, product_description, packing, remark</code>，<b>连 <code>unit_price</code> 都没有，更没有 <code>product_id</code></b>。
+        这正是「按名字找产品」的源头。</li>
+  </ol>
+</div>
+
+<p><b>正确的做法是先定判据，再筛表</b>，而不是凭印象列清单。判据三条，任一条不满足就不必关系化：</p>
+
+<table>
+  <thead><tr><th class="nw" style="width:8%">判据</th><th style="width:26%">要求</th><th>不满足会怎样</th></tr></thead>
+  <tbody>
+    <tr><td class="nw">①</td><td><b>有业务唯一编号</b></td><td>没有 → 并发时 <code>nextNumber()</code> 扫全表取 max+1 会<b>重号</b>，而数据库拦不住</td></tr>
+    <tr><td class="nw">②</td><td><b>被别的实体按 id 引用</b></td><td>没有 → 删改时无保护，只能写脚本扫全表补（<code>mergeCustomers</code> 就是这么干的）</td></tr>
+    <tr><td class="nw">③</td><td><b>承载金额或库存</b></td><td>没有 → 金额存成字符串也无所谓</td></tr>
+  </tbody>
+</table>
+
+<p>按三条筛完是 <b>10 个候选</b>，再按「风险 ÷ 成本」排序，得到真正该做的 8 张：</p>
+
+<table>
+  <thead><tr><th class="nw" style="width:19%">表</th><th class="nw" style="width:6%">①</th><th class="nw" style="width:6%">②</th><th class="nw" style="width:6%">③</th><th class="nw" style="width:10%">记录数</th><th class="nw" style="width:11%">优先级</th><th>理由</th></tr></thead>
+  <tbody>
+    <tr><td class="nw"><code>customers</code></td><td>✔</td><td>✔ 6 类</td><td>—</td><td class="nw">1,608</td><td><span class="pill p-r">必做</span></td><td>所有按名匹配的受害者；也是打码权限的对象</td></tr>
+    <tr><td class="nw"><code>products</code></td><td>✔ 130/130 唯一</td><td>✔ 明细行</td><td>✔ 库存+成本</td><td class="nw">132</td><td><span class="pill p-r">必做</span></td><td>成本价是权限边界；库存调整全靠它定位</td></tr>
+    <tr><td class="nw"><code>quotations</code><br><small>+ items</small></td><td>✔</td><td>✔ 5 类</td><td>✔</td><td class="nw">1,796</td><td><span class="pill p-r">必做</span></td><td>金额链起点；总额是字段级屏蔽对象</td></tr>
+    <tr><td class="nw"><code>invoices</code><br><small>+ items</small></td><td>✔</td><td>✔ receipts</td><td>✔</td><td class="nw">205</td><td><span class="pill p-r">必做</span></td><td>分次开票（Q4=B）需要按 <code>quotation_id</code> 聚合，JSON 里做不了唯一约束</td></tr>
+    <tr><td class="nw"><code>receipts</code></td><td>✔</td><td>—</td><td>✔</td><td class="nw">57</td><td><span class="pill p-r">必做</span></td><td>收款冲销要精确对账，金额不能是字符串</td></tr>
+    <tr><td class="nw"><code>purchase_orders</code><br><small>+ items</small></td><td>✔</td><td>✔ schedules.po_id</td><td>✔</td><td class="nw">902</td><td><span class="pill p-r">必做</span></td><td>排班用它做关联；已有 <code>product_id</code>，迁移成本最低</td></tr>
+    <tr><td class="nw"><code>delivery_notes</code><br><small>+ items</small></td><td>✔</td><td>✔ 库存溯源</td><td>✔ 库存</td><td class="nw">1,011</td><td><span class="pill p-a">应做</span></td><td>库存过账源头；明细行缺 <code>product_id</code> 是误扣库的根因</td></tr>
+    <tr><td class="nw"><code>stock_adjustments</code></td><td>✔</td><td>—</td><td>✔ 库存账本</td><td class="nw">9,566</td><td><span class="pill p-a">应做</span></td><td>只增不改的流水，最适合关系化；但写入路径已有 <code>product_id</code>，不紧急</td></tr>
+    <tr style="opacity:.62"><td class="nw"><code>contracts</code></td><td>✔</td><td>✔ 3 类</td><td>✔</td><td class="nw">12</td><td><span class="pill p-n">留 JSON</span></td><td>12 笔，无并发风险，无下游流程</td></tr>
+    <tr style="opacity:.62"><td class="nw"><code>stock_counts</code></td><td>✔</td><td>—</td><td>✔</td><td class="nw">47</td><td><span class="pill p-n">留 JSON</span></td><td>47 笔，且已有 <code>product_id</code></td></tr>
+    <tr style="opacity:.62"><td class="nw"><code>schedules</code></td><td>—</td><td>—</td><td>—</td><td class="nw">13,115</td><td><span class="pill p-n">留 JSON</span></td><td>三条判据全不满足；只接 <code>schedule_employees</code> 关联表</td></tr>
+  </tbody>
+</table>
+
+<div class="callout warn">
+  <b>但真正的瓶颈不在表头，在明细行 —— 这一步应该在「建表」之前做</b>
+  <p>全库 <b>8,631 条明细行</b>里，带 <code>product_id</code> 的只有 <b>4,863 条（56%）</b>，剩下 3,768 条只靠
+  <code>code_no</code> / <code>item_name</code> 文字描述。而 <code>productForAdjustment()</code> 正是拿这些文字去
+  <b>依次比 id → 比编码 → 比名称</b>，比不到就往下一个产品找 —— 这就是重复扣错库的根因。</p>
+  <p>好消息：<b>6,622 条（76.7%）能按 <code>code_no</code> 精确命中产品主档</b>（产品编码 130/130 唯一，命中率 99.94%）。
+  所以先写一个回填脚本，一行新表都不用建，<code>productForAdjustment()</code> 的模糊匹配分支当场可以删掉。</p>
+  <p style="margin-bottom:0">清单见施工顺序表 <code>T2-1</code>（3 人日），执行顺序也在那里 —— <b>先补 id，再建表</b>，反了就是白做。</p>
+</div>
 
 <h3>8.1 唯一原则：加表，不删表</h3>
 

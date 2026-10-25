@@ -64,6 +64,8 @@ export const MODULES = [
       { id: 'PERM-04', title: '動作級權限（審批/轉換/匯出）', p: 'P0', t: '權限', pre: 'front + office', steps: ['front POST /leaves/:id/decide', 'office GET /export/contracts.csv'], expect: 'front 403；office 403；只有 management 可匯出' },
       { id: 'PERM-05', title: '回收桶角色邊界', p: 'P1', t: '權限', pre: 'office / accounting / front', steps: ['GET /trash', 'POST /trash/purge'], expect: 'office、management 可進；accounting、front 403；永久刪除僅 office/management' },
       { id: 'PERM-06', title: '菜單與路由可用性一致', p: 'P1', t: '權限', pre: '四角色', steps: ['遍歷側欄每一項', '比對該角色實際 HTTP 狀態'], expect: '菜單可見的頁面必須 200；不得出現看得到卻 403 的死連結' },
+      { id: 'PERM-07', title: '選擇器不得繞過實體權限', p: 'P0', t: '權限', pre: '四角色', steps: ['front GET /api/pick?source=customers', 'front GET /api/pick?source=products', 'office／management GET products', 'front GET employees'], expect: 'front→customers/products 403；office 無 cost_price、management 有；front→employees 200（補給請假要用）；每次調用留 pick 審計' },
+      { id: 'PERM-08', title: '編輯表單金額掩碼', p: 'P0', t: '權限', pre: 'office／management + 一張帶金額報價', steps: ['office GET /edit/quotations/:id', '檢查可見 input 是否帶明文', '檢查是否有 hidden 保值'], expect: '可見控件無明文、有 ••••• 佔位符、hidden 保留原值；management 仍見真實金額' },
     ],
   },
   {
@@ -92,7 +94,7 @@ export const MODULES = [
     auto: '編號、明細小計/總額、必填、階段、轉 PO/合同、軟刪除',
     cases: [
       { id: 'QUO-01', title: '報價自動編號', p: 'P0', t: '功能', pre: 'office', steps: ['quotation_number 留空，類型=服務提交', '再看產品類型'], expect: '服務 SQP-YYYY-####；產品 SQM-YYYY-####；序號不跳號不重號' },
-      { id: 'QUO-02', title: '明細小計與總額', p: 'P0', t: '資料', pre: 'office', steps: ['2×100 折扣 10；運費 20；整單折扣 5', '讀 DB'], expect: '行小計 190；subtotal 190；total=190+20-5=205；前端顯示同值' },
+      { id: 'QUO-02', title: '明細小計與總額', p: 'P0', t: '資料', pre: 'office', steps: ['2×100 折扣 10；運費 20', '讀 DB'], expect: '行小計 190；subtotal 190；total=190+20=210；整單折扣已依 T0-5 從表單移除（欄位留 JSON 兼容舊資料）' },
       { id: 'QUO-03', title: '必填與空明細', p: 'P0', t: '異常', pre: 'office', steps: ['缺 customer_name', '缺 items', 'items=[]'], expect: '均 400 並指出欄位；不得產生半成品記錄' },
       { id: 'QUO-04', title: '報價階段與成交標記', p: 'P1', t: '功能', pre: '已有報價', steps: ['POST /quotations/:id/stage stage=已成交', '再提交非法 stage'], expect: '已成交時 accepted=true、accepted_date 有值；非法值 400' },
       { id: 'QUO-05', title: '報價轉採購單', p: 'P1', t: '功能', pre: '報價含 2 行明細', steps: ['POST /quotations/:id/to-po', '讀 PO 與報價'], expect: '302 → PO 詳情；quotation_id/customer/total 一致；PO 編號與名稱為非空（PO-YYYY-####）' },
@@ -331,6 +333,7 @@ export const MODULES = [
       { id: 'DAT-03', title: '發票餘額一致', p: 'P0', t: '資料', pre: '全部發票', steps: ['重算 total−paid', '比對 balance_due'], expect: '全部一致；已作廢按規則處理' },
       { id: 'DAT-04', title: '已過賬分錄借貸平衡', p: 'P0', t: '資料', pre: '全部交易', steps: ['篩 status≠草稿', '比對借貸總額'], expect: '差額 ≤ 0.01；不平衡不得存在' },
       { id: 'DAT-05', title: '軟刪除欄位完整', p: 'P1', t: '資料', pre: 'deleted=1 記錄', steps: ['檢查 deleted_at/deleted_by', '區分歷史匯入與近兩日操作'], expect: '新刪除必須有時間與操作人；歷史遺留單獨列帳' },
+      { id: 'DAT-06', title: '重名關聯不猜（409）', p: 'P0', t: '資料', pre: '庫內重名客戶', steps: ['取一組同名客戶', '以 customer_name 提交、customer_id 留空', '再用不同名客戶提交'], expect: '同名多筆 → 409 並提示；不同名不攔截；不得把單據改掛到別人名下' },
     ],
   },
   {

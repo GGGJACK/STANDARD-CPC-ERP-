@@ -71,7 +71,7 @@ export class Store {
     this.ensureColumn('users', 'accessible_pages', 'TEXT');
     const defaults = {
       quota_limit: '50', work_start: '08:30', work_end: '18:00', work_weekdays: '1,2,3,4,5',
-      window_enforced: '0', quota_scope_roles: 'office', tz: 'Asia/Hong_Kong', demo_mode: '1',
+      window_enforced: '0', quota_scope_roles: 'office', tz: 'Asia/Hong_Kong', demo_mode: '0',
     };
     const stmt = this.db.prepare('INSERT OR IGNORE INTO settings(key,value) VALUES (?,?)');
     for (const [key, value] of Object.entries(defaults)) stmt.run(key, value);

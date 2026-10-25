@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>第 1–4 步 · 缺陷修复与角色补齐 · 2026-10-25</title>
+<style>
+:root{
+  --ink:#1f2937; --ink-2:#4b5563; --ink-3:#6b7280;
+  --line:#e5e7eb; --line-2:#d1d5db;
+  --bg:#f7f7f5; --card:#ffffff;
+  --brand:#0f766e; --brand-soft:#ecfdf5;
+  --warn:#b45309; --warn-soft:#fffbeb;
+  --bad:#b91c1c; --bad-soft:#fef2f2;
+}
+*{box-sizing:border-box}
+body{margin:0;padding:48px 24px 72px;background:var(--bg);color:var(--ink);
+  font:14px/1.75 -apple-system,BlinkMacSystemFont,"Segoe UI","Microsoft YaHei","Microsoft JhengHei",sans-serif;
+  -webkit-font-smoothing:antialiased}
+.doc{max-width:860px;margin:0 auto}
+header{border-bottom:2px solid var(--brand);padding-bottom:22px;margin-bottom:30px}
+.kicker{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--brand);font-weight:600;margin-bottom:10px}
+h1{font-size:26px;line-height:1.35;margin:0 0 12px;font-weight:650;letter-spacing:-.01em}
+.lede{font-size:15px;color:var(--ink-2);margin:0}
+h2{font-size:17px;margin:38px 0 14px;font-weight:650;padding-left:11px;border-left:3px solid var(--brand);line-height:1.3}
+h3{font-size:14px;margin:22px 0 8px;font-weight:650}
+p{margin:0 0 12px}
+code{font:12.5px/1.5 ui-monospace,SFMono-Regular,Consolas,monospace;background:#eef2f1;padding:1.5px 5px;border-radius:4px;color:#0b5f57}
+pre{background:#1f2937;color:#e5e7eb;padding:14px 16px;border-radius:8px;overflow-x:auto;font:12.5px/1.7 ui-monospace,Consolas,monospace;margin:12px 0}
+pre code{background:none;color:inherit;padding:0}
+table{width:100%;border-collapse:collapse;margin:14px 0 18px;font-size:13px;background:var(--card)}
+th{background:#f3f4f3;text-align:left;font-weight:650;padding:9px 12px;border:1px solid var(--line-2);white-space:nowrap}
+td{padding:9px 12px;border:1px solid var(--line);vertical-align:top;color:var(--ink-2)}
+td:first-child{color:var(--ink);font-weight:500}
+tbody tr:nth-child(even){background:#fafafa}
+.stats{display:flex;gap:12px;margin:22px 0 8px;flex-wrap:wrap}
+.stat{flex:1;min-width:130px;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 16px}
+.stat b{display:block;font-size:23px;line-height:1.2;color:var(--brand);font-weight:650;letter-spacing:-.02em}
+.stat span{font-size:12px;color:var(--ink-3)}
+.note{border-left:3px solid var(--line-2);background:var(--card);padding:12px 16px;margin:14px 0;font-size:13px;color:var(--ink-2)}
+.note.warn{border-left-color:var(--warn);background:var(--warn-soft)}
+.note.bad{border-left-color:var(--bad);background:var(--bad-soft)}
+.note.ok{border-left-color:var(--brand);background:var(--brand-soft)}
+.note b{color:var(--ink)}
+ul,ol{margin:8px 0 14px;padding-left:22px}
+li{margin:5px 0;color:var(--ink-2)}
+li b{color:var(--ink)}
+.pill{display:inline-block;font-size:11px;font-weight:600;padding:1px 7px;border-radius:4px;background:var(--brand-soft);color:var(--brand);border:1px solid #b8e6dd;vertical-align:1px}
+.pill.s1{background:var(--bad-soft);color:var(--bad);border-color:#f5c2c2}
+.pill.ok{background:#ecfdf5;color:#047857;border-color:#a7f3d0}
+footer{margin-top:48px;padding-top:16px;border-top:1px solid var(--line);font-size:12px;color:var(--ink-3);display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+@media print{body{background:#fff;padding:0;font-size:12px}h2{page-break-after:avoid}table,pre,.note{page-break-inside:avoid}.doc{max-width:none}}
+</style>
+</head>
+<body>
+<div class="doc">
+
+<header>
+  <div class="kicker">Standard CPC ERP · 第 1–4 步 · dev 分支</div>
+  <h1>四个 P0 关掉了，回归库长到 118 项，九个角色齐了</h1>
+  <p class="lede">从「缺陷散在两份文件里」到「一张表、四条修复、三条断言、四张角色卡」。P0 分组 61/61 全绿；剩下 7 条都是 S2/S3，不阻断。</p>
+</header>
+
+<div class="stats">
+  <div class="stat"><b>11 → 4</b><span>缺陷库 11 条，已修 4 条</span></div>
+  <div class="stat"><b>19/19</b><span>P0 专项验证</span></div>
+  <div class="stat"><b>61/61</b><span>基线 P0 分组</span></div>
+  <div class="stat"><b>118</b><span>回归用例（原 115）</span></div>
+  <div class="stat"><b>9</b><span>角色（原 5）</span></div>
+</div>
+
+<h2>第 1 步 · 缺陷库合成一张表</h2>
+<p><code>00. 仓库管理/defects.csv</code> 成为唯一来源：测试基线的 8 条 + 架构审核的 3 个 P0，共 11 条。</p>
+
+<table>
+<thead><tr><th style="width:88px">ID</th><th style="width:64px">等级</th><th>现象</th><th style="width:100px">状态</th></tr></thead>
+<tbody>
+<tr><td>STK-06</td><td><span class="pill s1">S1/P0</span></td><td>删除已过账盘点，库存从 12 被冲成 0</td><td><span class="pill ok">已修待驗</span></td></tr>
+<tr><td>SEC-01</td><td><span class="pill s1">S1/P0</span></td><td>/api/pick 无授权，前线可拉 1,608 客户与成本价</td><td><span class="pill ok">已修待驗</span></td></tr>
+<tr><td>SEC-02</td><td><span class="pill s1">S1/P0</span></td><td>金额屏蔽只挡列表，编辑表单明文</td><td><span class="pill ok">已修待驗</span></td></tr>
+<tr><td>DAT-03</td><td><span class="pill s1">S1/P0</span></td><td>重名客户导致 261 份单据静默改挂</td><td><span class="pill ok">已修待驗</span></td></tr>
+<tr><td>PERM-06</td><td>S2/P1</td><td>会计菜单可见「盘点记录」，点进去 403</td><td>待修</td></tr>
+<tr><td>QUO-05</td><td>S2/P1</td><td>报价转采购单后编号与名称为空</td><td>待修</td></tr>
+<tr><td>DAT-02</td><td>S2/P1</td><td>22 张历史报价只有表头金额，保存即归零</td><td>待修</td></tr>
+<tr><td>INV-07</td><td>S3/P1</td><td>「部分收款」与字典「部分付款」不一致</td><td>待修</td></tr>
+<tr><td>PERM-03</td><td>S3/P2</td><td>会计能打开合约新增表单，提交才被拒</td><td>待修</td></tr>
+<tr><td>STK-09</td><td>S3/P2</td><td>自动盘点调整单编号空白</td><td>待修</td></tr>
+<tr><td>SCH-07</td><td>S3/P2</td><td>手动排班不算总工时</td><td>待修</td></tr>
+</tbody>
+</table>
+
+<h2>第 2 步 · 四条修复</h2>
+
+<h3>STK-06 · 根因不是「忘了写字段」，是写在了错的时机</h3>
+<p>原代码在 <code>store.save()</code> <b>之后</b>才把 <code>system_quantity</code> / <code>difference</code> 写回明细。
+但 <code>store.save()</code> 返回的是<b>重新从库里读出来的新对象</b>，改 <code>op.item</code> 只改到内存里的 <code>data.items</code>，
+<b>saved.items 里始终没有 difference</b>。删除冲销时 <code>item.difference</code> 缺失，回退成 <code>actual − 0 = 12</code>，库存被冲成 0，
+而「还原」又会 +12 掩掉第一次的错误 —— 所以它一直没被发现。</p>
+<pre><code>// 改法：回填必须在 save 之前
+for (const op of operations) { op.item.system_quantity = op.before; op.item.difference = op.difference; }
+const saved = store.save(cfg.key, data, { ... });
+// 冲销侧改成三档：快照 → system_quantity → 抛 409，不再猜</code></pre>
+
+<h3>SEC-01 · 判据仍取自实体 viewRoles，只列显式例外</h3>
+<p>没有另起一套权限表：<code>PICK_SOURCE_ENTITY</code> 把 11 个数据源映射到实体，用实体自己的 <code>viewRoles</code> 判。
+唯一例外写在一处 —— <code>employees</code> 对前线开放，因为补给/请假是前线自己填的表单，而 Employee 实体页只给管理层看。
+回填字段再按角色裁：金额只给会计/管理层，前线不返回联络资料；每次调用写一条 <code>action=pick</code> 审计。</p>
+
+<h3>SEC-02 · 拦在 fieldInput，而不是 renderValue</h3>
+<p>可见控件输出 <code>value=""</code> + <code>placeholder="•••••"</code>，原值走一个同名 hidden 提交，
+保证「看不见」和「不被清空」同时成立。这条修好后，编辑页、明细、打印走的是不同出口的隐患少了一个。</p>
+
+<h3>DAT-03 · 认不出就停下来，不要猜</h3>
+<p>先按 id 认；认不到才按名称查，命中多条直接 409，让用户从下拉选。
+<code>productForAdjustment()</code> 同样处理，同名产品不再取第一条。生产库里 47 份盘点单、0 份已过账，所以没有历史脏数据要回填。</p>
+
+<div class="note ok">
+<b>专项验证 19/19</b>（<code>04. 四期/工具/verify-p0.mjs</code>）：跑在 <code>VACUUM INTO</code> 出来的隔离副本上，不碰生产库。
+覆盖 front→customers/products 403、office 无 cost_price、management 有、front→employees 200、pick 审计、
+office 编辑页无明文、hidden 保值、同名 409、不同名不拦、盘点差额快照 = −3、过账 80→77、冲销回 80。
+</div>
+
+<h2>第 3 步 · 三条断言进了回归库</h2>
+
+<table>
+<thead><tr><th style="width:90px">用例</th><th>断言要点</th></tr></thead>
+<tbody>
+<tr><td>PERM-07</td><td>front→customers/products 403；office 无 cost_price；management 有；front→employees 200；每次调用留审计</td></tr>
+<tr><td>PERM-08</td><td>office 可见控件无明文、有 ••••• 占位符、hidden 保留原值；management 仍见真实金额</td></tr>
+<tr><td>DAT-06</td><td>同名多笔 → 409 且提示；不同名不拦截</td></tr>
+</tbody>
+</table>
+
+<p>基线从 115 项 107 通过，变成 <b>118 项 111 通过</b>；P0 分组 <b>61/61</b>，P1 43/47，P2 7/10。</p>
+
+<div class="note warn">
+<b>发现一处判据自相矛盾，已修正。</b>施工顺序表 T0-2 同时要求「HTML 源码中搜不到 <code>value="7500"</code>」和「hidden 下发原值」——
+这两条互斥：hidden 里必须有 7500，否则保存就清空。断言改成「<b>可见控件</b>不含明文，hidden 保留原值」，两个目标才都成立。
+</div>
+
+<h2>第 4 步 · 四个角色卡</h2>
+
+<table>
+<thead><tr><th style="width:120px">角色</th><th>补的洞</th><th style="width:180px">第一条门禁</th></tr></thead>
+<tbody>
+<tr><td>规格官</td><td>原系统才是裁判，而它会失效</td><td>没有证据的规格不许写</td></tr>
+<tr><td>数据管家</td><td>数据「完整」但不「自洽」</td><td>绝不自动改数据</td></tr>
+<tr><td>发布官</td><td>没有版本、没有回滚演练</td><td>P0 未全绿不发版</td></tr>
+<tr><td>QA 资产管家</td><td>修过的 bug 会回来，断言写死实现</td><td>没回归用例的修复不算修完</td></tr>
+</tbody>
+</table>
+
+<p>每张卡都写死了六件事：为什么需要（带本项目已付的学费）、什么时候叫它、输入路径、输出必须落成哪个文件、门禁、可直接粘贴的提示词。
+索引在 <code>00. 仓库管理/角色/README.md</code>。</p>
+
+<h2>现在的状态</h2>
+
+<table>
+<thead><tr><th style="width:150px">项</th><th>状态</th></tr></thead>
+<tbody>
+<tr><td>分支</td><td><code>dev</code>，已推送，本地 = 远端 = <code>5b4e4a9</code></td></tr>
+<tr><td>commit</td><td>741b255 缺陷库 → 99d4322 修复 → c13ad40 断言 → f456890 清理 → 5b4e4a9 角色卡</td></tr>
+<tr><td>P0</td><td><span class="pill ok">61/61 全绿</span></td></tr>
+<tr><td>剩余缺陷</td><td>7 条，全部 S2/S3</td></tr>
+<tr><td>main 分支</td><td>仍在 <code>b1fe7c1</code>，<b>未合并</b> —— 差两套验收没跑</td></tr>
+</tbody>
+</table>
+
+<h3>合进 main 还差什么（M0 放行条件）</h3>
+<ul>
+<li><b>411 项业务验收</b>（<code>phase4-smoke</code> 那套）</li>
+<li><b>34 页 DOM 对照</b>（<code>compare-ui.mjs</code>）</li>
+<li>回滚演练一次（按发布官卡里的七步）</li>
+</ul>
+<p>这三项都不是写代码能解决的，需要跑一遍。跑完 P0 才真正意义上「关掉」。</p>
+
+<h2>回滚</h2>
+<pre><code>git revert 99d4322    # 只退代码修复
+git revert 99d4322 c13ad40 5b4e4a9   # 退掉修复+断言+角色卡
+git checkout b1fe7c1 -- "04. 四期/系统代码"   # 单退代码，保留文档</code></pre>
+<div class="note">
+五个提交互相独立，可以只退其中一个。生产 <code>data.db</code> 全程未被写入 —— 所有验证都在副本上。
+</div>
+
+<footer>
+  <span>Standard CPC ERP · 第 1–4 步交付 · 2026-10-25</span>
+  <span>dev @ 5b4e4a9 · P0 61/61</span>
+</footer>
+
+</div>
+</body>
+</html>

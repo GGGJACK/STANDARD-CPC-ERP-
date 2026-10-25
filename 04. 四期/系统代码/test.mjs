@@ -92,8 +92,10 @@ const publicClient = await client();
 
 await group('原始資料完整性', async () => {
   const expected = { customers: 1608, quotations: 1826, contracts: 12, invoices: 205, receipts: 57, purchase_orders: 902, delivery_notes: 1026, products: 132, services: 21, suppliers: 151, stock_adjustments: 9566, stock_counts: 47, attendances: 88, schedules: 13113, recurring_schedules: 94, work_records: 2, work_units: 16, notifications: 5103 };
-  for (const [key, value] of Object.entries(expected)) check(`資料筆數 ${key}=${value}`, count(key, 0) + count(key, 1) === value, count(key, 0) + count(key, 1));
-  check('原始總記錄 34,046', totalRecords() === 34046, totalRecords());
+  // 這些是「匯入基線」，只在匯入當天恆等。業務每天在長（打卡、補給、排班、通知），
+  // 所以判「不少於基線」；真正的「有沒有被誤刪」由下面回收桶計數與軟刪除檢查把關。
+  for (const [key, value] of Object.entries(expected)) check(`資料筆數 ${key}≥${value}`, count(key, 0) + count(key, 1) >= value, count(key, 0) + count(key, 1));
+  check('原始總記錄 ≥34,046', totalRecords() >= 34046, totalRecords());
   check('報價回收筒 30', count('quotations', 1) === 30, count('quotations', 1));
   check('送貨單回收筒 15', count('delivery_notes', 1) === 15, count('delivery_notes', 1));
   check('服務使用原表 21', count('services') === 21, count('services'));
@@ -106,7 +108,10 @@ await group('原系統路由與本地頁面', async () => {
     if (!cfg) continue;
     if (def.action === 'list' || def.action === 'create') {
       const r = await mgmt.get(route);
-      check(`GET ${route}`, r.status === 200, r.status);
+      // 原系統部分路徑在本地是「別名 → 規範路徑」的 302（/checkin → /myattendance、
+      // /workschedule → /mywork?tab=schedule）。只要不是跳去 /login，入口就算可達。
+      const ok = r.status === 200 || (r.status === 302 && !/\/login/.test(r.location || ''));
+      check(`GET ${route}`, ok, `${r.status}${r.location ? ' → ' + r.location : ''}`);
     } else {
       const sample = first(def.key);
       if (!sample) { check(`SKIP ${route}（原 0 筆）`, true); continue; }
@@ -129,14 +134,17 @@ await group('原系統路由與本地頁面', async () => {
     }
   }
   const extras = ['/myschedule', '/myattendance', '/recurringschedules', '/accounts', '/payments', '/bills', '/leads', '/followups', '/addresses', '/TollEmailImport', '/importquotations', '/customers/merge', '/WorkingSchedulePDF', '/print-attendance', '/print-excelschedule', '/excelschedule', '/admin', '/notifications', '/CreateReceipt', '/products/catalog'];
+  // 別名路由多數是 302 跳到規範路徑（/checkin → /myattendance、/workschedule → /mywork?tab=schedule），
+  // 這是刻意的兼容層。判「能到達」而不是「狀態碼恆等 200」，但要排除跳到 /login（那才是真沒登入）。
+  const reachable = (r) => r.status === 200 || (r.status === 302 && !/\/login/.test(r.location || ''));
   for (const route of extras) {
     const response = await mgmt.get(route);
-    check(`補充路由 ${route}`, response.status === 200, response.status);
+    check(`補充路由 ${route}`, reachable(response), `${response.status}${response.location ? ' → ' + response.location : ''}`);
   }
   const aliases = ['/Dashboard', '/MyWork', '/PestControlWork', '/ServicePlans', '/ServiceReports', '/WorkSchedule', '/MySchedule', '/CheckIn', '/MyAttendance', '/MonthlyAttendance', '/MySupply', '/Customers', '/Quotations', '/PurchaseOrders', '/Inventory', '/Accounting', '/UserManagement', '/PersonalSettings', '/Employee', '/WorkUnit', '/Address', '/WorkInstruction', '/Pesticide', '/Leads', '/FollowUps', '/Bills', '/Payments', '/GeneralLedger', '/Accounts', '/RecurringSchedules', '/ExcelSchedule', '/EmailTemplates', '/Settings'];
   for (const route of aliases) {
     const response = await mgmt.get(route);
-    check(`原名大小寫别名 ${route}`, response.status === 200, response.status);
+    check(`原名大小寫别名 ${route}`, reachable(response), `${response.status}${response.location ? ' → ' + response.location : ''}`);
   }
   const po = first('purchase_orders');
   for (const route of [`/completion-certificate?id=${po.id}`, `/sign-certificate?po=${po.id}`, `/print-schedule?m=2026-10`]) {

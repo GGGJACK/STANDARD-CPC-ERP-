@@ -222,7 +222,7 @@ export const ENTITIES = {
       field('work_date', '工作日期／時間說明', 'text', { wide: true, section: '工作資訊' }),
       field('items', '報價項目', 'items', { required: true, wide: true, section: '報價項目', itemColumns: moneyItemColumns }),
       field('subtotal', '小計', 'money', { readOnly: true, section: '報價摘要' }), field('freight_charges', '運費', 'money', { section: '報價摘要' }),
-      field('discount', '折扣', 'money', { section: '報價摘要' }), field('total_amount', '總金額', 'money', { readOnly: true, section: '報價摘要' }),
+      field('total_amount', '總金額', 'money', { readOnly: true, section: '報價摘要' }),
       field('payment_terms', '付款條款', 'textarea', { wide: true, section: '條款與顯示' }), field('validity', '有效期', 'textarea', { wide: true, section: '條款與顯示' }),
       field('delivery_terms', '交貨條款', 'textarea', { wide: true, section: '條款與顯示' }), field('remarks', '備註列表', 'json', { wide: true, section: '條款與顯示' }),
       field('show_service_item_quantity_unit', '顯示數量及單位', 'checkbox', { section: '條款與顯示' }), field('show_service_item_total', '顯示項目總金額', 'checkbox', { section: '條款與顯示' }),

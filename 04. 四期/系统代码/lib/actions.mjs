@@ -66,28 +66,67 @@ function defaultNumber(store, cfg, data) {
   }
 }
 
+// 按名匹配只作兜底：唯一命中才回填。同名多筆時寧可報錯，也不要猜一個掛上去——
+// 庫裡有 25 組同名客戶，猜錯就是把單據靜默改掛到別人名下。
+function matchUniqueByName(rows, nameField, name, label) {
+  const target = str(name).trim();
+  if (!target) return null;
+  const hits = rows.filter((row) => str(row[nameField]).trim() === target);
+  if (hits.length === 1) return hits[0];
+  if (hits.length > 1) {
+    const refs = hits.map((row) => row.customer_code || row.employee_code || row.unit_name || row.id).join('、');
+    const error = new Error(`有多個同名${label}「${target}」，請從下拉選擇對應的一筆（可選：${refs}）`);
+    error.statusCode = 409;
+    throw error;
+  }
+  return null;
+}
+
+// 關聯回填的兩條規則（不是遺漏，改動前先讀）：
+// 1) 只有真的能存下 xxx_id 的實體才做解析。customers／leads／follow_ups 沒有 customer_id，
+//    名字就是自由文字，一律不做匹配、也不拋 409（否則新建同名客戶會被擋下，還會抄到別人的
+//    customer_code）。work_records 有 work_unit_name 但沒有 work_unit_id，同理跳過。
+// 2) 不變量：伺服端永不覆蓋使用者這次提交的值；派生欄位只在「本次為空」且「母檔有值」時補齊。
 function normalizeRelations(store, cfg, data) {
-  if (Object.hasOwn(data, 'customer_name') && data.customer_name) {
-    const customer = store.list('customers').find((r) => r.customer_name === data.customer_name || r.id === data.customer_id);
+  const hasField = (name) => cfg.fields.some((f) => f.name === name);
+  // 使用者手填的值（聯絡人、電話、客戶類型）一律保留；母檔沒有值時也不清空，
+  // 避免每次儲存都把人改過的資料蓋回去。
+  const fill = (field, value) => {
+    if (!hasField(field)) return;
+    if (value === undefined || value === null || value === '') return;
+    if (str(data[field])) return;
+    data[field] = value;
+  };
+  // 客戶：id 優先。有 id 就只認 id，不再依名字覆寫，避免單據漂移到同名客戶身上。
+  if (hasField('customer_id')) {
+    const id = str(data.customer_id).trim();
+    let customer = id ? store.get('customers', id) : null;
+    if (!customer) customer = matchUniqueByName(store.list('customers'), 'customer_name', data.customer_name, '客戶');
     if (customer) {
-      const mapping = {
-        customer_id: customer.id, customer_code: customer.customer_code, customer_tel: customer.phone,
-        customer_fax: customer.fax, customer_email: customer.email, contact_person: customer.contact_person,
-        customer_address: customer.service_address, service_address: customer.service_address,
-        delivery_address: customer.delivery_address, customer_type: customer.customer_type,
-      };
-      for (const [field, value] of Object.entries(mapping)) {
-        if (cfg.fields.some((f) => f.name === field) && (!data[field] || field === 'customer_id' || field === 'customer_code')) data[field] = value || '';
-      }
+      data.customer_id = customer.id;
+      fill('customer_code', customer.customer_code);
+      fill('customer_tel', customer.phone);
+      fill('customer_fax', customer.fax);
+      fill('customer_email', customer.email);
+      fill('contact_person', customer.contact_person);
+      fill('customer_address', customer.service_address);
+      fill('service_address', customer.service_address);
+      fill('delivery_address', customer.delivery_address);
+      fill('customer_type', customer.customer_type);
     }
   }
-  if (Object.hasOwn(data, 'work_unit_name') && data.work_unit_name) {
-    const unit = store.list('work_units').find((r) => r.unit_name === data.work_unit_name);
-    if (unit && cfg.fields.some((f) => f.name === 'work_unit_id')) data.work_unit_id = unit.id;
+  if (hasField('work_unit_id')) {
+    const id = str(data.work_unit_id).trim();
+    let unit = id ? store.get('work_units', id) : null;
+    if (!unit) unit = matchUniqueByName(store.list('work_units'), 'unit_name', data.work_unit_name, '工作單位');
+    if (unit) data.work_unit_id = unit.id;
   }
-  if (Object.hasOwn(data, 'employee_name') && data.employee_name) {
-    const employee = store.list('employees', { includeDeleted: true }).find((r) => r.employee_name === data.employee_name);
-    if (employee && cfg.fields.some((f) => f.name === 'employee_id')) data.employee_id = employee.id;
+  // 員工：姓名重複會把排班／請假掛錯人，所以同樣只接受唯一命中
+  if (hasField('employee_id')) {
+    const id = str(data.employee_id).trim();
+    let employee = id ? store.get('employees', id, { includeDeleted: true }) : null;
+    if (!employee) employee = matchUniqueByName(store.list('employees', { includeDeleted: true }), 'employee_name', data.employee_name, '員工');
+    if (employee) data.employee_id = employee.id;
   }
 }
 
@@ -278,6 +317,7 @@ function saveDeliveryNote({ store, cfg, data, existing, user, skipStock = false 
       op.product.stock_quantity = op.after;
       store.save('products', op.product, { id: op.product.id, user });
       const adjustment = {
+        adjustment_number: '', // 鍵必須先存在，defaultNumber() 才會編號（缺鍵會直接 return，調整單就沒有編號可追溯）
         adjustment_date: data.dn_date || hkNow().date, adjustment_type: '送貨出庫',
         product_id: op.product.id, product_name: op.product.product_name, product_code: op.product.product_code,
         quantity_before: op.before, quantity_change: -op.qty, quantity_after: op.after,
@@ -309,7 +349,16 @@ export function reverseStockCount({ store, id, user, redo = false }) {
     for (const item of arr(count.items)) {
       const product = productForAdjustment(store, item);
       if (!product) continue;
-      const diff = num(item.difference, num(item.actual_quantity) - num(item.system_quantity));
+      // 差額優先讀盤點單快照。快照與 system_quantity 都缺時不再退回 actual − 0
+      // （那會把庫存清零），直接中止，讓人用庫存調整單處理。
+      const hasSnapshot = item.difference !== undefined && item.difference !== null && item.difference !== '';
+      const hasSystem = item.system_quantity !== undefined && item.system_quantity !== null && item.system_quantity !== '';
+      if (!hasSnapshot && !hasSystem) {
+        const error = new Error(`盤點 ${count.count_number} 的明細缺少差額快照（${item.product_name || item.product_id || '未知產品'}），為避免寫錯庫存已中止，請改用庫存調整單處理`);
+        error.statusCode = 409;
+        throw error;
+      }
+      const diff = hasSnapshot ? num(item.difference) : num(item.actual_quantity) - num(item.system_quantity);
       if (!diff) continue;
       operations.push({ product, diff });
     }
@@ -325,6 +374,7 @@ export function reverseStockCount({ store, id, user, redo = false }) {
       op.product.stock_quantity = after;
       store.save('products', op.product, { id: op.product.id, user });
       const adjustment = {
+        adjustment_number: '', // 同上：缺鍵則不編號
         adjustment_date: hkNow().date, adjustment_type: '盤點調整',
         product_id: op.product.id, product_name: op.product.product_name, product_code: op.product.product_code,
         quantity_before: before, quantity_change: change, quantity_after: after,
@@ -357,19 +407,27 @@ function saveStockCount({ store, cfg, data, existing, user }) {  return store.tr
         const before = num(product.stock_quantity);
         const duplicated = store.list('stock_adjustments', { includeDeleted: true }).find((a) => a.source_stock_count_id === data.id && a.product_id === product.id);
         if (duplicated) { const error = new Error(`盤點 ${data.count_number} 已對 ${product.product_name} 過賬`); error.statusCode = 409; throw error; }
-        operations.push({ product, item, actual, before, difference: actual - before });
+        const difference = actual - before;
+        // 差異必須在第一次 store.save() 之前就寫進 data.items：
+        // save() 會從資料庫重新讀回一筆新物件，之後再改這裡的 item 引用不會進到 saved.items，
+        // 沖銷時讀不到 difference／system_quantity，就會把「實際 12」當成差異 12，庫存被清成 0。
+        item.product_id = product.id;
+        item.product_name = product.product_name;
+        item.product_code = product.product_code;
+        item.system_quantity = before;
+        item.difference = difference;
+        operations.push({ product, actual, before, difference });
       }
     }
     data.completed_by ||= user.name;
     if (shouldPost) { data.completed_date ||= hkNow().date; data.stock_posted = true; }
     const saved = store.save(cfg.key, data, { id: data.id, user, expectedUpdated: existing?.updated_date || null });
     for (const op of operations) {
-      op.item.product_id = op.product.id; op.item.product_name = op.product.product_name; op.item.product_code = op.product.product_code;
-      op.item.system_quantity = op.before; op.item.difference = op.difference;
       op.product.stock_quantity = op.actual;
       store.save('products', op.product, { id: op.product.id, user });
       if (op.difference !== 0) {
         const adjustment = {
+          adjustment_number: '', // 同上：缺鍵則不編號
           adjustment_date: data.count_date || hkNow().date, adjustment_type: '盤點調整', product_id: op.product.id,
           product_name: op.product.product_name, product_code: op.product.product_code, quantity_before: op.before,
           quantity_change: op.difference, quantity_after: op.actual, unit_cost: op.product.cost_price || 0,
@@ -380,7 +438,6 @@ function saveStockCount({ store, cfg, data, existing, user }) {  return store.tr
         store.save('stock_adjustments', adjustment, { user });
       }
     }
-    if (shouldPost) store.save(cfg.key, saved, { id: saved.id, user });
     store.audit({ user, action: shouldPost ? 'stock-count-post' : 'save', entity: cfg.entity, id: saved.id, label: saved.count_number, shown: `items=${operations.length}`, via: 'stock-count' });
     return store.get(cfg.key, saved.id);
   });

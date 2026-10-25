@@ -285,6 +285,47 @@ async function run() {
     const [f, a, o, m] = await Promise.all([req('front', '/trash'), req('accounting', '/trash'), req('office', '/trash'), req('management', '/trash')]);
     return { pass: f.status === 403 && a.status === 403 && o.status === 200 && m.status === 200, expected: 'front/acc 403，office/mgmt 200', actual: `${f.status}/${a.status}/${o.status}/${m.status}` };
   });
+  // SEC-01：選擇器是表單入口，不能成為繞過實體權限的第二條路
+  await check('PERM-07', 'PERM', '選擇器不得繞過實體權限', 'P0', '權限', async () => {
+    const parse = (r) => { try { return JSON.parse(r.text); } catch { return []; } };
+    const [fc, fp, op, mp, fe] = await Promise.all([
+      req('front', '/api/pick?source=customers&limit=5'),
+      req('front', '/api/pick?source=products&limit=5'),
+      req('office', '/api/pick?source=products&limit=5'),
+      req('management', '/api/pick?source=products&limit=5'),
+      req('front', '/api/pick?source=employees&limit=5'),
+    ]);
+    const officeRows = parse(op); const mgmtRows = parse(mp); const frontRows = parse(fp);
+    const leak = officeRows.some((x) => x.fill && Object.hasOwn(x.fill, 'cost_price'));
+    const mgmtHas = mgmtRows.some((x) => x.fill && Object.hasOwn(x.fill, 'cost_price'));
+    const frontLeak = frontRows.some((x) => x.fill && Object.hasOwn(x.fill, 'cost_price'));
+    const audited = db.prepare("SELECT COUNT(*) c FROM audit_log WHERE action='pick'").get().c;
+    return {
+      pass: fc.status === 403 && fp.status === 200 && !frontLeak && op.status === 200 && !leak && mgmtHas && fe.status === 200 && audited >= 3,
+      expected: 'front→customers 403；front→products 200 但無 cost_price（補給要選產品）；office 無 cost_price；mgmt 有；front→employees 200；每次調用留審計',
+      actual: `${fc.status}/${fp.status} frontLeak=${frontLeak} officeLeak=${leak} mgmt=${mgmtHas} emp=${fe.status} audit=${audited}`,
+    };
+  });
+  // SEC-02：屏蔽必須做在序列化層，不能只做在 renderValue
+  await check('PERM-08', 'PERM', '編輯表單金額掩碼', 'P0', '權限', async () => {
+    const q = db.prepare('SELECT data FROM records WHERE entity=? AND deleted=0').all('Quotation')
+      .map((r) => JSON.parse(r.data)).find((d) => Number(d.total_amount) > 0);
+    if (!q) return { pass: false, expected: '庫內應有帶金額的報價', actual: '無樣本' };
+    const amount = String(q.total_amount);
+    const [o, m] = await Promise.all([
+      req('office', '/edit/quotations/' + q.id),
+      req('management', '/edit/quotations/' + q.id),
+    ]);
+    const visible = [...o.text.matchAll(/<input[^>]*>/g)].map((x) => x[0])
+      .filter((tag) => tag.includes(`value="${amount}"`) && !/type="hidden"/.test(tag));
+    const masked = o.text.includes('•••••');
+    const hiddenKeeps = o.text.includes(`name="total_amount" value="${amount}"`);
+    return {
+      pass: o.status === 200 && !visible.length && masked && hiddenKeeps && m.text.includes(`value="${amount}"`),
+      expected: 'office 可見控件無明文、有佔位符、hidden 保值；management 見真實金額',
+      actual: `office ${o.status} 明文=${visible.length} 佔位=${masked} hidden=${hiddenKeeps} mgmt=${m.text.includes(`value="${amount}"`)}`,
+    };
+  });
 
   // ── 客戶 ─────────────────────────────
   await check('CUS-01', 'CUS', '新增客戶必填校驗', 'P0', '異常', async () => {
@@ -322,7 +363,7 @@ async function run() {
     const r = await post('office', '/save/quotations', basePayload('quotations', {
       quotation_type: '服務', customer_name: `${tag}-客戶`, customer_type: '標準', work_content: '滅蟲服務', service_location: '測試地點',
       work_unit_name: '測試單位', items: JSON.stringify([{ item_name: '服務費', quantity: 2, unit_price: 100, discount: 10, unit: '次' }]),
-      freight_charges: '20', discount: '5',
+      freight_charges: '20',
     }));
     const id = idFrom(r.location); X.quotationId = id;
     const row = id && rowOf('quotations', id);
@@ -331,7 +372,9 @@ async function run() {
   });
   await check('QUO-02', 'QUO', '報價明細與總額', 'P0', '資料', async () => {
     const row = rowOf('quotations', X.quotationId);
-    return { pass: row.subtotal === 190 && row.total_amount === 205 && row.items?.[0]?.total === 190, expected: '小計 190、總額 205', actual: `${row.subtotal}/${row.total_amount}` };
+    // 整單折扣已從表單移除（施工順序表 T0-5，歷史 0 使用；欄位仍留在 JSON 裡兼容舊資料），
+    // 所以總額 = 小計 + 運費，不再減表頭折扣。行級 Disc 保留。
+    return { pass: row.subtotal === 190 && row.total_amount === 210 && row.items?.[0]?.total === 190, expected: '小計 190、總額 190+20=210', actual: `${row.subtotal}/${row.total_amount}` };
   });
   await check('QUO-03', 'QUO', '報價必填與空明細', 'P0', '異常', async () => {
     const a = await post('office', '/save/quotations', basePayload('quotations', { quotation_type: '服務', customer_type: '標準', work_content: 'x', items: JSON.stringify([{ quantity: 1, unit_price: 1 }]) }));
@@ -821,6 +864,23 @@ async function run() {
       .map((r) => ({ entity: r.entity, id: r.id, ...JSON.parse(r.data) }));
     const bad = rows.filter((r) => !r.deleted_at || !r.deleted_by);
     return { pass: !bad.length, expected: '近兩日刪除均有時間/操作人（歷史匯入豁免）', actual: bad.slice(0, 5).map((r) => r.entity + ':' + r.id).join(',') || `OK (${rows.length} 筆)` };
+  });
+  // DAT-03：外鍵靠名字匹配，同名多筆時必須停下來問，不能取第一筆
+  await check('DAT-06', 'DAT', '重名關聯不猜（409）', 'P0', '資料', async () => {
+    const names = new Map();
+    for (const r of db.prepare('SELECT data FROM records WHERE entity=? AND deleted=0').all('Customer')) {
+      const n = JSON.parse(r.data).customer_name;
+      if (n) names.set(n, (names.get(n) || 0) + 1);
+    }
+    const dup = [...names.entries()].find(([, c]) => c > 1);
+    if (!dup) return { pass: false, expected: '庫內應有重名客戶作為樣本', actual: '無重名樣本' };
+    const bad = await post('office', '/save/delivery_notes', basePayload('delivery_notes', { customer_name: dup[0], customer_id: '' }));
+    const ok = await post('office', '/save/delivery_notes', basePayload('delivery_notes', { customer_name: `${tag}-無重名`, customer_id: '' }));
+    return {
+      pass: bad.status === 409 && htmlHas(bad.text, '同名') && ok.status !== 409,
+      expected: `同名客戶（×${dup[1]}）→ 409 並提示；不同名不攔`,
+      actual: `同名 ${bad.status}（${htmlHas(bad.text, '同名') ? '有提示' : '無提示'}）／不同名 ${ok.status}`,
+    };
   });
 }
 
