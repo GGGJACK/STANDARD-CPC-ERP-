@@ -568,8 +568,8 @@ for (const r of results.filter((x) => !x.pass)) {
   const root = ROOT[r.id] || { level: 'S3', cause: '待定位', fix: '待排期', evidence: '' };
   defectRows.push([r.id, root.level, r.priority, r.title, r.actual, root.cause, root.fix, root.evidence || '', '待修']);
 }
-fs.writeFileSync(path.join(HERE, '缺陷清單.csv'), '\ufeff' + defectRows.map((r) => r.map(csvCell).join(',')).join('\r\n'), 'utf8');
+fs.writeFileSync(path.join(HERE, '缺陷清單_測試派生.csv'), '\ufeff' + defectRows.map((r) => r.map(csvCell).join(',')).join('\r\n'), 'utf8');
 
 console.log('已生成 ERP測試設計與驗收方案_20261025.html');
-console.log('已生成 測試用例清單.csv / 缺陷清單.csv');
+console.log('已生成 測試用例清單.csv / 缺陷清單_測試派生.csv');
 console.log(`用例 ${allCases.length} 條；自動化對應 ${autoCases} 條；基線 ${summary ? summary.passed + '/' + summary.total : '未執行'}`);
