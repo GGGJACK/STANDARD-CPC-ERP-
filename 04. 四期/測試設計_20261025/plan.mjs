@@ -38,6 +38,12 @@ export const MODULES = [
       { id: 'SYS-03', title: '未知路由與錯誤頁', p: 'P1', t: '異常', pre: '已登入', steps: ['GET /no-such-page', 'GET /view/customers/not-exist'], expect: '404 錯誤頁含導航與返回；不得拋堆疊或空白頁' },
       { id: 'SYS-04', title: '啟動自動匯入開關', p: 'P1', t: '資料', pre: '副本 DB、CPC_AUTO_IMPORT=0', steps: ['啟動後統計 records 總數', '對照啟動前'], expect: '筆數不變；正式庫不會被測試資料污染' },
       { id: 'SYS-05', title: '時區與 HK 日期', p: 'P1', t: '邊界', pre: '系統時區非 HK', steps: ['新增一筆記錄', '檢查 created_date 與編號年份'], expect: '日期/年份按 Asia/Hong_Kong 計算，23:30 與 00:30 不跨錯日' },
+      {
+        id: 'SYS-06', title: '驗收腳本換機可跑', p: 'P1', t: '功能',
+        pre: '非作者本機的新部署；正式庫不在程式目錄（如 D:\\CPC-ERP\\_runtime\\data.db）',
+        steps: ['不改任何路徑，直接執行 run-tests.mjs / compare-ui.mjs / rollback-drill.mjs', '對比隔離副本與來源庫的 demo_mode'],
+        expect: '三套腳本無需改路徑即可執行（支援 CPC_ROOT / CPC_DB / CPC_OUT 與 --src / --db）；隔離副本內 demo_mode=1 而來源庫保持 0；不得出現整批 302 假失敗',
+      },
     ],
   },
   {
@@ -371,6 +377,36 @@ export const MODULES = [
       { id: 'UI-04', title: '空狀態與日曆', p: 'P2', t: 'UI', pre: '無資料月份', steps: ['打開 /schedules 空月'], expect: '日曆格不被 empty 圖示撐高；顯示「暫無資料」' },
       { id: 'UI-05', title: '彈窗與選擇器', p: 'P1', t: 'UI', pre: '新增合約/補給', steps: ['開彈窗', '搜尋並選客戶/產品'], expect: '彈窗不裁切下拉；選中回填名稱與 ID；捲動清單不自動關閉' },
       { id: 'UI-06', title: '1366×768 與列印', p: 'P2', t: 'UI', pre: '1366 寬', steps: ['檢查 12 欄表格/側欄/頁首', 'Ctrl+P 預覽'], expect: '無水平溢出（表格內滾動）；列印隱藏導航與按鈕' },
+    ],
+  },
+  {
+    code: 'ANN', name: '公告發布與啟用狀態', goal: '公告發布後必出現在公告欄；複選框勾選可落庫', risk: '高',
+    auto: 'ANN-01~04 已入 test.mjs「公告發布與公告欄可見性」分組',
+    cases: [
+      {
+        id: 'ANN-01', title: '公告發布後出現在公告欄', p: 'P0', t: '資料',
+        pre: '管理層登入、隔離副本',
+        steps: ['POST /save/announcements，is_active 以 hidden "0" + 勾選 "1" 兩個同名參數送出', '讀 records 表確認 is_active', 'GET / 檢查公告欄'],
+        expect: '落庫 is_active === true；首頁公告欄出現該標題。舊版此處落庫為 false，公告靜默消失',
+      },
+      {
+        id: 'ANN-02', title: '未啟用公告不顯示', p: 'P1', t: '功能',
+        pre: '同上',
+        steps: ['POST /save/announcements，僅送出 is_active=0', 'GET / 檢查公告欄'],
+        expect: '落庫 is_active === false；公告欄不含該標題（未啟用即草稿，屬預期行為）',
+      },
+      {
+        id: 'ANN-03', title: '編輯頁切換啟用可保存', p: 'P1', t: '功能',
+        pre: '已存在一筆未啟用公告',
+        steps: ['GET /edit/announcements/:id 取 __expected_updated', 'POST /save/announcements 帶 is_active 兩個同名參數', 'GET / 檢查公告欄'],
+        expect: '落庫轉為 true；公告欄出現。舊版編輯同樣存不進去，使用者會反覆嘗試仍無效',
+      },
+      {
+        id: 'ANN-04', title: '用戶管理「啟用」勾選可保存', p: 'P1', t: '權限',
+        pre: '管理層登入',
+        steps: ['POST /users/save，active 以兩個同名參數送出', '查 users.active'],
+        expect: 'users.active === 1。舊版 server.mjs 用 fields.active === \'1\' 比較陣列，恆為 false，帳號永遠無法啟用',
+      },
     ],
   },
 ];

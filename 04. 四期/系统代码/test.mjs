@@ -9,10 +9,21 @@ const DB_PATH = process.env.DB_PATH;
 if (!DB_PATH) throw new Error('請提供隔離測試 DB_PATH');
 const OUT = process.env.TEST_OUTPUT || path.join(path.dirname(DB_PATH), 'cpc-test-results.json');
 const db = new DatabaseSync(DB_PATH);
+// 驗收靠 /demo?as= 免密登入。正式庫自 2026-10-25 起預設 demo_mode=0（commit 3b56cc7），
+// 不開就會在第一步取 CSRF 時全部失敗。DB_PATH 依約定必須是隔離副本，這裡只改副本。
+db.prepare("INSERT INTO settings(key,value) VALUES('demo_mode','1') ON CONFLICT(key) DO UPDATE SET value='1'").run();
 const runId = Date.now().toString(36);
 const results = [];
 const state = { ids: {} };
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+
+// 驗收必須在任何一天跑都成立，禁止把日期寫死（缺陷 TST-01）。
+// 定期排程會「補齊所有到期日到當天」，所以起始日要相對今天算，否則隔一週就多生成一筆。
+const hkToday = () => new Date().toLocaleDateString('en-CA', { timeZone: 'Asia/Hong_Kong' });
+const shiftDate = (iso, days) => new Date(Date.parse(`${iso}T00:00:00Z`) + days * 86400000).toISOString().slice(0, 10);
+const DAY = hkToday();
+// 本週最近的週一（含今天）。以它為起始日，任何一天執行都恰好只有一個到期日。
+const WEEK_MONDAY = shiftDate(DAY, -((new Date(`${DAY}T00:00:00Z`).getUTCDay() + 6) % 7));
 
 function check(name, pass, details = '') {
   results.push({ name, pass: !!pass, details: String(details || '') });
@@ -59,7 +70,14 @@ async function client(role = null) {
   c.get = (route) => c.request(route);
   c.post = (route, fields = {}, withCsrf = true) => {
     const payload = { ...(withCsrf ? { __csrf: c.csrf } : {}), ...fields };
-    return c.request(route, { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: new URLSearchParams(payload).toString() });
+    // 值為陣列時逐個 append，模擬瀏覽器送出同名參數（複選框的 hidden "0" + 勾選的 "1"）。
+    // 用 new URLSearchParams(payload) 會把陣列序列化成 "0,1" 這種單值，測不出解析問題。
+    const params = new URLSearchParams();
+    for (const [key, value] of Object.entries(payload)) {
+      if (Array.isArray(value)) for (const item of value) params.append(key, String(item));
+      else params.append(key, String(value ?? ''));
+    }
+    return c.request(route, { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: params.toString() });
   };
   if (role) {
     const response = await fetch(`${BASE}/demo?as=${role}`, { redirect: 'manual' });
@@ -303,14 +321,14 @@ await group('排班與定期排程', async () => {
   const contract = row('contracts', state.ids.contract) || first('contracts');
   await create(mgmt, 'recurring_schedules', {
     schedule_name: '驗收每週排程', contract_id: contract.id, contract_number: contract.contract_number, customer_name: contract.customer_name,
-    start_date: '2026-10-19', end_date: '2026-12-31', next_schedule_date: '2026-10-19', frequency_type: '每週',
+    start_date: WEEK_MONDAY, end_date: shiftDate(WEEK_MONDAY, 60), next_schedule_date: WEEK_MONDAY, frequency_type: '每週',
     frequency_config: JSON.stringify({ weekly_days: [1], interval: 1 }), default_employees: JSON.stringify([{ employee_name: '驗收員' }]), default_vehicle: '',
     work_items: JSON.stringify([{ work_name: '每週驗收', work_location: '香港', estimated_hours: 1, start_time: '09:00', end_time: '17:00' }]), status: '啟用', notes: '',
   }, recurringId);
   const generated = await mgmt.post(`/recurring_schedules/${recurringId}/generate`, {});
   check('定期排程生成成功', generated.status === 302, generated.status);
   const generatedRows = db.prepare('SELECT data FROM records WHERE entity=? AND deleted=0').all('Schedule').map((r) => JSON.parse(r.data)).filter((s) => s.recurring_schedule_id === recurringId);
-  check('每週排程只生成到期一次', generatedRows.length === 1 && generatedRows[0].schedule_date === '2026-10-19', generatedRows.length);
+  check('每週排程只生成到期一次', generatedRows.length === 1 && generatedRows[0].schedule_date === WEEK_MONDAY, `${generatedRows.length} / ${generatedRows[0]?.schedule_date} vs ${WEEK_MONDAY}`);
   await mgmt.post(`/recurring_schedules/${recurringId}/generate`, {});
   const regenerated = db.prepare('SELECT data FROM records WHERE entity=? AND deleted=0').all('Schedule').map((r) => JSON.parse(r.data)).filter((s) => s.recurring_schedule_id === recurringId);
   check('重複生成不重複建班', regenerated.length === 1, regenerated.length);
@@ -439,6 +457,48 @@ await group('用戶白名單、改密與登入鎖定', async () => {
   for (let i = 0; i < 5; i++) last = await publicClient.post('/login', { email: badEmail, password: 'wrong' }, false);
   const locked = await publicClient.post('/login', { email: badEmail, password: 'wrong' }, false);
   check('連續失敗後登入鎖定', locked.status === 429, locked.status);
+});
+
+// ANN-01/02/03：公告發布後必須出現在首頁公告欄。
+// 回歸背景見 00. 仓库管理/缺陷_20261026_複選框布爾解析.md —
+// 舊版 bool() 對 ['0','1'] 回 false，導致所有複選框勾選都存不進去。
+await group('公告發布與公告欄可見性', async () => {
+  const onId = `t_${runId}_ann_on`;
+  const onTitle = `公告可見性-${runId}`;
+  const created = await mgmt.post('/save/announcements', {
+    __new_id: onId, title: onTitle, content: '回歸用例內容', priority: '一般', is_active: ['0', '1'],
+  });
+  check('ANN-01 新增公告（勾選啟用）', created.status === 302, created.status);
+  check('ANN-01 勾選啟用後 is_active 落庫為 true', row('announcements', onId)?.is_active === true, JSON.stringify(row('announcements', onId)?.is_active));
+  const boardOn = await mgmt.get('/');
+  check('ANN-01 已啟用公告出現在首頁公告欄', boardOn.text.includes(onTitle), boardOn.status);
+
+  const offId = `t_${runId}_ann_off`;
+  const offTitle = `公告隱藏-${runId}`;
+  const offCreated = await mgmt.post('/save/announcements', {
+    __new_id: offId, title: offTitle, content: '回歸用例內容', priority: '一般', is_active: '0',
+  });
+  check('ANN-02 新增公告（未勾選啟用）', offCreated.status === 302, offCreated.status);
+  check('ANN-02 未勾選時 is_active 落庫為 false', row('announcements', offId)?.is_active === false, JSON.stringify(row('announcements', offId)?.is_active));
+  const boardOff = await mgmt.get('/');
+  check('ANN-02 未啟用公告不出現在公告欄', !boardOff.text.includes(offTitle));
+
+  const toggled = await update(mgmt, 'announcements', offId, {
+    title: offTitle, content: '回歸用例內容', priority: '一般', is_active: ['0', '1'],
+  });
+  check('ANN-03 編輯頁切換啟用可保存', toggled.status === 302, toggled.status);
+  check('ANN-03 編輯後 is_active 轉為 true', row('announcements', offId)?.is_active === true);
+  const boardAfter = await mgmt.get('/');
+  check('ANN-03 編輯後公告出現在公告欄', boardAfter.text.includes(offTitle));
+
+  // 同一根因也影響「用戶管理」的啟用開關（server.mjs 原本用 fields.active === '1' 直接比較）
+  const userEmail = `ann-${runId}@example.com`;
+  await mgmt.post('/users/save', {
+    id: '', name: '啟用回歸', email: userEmail, role: 'office', employee_id: '',
+    active: ['0', '1'], must_change: '0', accessible_pages: '', password: 'Test123456',
+  });
+  const savedUser = db.prepare('SELECT active FROM users WHERE email=?').get(userEmail);
+  check('ANN-04 用戶「啟用」勾選可保存為 1', savedUser?.active === 1, savedUser?.active);
 });
 
 const passed = results.filter((r) => r.pass).length;
