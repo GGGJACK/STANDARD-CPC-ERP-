@@ -7,14 +7,19 @@ import { execSync, spawn } from 'node:child_process';
 import { DatabaseSync } from 'node:sqlite';
 import fs from 'node:fs';
 import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 
-const ROOT = 'F:/04 STANDARD CPC SYSTEM';
-const OUT = 'C:/Users/Lenovo/WorkBuddy/2026-10-24-16-04-13/out';
+const HERE = path.dirname(fileURLToPath(import.meta.url));
+// 倉庫根：本腳本位於 <root>/04. 四期/工具/。可用 CPC_ROOT 覆蓋。
+const ROOT = process.env.CPC_ROOT ? path.resolve(process.env.CPC_ROOT) : path.resolve(HERE, '..', '..');
+const OUT = process.env.CPC_OUT || path.join(ROOT, '.test-artifacts');
 const TAG = process.argv[2] || 'v4.4-20261025';
 const PORT = Number(process.argv[3] || 3105);
 const BASE = `http://127.0.0.1:${PORT}`;
 const RUN = path.join(OUT, `rollback-drill-${Date.now()}`);
-const SRC_LIVE = path.join(ROOT, '04. 四期/系统代码');
+const SRC_LIVE = path.join(ROOT, '04. 四期', '系统代码');
+// 正式庫不一定放在程式目錄（本機部署放在 _runtime），用 CPC_DB 指定來源庫。
+const SRC_DB = process.env.CPC_DB ? path.resolve(process.env.CPC_DB) : path.join(SRC_LIVE, 'data.db');
 
 const t0 = Date.now();
 const steps = [];
@@ -32,9 +37,16 @@ mark('git archive 导出代码');
 // 2. 用当前生产库生成副本（演练不碰正式库）
 fs.mkdirSync(path.join(RUN, 'uploads'), { recursive: true });
 {
-  const db = new DatabaseSync(path.join(SRC_LIVE, 'data.db'));
+  const db = new DatabaseSync(SRC_DB);
   db.exec(`VACUUM INTO '${path.join(RUN, 'data.db').replace(/'/g, "''")}'`);
   db.close();
+}
+// 冒煙靠 /demo?as= 免密登入，而正式庫自 2026-10-25 起預設 demo_mode=0（commit 3b56cc7）。
+// 只改本次演練副本，來源庫不受影響；否則 12 條冒煙會全部 302 假失敗。
+{
+  const fixture = new DatabaseSync(path.join(RUN, 'data.db'));
+  fixture.prepare("INSERT INTO settings(key,value) VALUES('demo_mode','1') ON CONFLICT(key) DO UPDATE SET value='1'").run();
+  fixture.close();
 }
 mark('VACUUM INTO 取数据库副本');
 

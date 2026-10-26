@@ -9,10 +9,21 @@ const DB_PATH = process.env.DB_PATH;
 if (!DB_PATH) throw new Error('請提供隔離測試 DB_PATH');
 const OUT = process.env.TEST_OUTPUT || path.join(path.dirname(DB_PATH), 'cpc-test-results.json');
 const db = new DatabaseSync(DB_PATH);
+// 驗收靠 /demo?as= 免密登入。正式庫自 2026-10-25 起預設 demo_mode=0（commit 3b56cc7），
+// 不開就會在第一步取 CSRF 時全部失敗。DB_PATH 依約定必須是隔離副本，這裡只改副本。
+db.prepare("INSERT INTO settings(key,value) VALUES('demo_mode','1') ON CONFLICT(key) DO UPDATE SET value='1'").run();
 const runId = Date.now().toString(36);
 const results = [];
 const state = { ids: {} };
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+
+// 驗收必須在任何一天跑都成立，禁止把日期寫死（缺陷 TST-01）。
+// 定期排程會「補齊所有到期日到當天」，所以起始日要相對今天算，否則隔一週就多生成一筆。
+const hkToday = () => new Date().toLocaleDateString('en-CA', { timeZone: 'Asia/Hong_Kong' });
+const shiftDate = (iso, days) => new Date(Date.parse(`${iso}T00:00:00Z`) + days * 86400000).toISOString().slice(0, 10);
+const DAY = hkToday();
+// 本週最近的週一（含今天）。以它為起始日，任何一天執行都恰好只有一個到期日。
+const WEEK_MONDAY = shiftDate(DAY, -((new Date(`${DAY}T00:00:00Z`).getUTCDay() + 6) % 7));
 
 function check(name, pass, details = '') {
   results.push({ name, pass: !!pass, details: String(details || '') });
@@ -310,14 +321,14 @@ await group('排班與定期排程', async () => {
   const contract = row('contracts', state.ids.contract) || first('contracts');
   await create(mgmt, 'recurring_schedules', {
     schedule_name: '驗收每週排程', contract_id: contract.id, contract_number: contract.contract_number, customer_name: contract.customer_name,
-    start_date: '2026-10-19', end_date: '2026-12-31', next_schedule_date: '2026-10-19', frequency_type: '每週',
+    start_date: WEEK_MONDAY, end_date: shiftDate(WEEK_MONDAY, 60), next_schedule_date: WEEK_MONDAY, frequency_type: '每週',
     frequency_config: JSON.stringify({ weekly_days: [1], interval: 1 }), default_employees: JSON.stringify([{ employee_name: '驗收員' }]), default_vehicle: '',
     work_items: JSON.stringify([{ work_name: '每週驗收', work_location: '香港', estimated_hours: 1, start_time: '09:00', end_time: '17:00' }]), status: '啟用', notes: '',
   }, recurringId);
   const generated = await mgmt.post(`/recurring_schedules/${recurringId}/generate`, {});
   check('定期排程生成成功', generated.status === 302, generated.status);
   const generatedRows = db.prepare('SELECT data FROM records WHERE entity=? AND deleted=0').all('Schedule').map((r) => JSON.parse(r.data)).filter((s) => s.recurring_schedule_id === recurringId);
-  check('每週排程只生成到期一次', generatedRows.length === 1 && generatedRows[0].schedule_date === '2026-10-19', generatedRows.length);
+  check('每週排程只生成到期一次', generatedRows.length === 1 && generatedRows[0].schedule_date === WEEK_MONDAY, `${generatedRows.length} / ${generatedRows[0]?.schedule_date} vs ${WEEK_MONDAY}`);
   await mgmt.post(`/recurring_schedules/${recurringId}/generate`, {});
   const regenerated = db.prepare('SELECT data FROM records WHERE entity=? AND deleted=0').all('Schedule').map((r) => JSON.parse(r.data)).filter((s) => s.recurring_schedule_id === recurringId);
   check('重複生成不重複建班', regenerated.length === 1, regenerated.length);

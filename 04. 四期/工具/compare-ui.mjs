@@ -1,9 +1,16 @@
 import fs from 'node:fs';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 
-const CDP = 'http://127.0.0.1:9222';
-const SITE = 'http://127.0.0.1:3100';
-const ORIGINAL = JSON.parse(fs.readFileSync('F:/04 STANDARD CPC SYSTEM/03. 三期/_交互审计.json', 'utf8'));
-const OUT = 'C:/Users/Lenovo/WorkBuddy/2026-10-24-16-04-13/out';
+const HERE = path.dirname(fileURLToPath(import.meta.url));
+// 倉庫根：本腳本位於 <root>/04. 四期/工具/。可用 CPC_ROOT 覆蓋。
+const ROOT = process.env.CPC_ROOT ? path.resolve(process.env.CPC_ROOT) : path.resolve(HERE, '..', '..');
+const CDP = process.env.CPC_CDP || 'http://127.0.0.1:9222';
+const SITE = process.env.CPC_SITE || 'http://127.0.0.1:3100';
+const ORIGINAL_FILE = process.env.CPC_ORIGINAL || path.join(ROOT, '03. 三期', '_交互审计.json');
+const ORIGINAL = JSON.parse(fs.readFileSync(ORIGINAL_FILE, 'utf8'));
+const OUT = process.env.CPC_OUT || path.join(ROOT, '.test-artifacts');
+fs.mkdirSync(OUT, { recursive: true });
 const routeMap = {
   '/dashboard': '/mywork', '/mywork': '/mywork', '/workschedule': '/workschedule', '/monthlyattendance': '/monthlyattendance',
   '/PersonalSettings': '/me', '/usermanagement': '/users', '/leaverecords': '/leaves', '/EmailTemplates': '/emailtemplates',

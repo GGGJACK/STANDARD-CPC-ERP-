@@ -16,7 +16,9 @@ const arg = (name, fallback) => {
   const i = argv.indexOf('--' + name);
   return i >= 0 && argv[i + 1] && !argv[i + 1].startsWith('--') ? argv[i + 1] : fallback;
 };
-const SRC = path.resolve(arg('src', 'F:/04 STANDARD CPC SYSTEM/04. 四期/系统代码'));
+const SRC = path.resolve(arg('src', path.join(HERE, '..', '系统代码')));
+// 正式庫不一定放在程式目錄（本機部署放在 _runtime），用 --db 指定來源庫
+const SRC_DB = path.resolve(arg('db', path.join(SRC, 'data.db')));
 const OUT = path.resolve(arg('out', HERE));
 const PORT = Number(arg('port', '3102'));
 const KEEP = argv.includes('--keep');
@@ -48,19 +50,26 @@ const setup = () => {
   // 一致性快照：VACUUM INTO 會把 WAL 內已提交資料一併寫入，避免 db+wal 非原子複製得到半舊快照
   const dest = path.join(RUN, 'data.db');
   try {
-    const src = new DatabaseSync(path.join(SRC, 'data.db'), { readOnly: true });
+    const src = new DatabaseSync(SRC_DB, { readOnly: true });
     src.exec(`VACUUM INTO '${dest.replace(/'/g, "''")}'`);
     src.close();
   } catch (error) {
     console.warn('VACUUM INTO 失敗，回退為複製 db + wal：' + error.message);
     for (const suffix of ['', '-wal']) {
-      const from = path.join(SRC, 'data.db' + suffix);
+      const from = SRC_DB + suffix;
       const to = path.join(RUN, 'data.db' + suffix);
       if (fs.existsSync(from)) fs.copyFileSync(from, to);
     }
   }
 
   log(`隔離副本：${path.join(RUN, 'data.db')}`);
+
+  // 驗收靠 /demo?as= 免密登入，而正式庫自 2026-10-25 起預設 demo_mode=0（commit 3b56cc7）。
+  // 只改隔離副本、不動來源庫；否則整套路由/權限驗收會因為全部 302 而假失敗。
+  const fixture = new DatabaseSync(dest);
+  fixture.prepare("INSERT INTO settings(key,value) VALUES('demo_mode','1') ON CONFLICT(key) DO UPDATE SET value='1'").run();
+  fixture.close();
+  log('已於隔離副本開啟 demo_mode（來源庫不受影響）');
 };
 
 let child;
