@@ -24,7 +24,12 @@ export const num = (value, fallback = 0) => {
   return Number.isFinite(n) ? n : fallback;
 };
 
-export const bool = (value) => value === true || value === 1 || value === '1' || value === 'true' || value === 'on' || value === 'yes';
+// 表單裡的 checkbox 會同時送出 hidden 的 "0" 與勾選時的 "1"。parseBody 遇到同名欄位會存成陣列，
+// 取最後一個值才符合「後送覆蓋前送」的表單語義，否則 bool(['0','1']) 恆為 false，勾選永遠無法生效。
+export const bool = (value) => {
+  const v = Array.isArray(value) ? value[value.length - 1] : value;
+  return v === true || v === 1 || v === '1' || v === 'true' || v === 'on' || v === 'yes';
+};
 export const arr = (value) => Array.isArray(value) ? value : [];
 export const str = (value) => value === null || value === undefined ? '' : String(value);
 export const uid = (prefix = 'r') => `${prefix}_${Date.now().toString(36)}_${crypto.randomBytes(6).toString('hex')}`;
