@@ -373,6 +373,36 @@ export const MODULES = [
       { id: 'UI-06', title: '1366×768 與列印', p: 'P2', t: 'UI', pre: '1366 寬', steps: ['檢查 12 欄表格/側欄/頁首', 'Ctrl+P 預覽'], expect: '無水平溢出（表格內滾動）；列印隱藏導航與按鈕' },
     ],
   },
+  {
+    code: 'ANN', name: '公告發布與啟用狀態', goal: '公告發布後必出現在公告欄；複選框勾選可落庫', risk: '高',
+    auto: 'ANN-01~04 已入 test.mjs「公告發布與公告欄可見性」分組',
+    cases: [
+      {
+        id: 'ANN-01', title: '公告發布後出現在公告欄', p: 'P0', t: '資料',
+        pre: '管理層登入、隔離副本',
+        steps: ['POST /save/announcements，is_active 以 hidden "0" + 勾選 "1" 兩個同名參數送出', '讀 records 表確認 is_active', 'GET / 檢查公告欄'],
+        expect: '落庫 is_active === true；首頁公告欄出現該標題。舊版此處落庫為 false，公告靜默消失',
+      },
+      {
+        id: 'ANN-02', title: '未啟用公告不顯示', p: 'P1', t: '功能',
+        pre: '同上',
+        steps: ['POST /save/announcements，僅送出 is_active=0', 'GET / 檢查公告欄'],
+        expect: '落庫 is_active === false；公告欄不含該標題（未啟用即草稿，屬預期行為）',
+      },
+      {
+        id: 'ANN-03', title: '編輯頁切換啟用可保存', p: 'P1', t: '功能',
+        pre: '已存在一筆未啟用公告',
+        steps: ['GET /edit/announcements/:id 取 __expected_updated', 'POST /save/announcements 帶 is_active 兩個同名參數', 'GET / 檢查公告欄'],
+        expect: '落庫轉為 true；公告欄出現。舊版編輯同樣存不進去，使用者會反覆嘗試仍無效',
+      },
+      {
+        id: 'ANN-04', title: '用戶管理「啟用」勾選可保存', p: 'P1', t: '權限',
+        pre: '管理層登入',
+        steps: ['POST /users/save，active 以兩個同名參數送出', '查 users.active'],
+        expect: 'users.active === 1。舊版 server.mjs 用 fields.active === \'1\' 比較陣列，恆為 false，帳號永遠無法啟用',
+      },
+    ],
+  },
 ];
 
 export const REQUIREMENTS = [

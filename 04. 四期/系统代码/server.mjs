@@ -697,9 +697,9 @@ async function handle(req, res) {
     requireRole(user, ['management'], 'users');
     const { fields } = await bodyWithCsrf(req, session);
     if (!['front', 'office', 'accounting', 'management'].includes(fields.role)) throw new HttpError(400, '無效角色');
-    if (fields.id === user.id && (fields.role !== 'management' || fields.active !== '1')) throw new HttpError(409, '不可停用自己或移除自己的管理角色');
+    if (fields.id === user.id && (fields.role !== 'management' || !bool(fields.active))) throw new HttpError(409, '不可停用自己或移除自己的管理角色');
     if (fields.password && (str(fields.password).length < 10 || !/[A-Za-z]/.test(fields.password) || !/\d/.test(fields.password))) throw new HttpError(400, '密碼至少 10 位並含字母及數字');
-    store.saveUser({ id: fields.id || '', email: str(fields.email).trim().toLowerCase(), name: str(fields.name).trim(), role: fields.role, employee_id: str(fields.employee_id), active: fields.active === '1', must_change: bool(fields.must_change), accessible_pages: str(fields.accessible_pages), password: str(fields.password) });
+    store.saveUser({ id: fields.id || '', email: str(fields.email).trim().toLowerCase(), name: str(fields.name).trim(), role: fields.role, employee_id: str(fields.employee_id), active: bool(fields.active), must_change: bool(fields.must_change), accessible_pages: str(fields.accessible_pages), password: str(fields.password) });
     return redirect(res, '/users?saved=1');
   }
   if (p.startsWith('/admin/') && req.method === 'POST') {
