@@ -58,3 +58,6 @@ _snaptest.db
 04. 四期/測試設計_20261025/_shot_*.png
 04. 四期/測試設計_20261025/_full.png
 04. 四期/架构审核_20261025/_edge*/
+
+# ===== 驗收腳本產物（compare-ui / rollback-drill）=====
+.test-artifacts/
