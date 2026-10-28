@@ -259,6 +259,8 @@ await group('報價、轉換、收款與簽署', async () => {
   // QUO-05：轉換路徑繞過表單必填校驗，編號若為空，列表就沒有編號可對賬
   const poRow = row('purchase_orders', poId);
   check('PO 編號與名稱非空（QUO-05）', /^PO-\d{4}-\d{4}$/.test(poRow.po_number) && !!poRow.po_name, `${poRow.po_number} / ${poRow.po_name}`);
+  // 報價 200 + 運費 20 = 220；只複製 items 會讓 PO 少 20
+  check('PO 金額與報價一致（QUO-05）', poRow.total_amount === q.total_amount && poRow.freight_charges === 20, `${poRow.total_amount} vs ${q.total_amount} · freight=${poRow.freight_charges}`);
   const ctRes = await mgmt.post(`/quotations/${qid}/to-contract`, {});
   must('報價轉合約', ctRes.status === 302, ctRes.status);
   state.ids.contract = idFromLocation(ctRes.location);

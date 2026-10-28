@@ -171,7 +171,8 @@ function recalculate(cfg, data) {
       subtotal += item.total;
     }
     data.subtotal = subtotal;
-    data.total_amount = subtotal + num(data.tax_amount);
+    // 運費要進總額，否則報價 190+20=210 轉出來的 PO 只有 190（QUO-05 的金額一致）。
+    data.total_amount = subtotal + num(data.freight_charges) + num(data.tax_amount);
     if (!data.po_name && data.po_number) data.po_name = [data.po_number, data.work_unit_name, data.work_content].filter(Boolean).join('_');
   }
   if (cfg.key === 'bills') {
@@ -561,6 +562,8 @@ export function convertQuotation({ store, quotationId, target, user }) {
         customer_name: q.customer_name || '', contact_person: q.contact_person || '', contact_phone: q.customer_tel || '',
         work_content: q.work_content || '', work_location: q.service_location || '', work_dates: q.work_date ? [q.work_date] : [],
         po_date: hkNow().date, items: arr(q.items).map((i) => ({ ...i })), payment_terms: q.payment_terms || '',
+        // 運費必須跟著明細一起帶走：只複製 items 會讓 PO 總額比報價少一筆運費（QUO-05）。
+        freight_charges: num(q.freight_charges),
         delivery_address: q.delivery_address || q.service_address || '', status: '草稿', work_status: '待安排', notes: q.notes || '',
       };
       defaultNumber(store, ENTITIES.purchase_orders, row); recalculate(ENTITIES.purchase_orders, row);
