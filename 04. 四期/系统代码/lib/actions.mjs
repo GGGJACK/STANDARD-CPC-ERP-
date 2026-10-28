@@ -139,8 +139,18 @@ function recalculate(cfg, data) {
       subtotal += item.total;
     }
     data.items = items;
-    data.subtotal = subtotal;
-    data.total_amount = subtotal + num(data.freight_charges) - num(data.discount);
+    if (str(data.amount_source) === 'header') {
+      // 歷史匯入的 22 張報價只有表頭金額，明細單價是 0 或缺明細（DAT-02）。
+      // 用明細重算等於把 9,000 靜默歸零；標了 header 就保留表頭金額，
+      // 要改成明細口徑必須走 /quotations/:id/recalc-amount 這個明確動作。
+      data.total_amount = num(data.total_amount);
+      data.subtotal = num(data.subtotal);
+    } else {
+      data.subtotal = subtotal;
+      data.total_amount = subtotal + num(data.freight_charges) - num(data.discount);
+      // 口徑寫進記錄：之後誰再打開都不必猜這筆金額是明細算的還是表頭帶進來的。
+      data.amount_source = 'items';
+    }
     if (!data.quotation_name && data.quotation_number) data.quotation_name = [data.quotation_number, data.work_unit_name, data.work_content].filter(Boolean).join('_');
   }
   if (cfg.key === 'invoices') {
@@ -590,6 +600,21 @@ export function convertQuotation({ store, quotationId, target, user }) {
       return { cfg: ENTITIES.invoices, row: saved };
     }
     const error = new Error('不支援的轉換'); error.statusCode = 400; throw error;
+  });
+}
+
+// DAT-02 的出口：把「表頭金額優先」的歷史報價改回明細口徑。
+// 明細補齊後由人明確按下才會走這裡；金額變化寫進審計，事後追得到。
+export function recalcQuotationAmount({ store, quotationId, user }) {
+  return store.transaction(() => {
+    const row = store.get('quotations', quotationId);
+    if (!row) { const error = new Error('找不到報價單'); error.statusCode = 404; throw error; }
+    const before = num(row.total_amount);
+    delete row.amount_source;
+    recalculate(ENTITIES.quotations, row);
+    const saved = store.save('quotations', row, { id: row.id, user });
+    store.audit({ user, action: 'recalc', entity: 'Quotation', id: row.id, label: row.quotation_number, shown: `total ${before} → ${num(saved.total_amount)}`, via: 'quotation' });
+    return saved;
   });
 }
 

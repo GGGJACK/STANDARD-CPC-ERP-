@@ -7,7 +7,7 @@ import { fileURLToPath } from 'node:url';
 import { Store } from './lib/store.mjs';
 import { ENTITIES, ENTITY_BY_NAME, ORIGINAL_ROUTES } from './lib/config.mjs';
 import { assertAccessible, assertEntity, assertRole, canEditRecord, canSeeAmounts, customerMergePage, customerOfficeAccess, entityDetail, entityForm, exportEntity, filteredRows, HttpError, importPage, listEntity } from './lib/core.mjs';
-import { backfillDeliveryStock, collectReceipt, convertQuotation, generateRecurringSchedules, importEntity, importTollExpenses, mergeCustomers, moveSchedule, reverseStockCount, saveEntity, saveExcelSchedules, saveMonthlyAttendance } from './lib/actions.mjs';
+import { backfillDeliveryStock, collectReceipt, convertQuotation, generateRecurringSchedules, importEntity, importTollExpenses, mergeCustomers, moveSchedule, recalcQuotationAmount, reverseStockCount, saveEntity, saveExcelSchedules, saveMonthlyAttendance } from './lib/actions.mjs';
 import { accountingPage, checkInPage, customerDetailPage, excelSchedulePage, generalLedgerPage, monthlyAttendancePage, myAttendancePage, myWorkPage, pestControlWorkDetail, pestControlWorkPage, receivablesPage, servicePlanDetail, servicePlansPage, serviceReportsPage, trashPage, trashUsedToday, TRASH_DAILY_LIMIT, vehicleCard, workSchedulePage } from './lib/pages.mjs';
 import { completionCertificate, printDocument, schedulePrint, workRecordPrint } from './lib/documents.mjs';
 import { imageEditorPage } from './lib/image-editor.mjs';
@@ -485,6 +485,14 @@ async function handle(req, res) {
     const target = suffix === '/to-po' ? 'purchase_orders' : suffix === '/to-contract' ? 'contracts' : 'invoices';
     const result = convertQuotation({ store, quotationId: id, target, user });
     return redirect(res, `/view/${result.cfg.key}/${encodeURIComponent(result.row.id)}`);
+  }
+  // DAT-02 的明確出口：把「表頭金額優先」的歷史報價切成明細口徑（明細補齊後才用）
+  if (p.startsWith('/quotations/') && p.endsWith('/recalc-amount') && req.method === 'POST') {
+    requireRole(user, ENTITIES.quotations.editRoles, 'quotations');
+    await bodyWithCsrf(req, session);
+    const id = decodeURIComponent(p.slice('/quotations/'.length, -'/recalc-amount'.length));
+    recalcQuotationAmount({ store, quotationId: id, user });
+    return redirect(res, `/view/quotations/${encodeURIComponent(id)}`);
   }
   if (p.startsWith('/invoices/') && p.endsWith('/receipt') && req.method === 'POST') {
     requireRole(user, ['accounting', 'management'], 'receipts');

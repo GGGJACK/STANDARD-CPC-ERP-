@@ -430,7 +430,11 @@ export function entityForm({ store, cfg, id = '', url, user, csrf, error = '', o
     if (cfg.key === 'leave_records') { row.start_date ||= hkNow().date; row.status ||= '待審批'; }
   }
   if (!row.id) row.id = uid(cfg.key.slice(0, 3));
-  return formPage({ cfg, row, ctx: { ...entityContext(store, user, csrf, true), rowId: row.id, originalId: original?.id || '' }, error, back: back || str(url.searchParams.get('back')) || null });
+  // 歷史報價的表頭金額口徑也要在表單上說清楚，否則使用者以為明細的 0 才是金額（DAT-02）。
+  const notice = cfg.key === 'quotations' && str(row.amount_source) === 'header'
+    ? `歷史報價：明細單價不完整，金額以表頭 ${money(num(row.total_amount))} 為準。在此儲存不會把金額歸零；若明細已補齊，請回詳情頁按「以明細重算」。`
+    : '';
+  return formPage({ cfg, row, ctx: { ...entityContext(store, user, csrf, true), rowId: row.id, originalId: original?.id || '' }, error, notice, back: back || str(url.searchParams.get('back')) || null });
 }
 
 export function customerOfficeAccess({ store, user, customer, req, csrf }) {
@@ -481,7 +485,10 @@ export function entityDetail({ store, cfg, id, user, csrf, req, url }) {
   let after = '';
   let tools = '';
   if (cfg.key === 'quotations') {
-    before = `<div class="card noprint"><div class="bar">${actionForm(`/quotations/${row.id}/to-po`, '轉為 PO', csrf)}${actionForm(`/quotations/${row.id}/to-contract`, '轉為合約', csrf)}${actionForm(`/quotations/${row.id}/to-invoice`, '轉為發票', csrf)}<a class="btn ghost" href="mailto:${esc(row.customer_email || '')}?subject=${encodeURIComponent(row.quotation_number || '')}">發送電郵</a><form method="post" action="/quotations/${row.id}/stage"><input type="hidden" name="__csrf" value="${esc(csrf)}"><select name="stage">${['已報價', '跟進中', '已收PO', '已成交', '已取消', '失敗'].map((s) => `<option${s === row.stage ? ' selected' : ''}>${s}</option>`).join('')}</select><button class="btn ghost">更新階段</button></form></div></div>`;
+    const legacyAmount = str(row.amount_source) === 'header'
+      ? `<div class="card noprint"><div class="notice">歷史報價（DAT-02）：明細單價不完整，金額以表頭 ${money(num(row.total_amount))} 為準，儲存不會歸零。若明細已補齊，可按右側按鈕改為明細口徑。</div><div class="bar"><form method="post" action="/quotations/${row.id}/recalc-amount"><input type="hidden" name="__csrf" value="${esc(csrf)}"><button class="btn ghost" data-confirm="按明細重算會以明細合計覆蓋表頭金額 ${num(row.total_amount)}，確定？">以明細重算</button></form></div></div>`
+      : '';
+    before = `${legacyAmount}<div class="card noprint"><div class="bar">${actionForm(`/quotations/${row.id}/to-po`, '轉為 PO', csrf)}${actionForm(`/quotations/${row.id}/to-contract`, '轉為合約', csrf)}${actionForm(`/quotations/${row.id}/to-invoice`, '轉為發票', csrf)}<a class="btn ghost" href="mailto:${esc(row.customer_email || '')}?subject=${encodeURIComponent(row.quotation_number || '')}">發送電郵</a><form method="post" action="/quotations/${row.id}/stage"><input type="hidden" name="__csrf" value="${esc(csrf)}"><select name="stage">${['已報價', '跟進中', '已收PO', '已成交', '已取消', '失敗'].map((s) => `<option${s === row.stage ? ' selected' : ''}>${s}</option>`).join('')}</select><button class="btn ghost">更新階段</button></form></div></div>`;
     after = `<div class="card"><h3>信件式預覽</h3><iframe src="/print/quotations/${encodeURIComponent(row.id)}" title="報價單預覽" style="width:100%;height:1050px;border:1px solid #e3e7eb"></iframe></div>`;
   }
   if (cfg.key === 'invoices') {
