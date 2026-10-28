@@ -1,5 +1,5 @@
 import { ENTITIES } from './config.mjs';
-import { arr, bool, hkNow, isIntegerField, num, parseCSV, str, uid } from './utils.mjs';
+import { arr, bool, hkNow, hoursFromTimes, isIntegerField, num, parseCSV, str, uid } from './utils.mjs';
 
 const NUMBER_FIELDS = {
   customers: 'customer_code', quotations: 'quotation_number', contracts: 'contract_number', invoices: 'invoice_number',
@@ -452,6 +452,9 @@ function saveSchedule({ store, cfg, data, existing, user }) {
         && (recurringIds.has(s.recurring_schedule_id) || arr(s.work_items).some((i) => recurringIds.has(i.recurring_schedule_id))));
       if (duplicated) { const error = new Error(`同一天已有相同定期排程（${duplicated.id}），不可重複生成`); error.statusCode = 409; throw error; }
     }
+    // 手動排班一直沒算總工時（SCH-07）：表單上的 total_hours 是唯讀空欄，
+    // 前後端都沒人填，13,116 筆排班只有 15 筆有值。落庫前按工作項起止時間匯總。
+    data.total_hours = hoursFromTimes(data.work_items);
     const saved = store.save(cfg.key, data, { id: data.id, user, expectedUpdated: existing?.updated_date || null });
     const poIds = [...new Set(arr(saved.work_items).map((i) => i.po_id).filter(Boolean))];
     for (const poId of poIds) {

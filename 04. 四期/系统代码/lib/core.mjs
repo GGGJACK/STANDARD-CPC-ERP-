@@ -1,7 +1,7 @@
 import { AMOUNT_FIELDS, ENTITIES } from './config.mjs';
 import { dynamicOptions } from './actions.mjs';
 import { dataTable, detailPage, formGrid, formPage, kpis, layout, pager, simpleTable } from './ui.mjs';
-import { arr, esc, hkNow, maskName, maskPhone, money, num, pageLinks, queryWith, str, toCSV, uid, unique } from './utils.mjs';
+import { arr, esc, hkNow, hoursFromTimes, maskName, maskPhone, money, num, pageLinks, queryWith, str, toCSV, uid, unique } from './utils.mjs';
 
 export class HttpError extends Error {
   constructor(status, message) { super(message); this.statusCode = status; }
@@ -126,6 +126,12 @@ function filterOptions(rows, filter, cfg) {
 function decorateRow(cfg, row, user) {
   const out = { ...row };
   if (cfg.key === 'contracts') out.contract_start_date = `${str(row.contract_start_date) || '—'} 至 ${str(row.contract_end_date) || '—'}`;
+  // 歷史排班在 SCH-07 修復前沒存 total_hours（13,116 筆只有 15 筆有值）。
+  // 列表按同一口徑即時算，避免為了顯示去做一次 13,116 筆的全量回寫。
+  if (cfg.key === 'schedules' && (row.total_hours === undefined || row.total_hours === null || row.total_hours === '')) {
+    const hours = hoursFromTimes(row.work_items);
+    out.total_hours = hours || '';
+  }
   if (cfg.key === 'customers' && user.role === 'office') {
     out.contact_person = maskName(out.contact_person);
     out.phone = maskPhone(out.phone);
