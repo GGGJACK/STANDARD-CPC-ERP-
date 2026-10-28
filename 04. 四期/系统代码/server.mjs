@@ -7,7 +7,7 @@ import { fileURLToPath } from 'node:url';
 import { Store } from './lib/store.mjs';
 import { ENTITIES, ENTITY_BY_NAME, ORIGINAL_ROUTES } from './lib/config.mjs';
 import { assertAccessible, assertEntity, assertRole, canEditRecord, canSeeAmounts, customerMergePage, customerOfficeAccess, entityDetail, entityForm, exportEntity, filteredRows, HttpError, importPage, listEntity } from './lib/core.mjs';
-import { backfillDeliveryStock, collectReceipt, convertQuotation, generateRecurringSchedules, importEntity, importTollExpenses, mergeCustomers, moveSchedule, reverseStockCount, saveEntity, saveExcelSchedules, saveMonthlyAttendance } from './lib/actions.mjs';
+import { backfillDeliveryStock, collectReceipt, convertQuotation, generateRecurringSchedules, importEntity, importTollExpenses, mergeCustomers, moveSchedule, recalcQuotationAmount, reverseStockCount, saveEntity, saveExcelSchedules, saveMonthlyAttendance } from './lib/actions.mjs';
 import { accountingPage, checkInPage, customerDetailPage, excelSchedulePage, generalLedgerPage, monthlyAttendancePage, myAttendancePage, myWorkPage, pestControlWorkDetail, pestControlWorkPage, receivablesPage, servicePlanDetail, servicePlansPage, serviceReportsPage, trashPage, trashUsedToday, TRASH_DAILY_LIMIT, vehicleCard, workSchedulePage } from './lib/pages.mjs';
 import { completionCertificate, printDocument, schedulePrint, workRecordPrint } from './lib/documents.mjs';
 import { imageEditorPage } from './lib/image-editor.mjs';
@@ -486,6 +486,14 @@ async function handle(req, res) {
     const result = convertQuotation({ store, quotationId: id, target, user });
     return redirect(res, `/view/${result.cfg.key}/${encodeURIComponent(result.row.id)}`);
   }
+  // DAT-02 的明確出口：把「表頭金額優先」的歷史報價切成明細口徑（明細補齊後才用）
+  if (p.startsWith('/quotations/') && p.endsWith('/recalc-amount') && req.method === 'POST') {
+    requireRole(user, ENTITIES.quotations.editRoles, 'quotations');
+    await bodyWithCsrf(req, session);
+    const id = decodeURIComponent(p.slice('/quotations/'.length, -'/recalc-amount'.length));
+    recalcQuotationAmount({ store, quotationId: id, user });
+    return redirect(res, `/view/quotations/${encodeURIComponent(id)}`);
+  }
   if (p.startsWith('/invoices/') && p.endsWith('/receipt') && req.method === 'POST') {
     requireRole(user, ['accounting', 'management'], 'receipts');
     const id = decodeURIComponent(p.slice('/invoices/'.length, -'/receipt'.length));
@@ -777,6 +785,10 @@ async function handle(req, res) {
 
   if (p.startsWith('/new/')) {
     const cfg = ENTITIES[p.slice(5)]; if (!cfg) throw new HttpError(404, '未知實體');
+    // 入口就按 editRoles 判，與 POST /save 一致（PERM-03）：
+    // 合約、請假、補給走的是「回列表頁 + 彈窗」，繞過 entityForm 的編輯校驗，
+    // 結果會計打得開新增合約表單、填完提交才 403。
+    assertEntity(user, cfg, true);
     // 合約一律走頁內彈窗：直接回列表頁並自動開啟彈窗（不再開新頁）
     if (cfg.key === 'contracts') return html(res, listEntity({ store, cfg, url: new URL('http://local/contracts?new=1'), user, csrf }));
     if (['leave_records', 'supply_records'].includes(cfg.key)) return html(res, listEntity({ store, cfg, url: new URL(`http://local${cfg.listPath}?new=1`), user, csrf }));

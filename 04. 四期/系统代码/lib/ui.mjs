@@ -829,7 +829,8 @@ export function pill(value) {
   const text = str(value);
   const green = ['已完成', '已付款', '生效中', '正常', '可用', '已批准', '已確認', '已接受', '在職', '完成', 'signed', '已送達', '已收貨', '已過賬', '已入賬', '已簽約', '已核對', '已開票', '已結清'];
   const red = ['逾期', '已到期', '低庫存', '已取消', '停用', '已拒絕', '離職'];
-  const yellow = ['待執行', '待安排', '草稿', '待審批', '進行中', '部分收款', 'pending'];
+  // 「部分收款」是 INV-07 修復前寫進庫的歷史值，一併保色，避免舊單變成無色 pill。
+  const yellow = ['待執行', '待安排', '草稿', '待審批', '進行中', '部分付款', '部分收款', 'pending'];
   return `<span class="pill ${green.includes(text) ? 'g' : red.includes(text) ? 'r' : yellow.includes(text) ? 'y' : ''}">${esc(text || '—')}</span>`;
 }
 
@@ -1064,7 +1065,7 @@ export function formGrid(fields, row = {}, ctx = {}) {
   return hidden + fields.filter((f) => !f.hidden).map((f) => `<div class="frow ${f.wide || ['textarea', 'richtext', 'items', 'files', 'json', 'picks'].includes(f.type) ? 'wide' : ''}"><label for="f_${esc(f.name)}">${esc(f.label)}${f.required ? ' <span class="required">*</span>' : ''}</label>${fieldInput(f, row[f.name], ctx)}</div>`).join('');
 }
 
-export function formPage({ cfg, row = {}, ctx = {}, error = '', back = null }) {
+export function formPage({ cfg, row = {}, ctx = {}, error = '', back = null, notice = '' }) {
   const isEdit = !!ctx.originalId;
   const rowId = ctx.rowId || row.id || '';
   const sections = [];
@@ -1083,7 +1084,7 @@ export function formPage({ cfg, row = {}, ctx = {}, error = '', back = null }) {
     }
     sections.push({ type: 'field', field });
   }
-  const body = `<div class="breadcrumbs"><a href="${esc(back || cfg.listPath)}">${esc(cfg.plural)}</a> / ${isEdit ? '編輯' : '新增'}${esc(cfg.title)}</div><h1>${isEdit ? '編輯' : '新增'}${esc(cfg.title)}</h1><div class="sub">帶 <span class="required">*</span> 為必填；儲存後會寫入審計記錄</div>${error ? `<div class="flash error">${esc(error)}</div>` : ''}<form class="card" method="post" action="/save/${esc(cfg.key)}"><input type="hidden" name="__csrf" value="${esc(ctx.csrf)}"><input type="hidden" name="__id" value="${esc(ctx.originalId || '')}"><input type="hidden" name="__new_id" value="${esc(rowId)}"><input type="hidden" name="__expected_updated" value="${esc(row.updated_date || '')}"><input type="hidden" name="__back" value="${esc(back || cfg.listPath)}">${hiddenFields.join('')}<div class="fgrid">${sections.map((entry) => entry.type === 'section' ? `<div class="fsection">${esc(entry.label)}</div>` : `<div class="frow ${entry.field.wide || ['textarea', 'richtext', 'items', 'files', 'json'].includes(entry.field.type) ? 'wide' : ''}"><label for="f_${esc(entry.field.name)}">${esc(entry.field.label)}${entry.field.required ? ' <span class="required">*</span>' : ''}</label>${fieldInput(entry.field, row[entry.field.name], { ...ctx, cfg, rowId })}</div>`).join('')}</div><div class="bar" style="margin-top:20px"><button class="btn" type="submit">儲存</button><a class="btn ghost" href="${esc(back || cfg.listPath)}">取消</a>${isEdit ? `<span class="muted">記錄 ID：${esc(rowId)}</span>` : ''}</div></form>`;
+  const body = `<div class="breadcrumbs"><a href="${esc(back || cfg.listPath)}">${esc(cfg.plural)}</a> / ${isEdit ? '編輯' : '新增'}${esc(cfg.title)}</div><h1>${isEdit ? '編輯' : '新增'}${esc(cfg.title)}</h1><div class="sub">帶 <span class="required">*</span> 為必填；儲存後會寫入審計記錄</div>${error ? `<div class="flash error">${esc(error)}</div>` : ''}${notice ? `<div class="notice">${esc(notice)}</div>` : ''}<form class="card" method="post" action="/save/${esc(cfg.key)}"><input type="hidden" name="__csrf" value="${esc(ctx.csrf)}"><input type="hidden" name="__id" value="${esc(ctx.originalId || '')}"><input type="hidden" name="__new_id" value="${esc(rowId)}"><input type="hidden" name="__expected_updated" value="${esc(row.updated_date || '')}"><input type="hidden" name="__back" value="${esc(back || cfg.listPath)}">${hiddenFields.join('')}<div class="fgrid">${sections.map((entry) => entry.type === 'section' ? `<div class="fsection">${esc(entry.label)}</div>` : `<div class="frow ${entry.field.wide || ['textarea', 'richtext', 'items', 'files', 'json'].includes(entry.field.type) ? 'wide' : ''}"><label for="f_${esc(entry.field.name)}">${esc(entry.field.label)}${entry.field.required ? ' <span class="required">*</span>' : ''}</label>${fieldInput(entry.field, row[entry.field.name], { ...ctx, cfg, rowId })}</div>`).join('')}</div><div class="bar" style="margin-top:20px"><button class="btn" type="submit">儲存</button><a class="btn ghost" href="${esc(back || cfg.listPath)}">取消</a>${isEdit ? `<span class="muted">記錄 ID：${esc(rowId)}</span>` : ''}</div></form>`;
   return layout({ title: `${isEdit ? '編輯' : '新增'}${cfg.title}`, body, user: ctx.user, active: cfg.active, csrf: ctx.csrf, wide: true });
 }
 

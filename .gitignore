@@ -61,3 +61,6 @@ _snaptest.db
 
 # ===== 驗收腳本產物（compare-ui / rollback-drill）=====
 .test-artifacts/
+
+# ===== 開發 worktree 的資料庫副本（協作防撞：<worktree>/_db/data.db）=====
+_db/
