@@ -1,5 +1,5 @@
 import { ENTITIES } from './config.mjs';
-import { arr, bool, hkNow, isIntegerField, num, parseCSV, str, uid } from './utils.mjs';
+import { arr, bool, hkNow, hoursFromTimes, isIntegerField, num, parseCSV, str, uid } from './utils.mjs';
 
 const NUMBER_FIELDS = {
   customers: 'customer_code', quotations: 'quotation_number', contracts: 'contract_number', invoices: 'invoice_number',
@@ -139,8 +139,18 @@ function recalculate(cfg, data) {
       subtotal += item.total;
     }
     data.items = items;
-    data.subtotal = subtotal;
-    data.total_amount = subtotal + num(data.freight_charges) - num(data.discount);
+    if (str(data.amount_source) === 'header') {
+      // 歷史匯入的 22 張報價只有表頭金額，明細單價是 0 或缺明細（DAT-02）。
+      // 用明細重算等於把 9,000 靜默歸零；標了 header 就保留表頭金額，
+      // 要改成明細口徑必須走 /quotations/:id/recalc-amount 這個明確動作。
+      data.total_amount = num(data.total_amount);
+      data.subtotal = num(data.subtotal);
+    } else {
+      data.subtotal = subtotal;
+      data.total_amount = subtotal + num(data.freight_charges) - num(data.discount);
+      // 口徑寫進記錄：之後誰再打開都不必猜這筆金額是明細算的還是表頭帶進來的。
+      data.amount_source = 'items';
+    }
     if (!data.quotation_name && data.quotation_number) data.quotation_name = [data.quotation_number, data.work_unit_name, data.work_content].filter(Boolean).join('_');
   }
   if (cfg.key === 'invoices') {
@@ -161,7 +171,8 @@ function recalculate(cfg, data) {
       subtotal += item.total;
     }
     data.subtotal = subtotal;
-    data.total_amount = subtotal + num(data.tax_amount);
+    // 運費要進總額，否則報價 190+20=210 轉出來的 PO 只有 190（QUO-05 的金額一致）。
+    data.total_amount = subtotal + num(data.freight_charges) + num(data.tax_amount);
     if (!data.po_name && data.po_number) data.po_name = [data.po_number, data.work_unit_name, data.work_content].filter(Boolean).join('_');
   }
   if (cfg.key === 'bills') {
@@ -452,6 +463,9 @@ function saveSchedule({ store, cfg, data, existing, user }) {
         && (recurringIds.has(s.recurring_schedule_id) || arr(s.work_items).some((i) => recurringIds.has(i.recurring_schedule_id))));
       if (duplicated) { const error = new Error(`同一天已有相同定期排程（${duplicated.id}），不可重複生成`); error.statusCode = 409; throw error; }
     }
+    // 手動排班一直沒算總工時（SCH-07）：表單上的 total_hours 是唯讀空欄，
+    // 前後端都沒人填，13,116 筆排班只有 15 筆有值。落庫前按工作項起止時間匯總。
+    data.total_hours = hoursFromTimes(data.work_items);
     const saved = store.save(cfg.key, data, { id: data.id, user, expectedUpdated: existing?.updated_date || null });
     const poIds = [...new Set(arr(saved.work_items).map((i) => i.po_id).filter(Boolean))];
     for (const poId of poIds) {
@@ -540,11 +554,16 @@ export function convertQuotation({ store, quotationId, target, user }) {
       const existing = store.list('purchase_orders').find((r) => r.quotation_id === q.id);
       if (existing) return { cfg: ENTITIES.purchase_orders, row: existing, existing: true };
       const row = {
+        // 鍵必須先存在：defaultNumber() 用 Object.hasOwn 判斷，缺鍵就直接 return，
+        // 轉出來的採購單會沒有編號，po_name 也跟著空白（QUO-05，與 STK-09 同型）。
+        po_number: '',
         quotation_id: q.id, quotation_number: q.quotation_number, quotation_type: q.quotation_type,
         work_unit_id: q.work_unit_id || '', work_unit_name: q.work_unit_name || '', customer_id: q.customer_id || '',
         customer_name: q.customer_name || '', contact_person: q.contact_person || '', contact_phone: q.customer_tel || '',
         work_content: q.work_content || '', work_location: q.service_location || '', work_dates: q.work_date ? [q.work_date] : [],
         po_date: hkNow().date, items: arr(q.items).map((i) => ({ ...i })), payment_terms: q.payment_terms || '',
+        // 運費必須跟著明細一起帶走：只複製 items 會讓 PO 總額比報價少一筆運費（QUO-05）。
+        freight_charges: num(q.freight_charges),
         delivery_address: q.delivery_address || q.service_address || '', status: '草稿', work_status: '待安排', notes: q.notes || '',
       };
       defaultNumber(store, ENTITIES.purchase_orders, row); recalculate(ENTITIES.purchase_orders, row);
@@ -568,6 +587,8 @@ export function convertQuotation({ store, quotationId, target, user }) {
     }
     if (target === 'invoices') {
       const row = {
+        // 同 QUO-05：invoice_number 鍵要在，否則轉出來的發票沒有編號。
+        invoice_number: '',
         invoice_type: q.quotation_type || '服務', invoice_date: hkNow().date,
         due_date: new Date(Date.now() + 30 * 86400000).toISOString().slice(0, 10),
         quotation_id: q.id, quotation_number: q.quotation_number, customer_id: q.customer_id || '', customer_name: q.customer_name || '',
@@ -585,6 +606,21 @@ export function convertQuotation({ store, quotationId, target, user }) {
   });
 }
 
+// DAT-02 的出口：把「表頭金額優先」的歷史報價改回明細口徑。
+// 明細補齊後由人明確按下才會走這裡；金額變化寫進審計，事後追得到。
+export function recalcQuotationAmount({ store, quotationId, user }) {
+  return store.transaction(() => {
+    const row = store.get('quotations', quotationId);
+    if (!row) { const error = new Error('找不到報價單'); error.statusCode = 404; throw error; }
+    const before = num(row.total_amount);
+    delete row.amount_source;
+    recalculate(ENTITIES.quotations, row);
+    const saved = store.save('quotations', row, { id: row.id, user });
+    store.audit({ user, action: 'recalc', entity: 'Quotation', id: row.id, label: row.quotation_number, shown: `total ${before} → ${num(saved.total_amount)}`, via: 'quotation' });
+    return saved;
+  });
+}
+
 export function collectReceipt({ store, invoiceId, fields, user }) {
   return store.transaction(() => {
     const invoice = store.get('invoices', invoiceId);
@@ -594,6 +630,8 @@ export function collectReceipt({ store, invoiceId, fields, user }) {
     if (!(amount > 0)) { const error = new Error('收款金額必須大於 0'); error.statusCode = 400; throw error; }
     if (amount - balance > 0.009) { const error = new Error(`收款金額不可超過未收餘額 ${balance.toFixed(2)}`); error.statusCode = 400; throw error; }
     const row = {
+      // 同 QUO-05：收款單也要先有鍵，否則收據編號空白、無法按號追溯。
+      receipt_number: '',
       receipt_date: str(fields.receipt_date) || hkNow().date, invoice_id: invoice.id, invoice_number: invoice.invoice_number,
       customer_id: invoice.customer_id || '', customer_name: invoice.customer_name || '', customer_address: invoice.customer_address || '',
       customer_tel: invoice.customer_tel || '', customer_fax: invoice.customer_fax || '', contact_person: invoice.contact_person || '',
@@ -605,7 +643,9 @@ export function collectReceipt({ store, invoiceId, fields, user }) {
     const receipt = store.save('receipts', row, { user });
     invoice.paid_amount = num(invoice.paid_amount) + amount;
     invoice.balance_due = Math.max(0, num(invoice.total_amount) - invoice.paid_amount);
-    invoice.status = invoice.balance_due <= 0.009 ? '已付款' : '部分收款';
+    // 狀態值必須落在字典內（INV-07）：發票狀態選項／篩選器用的是「部分付款」，
+    // 這裡原本寫「部分收款」，收款後列表 pill 與篩選器都認不出、篩選會漏單。
+    invoice.status = invoice.balance_due <= 0.009 ? '已付款' : '部分付款';
     store.save('invoices', invoice, { id: invoice.id, user });
     store.audit({ user, action: 'collect', entity: 'Invoice', id: invoice.id, label: `${invoice.invoice_number} / ${receipt.receipt_number}`, shown: `amount=${amount};balance=${invoice.balance_due}`, via: 'receipt' });
     return receipt;

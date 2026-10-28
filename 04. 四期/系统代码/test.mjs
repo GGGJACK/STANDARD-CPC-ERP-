@@ -1,7 +1,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { DatabaseSync } from 'node:sqlite';
-import { ENTITIES, ORIGINAL_ROUTES } from './lib/config.mjs';
+import { ENTITIES, NAV, ORIGINAL_ROUTES } from './lib/config.mjs';
 
 const BASE = process.env.TEST_BASE || 'http://127.0.0.1:3100';
 if (!process.env.CPC_TEST && !BASE.includes(':3100')) throw new Error('拒絕對非測試端口執行驗收；請設 TEST_BASE 為隔離測試服務');
@@ -182,6 +182,8 @@ await group('四角色與原路徑權限', async () => {
     [office, `/viewcustomer?id=${customer.id}`, 200], [office, `/viewinvoice?id=${invoice.id}`, 403], [office, `/edit/quotations/${quotation.id}`, 200], [office, `/print/quotations/${quotation.id}`, 403],
     [accounting, '/invoices', 200], [accounting, '/customers', 200], [accounting, '/users', 403], [accounting, '/employees', 200], [accounting, '/schedules', 200], [accounting, '/excelschedule', 200], [accounting, '/new/schedules', 403],
     [accounting, `/viewinvoice?id=${invoice.id}`, 200], [mgmt, `/print/quotations/${quotation.id}`, 200], [mgmt, `/viewquotation?id=${quotation.id}`, 200],
+    // PERM-03：合約走「回列表 + 彈窗」，入口原本只判查看權 → 會計打得開、提交才 403
+    [accounting, '/new/contracts', 403], [office, '/new/contracts', 200],
   ];
   for (const [client, route, expected] of cases) {
     const response = await client.get(route);
@@ -189,6 +191,24 @@ await group('四角色與原路徑權限', async () => {
   }
   const noCsrf = await mgmt.post('/save/customers', { customer_name: 'bad' }, false);
   check('寫操作缺 CSRF 返回 403', noCsrf.status === 403, noCsrf.status);
+});
+
+// PERM-06：側欄看得到的每一頁都必須進得去。菜單角色與實體 viewRoles 是兩份配置，
+// 任一邊改了另一邊沒跟上，就會出現「看得到、點進去 403」的死連結（盤點記錄就是這樣）。
+await group('菜單與路由可用性一致', async () => {
+  const clients = { office, accounting, management: mgmt, front };
+  for (const [role, client] of Object.entries(clients)) {
+    for (const groupDef of NAV) {
+      for (const item of groupDef.items) {
+        if (!item.roles.includes(role)) continue;
+        const response = await client.get(item.path);
+        const ok = response.status === 200 || (response.status === 302 && !/\/login/.test(response.location || ''));
+        check(`菜單 ${role} ${item.path} 可達`, ok, `${response.status}${response.location ? ' → ' + response.location : ''}`);
+      }
+    }
+  }
+  const dialogPage = await accounting.get('/contracts?new=1');
+  check('無編輯權不渲染合約彈窗（PERM-03）', dialogPage.status === 200 && !dialogPage.text.includes('contractDlg'), dialogPage.status);
 });
 
 await group('客戶 CRUD、CSV、XSS 與合併', async () => {
@@ -236,6 +256,11 @@ await group('報價、轉換、收款與簽署', async () => {
   must('報價轉 PO', poRes.status === 302, poRes.status);
   const poId = idFromLocation(poRes.location); state.ids.po = poId;
   check('PO 保留來源與明細', row('purchase_orders', poId).quotation_id === qid && row('purchase_orders', poId).items.length === 1);
+  // QUO-05：轉換路徑繞過表單必填校驗，編號若為空，列表就沒有編號可對賬
+  const poRow = row('purchase_orders', poId);
+  check('PO 編號與名稱非空（QUO-05）', /^PO-\d{4}-\d{4}$/.test(poRow.po_number) && !!poRow.po_name, `${poRow.po_number} / ${poRow.po_name}`);
+  // 報價 200 + 運費 20 = 220；只複製 items 會讓 PO 少 20
+  check('PO 金額與報價一致（QUO-05）', poRow.total_amount === q.total_amount && poRow.freight_charges === 20, `${poRow.total_amount} vs ${q.total_amount} · freight=${poRow.freight_charges}`);
   const ctRes = await mgmt.post(`/quotations/${qid}/to-contract`, {});
   must('報價轉合約', ctRes.status === 302, ctRes.status);
   state.ids.contract = idFromLocation(ctRes.location);
@@ -243,11 +268,17 @@ await group('報價、轉換、收款與簽署', async () => {
   must('報價轉發票', ivRes.status === 302, ivRes.status);
   const ivId = idFromLocation(ivRes.location); state.ids.invoice = ivId;
   check('發票初始餘額 220', row('invoices', ivId).balance_due === 220 && row('invoices', ivId).paid_amount === 0);
+  check('發票編號非空（QUO-05）', /^INV-\d{4}-\d{4}$/.test(row('invoices', ivId).invoice_number), row('invoices', ivId).invoice_number);
   const rcRes = await mgmt.post(`/invoices/${ivId}/receipt`, { amount: '50', payment_method: '現金', receipt_date: '2026-10-24' });
   must('發票收款生成收據', rcRes.status === 302, rcRes.status);
   const receiptId = idFromLocation(rcRes.location); state.ids.receipt = receiptId;
-  check('收款後已收/餘額正確', row('invoices', ivId).paid_amount === 50 && row('invoices', ivId).balance_due === 170 && row('invoices', ivId).status === '部分收款');
+  const invStatus = row('invoices', ivId).status;
+  check('收款後已收/餘額正確', row('invoices', ivId).paid_amount === 50 && row('invoices', ivId).balance_due === 170 && invStatus === '部分付款', `${row('invoices', ivId).paid_amount}/${row('invoices', ivId).balance_due}/${invStatus}`);
+  // INV-07：寫進去的狀態必須是字典裡的值，否則列表 pill 與篩選器都認不出
+  const statusOptions = ENTITIES.invoices.fields.find((f) => f.name === 'status').options || [];
+  check('收款狀態落在字典內（INV-07）', statusOptions.includes(invStatus) && !statusOptions.includes('部分收款'), `${invStatus} ∈ [${statusOptions.join(',')}]`);
   check('收據金額正確', row('receipts', receiptId).total_amount === 50);
+  check('收據編號非空（QUO-05）', /^R\d{6}$/.test(row('receipts', receiptId).receipt_number), row('receipts', receiptId).receipt_number);
   const over = await mgmt.post(`/invoices/${ivId}/receipt`, { amount: '9999', payment_method: '現金' });
   check('超額收款被拒', over.status === 400, over.status);
   const rcPrint = await mgmt.get(`/print/receipts/${receiptId}`);
@@ -263,6 +294,29 @@ await group('報價、轉換、收款與簽署', async () => {
   check('公開簽署落庫', signed.status === 200 && row('purchase_orders', poId).signed_by === '驗收簽署人' && row('purchase_orders', poId).signing_status === '已簽署', signed.status);
   const again = await publicClient.post(signing, { signer_name: '重複', signature_data: png }, false);
   check('重複簽署拒絕', again.status === 409, again.status);
+
+  // DAT-02：歷史「表頭有金額、明細 0 價」的報價，打開再保存不能把金額歸零。
+  // 直接寫庫造一張匯入型記錄（真實樣本 SQP-2026-0230 就是 1 行明細、單價 0、表頭 9,000）。
+  const legacyId = `t_${runId}_legacy`;
+  const legacySeed = {
+    id: legacyId, quotation_type: '服務', customer_type: '標準', customer_name: '歷史客戶', work_content: '舊服務',
+    quotation_number: 'SQP-2025-0001', document_date: '2025-06-01',
+    items: [{ item_name: '舊服務', quantity: 1, unit_price: 0, total: 0 }], subtotal: 0, total_amount: 900,
+    amount_source: 'header', created_date: '2025-06-01T00:00:00+08:00', updated_date: '2025-06-01T00:00:00+08:00',
+  };
+  db.prepare('INSERT INTO records(entity,id,data,deleted,created_date,updated_date) VALUES (?,?,?,0,?,?)')
+    .run('Quotation', legacyId, JSON.stringify(legacySeed), legacySeed.created_date, legacySeed.updated_date);
+  const legacySave = await mgmt.post('/save/quotations', {
+    __id: legacyId, __expected_updated: legacySeed.updated_date, quotation_type: '服務', customer_type: '標準',
+    customer_name: '歷史客戶', work_content: '舊服務', items: JSON.stringify(legacySeed.items), total_amount: '900',
+  });
+  const legacyAfter = row('quotations', legacyId);
+  check('歷史報價保存不歸零（DAT-02）', legacySave.status === 302 && legacyAfter.total_amount === 900 && legacyAfter.amount_source === 'header', `${legacySave.status} / ${legacyAfter.total_amount} / ${legacyAfter.amount_source}`);
+  const legacyPage = await mgmt.get(`/view/quotations/${legacyId}`);
+  check('歷史報價詳情提示口徑（DAT-02）', legacyPage.status === 200 && legacyPage.text.includes('歷史報價') && legacyPage.text.includes('以明細重算'), legacyPage.status);
+  const recalcRes = await mgmt.post(`/quotations/${legacyId}/recalc-amount`, {});
+  const legacyRecalc = row('quotations', legacyId);
+  check('明細重算出口可用（DAT-02）', recalcRes.status === 302 && legacyRecalc.total_amount === 0 && legacyRecalc.amount_source === 'items', `${recalcRes.status} / ${legacyRecalc.total_amount} / ${legacyRecalc.amount_source}`);
 });
 
 await group('送貨單與庫存事務', async () => {
@@ -314,6 +368,15 @@ await group('排班與定期排程', async () => {
   const poId = state.ids.po || first('purchase_orders').id;
   await create(mgmt, 'schedules', { schedule_date: '2026-11-15', vehicle_plate: '', color: '#fff', assigned_employees: JSON.stringify([{ employee_name: '驗收員' }]), work_items: JSON.stringify([{ po_id: poId, work_name: '驗收工作', work_location: '香港', estimated_hours: 1, status: '待執行' }]), total_hours: 1, status: '待執行', notes: '' }, scheduleId);
   check('排班同步 PO 工作日期', (row('purchase_orders', poId).work_dates || []).includes('2026-11-15'));
+  // SCH-07：總工時按工作項起止時間匯總；表單上的 total_hours 是唯讀空欄，不能靠使用者填
+  const hoursId = `t_${runId}_hours`;
+  await create(mgmt, 'schedules', { schedule_date: '2026-11-20', assigned_employees: JSON.stringify([{ employee_name: '驗收員' }]), work_items: JSON.stringify([
+    { work_name: '上午', start_time: '09:00', end_time: '11:00' },
+    { work_name: '下午', start_time: '13:00', end_time: '14:30' },
+  ]), status: '待執行' }, hoursId);
+  check('排班總工時 3.5（SCH-07）', row('schedules', hoursId).total_hours === 3.5, row('schedules', hoursId).total_hours);
+  await mgmt.post('/save/schedules', { __id: hoursId, __expected_updated: row('schedules', hoursId).updated_date, work_items: JSON.stringify([{ work_name: '夜班', start_time: '22:00', end_time: '01:00' }]) });
+  check('跨日工時按 +24h（SCH-07）', row('schedules', hoursId).total_hours === 3, row('schedules', hoursId).total_hours);
   const moved = await mgmt.post(`/schedules/${scheduleId}/move`, { date: '2026-11-16' });
   check('拖曳排班更新日期', moved.status === 200 && row('schedules', scheduleId).schedule_date === '2026-11-16', moved.status);
   check('移動後同步 PO 日期', (row('purchase_orders', poId).work_dates || []).includes('2026-11-16'));

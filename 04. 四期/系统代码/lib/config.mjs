@@ -408,6 +408,9 @@ export const ENTITIES = {
       field('delivery_date', '交貨日期', 'date', { section: '訂單資訊' }), field('delivery_address', '交貨地址', 'textarea', { wide: true, section: '訂單資訊' }),
       field('items', '訂單項目', 'items', { wide: true, section: '訂單項目', itemColumns: moneyItemColumns }),
       field('subtotal', '小計', 'money', { readOnly: true, section: '訂單項目' }), field('tax_amount', '稅額', 'money', { section: '訂單項目' }), field('total_amount', '總金額', 'money', { section: '訂單項目' }),
+      // 報價轉 PO 時把運費帶過來（QUO-05）。不放在表單上：PO 的運費只由報價繼承，
+      // 手動改運費請回報價單，避免同一筆錢在兩處各改一次。hidden 仍會隨表單往返保存。
+      field('freight_charges', '運費（由報價帶入）', 'money', { hidden: true, section: '訂單項目' }),
       field('payment_terms', '付款條款', 'textarea', { wide: true, section: '訂單資訊' }),
       field('status', '狀態', 'select', { options: ['草稿', '已確認', '處理中', '已完成', '已取消'], section: '狀態與文件' }),
       field('work_status', '工作狀態', 'select', { options: ['待安排', '已安排', '進行中', '已完成', '已取消'], section: '狀態與文件' }),
@@ -495,7 +498,7 @@ export const ENTITIES = {
   }),
 
   stock_counts: define({
-    key: 'stock_counts', entity: 'StockCount', title: '盤點', plural: '盤點記錄', listPath: '/stockcounts', dateField: 'count_date', labelField: 'count_number', softDelete: true, viewRoles: OFFICE_ADMIN,
+    key: 'stock_counts', entity: 'StockCount', title: '盤點', plural: '盤點記錄', listPath: '/stockcounts', dateField: 'count_date', labelField: 'count_number', softDelete: true, viewRoles: BACK_OFFICE,
     search: ['count_number', 'completed_by', 'notes'],
     columns: [column('count_number', '盤點編號'), column('count_date', '盤點日期', 'date'), { key: 'items', label: '項目數', value: (row) => { const list = Array.isArray(row.items) ? row.items : []; if (!list.length) return '—'; const names = list.slice(0, 3).map((it) => `${it.product_name || it.product_code || ''} ${it.system_quantity ?? '—'}→${it.actual_quantity ?? '—'}`).join('；'); return `<span title="${escAttr(names)}">${list.length} 項</span>`; } }, column('status', '狀態', 'pill'), column('completed_by', '完成人員'), actionColumn()],
     filters: [{ key: 'status', label: '全部狀態', options: ['已完成', '進行中', '已取消'] }],

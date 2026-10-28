@@ -283,3 +283,25 @@ export function groupBy(items, selector) {
 export function unique(values) {
   return [...new Set(values.filter((v) => v !== '' && v !== null && v !== undefined).map(String))].sort((a, b) => a.localeCompare(b, 'zh-Hant'));
 }
+
+// 排班／工作項工時（SCH-07）。
+// 起止時間才是實際派工時長；跨日（22:00–01:00）按 +24h 計。
+// 一項都沒有起止時間時，才退回 estimated_hours / work_hours 的估計值。
+export function hoursFromTimes(items) {
+  const rows = arr(items);
+  const toMinutes = (value) => {
+    const matched = /^(\d{1,2}):(\d{2})/.exec(str(value).trim());
+    return matched ? Number(matched[1]) * 60 + Number(matched[2]) : null;
+  };
+  let minutes = 0;
+  let timed = 0;
+  for (const item of rows) {
+    const start = toMinutes(item?.start_time);
+    const end = toMinutes(item?.end_time);
+    if (start === null || end === null) continue;
+    minutes += end >= start ? end - start : end + 24 * 60 - start;
+    timed += 1;
+  }
+  const hours = timed ? minutes / 60 : rows.reduce((sum, item) => sum + num(item?.estimated_hours ?? item?.work_hours), 0);
+  return Math.round(hours * 100) / 100;
+}

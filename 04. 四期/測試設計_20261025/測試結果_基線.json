@@ -1,29 +1,29 @@
 {
   "meta": {
     "title": "標準清潔滅蟲 ERP · 可執行驗收結果",
-    "date": "2026-10-26T06:28:33.480Z",
+    "date": "2026-10-28T02:57:40.695Z",
     "base": "http://127.0.0.1:3102",
-    "src": "D:\\CPC-ERP\\04. 四期\\系统代码",
-    "runId": "mvovkqb9",
+    "src": "F:\\04 STANDARD CPC SYSTEM\\04. 四期\\系统代码",
+    "runId": "mvriwyfb",
     "node": "v22.22.2"
   },
   "summary": {
-    "total": 118,
-    "passed": 112,
-    "failed": 6,
-    "passRate": 94.9,
+    "total": 117,
+    "passed": 117,
+    "failed": 0,
+    "passRate": 100,
     "byPriority": {
       "P0": {
         "total": 61,
         "pass": 61
       },
       "P1": {
-        "total": 47,
-        "pass": 43
+        "total": 46,
+        "pass": 46
       },
       "P2": {
         "total": 10,
-        "pass": 8
+        "pass": 10
       }
     },
     "byModule": {
@@ -36,8 +36,8 @@
         "pass": 7
       },
       "PERM": {
-        "total": 21,
-        "pass": 19
+        "total": 20,
+        "pass": 20
       },
       "CUS": {
         "total": 6,
@@ -45,7 +45,7 @@
       },
       "QUO": {
         "total": 8,
-        "pass": 7
+        "pass": 8
       },
       "PO": {
         "total": 7,
@@ -65,7 +65,7 @@
       },
       "INV": {
         "total": 6,
-        "pass": 5
+        "pass": 6
       },
       "TXN": {
         "total": 4,
@@ -81,7 +81,7 @@
       },
       "SCH": {
         "total": 5,
-        "pass": 4
+        "pass": 5
       },
       "TRS": {
         "total": 3,
@@ -105,7 +105,7 @@
       },
       "DAT": {
         "total": 6,
-        "pass": 5
+        "pass": 6
       }
     }
   },
@@ -119,7 +119,7 @@
       "pass": true,
       "expected": "200 且含登入表單",
       "actual": "status=200",
-      "ms": 3,
+      "ms": 7,
       "detail": ""
     },
     {
@@ -131,7 +131,7 @@
       "pass": true,
       "expected": "404 錯誤頁、無堆疊",
       "actual": "404/404",
-      "ms": 7,
+      "ms": 11,
       "detail": ""
     },
     {
@@ -142,8 +142,8 @@
       "type": "資料",
       "pass": true,
       "expected": "啟動不批量改寫資料",
-      "actual": "34048 → 34048",
-      "ms": 0,
+      "actual": "34054 → 34054",
+      "ms": 1,
       "detail": ""
     },
     {
@@ -155,7 +155,7 @@
       "pass": true,
       "expected": "四角色均有 sid 且 /mywork 200",
       "actual": "OK",
-      "ms": 277,
+      "ms": 552,
       "detail": ""
     },
     {
@@ -167,7 +167,7 @@
       "pass": true,
       "expected": "302 → /login",
       "actual": "302 /login?from=%2Fcustomers",
-      "ms": 1,
+      "ms": 2,
       "detail": ""
     },
     {
@@ -179,7 +179,7 @@
       "pass": true,
       "expected": "401 且不落庫",
       "actual": "401, 1608→1608",
-      "ms": 2,
+      "ms": 4,
       "detail": ""
     },
     {
@@ -191,7 +191,7 @@
       "pass": true,
       "expected": "403 / 403、筆數不變",
       "actual": "403/403, 1608→1608",
-      "ms": 3,
+      "ms": 7,
       "detail": ""
     },
     {
@@ -203,7 +203,7 @@
       "pass": true,
       "expected": "第 6 次 429",
       "actual": "200,200,200,200,200,429",
-      "ms": 9,
+      "ms": 298,
       "detail": ""
     },
     {
@@ -215,7 +215,7 @@
       "pass": true,
       "expected": "登出 302、舊 sid 再訪問 302",
       "actual": "302/302",
-      "ms": 1,
+      "ms": 3,
       "detail": ""
     },
     {
@@ -226,8 +226,8 @@
       "type": "安全",
       "pass": true,
       "expected": "HttpOnly + SameSite=Lax + Path=/",
-      "actual": "sid=if57XR3WbMdP5biwIspqVSnalpWFEGDa; Path=/; HttpOnly; SameSite=Lax; Max-Age=43200",
-      "ms": 0,
+      "actual": "sid=DJRrJsRy9GOQ4mE9NvJf3rjw11WOPSte; Path=/; HttpOnly; SameSite=Lax; Max-Age=43200",
+      "ms": 1,
       "detail": ""
     },
     {
@@ -315,18 +315,6 @@
       "detail": "44 頁"
     },
     {
-      "id": "PERM-06",
-      "module": "PERM",
-      "title": "菜單可用性 · 會計",
-      "priority": "P1",
-      "type": "權限",
-      "pass": false,
-      "expected": "菜單可見頁面必須 200",
-      "actual": "/stockcounts=403(應200)",
-      "ms": 0,
-      "detail": ""
-    },
-    {
       "id": "PERM-02",
       "module": "PERM",
       "title": "直鏈越權攔截 · 管理層",
@@ -404,9 +392,9 @@
       "title": "實體表單權限 · 會計",
       "priority": "P2",
       "type": "權限",
-      "pass": false,
+      "pass": true,
       "expected": "editRoles 決定 200/403",
-      "actual": "contracts=200/403",
+      "actual": "OK",
       "ms": 0,
       "detail": ""
     },
@@ -443,7 +431,7 @@
       "pass": true,
       "expected": "front/office 403，management 200",
       "actual": "403/403/200",
-      "ms": 24,
+      "ms": 429,
       "detail": ""
     },
     {
@@ -455,7 +443,7 @@
       "pass": true,
       "expected": "front/acc 403，office/mgmt 200",
       "actual": "403/403/200/200",
-      "ms": 19,
+      "ms": 12,
       "detail": ""
     },
     {
@@ -466,8 +454,8 @@
       "type": "權限",
       "pass": true,
       "expected": "front→customers 403；front→products 200 但無 cost_price（補給要選產品）；office 無 cost_price；mgmt 有；front→employees 200；每次調用留審計",
-      "actual": "403/200 frontLeak=false officeLeak=false mgmt=true emp=200 audit=12",
-      "ms": 137,
+      "actual": "403/200 frontLeak=false officeLeak=false mgmt=true emp=200 audit=4",
+      "ms": 285,
       "detail": ""
     },
     {
@@ -479,7 +467,7 @@
       "pass": true,
       "expected": "office 可見控件無明文、有佔位符、hidden 保值；management 見真實金額",
       "actual": "office 200 明文=0 佔位=true hidden=true mgmt=true",
-      "ms": 391,
+      "ms": 337,
       "detail": ""
     },
     {
@@ -491,7 +479,7 @@
       "pass": true,
       "expected": "400 + 必填提示、不落庫",
       "actual": "400, 1608→1608",
-      "ms": 164,
+      "ms": 147,
       "detail": ""
     },
     {
@@ -502,8 +490,8 @@
       "type": "功能",
       "pass": true,
       "expected": "302 → 詳情、DB 一致",
-      "actual": "302 /view/customers/cus_mvovl6ku_a37330573b3c",
-      "ms": 8,
+      "actual": "302 /view/customers/cus_mvrixkv7_b264e5a9756f",
+      "ms": 370,
       "detail": ""
     },
     {
@@ -515,7 +503,7 @@
       "pass": true,
       "expected": "列表命中新客戶",
       "actual": "status=200",
-      "ms": 22,
+      "ms": 25,
       "detail": ""
     },
     {
@@ -526,8 +514,8 @@
       "type": "資料",
       "pass": true,
       "expected": "電話更新、名稱不變",
-      "actual": "9999 0000 / QA-mvovkqb9-客戶",
-      "ms": 3,
+      "actual": "9999 0000 / QA-mvriwyfb-客戶",
+      "ms": 781,
       "detail": ""
     },
     {
@@ -539,7 +527,7 @@
       "pass": true,
       "expected": "200 + KPI/資料",
       "actual": "status=200",
-      "ms": 82,
+      "ms": 141,
       "detail": ""
     },
     {
@@ -551,7 +539,7 @@
       "pass": true,
       "expected": "403、不泄露電話",
       "actual": "status=403",
-      "ms": 3,
+      "ms": 2,
       "detail": ""
     },
     {
@@ -563,7 +551,7 @@
       "pass": true,
       "expected": "SQP-YYYY-####",
       "actual": "SQP-2026-1086",
-      "ms": 61,
+      "ms": 136,
       "detail": ""
     },
     {
@@ -587,7 +575,7 @@
       "pass": true,
       "expected": "缺客戶 400、空明細 400",
       "actual": "400/400",
-      "ms": 311,
+      "ms": 295,
       "detail": ""
     },
     {
@@ -599,7 +587,7 @@
       "pass": true,
       "expected": "成交標記 + 非法值 400",
       "actual": "302/400, accepted=true",
-      "ms": 5,
+      "ms": 47,
       "detail": ""
     },
     {
@@ -608,10 +596,10 @@
       "title": "報價轉採購單",
       "priority": "P1",
       "type": "功能",
-      "pass": false,
+      "pass": true,
       "expected": "PO 關聯報價、金額一致、PO 編號非空",
-      "actual": "status=302, po_number=空, po_name=空",
-      "ms": 18,
+      "actual": "status=302, po_number=PO-2026-0903, po_name=PO-2026-0903_測試單位_滅蟲服務",
+      "ms": 79,
       "detail": ""
     },
     {
@@ -622,8 +610,8 @@
       "type": "功能",
       "pass": true,
       "expected": "合約關聯、編號沿用、名稱含客戶",
-      "actual": "SQP-2026-1086 / SQP-2026-1086_QA-mvovkqb9-客戶_測試地點_滅蟲服務",
-      "ms": 6,
+      "actual": "SQP-2026-1086 / SQP-2026-1086_QA-mvriwyfb-客戶_測試地點_滅蟲服務",
+      "ms": 39,
       "detail": ""
     },
     {
@@ -634,8 +622,8 @@
       "type": "異常",
       "pass": true,
       "expected": "同一 PO、筆數不變",
-      "actual": "pur_mvovl6yy_decf0906d540 / 903→903",
-      "ms": 17,
+      "actual": "pur_mvrixma1_1ce57da8989d / 903→903",
+      "ms": 15,
       "detail": ""
     },
     {
@@ -647,7 +635,7 @@
       "pass": true,
       "expected": "deleted=1 + 回收桶可見 + 還原",
       "actual": "302, deleted=true, restore=302",
-      "ms": 10,
+      "ms": 175,
       "detail": ""
     },
     {
@@ -658,8 +646,8 @@
       "type": "功能",
       "pass": true,
       "expected": "編號保存 + 名稱自動含單位",
-      "actual": "PO-QA-mvovkqb9 / PO-QA-mvovkqb9_測試單位_滅蟲",
-      "ms": 20,
+      "actual": "PO-QA-mvriwyfb / PO-QA-mvriwyfb_測試單位_滅蟲",
+      "ms": 89,
       "detail": ""
     },
     {
@@ -671,7 +659,7 @@
       "pass": true,
       "expected": "400",
       "actual": "400",
-      "ms": 146,
+      "ms": 143,
       "detail": ""
     },
     {
@@ -683,7 +671,7 @@
       "pass": true,
       "expected": "600 / 650",
       "actual": "600/650",
-      "ms": 14,
+      "ms": 90,
       "detail": ""
     },
     {
@@ -695,7 +683,7 @@
       "pass": true,
       "expected": "詳情含送貨/發票/排班入口",
       "actual": "status=200",
-      "ms": 3,
+      "ms": 41,
       "detail": ""
     },
     {
@@ -707,7 +695,7 @@
       "pass": true,
       "expected": "刪除→還原",
       "actual": "true/false",
-      "ms": 6,
+      "ms": 155,
       "detail": ""
     },
     {
@@ -719,7 +707,7 @@
       "pass": true,
       "expected": "待簽署 + 連結可開",
       "actual": "待簽署 / 200",
-      "ms": 3,
+      "ms": 80,
       "detail": ""
     },
     {
@@ -731,7 +719,7 @@
       "pass": true,
       "expected": "表單預填客戶/PO",
       "actual": "status=200",
-      "ms": 155,
+      "ms": 147,
       "detail": ""
     },
     {
@@ -743,7 +731,7 @@
       "pass": true,
       "expected": "留空 400、填值成功",
       "actual": "400/302",
-      "ms": 175,
+      "ms": 240,
       "detail": ""
     },
     {
@@ -753,9 +741,9 @@
       "priority": "P1",
       "type": "功能",
       "pass": true,
-      "expected": "C2-QA-mvovkqb9_QA-mvovkqb9-客戶_九龍測試地點_滅蟲服務",
-      "actual": "C2-QA-mvovkqb9_QA-mvovkqb9-客戶_九龍測試地點_滅蟲服務",
-      "ms": 16,
+      "expected": "C2-QA-mvriwyfb_QA-mvriwyfb-客戶_九龍測試地點_滅蟲服務",
+      "actual": "C2-QA-mvriwyfb_QA-mvriwyfb-客戶_九龍測試地點_滅蟲服務",
+      "ms": 89,
       "detail": ""
     },
     {
@@ -767,7 +755,7 @@
       "pass": true,
       "expected": "彈窗存在且欄位齊全",
       "actual": "status=200",
-      "ms": 26,
+      "ms": 4,
       "detail": ""
     },
     {
@@ -779,7 +767,7 @@
       "pass": true,
       "expected": "詳情 200、客戶名可點",
       "actual": "200",
-      "ms": 19,
+      "ms": 54,
       "detail": ""
     },
     {
@@ -791,7 +779,7 @@
       "pass": true,
       "expected": "刪除→還原",
       "actual": "true/false/302",
-      "ms": 8,
+      "ms": 159,
       "detail": ""
     },
     {
@@ -803,7 +791,7 @@
       "pass": true,
       "expected": "缺價 400、成功且庫存 10",
       "actual": "400/302, stock=10",
-      "ms": 165,
+      "ms": 234,
       "detail": ""
     },
     {
@@ -815,7 +803,7 @@
       "pass": true,
       "expected": "10 +5 → 15",
       "actual": "10/5/15, stock=15",
-      "ms": 92,
+      "ms": 167,
       "detail": ""
     },
     {
@@ -827,7 +815,7 @@
       "pass": true,
       "expected": "409、庫存仍 15",
       "actual": "409, stock=15",
-      "ms": 257,
+      "ms": 242,
       "detail": ""
     },
     {
@@ -839,7 +827,7 @@
       "pass": true,
       "expected": "409",
       "actual": "409",
-      "ms": 147,
+      "ms": 138,
       "detail": ""
     },
     {
@@ -851,7 +839,7 @@
       "pass": true,
       "expected": "庫存 12、-3 調整、已過賬",
       "actual": "302, stock=12, posted=true, adj=-3",
-      "ms": 205,
+      "ms": 286,
       "detail": ""
     },
     {
@@ -863,7 +851,7 @@
       "pass": true,
       "expected": "ADJ-YYYY-#####",
       "actual": "ADJ-2026-00002",
-      "ms": 81,
+      "ms": 76,
       "detail": ""
     },
     {
@@ -875,7 +863,7 @@
       "pass": true,
       "expected": "庫存回 15、reversed",
       "actual": "302, stock=15, reversed=true",
-      "ms": 126,
+      "ms": 225,
       "detail": ""
     },
     {
@@ -887,7 +875,7 @@
       "pass": true,
       "expected": "庫存回 12、reversed=false",
       "actual": "302, stock=12",
-      "ms": 101,
+      "ms": 223,
       "detail": ""
     },
     {
@@ -899,7 +887,7 @@
       "pass": true,
       "expected": "409",
       "actual": "409",
-      "ms": 162,
+      "ms": 144,
       "detail": ""
     },
     {
@@ -911,7 +899,7 @@
       "pass": true,
       "expected": "DNPyymm###、庫存 12→9",
       "actual": "DNP2610057, stock=9, synced=true",
-      "ms": 199,
+      "ms": 289,
       "detail": ""
     },
     {
@@ -923,7 +911,7 @@
       "pass": true,
       "expected": "1 張 -3 出庫調整",
       "actual": "1 張 / -3",
-      "ms": 55,
+      "ms": 76,
       "detail": ""
     },
     {
@@ -935,7 +923,7 @@
       "pass": true,
       "expected": "409、庫存不變",
       "actual": "409, 9→9",
-      "ms": 186,
+      "ms": 173,
       "detail": ""
     },
     {
@@ -959,7 +947,7 @@
       "pass": true,
       "expected": "儲存成功但不重扣",
       "actual": "302, 9→9",
-      "ms": 10,
+      "ms": 91,
       "detail": ""
     },
     {
@@ -971,7 +959,7 @@
       "pass": true,
       "expected": "550/580/580 + INV 編號",
       "actual": "550/580/580, INV-2026-0002",
-      "ms": 19,
+      "ms": 112,
       "detail": ""
     },
     {
@@ -983,7 +971,7 @@
       "pass": true,
       "expected": "400",
       "actual": "400",
-      "ms": 155,
+      "ms": 143,
       "detail": ""
     },
     {
@@ -994,8 +982,8 @@
       "type": "資料",
       "pass": true,
       "expected": "300→280→0、2 張收據",
-      "actual": "300/280 (部分收款) → 580/0 (已付款), receipts=2",
-      "ms": 6,
+      "actual": "300/280 (部分付款) → 580/0 (已付款), receipts=2",
+      "ms": 103,
       "detail": ""
     },
     {
@@ -1004,10 +992,10 @@
       "title": "部分收款狀態字典",
       "priority": "P1",
       "type": "資料",
-      "pass": false,
+      "pass": true,
       "expected": "狀態=部分付款（filter 字典值）",
-      "actual": "部分收款",
-      "ms": 13,
+      "actual": "部分付款",
+      "ms": 146,
       "detail": ""
     },
     {
@@ -1043,7 +1031,7 @@
       "pass": true,
       "expected": "400、不落庫",
       "actual": "400, 0→0",
-      "ms": 177,
+      "ms": 143,
       "detail": ""
     },
     {
@@ -1055,7 +1043,7 @@
       "pass": true,
       "expected": "100/100",
       "actual": "100/100",
-      "ms": 6,
+      "ms": 99,
       "detail": ""
     },
     {
@@ -1067,7 +1055,7 @@
       "pass": true,
       "expected": "草稿可存",
       "actual": "302",
-      "ms": 3,
+      "ms": 112,
       "detail": ""
     },
     {
@@ -1078,8 +1066,8 @@
       "type": "效能",
       "pass": true,
       "expected": "200、< 3s",
-      "actual": "200, 54ms",
-      "ms": 54,
+      "actual": "200, 34ms",
+      "ms": 34,
       "detail": ""
     },
     {
@@ -1091,7 +1079,7 @@
       "pass": true,
       "expected": "3 天、待審批",
       "actual": "3/待審批",
-      "ms": 5,
+      "ms": 90,
       "detail": ""
     },
     {
@@ -1103,7 +1091,7 @@
       "pass": true,
       "expected": "姓名被強制為本人",
       "actual": "盧力峰",
-      "ms": 1,
+      "ms": 0,
       "detail": ""
     },
     {
@@ -1115,7 +1103,7 @@
       "pass": true,
       "expected": "front 403、mgmt 批准",
       "actual": "403/302, 已批准",
-      "ms": 11,
+      "ms": 101,
       "detail": ""
     },
     {
@@ -1127,7 +1115,7 @@
       "pass": true,
       "expected": "400、狀態不變",
       "actual": "400",
-      "ms": 4,
+      "ms": 3,
       "detail": ""
     },
     {
@@ -1139,7 +1127,7 @@
       "pass": true,
       "expected": "302、本人、數量 2",
       "actual": "302, 盧力峰, 2",
-      "ms": 4,
+      "ms": 88,
       "detail": ""
     },
     {
@@ -1151,7 +1139,7 @@
       "pass": true,
       "expected": "400 整數提示",
       "actual": "400",
-      "ms": 182,
+      "ms": 142,
       "detail": ""
     },
     {
@@ -1163,7 +1151,7 @@
       "pass": true,
       "expected": "__id 空、__new_id 有值",
       "actual": "status=200, __id=",
-      "ms": 194,
+      "ms": 144,
       "detail": ""
     },
     {
@@ -1174,8 +1162,8 @@
       "type": "功能",
       "pass": true,
       "expected": "2 個工作項保存",
-      "actual": "2 項、total_hours=",
-      "ms": 5,
+      "actual": "2 項、total_hours=3.5",
+      "ms": 103,
       "detail": ""
     },
     {
@@ -1184,9 +1172,9 @@
       "title": "排班總工時計算",
       "priority": "P2",
       "type": "資料",
-      "pass": false,
+      "pass": true,
       "expected": "09:00–11:00 + 13:00–14:30 = 3.5",
-      "actual": "total_hours=空",
+      "actual": "total_hours=3.5",
       "ms": 0,
       "detail": ""
     },
@@ -1199,7 +1187,7 @@
       "pass": true,
       "expected": "200、日期更新",
       "actual": "200, 2026-11-11",
-      "ms": 6,
+      "ms": 90,
       "detail": ""
     },
     {
@@ -1211,7 +1199,7 @@
       "pass": true,
       "expected": "PO.work_dates 含 2026-11-12",
       "actual": "[\"2026-11-12\"]",
-      "ms": 3,
+      "ms": 90,
       "detail": ""
     },
     {
@@ -1223,7 +1211,7 @@
       "pass": true,
       "expected": "皆 403",
       "actual": "403/403",
-      "ms": 3,
+      "ms": 4,
       "detail": ""
     },
     {
@@ -1235,7 +1223,7 @@
       "pass": true,
       "expected": "200 + 列表/篩選",
       "actual": "status=200",
-      "ms": 4,
+      "ms": 5,
       "detail": ""
     },
     {
@@ -1247,7 +1235,7 @@
       "pass": true,
       "expected": "還原成功",
       "actual": "302, deleted=false",
-      "ms": 6,
+      "ms": 194,
       "detail": ""
     },
     {
@@ -1259,7 +1247,7 @@
       "pass": true,
       "expected": "office 可永久刪除（上限內）",
       "actual": "302, gone=true",
-      "ms": 5,
+      "ms": 198,
       "detail": ""
     },
     {
@@ -1271,7 +1259,7 @@
       "pass": true,
       "expected": "403/403/200 text/csv",
       "actual": "403/403/200 text/csv; charset=utf-8",
-      "ms": 25,
+      "ms": 78,
       "detail": ""
     },
     {
@@ -1283,7 +1271,7 @@
       "pass": true,
       "expected": "UTF-8 BOM、含標題",
       "actual": "status=200, bom=true, first=efbbbf, len=240910",
-      "ms": 31,
+      "ms": 72,
       "detail": ""
     },
     {
@@ -1295,7 +1283,7 @@
       "pass": true,
       "expected": "輸出轉義、無原始 script",
       "actual": "create=302, escaped=true",
-      "ms": 106,
+      "ms": 551,
       "detail": ""
     },
     {
@@ -1307,7 +1295,7 @@
       "pass": true,
       "expected": "403/403",
       "actual": "403/403",
-      "ms": 4,
+      "ms": 5,
       "detail": ""
     },
     {
@@ -1318,8 +1306,8 @@
       "type": "安全",
       "pass": true,
       "expected": "200、路徑限制在 uploads 下",
-      "actual": "200 /uploads/Product/pro_mvovl7ku_ac44ce3ca4e0/product_image/1792996111265_6a692b_evil.png",
-      "ms": 11,
+      "actual": "200 /uploads/Product/pro_mvrixnlm_f878c9afa585/product_image/1793156257829_6e0e17_evil.png",
+      "ms": 700,
       "detail": ""
     },
     {
@@ -1330,8 +1318,8 @@
       "type": "安全",
       "pass": true,
       "expected": "每次登入新 sid",
-      "actual": "mwhkdSCh vs SyGvSc0o",
-      "ms": 1,
+      "actual": "f-xZoMEL vs LpNzjXcZ",
+      "ms": 3,
       "detail": ""
     },
     {
@@ -1343,7 +1331,7 @@
       "pass": true,
       "expected": "200 且 < 3000ms（暖機後）",
       "actual": "200, 30ms",
-      "ms": 62,
+      "ms": 60,
       "detail": ""
     },
     {
@@ -1354,8 +1342,8 @@
       "type": "效能",
       "pass": true,
       "expected": "200 且 < 3000ms（暖機後）",
-      "actual": "200, 32ms",
-      "ms": 73,
+      "actual": "200, 30ms",
+      "ms": 61,
       "detail": ""
     },
     {
@@ -1366,8 +1354,8 @@
       "type": "效能",
       "pass": true,
       "expected": "200 且 < 2000ms（暖機後）",
-      "actual": "200, 110ms",
-      "ms": 218,
+      "actual": "200, 101ms",
+      "ms": 204,
       "detail": ""
     },
     {
@@ -1378,8 +1366,8 @@
       "type": "效能",
       "pass": true,
       "expected": "200 且 < 3000ms（暖機後）",
-      "actual": "200, 141ms",
-      "ms": 288,
+      "actual": "200, 142ms",
+      "ms": 296,
       "detail": ""
     },
     {
@@ -1390,8 +1378,8 @@
       "type": "效能",
       "pass": true,
       "expected": "兩頁 < 1.5s",
-      "actual": "91ms / 92ms",
-      "ms": 183,
+      "actual": "93ms / 92ms",
+      "ms": 185,
       "detail": ""
     },
     {
@@ -1403,7 +1391,7 @@
       "pass": true,
       "expected": "13px / 700",
       "actual": "命中",
-      "ms": 116,
+      "ms": 135,
       "detail": ""
     },
     {
@@ -1415,7 +1403,7 @@
       "pass": true,
       "expected": "position:sticky",
       "actual": "命中",
-      "ms": 27,
+      "ms": 34,
       "detail": ""
     },
     {
@@ -1427,7 +1415,7 @@
       "pass": true,
       "expected": "無 HK$ HK$",
       "actual": "OK",
-      "ms": 112,
+      "ms": 100,
       "detail": ""
     },
     {
@@ -1439,7 +1427,7 @@
       "pass": true,
       "expected": "無 .calendar-cell.empty 規則",
       "actual": "OK",
-      "ms": 190,
+      "ms": 142,
       "detail": ""
     },
     {
@@ -1451,7 +1439,7 @@
       "pass": true,
       "expected": "每頁 ≤ 1 個 pagehead",
       "actual": "OK",
-      "ms": 280,
+      "ms": 265,
       "detail": ""
     },
     {
@@ -1463,8 +1451,8 @@
       "pass": true,
       "expected": "0 筆壞 JSON",
       "actual": "0 筆",
-      "ms": 390,
-      "detail": "34075 筆"
+      "ms": 307,
+      "detail": "34081 筆"
     },
     {
       "id": "DAT-02",
@@ -1472,10 +1460,10 @@
       "title": "報價合計抽樣一致",
       "priority": "P1",
       "type": "資料",
-      "pass": false,
+      "pass": true,
       "expected": "抽樣 400 筆全部一致",
-      "actual": "1 筆表頭有金額但明細為 0：SQP-2026-0230",
-      "ms": 7,
+      "actual": "OK (400 筆)",
+      "ms": 6,
       "detail": ""
     },
     {
@@ -1487,7 +1475,7 @@
       "pass": true,
       "expected": "balance=total−paid",
       "actual": "OK (207 筆)",
-      "ms": 3,
+      "ms": 5,
       "detail": ""
     },
     {
@@ -1499,7 +1487,7 @@
       "pass": true,
       "expected": "非草稿全部平衡",
       "actual": "OK (2 筆)",
-      "ms": 1,
+      "ms": 0,
       "detail": ""
     },
     {
@@ -1511,7 +1499,7 @@
       "pass": true,
       "expected": "近兩日刪除均有時間/操作人（歷史匯入豁免）",
       "actual": "OK (1 筆)",
-      "ms": 30,
+      "ms": 37,
       "detail": ""
     },
     {
@@ -1523,7 +1511,7 @@
       "pass": true,
       "expected": "同名客戶（×2）→ 409 並提示；不同名不攔",
       "actual": "同名 409（有提示）／不同名 302",
-      "ms": 223,
+      "ms": 329,
       "detail": ""
     }
   ],
@@ -3840,8 +3828,8 @@
         "path": "/stockcounts",
         "label": "盤點記錄",
         "allowed": true,
-        "status": 403,
-        "pass": false
+        "status": 200,
+        "pass": true
       },
       {
         "role": "accounting",
@@ -4945,8 +4933,8 @@
         "role": "accounting",
         "key": "stock_counts",
         "path": "/stockcounts",
-        "expected": 403,
-        "status": 403,
+        "expected": 200,
+        "status": 200,
         "pass": true
       },
       {
@@ -5893,8 +5881,8 @@
         "role": "accounting",
         "key": "contracts",
         "expected": 403,
-        "status": 200,
-        "pass": false
+        "status": 403,
+        "pass": true
       },
       {
         "role": "accounting",
@@ -6423,8 +6411,8 @@
       "assigned_admin_name": "",
       "customer_source": "",
       "lead_id": "",
-      "customer_id": "cus_mvovl6ku_a37330573b3c",
-      "customer_name": "QA-mvovkqb9-客戶",
+      "customer_id": "cus_mvrixkv7_b264e5a9756f",
+      "customer_name": "QA-mvriwyfb-客戶",
       "customer_type": "標準",
       "main_customer": "",
       "customer_code": "",
@@ -6475,9 +6463,10 @@
       "accepted": false,
       "accepted_date": "",
       "pdf_url": "",
-      "id": "quo_mvovl6o5_a52f28f25418",
-      "created_date": "2026-10-26T06:28:27.323Z",
-      "updated_date": "2026-10-26T06:28:27.323Z",
+      "id": "quo_mvrixlvv_316d1c7b9e0d",
+      "amount_source": "items",
+      "created_date": "2026-10-28T02:57:30.431Z",
+      "updated_date": "2026-10-28T02:57:30.431Z",
       "created_by": "office@demo.hk",
       "created_by_id": "u-office",
       "__deleted": false
