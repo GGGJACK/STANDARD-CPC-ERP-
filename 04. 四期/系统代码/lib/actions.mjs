@@ -540,6 +540,9 @@ export function convertQuotation({ store, quotationId, target, user }) {
       const existing = store.list('purchase_orders').find((r) => r.quotation_id === q.id);
       if (existing) return { cfg: ENTITIES.purchase_orders, row: existing, existing: true };
       const row = {
+        // 鍵必須先存在：defaultNumber() 用 Object.hasOwn 判斷，缺鍵就直接 return，
+        // 轉出來的採購單會沒有編號，po_name 也跟著空白（QUO-05，與 STK-09 同型）。
+        po_number: '',
         quotation_id: q.id, quotation_number: q.quotation_number, quotation_type: q.quotation_type,
         work_unit_id: q.work_unit_id || '', work_unit_name: q.work_unit_name || '', customer_id: q.customer_id || '',
         customer_name: q.customer_name || '', contact_person: q.contact_person || '', contact_phone: q.customer_tel || '',
@@ -568,6 +571,8 @@ export function convertQuotation({ store, quotationId, target, user }) {
     }
     if (target === 'invoices') {
       const row = {
+        // 同 QUO-05：invoice_number 鍵要在，否則轉出來的發票沒有編號。
+        invoice_number: '',
         invoice_type: q.quotation_type || '服務', invoice_date: hkNow().date,
         due_date: new Date(Date.now() + 30 * 86400000).toISOString().slice(0, 10),
         quotation_id: q.id, quotation_number: q.quotation_number, customer_id: q.customer_id || '', customer_name: q.customer_name || '',
@@ -594,6 +599,8 @@ export function collectReceipt({ store, invoiceId, fields, user }) {
     if (!(amount > 0)) { const error = new Error('收款金額必須大於 0'); error.statusCode = 400; throw error; }
     if (amount - balance > 0.009) { const error = new Error(`收款金額不可超過未收餘額 ${balance.toFixed(2)}`); error.statusCode = 400; throw error; }
     const row = {
+      // 同 QUO-05：收款單也要先有鍵，否則收據編號空白、無法按號追溯。
+      receipt_number: '',
       receipt_date: str(fields.receipt_date) || hkNow().date, invoice_id: invoice.id, invoice_number: invoice.invoice_number,
       customer_id: invoice.customer_id || '', customer_name: invoice.customer_name || '', customer_address: invoice.customer_address || '',
       customer_tel: invoice.customer_tel || '', customer_fax: invoice.customer_fax || '', contact_person: invoice.contact_person || '',
