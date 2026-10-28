@@ -829,7 +829,8 @@ export function pill(value) {
   const text = str(value);
   const green = ['已完成', '已付款', '生效中', '正常', '可用', '已批准', '已確認', '已接受', '在職', '完成', 'signed', '已送達', '已收貨', '已過賬', '已入賬', '已簽約', '已核對', '已開票', '已結清'];
   const red = ['逾期', '已到期', '低庫存', '已取消', '停用', '已拒絕', '離職'];
-  const yellow = ['待執行', '待安排', '草稿', '待審批', '進行中', '部分收款', 'pending'];
+  // 「部分收款」是 INV-07 修復前寫進庫的歷史值，一併保色，避免舊單變成無色 pill。
+  const yellow = ['待執行', '待安排', '草稿', '待審批', '進行中', '部分付款', '部分收款', 'pending'];
   return `<span class="pill ${green.includes(text) ? 'g' : red.includes(text) ? 'r' : yellow.includes(text) ? 'y' : ''}">${esc(text || '—')}</span>`;
 }
 

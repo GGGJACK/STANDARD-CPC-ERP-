@@ -612,7 +612,9 @@ export function collectReceipt({ store, invoiceId, fields, user }) {
     const receipt = store.save('receipts', row, { user });
     invoice.paid_amount = num(invoice.paid_amount) + amount;
     invoice.balance_due = Math.max(0, num(invoice.total_amount) - invoice.paid_amount);
-    invoice.status = invoice.balance_due <= 0.009 ? '已付款' : '部分收款';
+    // 狀態值必須落在字典內（INV-07）：發票狀態選項／篩選器用的是「部分付款」，
+    // 這裡原本寫「部分收款」，收款後列表 pill 與篩選器都認不出、篩選會漏單。
+    invoice.status = invoice.balance_due <= 0.009 ? '已付款' : '部分付款';
     store.save('invoices', invoice, { id: invoice.id, user });
     store.audit({ user, action: 'collect', entity: 'Invoice', id: invoice.id, label: `${invoice.invoice_number} / ${receipt.receipt_number}`, shown: `amount=${amount};balance=${invoice.balance_due}`, via: 'receipt' });
     return receipt;
