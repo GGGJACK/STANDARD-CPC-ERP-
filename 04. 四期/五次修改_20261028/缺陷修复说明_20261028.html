@@ -44,13 +44,15 @@ footer{margin-top:46px;padding-top:16px;border-top:1px solid var(--line);font-si
 <div class="doc">
 <header>
   <div class="kicker">第五次修改 · 缺陷台账清理</div>
-  <h1>6 条待修缺陷全部修复，验收 572 / 572</h1>
+  <h1>6 条待修缺陷全部修复，五道门槛全绿</h1>
   <p class="lede">基线 <code>75b582a</code>（dev，含 v4.6 的 FRM-01 复选框修复）。六条缺陷逐条定位到代码行、单独提交、补回归断言；另对 22 张历史报价做了「只加口径标记、不改金额」的数据处理。</p>
 </header>
 
 <div class="stats">
   <div class="stat"><b>6</b><span>待修缺陷 → 已修待验</span></div>
-  <div class="stat"><b>572/572</b><span>业务验收（隔离副本 · 3110）</span></div>
+  <div class="stat"><b>565/565</b><span>业务验收（隔离副本 · 3110）</span></div>
+  <div class="stat"><b>117/117</b><span>基線套件（P0 61/61）</span></div>
+  <div class="stat"><b>34/34 · 14/14</b><span>DOM 对照 · 回滚演练</span></div>
   <div class="stat"><b>127</b><span>新增：侧栏四角色可達性全扫</span></div>
   <div class="stat"><b>22</b><span>历史报价标记 amount_source</span></div>
 </div>
@@ -75,10 +77,10 @@ footer{margin-top:46px;padding-top:16px;border-top:1px solid var(--line);font-si
 </tr>
 <tr>
   <td>QUO-05</td>
-  <td>报价转 PO 后编号、名称为空，列表无法对账</td>
-  <td><code>defaultNumber()</code> 用 <code>Object.hasOwn</code> 判键，转出来的 PO 对象根本没有 <code>po_number</code>，直接 return；发票、收据同一路径同病</td>
-  <td>三处先补空键（<code>po_number</code>／<code>invoice_number</code>／<code>receipt_number</code>），与 STK-09 同法</td>
-  <td>PO-2026-0904（名称 <code>PO-2026-0904_滅鼠</code>）、INV-2026-0003、R260059</td>
+  <td>报价转 PO 后编号、名称为空；金额还比报价少一笔运费</td>
+  <td>① <code>defaultNumber()</code> 用 <code>Object.hasOwn</code> 判键，转出来的 PO 对象根本没有 <code>po_number</code>，直接 return，发票、收据同一路径同病；② 转换只复制 <code>items</code>，没带 <code>freight_charges</code>，PO 重算只加 <code>tax_amount</code>，报价 190+20=210 转出来只有 190</td>
+  <td>① 三处先补空键（<code>po_number</code>／<code>invoice_number</code>／<code>receipt_number</code>）；② PO 增隐藏字段 <code>freight_charges</code>，转换时带入、重算时计入总额（只由报价继承，不在 PO 表单上手改）</td>
+  <td>PO-2026-0904（名称 <code>PO-2026-0904_滅鼠</code>）、INV-2026-0003、R260059；金额断言 210 = 210 · freight 20</td>
 </tr>
 <tr>
   <td>INV-07</td>
@@ -115,9 +117,13 @@ footer{margin-top:46px;padding-top:16px;border-top:1px solid var(--line);font-si
 <div class="note warn"><b>需要业务确认的一笔：</b>SQM-2026-0054 表头 3,100、明细 2,340（1 行 × 36 × 65），差 760。已按表头口径保护，等会计确认这 760 是运费、折扣还是录入差异，再决定是否点「以明细重算」。</div>
 
 <h2>三、验收与提交</h2>
-<pre><code>node --check server.mjs lib/*.mjs            # 全过
+<pre><code>node --check server.mjs lib/*.mjs                      # 全过
 CPC_TEST=1 TEST_BASE=http://127.0.0.1:3110 \
-  DB_PATH=&lt;隔离副本&gt; node test.mjs          # 572/572</code></pre>
+  DB_PATH=&lt;隔离副本&gt; node test.mjs                    # 565/565（干净副本）
+node "04. 四期/測試設計_20261025/run-tests.mjs"         # 117/117（P0 61/61）
+node "04. 四期/工具/compare-ui.mjs"                     # 34/34（无头 Edge 9222）
+node "04. 四期/工具/rollback-drill.mjs" v4.6-20261026 3105  # 14/14</code></pre>
+<div class="note ok"><b>五道门槛全绿。</b>回滚演练从 tag <code>v4.6-20261026</code> 只靠 <code>git archive</code> 导出代码（15 个文件、seed + lib 齐全）、<code>VACUUM INTO</code> 起副本，14 条冒烟全过，总耗时 10.7s。</div>
 <p>六条缺陷各自一个提交，测试与台账回填分开：</p>
 <table>
 <thead><tr><th>提交</th><th>内容</th></tr></thead>
@@ -130,19 +136,33 @@ CPC_TEST=1 TEST_BASE=http://127.0.0.1:3110 \
 <tr><td>e4823f6</td><td>fix: 历史报价保留表头口径 + 核对脚本（DAT-02）</td></tr>
 <tr><td>f053262</td><td>test: 六条缺陷回归断言 + 菜单可達性全扫</td></tr>
 <tr><td>ad769b8</td><td>chore(defects): 回填六条修复提交</td></tr>
+<tr><td>af10fe5</td><td>docs: 第五次修改缺陷修复说明</td></tr>
+<tr><td>6710cdd</td><td>fix: 报价转 PO 带走运费，PO 总额与报价一致（QUO-05 金额项）</td></tr>
+<tr><td>71f3549</td><td>test: 重跑基线套件 117/117</td></tr>
+<tr><td>60c756d</td><td>chore(defects): QUO-05 补记运费丢失与最终提交</td></tr>
 </tbody>
 </table>
 
-<h2>四、未做与风险</h2>
+<h2>四、门槛结果与遗留</h2>
+<table>
+<thead><tr><th>门槛</th><th>要求</th><th>结果</th></tr></thead>
+<tbody>
+<tr><td>node --check</td><td>全过</td><td><span class="pill ok">通过</span> server + lib 全过</td></tr>
+<tr><td>run-tests.mjs</td><td>P0 分组 100%</td><td><span class="pill ok">61/61</span> 全量 117/117</td></tr>
+<tr><td>test.mjs</td><td>业务验收全绿</td><td><span class="pill ok">565/565</span></td></tr>
+<tr><td>compare-ui.mjs</td><td>DOM 对照 34/34</td><td><span class="pill ok">34/34</span></td></tr>
+<tr><td>rollback-drill.mjs</td><td>从 tag 恢复可跑</td><td><span class="pill ok">14/14</span> v4.6-20261026</td></tr>
+</tbody>
+</table>
 <ul>
-  <li><b>未跑</b> <code>compare-ui.mjs</code>（需 Edge 开 9222）与 <code>rollback-drill.mjs</code>：本次只进 <code>dev</code>，按约定门槛只需 <code>node --check</code>；要进 <code>main</code> 前必须补跑。</li>
-  <li><b>历史脏值未清理</b>：库里 29 张发票状态是「已发出」（简体），字典是「已發出」，筛选器按字面比对会漏。本次未在台账内，建议单开一条缺陷。</li>
+  <li><b>QUO-05 是分两次修完的</b>：先补编号键，跑基線套件时才发现「金额一致」仍不成立（运费丢失），第二个提交补上。这条如果只跑 <code>test.mjs</code> 会漏——它的断言只查编号非空。</li>
+  <li><b>历史脏值未清理</b>：库里 29 张发票状态是「已发出」（简体），字典是「已發出」，筛选器按字面比对会漏这 29 张。本次未在台账内，建议单开一条缺陷。</li>
   <li><b>SCH-07 未回写</b>：13,116 笔历史排班仍以渲染时计算显示；若要做工时报表汇总，需先跑一次回写脚本（会更新 <code>updated_date</code>，影响并发编辑的乐观锁）。</li>
 </ul>
 
 <footer>
   <span>标准清洁灭虫 · CPC ERP · 第五次修改</span>
-  <span>2026-10-28 · 基线 75b582a · 验收 572/572</span>
+  <span>2026-10-28 · 基线 75b582a · 五道门槛全绿</span>
 </footer>
 </div>
 </body>
