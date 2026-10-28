@@ -495,7 +495,7 @@ export const ENTITIES = {
   }),
 
   stock_counts: define({
-    key: 'stock_counts', entity: 'StockCount', title: '盤點', plural: '盤點記錄', listPath: '/stockcounts', dateField: 'count_date', labelField: 'count_number', softDelete: true, viewRoles: OFFICE_ADMIN,
+    key: 'stock_counts', entity: 'StockCount', title: '盤點', plural: '盤點記錄', listPath: '/stockcounts', dateField: 'count_date', labelField: 'count_number', softDelete: true, viewRoles: BACK_OFFICE,
     search: ['count_number', 'completed_by', 'notes'],
     columns: [column('count_number', '盤點編號'), column('count_date', '盤點日期', 'date'), { key: 'items', label: '項目數', value: (row) => { const list = Array.isArray(row.items) ? row.items : []; if (!list.length) return '—'; const names = list.slice(0, 3).map((it) => `${it.product_name || it.product_code || ''} ${it.system_quantity ?? '—'}→${it.actual_quantity ?? '—'}`).join('；'); return `<span title="${escAttr(names)}">${list.length} 項</span>`; } }, column('status', '狀態', 'pill'), column('completed_by', '完成人員'), actionColumn()],
     filters: [{ key: 'status', label: '全部狀態', options: ['已完成', '進行中', '已取消'] }],
