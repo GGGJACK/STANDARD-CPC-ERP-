@@ -777,6 +777,10 @@ async function handle(req, res) {
 
   if (p.startsWith('/new/')) {
     const cfg = ENTITIES[p.slice(5)]; if (!cfg) throw new HttpError(404, '未知實體');
+    // 入口就按 editRoles 判，與 POST /save 一致（PERM-03）：
+    // 合約、請假、補給走的是「回列表頁 + 彈窗」，繞過 entityForm 的編輯校驗，
+    // 結果會計打得開新增合約表單、填完提交才 403。
+    assertEntity(user, cfg, true);
     // 合約一律走頁內彈窗：直接回列表頁並自動開啟彈窗（不再開新頁）
     if (cfg.key === 'contracts') return html(res, listEntity({ store, cfg, url: new URL('http://local/contracts?new=1'), user, csrf }));
     if (['leave_records', 'supply_records'].includes(cfg.key)) return html(res, listEntity({ store, cfg, url: new URL(`http://local${cfg.listPath}?new=1`), user, csrf }));

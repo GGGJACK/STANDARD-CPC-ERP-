@@ -276,7 +276,9 @@ export function listEntity({ store, cfg, url, user, csrf }) {
   // 合約用頁內彈窗；?new=1 / ?edit=id 由伺服器直接渲染並自動開啟
   const dialogEditId = dialogForm ? str(url.searchParams.get('edit')) : '';
   const dialogEditRow = dialogEditId ? store.get('contracts', dialogEditId) : null;
-  const dialogOpen = dialogForm && !trash;
+  // 彈窗也受 editRoles 約束（PERM-03）：沒有編輯權的角色不該在 DOM 裡拿到一份可填的新增表單，
+  // 否則 /contracts?new=1 仍會把「填完才被 403」的體驗留下來。
+  const dialogOpen = dialogForm && !trash && cfg.editRoles.includes(user.role);
   const dialogHtml = dialogOpen ? contractDialog({ store, user, csrf, row: dialogEditRow || { ...defaultsFor(cfg), id: uid('con') }, isEdit: !!dialogEditRow, back: cfg.listPath, open: !!dialogEditRow || url.searchParams.get('new') === '1' }) : '';
   const recOpen = !trash && ['leave_records', 'supply_records'].includes(cfg.key);
   const recName = str(user.name).replace(/（[^）]*）/g, '').trim();
